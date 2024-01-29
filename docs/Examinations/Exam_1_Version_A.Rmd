@@ -1,0 +1,418 @@
+---
+title: "Exam 1"
+author: "STAT 251 Section 01"
+output:
+ pdf_document:
+   keep_tex: true
+   number_sections: true
+header-includes:
+  \usepackage{float}
+#bibliography: home2bibs.bib
+---
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width=12, fig.height=10, fig.pos = "H")
+#knitr::opts_chunk$set(list(echo = FALSE, eval = FALSE))
+library(kableExtra)
+library(knitr)
+library(latex2exp)
+library(gridExtra)
+library(ggpubr)
+library(ggthemes)
+library(plyr)
+mainpath = 'C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/'
+wmpath = 'C:/Users/Bruin/Desktop/GS Academia/SEM 2/STAT 519/PROJ 1/watermelon/simulated datasets/ wawamelon/WaterMelonMaster.csv'
+whiskpath = 'C:/Users/Bruin/Desktop/GS Academia/SEM 2/STAT 519/PROJ 1/Whiskers/SimSealData/whiskerMaster.csv'
+```
+
+
+
+
+
+
+
+\begin{table}
+\centering
+\begin{tabular}{cccc}
+
+Student Name: & $\_\_\_\_\_\_\_\_\_\_\_\_\_\_$ & Last Four of Vandal Number:  & $\_\_$ $\_\_$ $\_\_$ $\_\_$ \\
+&&& \\
+Test Version: & \textbf{A} && \\
+
+\end{tabular}
+\end{table}
+
+
+\newpage
+
+
+\begin{enumerate}
+\item[ 2pts \bf 3.)]{Multiple choice: A plot which shows distinct values of a variable on the $x$-axis and the frequency or relative frequency on the $y$-axis is called a:}
+\item[(a)]{Dot plot}
+\item[(b)]{Pie chart}
+\item[(c)]{Box and Whisker Plot}
+\item[(d)]{Histogram}
+\end{enumerate}
+
+
+\newpage
+\begin{enumerate}
+\item[2pts \bf 4.)]{Multiple choice: A preliminary exploration and summary of the data}
+\item[(a)]{descriptive statistics}
+\item[(b)]{sampling design}
+\item[(c)]{interquartile range}
+\item[(d)]{box and whisker plot}
+\end{enumerate}
+
+
+\begin{enumerate} 
+  \item[2pts \bf 5.)]{True or False: Inferential statistics can be applied to both samples and populations}
+  \item[] Answer:$\_\_\_\_\_\_$
+\end{enumerate}
+
+
+
+\begin{enumerate} 
+  \item[4pts \bf 6.)]{Write in the letter(s) of the words or phrases that best complete the following sentence: "The mean is the \_\_\_\_\_ of a distribution while the median is the \_\_\_\_\_ of a distribution."}
+  \item[(a)] middle value
+  \item[(b)] frequency
+  \item[(c)] measure of spread
+  \item[(d)] center of gravity
+\end{enumerate}
+
+
+\begin{enumerate} 
+  \item[4pts \bf 7.)]{Write in the letter(s) of the words or phrases that best complete the following sentence: "The range is a \_\_\_\_\_ of a distribution. It is very \_\_\_\_\_ to outliers"}
+  \item[(a)] measure of spread
+  \item[(b)] susceptible
+  \item[(c)] measure of location
+  \item[(d)] resistant
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\begin{enumerate}
+\item[14pts \bf 8.)] Consider the following data from a survey conducted on sample of 20 college students in the state of Georgia. The survey, conducted by the State, was investigating several variables to investigate how student behavior affects academic performance. One of the survey questions required students to self report the amount of time (in whole hours) they spend studying each day. The following frequency table gives the distribution of the number of hours spent studying. Fill in the table (5 pts) and answer questions (a)-(c):
+\end{enumerate}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ix = c(25,39,53,57,22,43,36,10,20,41,58,3,1,13,15,49,9,4,16,29)
+gadata = read.csv(paste0(mainpath, '/Week_2/georgia_student_survey.csv'))[ix,]
+gadata$Studytime = round_any(gadata$Studytime, 1)
+
+st = sort(unique(gadata$Studytime))
+st_F = summary(as.factor(gadata$Studytime))
+st_RF = st_F/sum(st_F)
+st_CRF = cumsum(st_RF)
+
+
+FT = cbind.data.frame(`Study Time (Hrs)` = st, 
+                      Frequency = c(st_F[1],"", st_F[3:10]),
+                      `Relative frequency` = c(st_RF[1:2], "", "", "", st_RF[6:10]),
+                      `Cumulative RF` = c(st_CRF[1:3], rep("", 7)))
+
+kable(FT, format = 'latex', digits = 2, row.names = F)
+```
+
+
+\begin{itemize}
+\item[2pts (a)]{What kind of variable is ``Study Time (Hrs)"?}
+\item[]
+\item[]
+\item[5pts (b)]{Using the frequency table above, compute the mean amount of time a student spends studying in this sample: show your calculations}
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[2pts (c)]{What proportion of students study at most 5 hours a day?}
+\end{itemize}
+
+\newpage
+\begin{enumerate}
+\item[5pts \bf 9.)]{An international environmental organization samples the annual per capita carbon-dioxide ($\text{CO}_2$) emissions (in metric tons) of 28 nations in the European Union to estimate the average annual global emissions for the continent. From their sample they record a mean of $\bar{x} = 6.3$ metric tons with a variance of $s^2 = 46$ metric tons. The nation of Luxembourg has a annual $\text{CO}_2$ of 15.8 metric tons. How many standard deviations above the mean are the annual $\text{CO}_2$ emissions of Luxembourg? Please show all calculations.}
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+
+
+
+
+\begin{enumerate}
+\item[10pts \bf 10.)]{consider the following sample of 5 observations of a quantitative variable $X$ 
+\[ X = \{5.7, -4.4, 1.5, 9.6, -0.2 \}\]
+Compute the sample variance and standard deviation. Please show your work}
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+
+
+
+
+
+
+
+
+\newpage
+\begin{enumerate}
+\item[11pts \bf 11.)]{Consider the following distribution of the weights (in pounds) of NFL players at the position of offensive lineman (OL). Assume that OL players have an average weight of about 310 lbs and the standard deviation for weight is 17 lbs. Answer questions (a)-(c) and show any calculations you use}
+\end{enumerate}
+```{r, echo=FALSE, fig.height=3, fig.width=5, message=FALSE, warning=FALSE}
+set.seed(592)
+x = rnorm(1000, mean = 310, sd = 17)
+x2 = x[which(x>=274 & x<=380)]
+CRF = cumsum(summary(as.factor(round_any(x2, 5)))/sum(summary(as.factor(round_any(x2, 5)))))
+unqx = sort(unique(round_any(x2,5)))
+
+A = ggplot()+
+  geom_histogram(aes(x = x2), bins = 16,color = 'black', fill = 'grey')+
+  scale_x_continuous(breaks = seq(270, 385, 10))+
+  theme_hc()+
+  theme(axis.text.x = element_text(size = 10),
+        axis.title.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 15))+
+  ylab('Frequency')+
+  xlab('Weight (lbs)')+
+  ggtitle('Distribution of NFL Player Weights (lbs)',subtitle = 'For OL Positions')
+
+B = ggplot()+
+  geom_step(aes(x = unqx, y = CRF), color = 'black', size = 1)+
+  geom_point(aes(x = unqx, y = CRF), size = 2)+
+  scale_x_continuous(breaks = seq(255, 395, 10))+
+  theme_hc()+
+  theme(axis.text.x = element_text(size = 10),
+        axis.title.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 15))+
+  ylab('Cumulative Relative Frequency')+
+  xlab('Weight in Pounds')+
+  ggtitle('Cumulative Distribution of NFL Player Weights (lbs)',subtitle = 'For the OL Position')
+
+plot(A)
+#ggarrange(A, B, nrow = 1, ncol = 2)
+
+```
+
+\begin{enumerate}
+\item[3pts (a)]{What proportion of players weigh more than 327 lbs?}
+\item[]
+\item[]
+\item[]
+\item[]
+\item[3pts (b)]{What proportion of players weigh between 293 lbs and 327 lbs?}
+\item[]
+\item[]
+\item[]
+\item[]
+\item[5pts (c)]{Aaron Brewer, an offensive lineman for the Tennesee Titans, weighs 274.8 lbs. Using the $\pm 2s$ rule, is Aaron Brewer's weight an outlier relative to the rest of the NFL?}
+\item[]
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+
+
+
+
+\newpage
+\begin{enumerate}
+\item[8pts \bf 13.)]{Each of the following distributions has a mean of either $\mu = 60$ or $\mu = 100$, and a standard deviation of either $\sigma = 10$ or $\sigma = 25$. Label each distribution with its mean and standard deviation.}
+\end{enumerate}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+set.seed(129)
+nn = 100000
+a1 = rnorm(nn, 60, 25)
+b1 = rnorm(nn, 100, 25)
+c1 = rnorm(nn, 100, 10)
+d1 = rnorm(nn, 60, 10)
+
+pa1 = ggplot()+
+  geom_density(aes(x = a1[a1 > 0]), fill = 'lightgrey', size = 1)+
+  theme_base()+
+  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),title = element_text(size = 12))+
+  xlab('')+
+  ggtitle('(a)', subtitle = paste0(TeX('$\\mu$'),'=_________, ', TeX('$\\sigma'), '=__________'))
+
+pb1 = ggplot()+
+  geom_density(aes(x = b1[b1 > 0]), fill = 'lightgrey', size = 1)+
+  theme_base()+
+  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),title = element_text(size = 12))+
+  xlab('')+
+  ggtitle('(b)', subtitle = paste0(TeX('$\\mu$'),'=_________, ', TeX('$\\sigma'), '=__________'))
+
+pc1 = ggplot()+
+  geom_density(aes(x = c1), fill = 'lightgrey', size = 1)+
+  theme_base()+
+  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),title = element_text(size = 12))+
+  xlab('')+
+  ggtitle('(c)', subtitle = paste0(TeX('$\\mu$'),'=_________, ', TeX('$\\sigma'), '=__________'))
+
+pd1 = ggplot()+
+  geom_density(aes(x = d1), fill = 'lightgrey', size = 1)+
+  theme_base()+
+  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),title = element_text(size = 12))+
+  xlab('')+
+  ggtitle('(d)', subtitle = paste0(TeX('$\\mu$'),'=_________, ', TeX('$\\sigma'), '=__________'))
+
+ggarrange(pa1, pb1, pc1, pd1, nrow = 2, ncol = 2)
+```
+
+
+\newpage
+\begin{enumerate}
+\item[8pts \bf 12.)]{Describe the shape of the following distributions and for each distribution identify if the mean will be larger, smaller or the same as the median.}
+\end{enumerate}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#distribution shapes
+
+set.seed(123)
+sr = ggplot()+
+  geom_density(aes(x = rbeta(100000, 2, 10)), fill = 'lightgrey', size = 1)+
+  theme_base()+
+  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
+        axis.ticks.y = element_blank())+
+  xlab('')+
+  ggtitle('Shape:_________________________________', subtitle = 'mean _________ median')
+set.seed(123)
+sym = ggplot()+
+  geom_density(aes(x = rnorm(100000)), fill = 'lightgrey', size = 1)+
+  theme_base()+
+  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
+        axis.ticks.y = element_blank())+
+  xlab('')+
+  ggtitle('Shape:_________________________________', subtitle = 'mean _________ median')
+set.seed(123)
+sl = ggplot()+
+  geom_density(aes(x = rbeta(100000, 10, 2)), fill = 'lightgrey', size = 1)+
+  theme_base()+
+  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
+        axis.ticks.y = element_blank())+
+  xlab('')+
+  ggtitle('Shape:_________________________________', subtitle = 'mean _________ median')
+set.seed(123)
+bm = ggplot()+
+  geom_density(aes(x = c(rnorm(50000), rnorm(50000, 3))), fill = 'lightgrey', size = 1)+
+  theme_base()+
+  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
+        axis.ticks.y = element_blank())+
+  xlab('')+
+  ggtitle('Shape:_________________________________', subtitle = 'mean _________ median')
+
+ggarrange(sl, sym, bm, sr, nrow = 2, ncol = 2)
+
+```
+
+\newpage
+\begin{enumerate}
+\item[18pts \bf 14.)] \textbf{Table 1.} gives the distribution of a quantitative variable $x$. Use this table to answer parts (a) and (b)
+\end{enumerate}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+v = c(5,6,7,8,9,10,11,12)
+fv = c(8, 5, 2, 15, 7, 8, 5, 10)
+sv = sum(fv)
+rfv = fv/sv
+crfv = cumsum(rfv)
+tab = cbind.data.frame(X = v, `Frequency(X)` = fv, `Relative Frequency(x)` = rfv, `Cumulative Relative Fequency` = crfv)
+
+kable(tab, format = 'latex', booktabs = T, caption = '', digits = 3)
+rv = c(rep(5,8), rep(6,5), rep(7,2), rep(8,15), rep(9,7), rep(10,8), rep(11,5), rep(12,10))
+
+```
+
+
+\begin{enumerate}
+\item[9pts (a)]{Plot the cumulative distribution and use this plot to find the $25th$, $50th$, and $75th$ percentiles}
+\end{enumerate}
+
+```{r, echo=FALSE, fig.height=3, fig.width=4, message=FALSE, warning=FALSE}
+
+df = cbind.data.frame(x = rv, y = runif(60))
+ggplot(data = df, aes(x =x, y = y))+
+  geom_blank()+
+  theme_hc()+
+  scale_x_continuous(breaks = seq(5, 12, 1))+
+  scale_y_continuous(breaks = seq(0, 1, 0.1))+
+  theme(axis.text.x = element_text(size = 12),
+        axis.title.x = element_text(size = 15),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 15),
+        panel.grid.major.y=element_line(colour="black"))+
+  ylab('')+
+  xlab('')
+  
+  
+```
+
+$25th = \_\_\_\_$  $50th = \_\_\_\_$  $75th = \_\_\_\_$ 
+
+\newpage
+\begin{enumerate}
+\item[9pts (b)] Below is a box and whisker plot for the frequency table in \textbf{table 1}. Using the relevant statistics, label the values of the minimum, maximum, Q1, Q3, and IQR [hint you can use your calculations from part (a)]. 
+\end{enumerate}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+Q1 = 7
+med = 8+0.5
+Q3 = 10
+IQR = 3
+minv = 5+.2
+maxv = 12-.2
+estims = c(minv, Q1, med, Q3, maxv)
+
+
+boxplot(rv, horizontal = TRUE, axes = FALSE, staplewex = 1)
+text(x=estims, labels =paste(c("Min", "Q1","Median", "Q3", "Max"), "_____", sep = "="), 
+     y=1.25, cex = 1.5)
+text(x=8, labels =paste("IQR", "_______", sep = " = "), y=1.5, cex = 2)
+```
+
+
+
+\begin{enumerate}
+\item[ 4pts \bf(bonus)]{Why is the sample variance divided by $n-1$ instead of $n$ like the sample mean? explain you answer (a mathematical demonstration can also help)}
+\end{enumerate}
