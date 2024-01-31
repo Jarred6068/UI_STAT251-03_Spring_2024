@@ -146,7 +146,7 @@ kable(FT, format = 'latex', digits = 2, row.names = F)
 
 \newpage
 \begin{enumerate}
-\item[5pts \bf 9.)]{An international environmental organization samples the annual per capita carbon-dioxide ($\text{CO}_2$) emissions (in metric tons) of 28 nations in the European Union to estimate the average annual global emissions for the continent. From their sample they record a mean of $\bar{x} = 6.3$ metric tons with a variance of $s^2 = 46$ metric tons. The nation of Luxembourg has a annual $\text{CO}_2$ of 15.8 metric tons. How many standard deviations above the mean are the annual $\text{CO}_2$ emissions of Luxembourg? Please show all calculations.}
+\item[5pts \bf 9.)]  construct a histogram 
 \item[]
 \item[]
 \item[]
@@ -160,16 +160,14 @@ kable(FT, format = 'latex', digits = 2, row.names = F)
 
 
 \begin{enumerate}
-\item[10pts \bf 10.)]{consider the following sample of 5 observations of a quantitative variable $X$ 
-\[ X = \{5.7, -4.4, 1.5, 9.6, -0.2 \}\]
-Compute the sample variance and standard deviation. Please show your work}
+\item[10pts \bf 10.)]{consider the following sample of 3 observations of a quantitative variable $X$ 
+\[ X = \{-4.4, 1.5, -0.2 \}\]}
+\item[a.] Show how to compute the sample variance
 \item[]
 \item[]
 \item[]
 \item[]
-\item[]
-\item[]
-\item[]
+\item[b.] Assuming the variance of $X$ above $s^2 \approx 9.22$, what is the standard deviation $s$? 
 \item[]
 \item[]
 \item[]
@@ -178,172 +176,15 @@ Compute the sample variance and standard deviation. Please show your work}
 
 
 
-
-
-
-
-\newpage
-\begin{enumerate}
-\item[11pts \bf 11.)]{Consider the following distribution of the weights (in pounds) of NFL players at the position of offensive lineman (OL). Assume that OL players have an average weight of about 310 lbs and the standard deviation for weight is 17 lbs. Answer questions (a)-(c) and show any calculations you use}
-\end{enumerate}
-```{r, echo=FALSE, fig.height=3, fig.width=5, message=FALSE, warning=FALSE}
-set.seed(592)
-x = rnorm(1000, mean = 310, sd = 17)
-x2 = x[which(x>=274 & x<=380)]
-CRF = cumsum(summary(as.factor(round_any(x2, 5)))/sum(summary(as.factor(round_any(x2, 5)))))
-unqx = sort(unique(round_any(x2,5)))
-
-A = ggplot()+
-  geom_histogram(aes(x = x2), bins = 16,color = 'black', fill = 'grey')+
-  scale_x_continuous(breaks = seq(270, 385, 10))+
-  theme_hc()+
-  theme(axis.text.x = element_text(size = 10),
-        axis.title.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-        axis.title.y = element_text(size = 15))+
-  ylab('Frequency')+
-  xlab('Weight (lbs)')+
-  ggtitle('Distribution of NFL Player Weights (lbs)',subtitle = 'For OL Positions')
-
-B = ggplot()+
-  geom_step(aes(x = unqx, y = CRF), color = 'black', size = 1)+
-  geom_point(aes(x = unqx, y = CRF), size = 2)+
-  scale_x_continuous(breaks = seq(255, 395, 10))+
-  theme_hc()+
-  theme(axis.text.x = element_text(size = 10),
-        axis.title.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-        axis.title.y = element_text(size = 15))+
-  ylab('Cumulative Relative Frequency')+
-  xlab('Weight in Pounds')+
-  ggtitle('Cumulative Distribution of NFL Player Weights (lbs)',subtitle = 'For the OL Position')
-
-plot(A)
-#ggarrange(A, B, nrow = 1, ncol = 2)
-
-```
 
 \begin{enumerate}
-\item[3pts (a)]{What proportion of players weigh more than 327 lbs?}
-\item[]
-\item[]
-\item[]
-\item[]
-\item[3pts (b)]{What proportion of players weigh between 293 lbs and 327 lbs?}
-\item[]
-\item[]
-\item[]
-\item[]
-\item[5pts (c)]{Aaron Brewer, an offensive lineman for the Tennesee Titans, weighs 274.8 lbs. Using the $\pm 2s$ rule, is Aaron Brewer's weight an outlier relative to the rest of the NFL?}
-\item[]
-\item[]
-\item[]
-\item[]
+\item[\bf 13.)] match boxplot to correct histogram distribution
 \end{enumerate}
 
 
 
 
-\newpage
-\begin{enumerate}
-\item[8pts \bf 13.)]{Each of the following distributions has a mean of either $\mu = 60$ or $\mu = 100$, and a standard deviation of either $\sigma = 10$ or $\sigma = 25$. Label each distribution with its mean and standard deviation.}
-\end{enumerate}
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=6}
-set.seed(129)
-nn = 100000
-a1 = rnorm(nn, 60, 25)
-b1 = rnorm(nn, 100, 25)
-c1 = rnorm(nn, 100, 10)
-d1 = rnorm(nn, 60, 10)
-
-pa1 = ggplot()+
-  geom_density(aes(x = a1[a1 > 0]), fill = 'lightgrey', size = 1)+
-  theme_base()+
-  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),title = element_text(size = 12))+
-  xlab('')+
-  ggtitle('(a)', subtitle = paste0(TeX('$\\mu$'),'=_________, ', TeX('$\\sigma'), '=__________'))
-
-pb1 = ggplot()+
-  geom_density(aes(x = b1[b1 > 0]), fill = 'lightgrey', size = 1)+
-  theme_base()+
-  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),title = element_text(size = 12))+
-  xlab('')+
-  ggtitle('(b)', subtitle = paste0(TeX('$\\mu$'),'=_________, ', TeX('$\\sigma'), '=__________'))
-
-pc1 = ggplot()+
-  geom_density(aes(x = c1), fill = 'lightgrey', size = 1)+
-  theme_base()+
-  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),title = element_text(size = 12))+
-  xlab('')+
-  ggtitle('(c)', subtitle = paste0(TeX('$\\mu$'),'=_________, ', TeX('$\\sigma'), '=__________'))
-
-pd1 = ggplot()+
-  geom_density(aes(x = d1), fill = 'lightgrey', size = 1)+
-  theme_base()+
-  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),title = element_text(size = 12))+
-  xlab('')+
-  ggtitle('(d)', subtitle = paste0(TeX('$\\mu$'),'=_________, ', TeX('$\\sigma'), '=__________'))
-
-ggarrange(pa1, pb1, pc1, pd1, nrow = 2, ncol = 2)
-```
-
-
-\newpage
-\begin{enumerate}
-\item[8pts \bf 12.)]{Describe the shape of the following distributions and for each distribution identify if the mean will be larger, smaller or the same as the median.}
-\end{enumerate}
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-#distribution shapes
-
-set.seed(123)
-sr = ggplot()+
-  geom_density(aes(x = rbeta(100000, 2, 10)), fill = 'lightgrey', size = 1)+
-  theme_base()+
-  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
-        axis.ticks.y = element_blank())+
-  xlab('')+
-  ggtitle('Shape:_________________________________', subtitle = 'mean _________ median')
-set.seed(123)
-sym = ggplot()+
-  geom_density(aes(x = rnorm(100000)), fill = 'lightgrey', size = 1)+
-  theme_base()+
-  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
-        axis.ticks.y = element_blank())+
-  xlab('')+
-  ggtitle('Shape:_________________________________', subtitle = 'mean _________ median')
-set.seed(123)
-sl = ggplot()+
-  geom_density(aes(x = rbeta(100000, 10, 2)), fill = 'lightgrey', size = 1)+
-  theme_base()+
-  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
-        axis.ticks.y = element_blank())+
-  xlab('')+
-  ggtitle('Shape:_________________________________', subtitle = 'mean _________ median')
-set.seed(123)
-bm = ggplot()+
-  geom_density(aes(x = c(rnorm(50000), rnorm(50000, 3))), fill = 'lightgrey', size = 1)+
-  theme_base()+
-  theme(axis.text.x = element_text(size = 12), axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 14), axis.title.y = element_blank(),
-        axis.ticks.y = element_blank())+
-  xlab('')+
-  ggtitle('Shape:_________________________________', subtitle = 'mean _________ median')
-
-ggarrange(sl, sym, bm, sr, nrow = 2, ncol = 2)
-
-```
 
 \newpage
 \begin{enumerate}
