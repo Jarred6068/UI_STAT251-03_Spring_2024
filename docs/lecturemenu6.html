@@ -349,6 +349,9 @@ $(document).ready(function () {
         <li>
           <a href="lecturemenu6.html">Week 6</a>
         </li>
+        <li>
+          <a href="lecturemenu7.html">Week 7</a>
+        </li>
       </ul>
     </li>
     <li>
@@ -532,17 +535,23 @@ $(document).ready(function () {
     Mon Sept 28  Lecture 12  the normal distribution, density curves, the standard
                              normal, z-scores, the empirical rule (delivered through
                              "The empirical rule", its last slide after the Sept 29 trim)
-                             lecture_slides/Week 6/Week6_Lecture12_Slides_9_28_2026.pptx
+                             lecture_slides/Week 6/2026/Week6_Lecture12_Slides_9_28_2026.pptx
     Wed Sept 30  Lecture 13  the rest of Lecture 12 (reading sigma off a curve, the exam
                              example, outliers, normal quantiles, transformations), then
                              sampling distributions, standard error, margin of error
                              (delivered through the margin-of-error example); opens with
                              a Q&A review and three review problems
-                             lecture_slides/Week 6/Week6_Lecture13_Slides_9_30_2026.pptx
+                             lecture_slides/Week 6/2026/Week6_Lecture13_Slides_9_30_2026.pptx
     Fri Oct 2    Lecture 14  statistical significance (carried from Lecture 13), then
-                             probability: the rules, random variables, discrete
-                             probability distributions, expected value
-                             lecture_slides/Week 6/Week6_Lecture14_Slides_10_2_2026.pptx
+                             probability and its rules (delivered through "Combining two
+                             events", its last slide after the Oct 5 trim)
+                             lecture_slides/Week 6/2026/Week6_Lecture14_Slides_10_2_2026.pptx
+    Mon Oct 5    Lecture 15  (Week 7) the rest of this page's probability section - the
+                             general addition and multiplication rules (independence), the
+                             rule examples, sampling with and without replacement, random
+                             variables, discrete distributions, expected value - before
+                             the Week 7 named distributions
+                             lecture_slides/Week 7/2026/Week7_Lecture15_Slides_10_5_2026.pptx
   From Lecture 13 on, the slides use all 379 students in heights.csv as the running
   data set (x-bar 67.1, s 4.12); the notes below still use the 262 women for the
   normal-distribution and sampling-distribution sections.
@@ -562,7 +571,9 @@ $(document).ready(function () {
       assert every number the slides print;
     * probability examples avoid the Homework 2 problems (3 coin flips, band/sport,
       the card deck, the urn, Moscow weather, the tree volumes) so the notes do not
-      hand out the homework answers.
+      hand out the homework answers. The urn example (3 red, 4 blue, 3 yellow, added
+      Oct 5 2026 for Lecture 15) is a different urn from Homework 2 problem 9(d)-(e),
+      and asks different questions (both red, no red, same color).
   Lecture 12 opens (after the review slides) by introducing the normal
   distribution properly - three real bell shapes, the definition, the two
   parameters, why it matters (averages of dice), density curves and "area is
@@ -2280,6 +2291,25 @@ depend on what was drawn before.</li>
 their draws are dependent. When the population is much larger than the
 sample, though, removing a few units barely changes what is left, and
 the draws behave almost exactly as if they were independent.</p>
+<div id="example-drawing-from-an-urn" class="section level3">
+<h3>Example: drawing from an urn</h3>
+<p>An urn holds 10 balls: 3 red, 4 blue and 3 yellow. Draw 2 balls
+<strong>without replacement</strong>. After each draw there is one fewer
+ball, and one fewer of the color just drawn.</p>
+<ul>
+<li><span class="math inline">\(P(\text{both red}) = \frac{3}{10} \cdot
+\frac{2}{9} = \frac{6}{90} \approx 0.067\)</span>: after a red ball,
+only 2 of the remaining 9 are red.</li>
+<li><span class="math inline">\(P(\text{no red balls}) = \frac{7}{10}
+\cdot \frac{6}{9} = \frac{42}{90} \approx 0.467\)</span>: both draws
+come from the 7 balls that are not red.</li>
+<li>“Both the same color” means both red, both blue or both yellow.
+Those three events are disjoint, so add them: <span
+class="math display">\[P(\text{same color}) = \frac{3}{10} \cdot
+\frac{2}{9} + \frac{4}{10} \cdot \frac{3}{9} + \frac{3}{10} \cdot
+\frac{2}{9} = \frac{24}{90} \approx 0.267\]</span></li>
+</ul>
+</div>
 <div id="example-drawing-two-aces" class="section level3">
 <h3>Example: drawing two aces</h3>
 <p>A standard deck has 52 cards, 4 of them aces. Draw two cards. What is

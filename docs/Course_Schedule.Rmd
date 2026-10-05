@@ -147,7 +147,7 @@ outlined below. Any changes will be announced in class and posted here.**
   example, identifying outliers, normal quantiles / the z-table / pnorm, and
   transformations - moved into Lecture 13 (Wed Sept 30), in front of the
   sampling distributions, margin of error and statistical significance that
-  were already planned for that day (lecture_slides/Week 6/
+  were already planned for that day (lecture_slides/Week 6/2026/
   Week6_Lecture13_Slides_9_30_2026.pptx). Friday Oct 2 is unchanged, so nothing
   later shifts. If Lecture 13 runs short, the margin-of-error block (its last
   five slides before the summary) is what carries into Oct 2.
@@ -155,9 +155,17 @@ outlined below. Any changes will be announced in class and posted here.**
   CARRY-OVER, Oct 1 2026. No dates changed. Lecture 13 (Wed Sept 30) stopped after
   the margin-of-error example (its slide 21), so statistical significance opens
   Lecture 14 (Fri Oct 2) ahead of the probability material already planned for that
-  day (lecture_slides/Week 6/Week6_Lecture14_Slides_10_2_2026.pptx). Lecture 14 also
-  reaches the expected value of a discrete random variable, which Oct 5 can treat
-  as review before the named distributions. Nothing later shifts.
+  day (lecture_slides/Week 6/2026/Week6_Lecture14_Slides_10_2_2026.pptx). Nothing
+  later shifts.
+
+  CARRY-OVER, Oct 5 2026. No dates changed. Lecture 14 (Fri Oct 2) stopped after
+  "Combining two events" (its slide 14), before independence. The general addition
+  and multiplication rules (independence), the probability examples, random
+  variables, discrete distributions and expected value open Lecture 15 (Mon Oct 5)
+  ahead of the Bernoulli, binomial and Poisson distributions planned for that day
+  (lecture_slides/Week 7/2026/Week7_Lecture15_Slides_10_5_2026.pptx). If Lecture 15
+  runs short, the Poisson block (its slides 27-29) is the clean thing to carry
+  into Oct 7, ahead of continuous distributions.
 -->
 
 
@@ -287,7 +295,7 @@ outlined below. Any changes will be announced in class and posted here.**
 <tr>
   <th scope="row">Friday</th>
   <td>October  2, 2026</td>
-  <td>Statistical significance; introduction to probability, random variables, discrete probability distributions</td>
+  <td>Statistical significance; introduction to probability and its rules</td>
 </tr>
 </tbody>
 <tbody>
@@ -297,7 +305,7 @@ outlined below. Any changes will be announced in class and posted here.**
 <tr>
   <th scope="row">Monday</th>
   <td>October  5, 2026</td>
-  <td>Discrete probability distributions</td>
+  <td>Probability continued: random variables; discrete probability distributions - Bernoulli, binomial and Poisson</td>
 </tr>
 <tr>
   <th scope="row">Wednesday</th>

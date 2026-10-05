@@ -24,376 +24,758 @@ library(ggpubr)
 library(latex2exp)
 
 path = 'Data/'
+
+fmt <- function(x, d = 2) formatC(x, format = 'f', digits = d)
+tab <- function(df, ...) kable(df, format = 'html', row.names = FALSE, escape = FALSE, ...) %>%
+  kable_classic(full_width = FALSE, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped')
+
+# the hand formulas, exactly as written below
+binom_pmf <- function(k, n, p) factorial(n) / (factorial(k) * factorial(n - k)) * p^k * (1 - p)^(n - k)
+pois_pmf  <- function(k, lambda) lambda^k * exp(-lambda) / factorial(k)
+near <- function(a, b, tol = 5e-4) abs(a - b) < tol
+
+# every number quoted on this page is computed here. The Lecture 15 numbers are the
+# same ones asserted in assets/make_lecture15_figures.R.
+quiz  <- binom_pmf(0:10, 10, 0.25)
+p_ft  <- 4236 / 4645
+lam   <- 172 / 64
+trout <- 500 / 10000
+stopifnot(near(quiz[4], 0.250), near(quiz[1], 0.056), near(sum(quiz[7:11]), 0.020),
+          near(p_ft, 0.912), near(0.912^10, 0.398), near(binom_pmf(9, 10, 0.912), 0.384),
+          near(lam, 2.69, 5e-3), near(pois_pmf(0, lam), 0.068), near(exp(-lam / 2), 0.26, 5e-3),
+          trout == 0.05, near(1 - 0.95^10, 0.401),
+          near(binom_pmf(5, 100, 0.05), 0.180), near(pois_pmf(5, 5), 0.175))
 ```
-
-
-# Common discrete distributions
-
-We can think of a probability distribution as a model of a particular random process. Some types of random variables are commonly encountered and thus common models of these random variables have emerged to describe their probability distributions. Below we will introduce a few of the most commonly used probability distributions for discrete random variables.
-
-### The Bernoulli distribution 
-
-The Bernoulli distribution, named after Swiss mathematician Jacob Bernoulli, is the probability distribution of a discrete random variable with two possible outcomes $\{0, 1\}$ where the outcome $X = 1$ occurs with probability $p$ and the outcome $X = 0$ occurs with probability $1-p$. This random variable can be used to model any binary random process like flipping a coin, or any categorical variable with two categories such as male or female. The **probability mass function** - which we can think of as the function which assigns probabilities to different outcomes of random variable - is given below
-
-\[ P(X) = \begin{cases} p & \ \text{if} \  X = 1 \\
-                      (1-p) & \ \text{if} \ X = 0
-          \end{cases}
-\]
-
-The Bernoulli distribution has a single parameter $p$ which is referred to as the "probability of success" - referring to the probability that the outcome we are interested in happens - such as getting Heads in a single flip of a coin. We usually denote that a random variable $X$ follows a Bernoulli distribution mathematically as
-\[ X \sim Bernoulli(p) \]
-
-In probability theory, the term **expected value** is often used instead of mean or average; however, they technically mean the same thing. The expected value of a probability distribution for a random variable $X$ is denoted mathematically as $E[X]$. The Bernoulli distribution has the following expected value and variance:
-
-\[ E[X] = p  \]
-\[ Var[X] = p(1-p)\]
-
-where $Var[X]$ means the variance of the random variable $X$. 
-
-It's important to note that many types of random variables can be remodeled into a Bernoulli distribution. Take for example a random variable $Z$ which assigns the numbers $0$, $1$, or $2$, to people who have one of three categories of pets: cats, dogs, or fish, respectively. The following table gives the probability distribution of $Z$:
-
-```{r, echo=FALSE, warning=F, message=FALSE}
-df = cbind.data.frame(Z = c(0,1,2),
-                      Probability = c('$p_1$', '$p_2$', '$p_3$'))
-
-kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
-```
-
-If we are interested in whether a single randomly sampled individual has a dog as a pet, then we may consider having a dog as the "successful" outcome and all other outcomes as "failures". Then the random variable $Y$ assigns a value of $1$ to an individual who has a dog as a pet with probability $p_2$ and a value of $0$ to an individual who does not have a dog with probability $1 - p_2 = p_1+p_3$. Thus the random variable $Y$ follows a Bernoulli distribution:
-
-\[ Y \sim Bernoulli(p_2) \]
-
-### The binomial distribution
-
-The binomial distribution is probably the most widely used discrete probability model. A binomial random variable counts the number of "successful" outcomes out of $n$ independent trials where each trial has probability of success $p$. Like the Bernoulli random variable, the binomial distribution deals with <i>dichotomous</i> outcomes. In fact, a binomial random variable is a sum of $n$ independent draws from a Bernoulli distribution. Thus the defining characteristics of a binomial distribution are 
-
-* There is a basic random process with two possible outcomes denoted as "success" or "failure"
-
-* There are $n$ independent repetitions of the random process
-
-* the probability of success $p$ is constant across all observations of the random process
-
-Thus the number of trials $n$ and the probability of success $p$ are parameters of the binomial distribution. A random variable $X$ which follows the binomial distribution is denoted mathematically as 
-
-\[ X \sim Binom(n, p)  \]
-
-Typical applications of the binomial distribution involve experimental outcomes such as the number of patients who recovered from illness while taking an experimental drug. Or the number of salmon that successfully spawn in a creek on a given day of the week. 
-
-
-```{r, echo = F, message=F, warning=F, fig.height=5, fig.width=10}
-n = 10
-p = 0.4
-bdf = cbind.data.frame(k = 0:n, prob = dbinom(0:n, size = n, prob = p))
-ggplot(data = bdf, aes(x = k, y = prob))+
-  geom_col(fill = 'steelblue', color = 'black', width = 0.7)+
-  theme_pander()+
-  scale_x_continuous(breaks = 0:n)+
-  theme(panel.grid.minor = element_blank(),
-        axis.text = element_text(size = 12),
-        axis.title = element_text(size = 16))+
-  xlab('Number of Successes (k)')+
-  ylab("Probability")+
-  ggtitle(TeX('Binomial PMF: $n = 10$, $p = 0.4$'))
-```
-
-The mean and variance of the binomial distribution are given by:
-
-\[ E[X] = np \]
-\[ Var[X] = np(1-p) \]
-
-The binomial distribution has the following probability mass function:
-
-\[ P(X = k) = \binom nk p^k (1-p)^{n-k}\]
-
-The first quantity is called the binomial coefficient and counts the number of ways to arrange $k$ successes among $n$ independent trials. Mathematically it is defined as
-
-\[ \binom nk = \frac{n!}{k!(n-k)!}  \]
-
-The symbol $!$ is called a factorial. In mathematics, a factorial is the product of all positive integers less than or equal to a given positive integer and not including $0$. 
-\[n! = n \times (n-1) \times (n-2) \times \dots \times 1 \]
-
-For example the quantity $5!$ is computed as 
-
-\[ 5! = 5\times 4\times 3\times 2\times 1\]
-
-It is also important to note that the quantity $0! = 1$ which is admittedly not intuitive.
-
-To explain in more detail, if we think of the $n$ trials as a sequence of $k$ ones (successes) and $n-k$ zeros (failures), then the binomial coefficient is essentially enumerating and counting all possible <i>permutations</i> of that sequence. Consider the possible sequences of two successes in three trials: there are three possible sequences of successes and failures we could observe:
-
-\[ (1, 1, 0) \\
-   (1, 0, 1) \\
-   (0, 1, 1)\]
-
-Using the binomial coefficient we have 
-
-\[ \binom 32 = \frac{3!}{2! (3-2)!} = \frac{3\times 2\times 1}{2\times 1 \times 1} = 3 \]
-
-Example: The random variable $X$ models the number of hits in five at-bats for professional baseball player Luis Arraez of the Miami Marlins who has a hit percentage of $35\%$ (a batting average of $.350$). Thus $X$ is a binomial random variable
-\[ X \sim Binom(n=5, p=0.35) \]
-
-* Compute the probability that Luis Arraez gets <u>one hit</u> in the next five at-bats
-
-\[ P(X = 1) = \binom 51 (0.35)^1 (0.65)^4 = 5 \times 0.35 \times 0.1785 \approx 0.312 \]
-
-* Compute the probability that Luis Arraez gets more than 4 hits in the next five at-bats
-
-Here "more than 4 hits" out of 5 at-bats means all 5 are hits:
-\[ P(X > 4) = P(X = 5) = \binom 55 (0.35)^5 (0.65)^0 = (0.35)^5 \approx 0.005 \]
-
-
-# The Poisson distribution
-
-The Poisson (pronounced "$\text{Pwa - s}\tilde o$") distribution is named after French Scientist Siméon Denis Poisson (1781–1840). It models the probability that a given number of events occur in a fixed interval of time, assuming the events occur independently of each other and with a known constant mean rate $\lambda$. Thus, a Poisson random variable has the following characteristics:
-
-* The occurrence of one event does not affect the probability that a second event will occur. That is, events occur independently.
-
-* The rate at which events occur is constant. The rate cannot be higher in some intervals and lower in other intervals.
-
-* Two events cannot occur at exactly the same instant; instead, at each very small sub-interval exactly one event either occurs or does not occur.
-
-* the events occur at rate $\lambda$ - also called the rate parameter - and is strictly positive $\lambda \in (0,\infty)$.
-
-
-```{r, echo = F, message=F, warning=F, fig.height=5, fig.width=10}
-lambda = 4
-pois_df = cbind.data.frame(k = 0:15, prob = dpois(0:15, lambda = lambda))
-ggplot(data = pois_df, aes(x = k, y = prob))+
-  geom_col(fill = 'darkorange', color = 'black', width = 0.7)+
-  theme_pander()+
-  scale_x_continuous(breaks = 0:15)+
-  theme(panel.grid.minor = element_blank(),
-        axis.text = element_text(size = 12),
-        axis.title = element_text(size = 16))+
-  xlab('Number of Events (k)')+
-  ylab("Probability")+
-  ggtitle(TeX('Poisson PMF: $\\lambda = 4$'))
-```
-
-The probability mass function is given by
-
-\[ P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}\]
-
-where $k$ is the number of events occurring, $\lambda$ is the rate at which events occur. The quantity $e$ is called <i>Euler's number</i>. It is a numerical constant that arises often in mathematics and can be characterized in many different ways. One definition occurs as the limit point of the sequence $(1+1/n)^n$:
-
-\[e = \lim_{n\rightarrow \infty} \left( 1+\frac{1}{n} \right)^n \approx 2.7183 \]
-
-virtually all calculators will have a <i>natural exponentiation</i> button for this quantity which is defined as
-
-\[ e = \exp(1) \]
-
-The expected value and variance of a Poisson random variable are both given by the rate parameter $\lambda$ 
-
-\[ E[X] = \lambda\]
-\[ Var[X] = \lambda\]
-
-The Poisson distribution has a wide range of applications across scientific disciplines including finance, genetics, infectious disease, manufacturing and many more. Some examples of the poisson random variables are given below:
-
-* The number of mutations on a strand of DNA occurring in a given unit of time
-
-* The number of defective products produced per hour of assembly at a factory
-
-* The number of bankruptcies filed in a given month
-
-* The number of internet connection failures in a given month
-
-Example: Let the random variable $Y$ represent the number of phone calls placed to a call center each hour during peak customer service hours. Assume that calls typically occur at a rate of $10$ calls per hour.
-
-* What is the probability that the call center receives $8$ calls in the next hour?
-
-Here $Y \sim Poisson(\lambda = 10)$, so
-\[ P(Y = 8) = \frac{10^8 e^{-10}}{8!} \approx 0.113 \]
-
-* What is the probability that the call center receives fewer than $2$ calls in the next hour?
-
-"Fewer than 2 calls" means $0$ or $1$ call:
-\[ P(Y < 2) = P(Y = 0) + P(Y = 1) = \frac{10^0 e^{-10}}{0!} + \frac{10^1 e^{-10}}{1!} = 11 e^{-10} \approx 0.0005 \]
-
-### Continuous random variables 
-
-Recall that continuous random variables have an uncountable number of outcomes. As a result, finding probabilities for continuous random variables requires a heavier mathematical treatment. For continuous random variables, the function which assigns probabilities to different outcomes is called a **probability density function**. 
-
-
-Since we cannot simply list the possible values of a continuous random variable and their probabilities, we have to rely on graphically displaying their distributions as we have done before. Consider the random variable $X$ with probability density function $f(x)$ given below
-
-```{r, echo=F, message=F, warning=F, fig.height=5, fig.width=10}
-h2 = round(1/(25*0.25), 2)
-dist2 = cbind.data.frame(val = c(-1, -1, -0.75, -0.5, -0.25, 0 , 0.25, 0.5, 0.75, 1, 1), 
-                        dens = c(0,  2*h2,3*h2, 7*h2,  5*h2, 4*h2,2*h2,1*h2,1*h2,0,0))
-#pdf(paste0(savepath, "PMFplot2.pdf"), height = 5, width = 6.5)
-ggplot(data = dist2, aes(x = val, y = dens))+geom_step(size = 1)+
-  theme_pander()+
-  scale_x_continuous(limits=c(-1, 1), breaks = seq(-1, 1, 0.25))+
-  scale_y_continuous(limits=c(0,7*h2), breaks = seq(0, 7*h2, h2))+
-  theme(panel.grid.minor = element_blank(), 
-        axis.text = element_text(size = 12),
-        axis.title = element_text(size = 16))+
-  xlab('X')+
-  ylab("Probability Density")+
-  ggtitle("Probability Distribution of X")
-#dev.off()
-```
-
-
-For a continuous distribution we cannot compute the probability that $X$ is equal to some particular value because $X$ can take on infinite number of values within a range. Thus the probability density is divided among an infinite number of outcomes making the probability of any one outcome effectively zero. We can however consider the probability that $X$ takes on a value in some sub-interval of its domain. For example, we can compute the probability $P(X<0)$. Finding this probability amounts to finding the area underneath the probability density curve of $X$ in the interval $[-1, 0)$. 
-
-#### Finding probabilities from continuous distributions
-
-Normally, the mathematics of calculus would be required to compute this probability and we would need to integrate $f(x)$ over this range of values. However, in the example above we can manually extrapolate the area under the curve. Notice that the area of the curve is divided into a grid. By finding the area of a single box in the graph, we can multiply this area by the number of boxes in the previously specified range to compute the total area under the curve. For example, the area of a single box is
-
-\[ \text{Area} = 0.25 \times 0.16 = 0.04\]
-
-Now that we know the area of a single box on the plot 
-
-\[P(X < 0) = 0.04 \times 17 = 0.68 \]
-
-Lets consider another example: Below is the probability density function for a random variable $W$
-
-```{r, echo=F, message=F, warning=F, fig.height=5, fig.width=10}
-dist4 = cbind.data.frame(val = c(0, 2, 5), 
-                         dens = c(0,0.4,0))
-#pdf(paste0(savepath, "PMF_triangular_plot2.pdf"), height = 5, width = 6.5)
-ggplot(data = dist4, aes(x = val, y = dens))+geom_line(size = 1)+theme_pander()+
-  scale_x_continuous(limits=c(0, 5), breaks = seq(0, 5, 1))+
-  scale_y_continuous(limits=c(0,0.45), breaks = seq(0, 0.45, 0.05))+
-  theme(panel.grid.minor = element_blank(), axis.text = element_text(size = 12),
-        axis.title = element_text(size = 14))+
-  xlab('W')+
-  ylab("Probability Density")
-#dev.off()
-```
-
-* Find the probability $P(W \leq 1)$. Again, to solve this we can extrapolate the area under the curve. Since the area between $0$ and $1$ of the distribution forms a right-angle triangle we can compute the area using the formula for the area of a triangle:
-
-\[\text{area of triangle} = \frac{1}{2}(b \times h) \]
-
-where $b$ is the base length and $h$ is the height of the triangle. The base runs from $0$ to $1$, so $b = 1$. The density rises in a straight line from $(0, 0)$ to the peak at $(2, 0.4)$, giving a slope of $0.4/2 = 0.2$; therefore the height of the curve at $W = 1$ is $h = 0.2 \times 1 = 0.2$.
-
-\[ P(W\leq 1) = \frac{1}{2}(1\times 0.2) = 0.1 \]
-
-
-#### Mean and variance of continuous random variables
-
-* The mean $\mu$ and variance $\sigma^2$ of a continuous random variable cannot (usually) be defined or computed without calculus but their interpretations are the same as for discrete distributions
-
-
 
 <!--
-  MOVED HERE Sept 28 2026 from the 2024 Week 6 page, when that page was rewritten
-  for Fall 2026. It sets up the central limit theorem (Fri Oct 9), so it belongs in
-  Week 7. Still 2024 material awaiting its Fall 2026 revision.
+  SCOPE OF THIS PAGE (Fall 2026 rewrite, Oct 5 2026).
+
+  Week 7 is three lectures (see Course_Schedule.Rmd, the date source of truth):
+    Mon Oct 5    Lecture 15  opens with the end of the Week 6 probability section
+                             (independence through expected value, carried from
+                             Lecture 14 and written up on the Week 6 page), then the
+                             Bernoulli, binomial and Poisson distributions
+                             lecture_slides/Week 7/2026/Week7_Lecture15_Slides_10_5_2026.pptx
+    Wed Oct 7    Lecture 16  continuous probability distributions
+    Fri Oct 9    Lecture 17  sampling distributions and the central limit theorem
+  The sections below follow that order. The Lecture 15 examples (guessing on a quiz,
+  Stephen Curry's free throws, goals at the 2022 World Cup) are the slide examples;
+  their numbers and sources are in assets/make_lecture15_figures.R.
+
+  Sources. Terms follow OpenStax Introductory Statistics 2e, Sections 4.3, 4.6, 5.1
+  and 7.1-7.3 (the Week 7 reading). This page rewrites the 2024 Week 7 page and
+  pulls in 2024 lecture material:
+    * kept from the 2024 page: recoding a category as a Bernoulli trial, the
+      binomial coefficient and factorials, the Poisson conditions and examples of
+      Poisson counts, counting boxes under a step density, the triangle density,
+      and the Coho salmon sampling-distribution derivation;
+    * from the 2024 decks: the tiger trout (2024 Lecture 13 slide 8, Lecture 15
+      slide 19), the density-quartiles example (2024 Lecture 13 slide 16), the
+      rectangles that approximate an area (2024 Lecture 13 slides 13-15), "height
+      is density, not probability" and the cumulative-probability rules (2024
+      Lecture 15 slides 3-6), and the three kinds of distribution (2024 Lecture 15
+      slide 10);
+    * moved here from the 2024 Week 8 page: the central limit theorem and the
+      sampling distribution of p-hat. The Week 8 page still has its 2024 copy and
+      will be revised with the Oct 12 lecture.
+  Dropped: the Luis Arraez and call-center examples (replaced by the slide examples),
+  the Star Wars Poisson example, and the 2024 Texas hold'em table, whose probabilities
+  were wrong (P(no ace in two cards) = C(48,2)/C(52,2) = 0.851, not 0.559).
+  The 2024 "four-sided die, n = 2" derivation is NOT used: it is Homework 3 problem 1.
+  Homework 2 problem 10 asks students to confirm mu = p and sigma^2 = p(1-p) for a
+  Bernoulli, so this page states those results without deriving them.
 -->
 
-### Deriving sampling distributions
+# Named discrete distributions
 
-Two important probability distributions we encounter often in the statistics are the population distribution of a random variable and the sampling distribution of a statistic
+Monday opens with the end of the probability section from the [Week 6 notes](lecturemenu6.html):
+the general addition rule and independence, the examples on the heights table, sampling with
+and without replacement, random variables, discrete probability distributions and expected
+value. Those are written up there, starting at
+[Combining two events](lecturemenu6.html#combining-two-events).
 
-* The **population distribution** is the probability distribution for the outcomes of a random variable
+Last week every probability distribution was built by hand: list the outcomes, count, add. Some
+random processes come up so often that their distributions have names and formulas. Each one is a
+**probability model**: a description of a chance process that, once we know a parameter or two,
+tells us the probability of every possible value. This week we meet three discrete models.
 
-* The **sampling distribution** is the probability distribution for a statistic
+## The Bernoulli distribution
 
-For a discrete random variable, the sampling distribution of a statistic can be derived through the following steps:
+* A **Bernoulli trial** is a single random trial with exactly two possible outcomes, called
+  "success" and "failure". The random variable $X$ records a success as $X = 1$ and a failure as
+  $X = 0$.
+* Its distribution has one parameter, the **probability of success** $p$:
 
- 1. Enumerate all possible samples of size $n$ that can be drawn from the population. For each sample, calculate the sample mean, sample variance, or any other relevant statistic of interest.
- 
- 2. Determine the probability associated with each possible sample statistic. This involves using the population distribution to calculate the probability of obtaining each value of the sample statistic.
- 
- 3. Assemble the probabilities for each sample statistic to create the sampling distribution. This distribution describes the probabilities of observing different values of the sample statistic across all possible samples of size $n$.
- 
- 
-**Example**: Texas hold'em is a gambling game which starts with each player receiving two cards. Here is the population distribution for the number of aces dealt in a two-card hand
-
-\[X = \text{Number of aces in a hand of poker} \]
-
-```{r, echo=FALSE, warning=F, message=FALSE}
-df = cbind.data.frame(X = c("0", "1", "2"),
-                      Probability = c(0.559, 0.382, 0.059))
-
-kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
+```{r, echo=FALSE}
+tab(data.frame(x = c('0 (failure)', '1 (success)'), p = c('$1 - p$', '$p$')),
+    col.names = c('$x$', '$P(x)$'))
 ```
 
-Derive the sampling distribution for the number of aces in two consecutive hands of texas hold'em. To derive the sampling distribution we must define the sample space for the number of aces in two hands. The possibilities are given below (here we assume the two hands are independent, so the joint probabilities are the products of the individual-hand probabilities).
+We write $X \sim \text{Bernoulli}(p)$. Its mean and variance are
+$$\mu = p \qquad\qquad \sigma^2 = p(1 - p)$$
+(Homework 2 asks you to check these with the formulas $\mu = \sum x\, P(x)$ and
+$\sigma^2 = \sum (x - \mu)^2 P(x)$ from Week 6.) The name honors Jacob Bernoulli, the same Swiss
+mathematician who proved the law of large numbers.
 
+"Success" does not have to be good news; it is just the outcome we are counting. A coin landing
+heads, a patient recovering, a part being defective and a voter supporting a candidate can all be
+successes.
 
-```{r, echo=FALSE, warning=F, message=FALSE}
-df = cbind.data.frame(`Number of Aces in two hands` = c(0:4),
-                      `Outcomes giving result` = c('$(0,0) = \\color{red}{1}$', 
-                                                   '$(0,1), (1,0) = \\color{red}{2}$', 
-                                                   '$(0, 2), (2,0), (1,1) = \\color{red}{3}$',
-                                                   '$(1,2), (2,1) = \\color{red}{2}$', 
-                                                   '$(2,2) = \\color{red}{1}$'),
-                      Probability = c('$0.559\\times 0.559 = \\color{red}{0.312}$',
-                                      '$2(0.559\\times 0.382) = \\color{red}{0.427}$',
-                                      '$2(0.559\\times 0.059) + (0.382\\times 0.382) = \\color{red}{0.212}$',
-                                      '$2(0.382\\times 0.059) = \\color{red}{0.045}$',
-                                      '$0.059\\times 0.059 = \\color{red}{0.003}$'))
+**Any categorical variable can be turned into a Bernoulli trial.** Suppose $Z$ records whether a
+randomly chosen person's pet is a cat, a dog or a fish, with probabilities $p_1$, $p_2$ and $p_3$.
+If what we care about is whether the person has a dog, call "dog" a success and everything else a
+failure. Then $Y = 1$ for a dog owner, with probability $p_2$, and $Y = 0$ otherwise, with
+probability $p_1 + p_3 = 1 - p_2$, so $Y \sim \text{Bernoulli}(p_2)$.
 
-kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
+### Example: guessing one question
+
+You guess on a multiple-choice question with 4 options, one of them correct. Let $X = 1$ if the guess
+is right. Then $X \sim \text{Bernoulli}(0.25)$:
+
+* $P(X = 0) = 1 - 0.25 = 0.75$;
+* $\mu = 0.25$ and $\sigma^2 = 0.25 \times 0.75 = 0.1875$.
+
+The mean of a 0/1 variable is the proportion of 1s, so $\mu = 0.25$ says that in the long run a
+quarter of your guesses are right.
+
+## The binomial distribution
+
+One Bernoulli trial is not very interesting. Repeat it, and count the successes. The textbook lists
+three characteristics of this **binomial setting**:
+
+1. **A fixed number of trials** $n$, decided in advance.
+2. **Two outcomes on every trial**, success or failure, with **the same probability of success** $p$
+   each time (and probability of failure $q = 1 - p$).
+3. **Independent trials**: the outcome of one trial does not change the probability of success on any
+   other.
+
+* A **binomial random variable** $X$ is the number of successes in such a setting. Its distribution,
+  the **binomial distribution**, has two parameters, $n$ and $p$, and we write $X \sim \text{Binom}(n, p)$.
+  (The textbook writes $X \sim B(n, p)$.) A Bernoulli random variable is the special case $n = 1$.
+
+The probability of exactly $k$ successes is
+$$P(X = k) = \frac{n!}{k!\,(n - k)!}\; p^k\, (1 - p)^{n - k}, \qquad k = 0, 1, \ldots, n$$
+and the mean and variance are
+$$\mu = np \qquad\qquad \sigma^2 = np(1 - p) \qquad\qquad \sigma = \sqrt{np(1 - p)}$$
+
+The mean makes sense: in $n$ trials that each succeed with probability $p$, you expect $np$
+successes.
+
+**Where the formula comes from.** The symbol $!$ is a **factorial**: the product of all the positive
+whole numbers up to that number,
+$$n! = n \times (n - 1) \times (n - 2) \times \cdots \times 1, \qquad\text{so } 5! = 5 \times 4 \times 3 \times 2 \times 1 = 120$$
+and, by definition, $0! = 1$. The first factor in the formula, the **binomial coefficient**
+$$\binom{n}{k} = \frac{n!}{k!\,(n - k)!}$$
+counts the number of different orders in which $k$ successes can fall among $n$ trials. Each one of
+those orders has probability $p^k (1 - p)^{n - k}$ by the multiplication rule, because the trials
+are independent. Multiplying the two gives $P(X = k)$.
+
+### Example: three tosses again
+
+In Week 6 we found the distribution of $X$ = the number of heads in 3 tosses of a fair coin by listing
+all 8 outcomes. That is the binomial setting with $n = 3$ and $p = 0.5$, so the formula should give
+the same answer:
+$$P(X = 2) = \frac{3!}{2!\,1!}\,(0.5)^2\,(0.5)^1 = 3 \times \frac{1}{8} = \frac{3}{8}$$
+The coefficient $3!/(2!\,1!) = 3$ counts the three orders with 2 heads, HHT, HTH and THH, exactly the
+outcomes we counted by hand. The formula just saves us from listing them when $n$ is large.
+
+### Example: guessing a whole quiz
+
+You guess on all 10 questions of a 4-option multiple-choice quiz, so the number right is
+$X \sim \text{Binom}(10, 0.25)$.
+
+* $P(X = 3) = \dfrac{10!}{3!\,7!}(0.25)^3(0.75)^7 = 120 \times 0.0156 \times 0.1335 \approx `r fmt(quiz[4], 3)`$
+* $P(X = 0) = (0.75)^{10} \approx `r fmt(quiz[1], 3)`$: about 1 time in 18 you get every question wrong.
+* $\mu = 10 \times 0.25 = 2.5$ questions and $\sigma = \sqrt{10 \times 0.25 \times 0.75} \approx `r fmt(sqrt(1.875), 2)`$.
+
+The whole distribution:
+
+```{r, echo=FALSE}
+qd <- data.frame(k = 0:10, p = fmt(quiz, 3))
+tab(as.data.frame(t(qd$p)), col.names = paste0('$', 0:10, '$')) %>%
+  add_header_above(c('$P(X = k)$ for $k =$' = 11), escape = FALSE)
 ```
 
-Therefore we can summarize the sampling distribution of the number $Y$ of Aces in two hands of texas hold'em
+To pass with 6 or more right you need $P(X \geq 6) = P(6) + P(7) + \cdots + P(10) \approx
+`r fmt(sum(quiz[7:11]), 3)`$, about a 2% chance. Guessing is not a strategy.
 
-```{r, echo=FALSE, warning=F, message=FALSE}
-df = cbind.data.frame(`Number of Aces in two hands` = c(0:4),
-                      Probability = c(0.312, 0.427, 0.212, 0.045, 0.003))
+### Example: tiger trout
 
-kable(df, format = 'html', col.names = c('$Y$', '$P(Y)$'), digits = 3, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
+A tiger trout is a sterile cross between a brown trout and a brook trout, raised in hatcheries and
+stocked into lakes and ponds. Suppose 500 of the 10,000 trout stocked in a reservoir are tiger trout
+and the fish are well mixed, so each fish caught is a tiger trout with probability
+$p = 500/10{,}000 = 0.05$. (With 10,000 fish, catching a few barely changes the mix, so the catches
+behave like independent trials; see "Sampling with and without replacement" in the Week 6 notes.)
+
+* The probability that the first fish you catch is a tiger trout is just $p = 0.05$.
+* The probability of at least one tiger trout among your first 10 fish is easiest through the
+  complement:
+  $$P(X \geq 1) = 1 - P(X = 0) = 1 - (0.95)^{10} \approx `r fmt(1 - 0.95^10, 3)`$$
+
+### Example: free throws
+
+Stephen Curry has made 4,236 of the 4,645 free throws he has attempted in the NBA, so take
+$p = 4236/4645 \approx 0.912$. If he shoots 10 free throws and the shots are independent,
+$X \sim \text{Binom}(10, 0.912)$:
+
+* $P(\text{all } 10) = (0.912)^{10} \approx `r fmt(0.912^10, 2)`$, so even one of the best free-throw
+  shooters ever misses at least one of 10 about 60% of the time;
+* $P(X = 9) = 10\,(0.912)^9(0.088) \approx `r fmt(binom_pmf(9, 10, 0.912), 2)`$;
+* on average he makes $\mu = np = 10 \times 0.912 \approx 9.1$.
+
+## The shape of a binomial distribution
+
+```{r, echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('assets/l15_binomial_shapes.png')
 ```
 
+Each panel is $\text{Binom}(10, p)$. With $p = 0.5$ the distribution is **symmetric**. When $p$ is
+small, the counts pile up near 0 and the distribution is **skewed right**; when $p$ is large it is
+**skewed left**. In each case the peak sits near the mean $np$: 2, 5 and 8. As $n$ grows, the
+distribution becomes more and more bell shaped even when $p$ is not 0.5, which is the central limit
+theorem at the end of this page.
 
-**Example** Consider the probability distribution of the random variable $X$. Let $X$ represent the number of Coho salmon caught in an afternoon by a fly fisherman fishing the Clearwater river.
+## Is it binomial?
 
+Check the three conditions before reaching for the formula.
 
-```{r, echo=FALSE, warning=F, message=FALSE}
-df = cbind.data.frame(X = c("0", "1", "2"),
-                      Probability = c(0.589, 0.232, 0.179))
+* **The number of heads in 20 flips of a coin.** Yes: $n = 20$ is fixed, $p = 0.5$ on every flip, and
+  the flips are independent.
+* **The number of aces in a 5-card hand.** No: the cards are dealt without replacement, so the draws
+  are not independent. After an ace, only 3 of the 51 remaining cards are aces.
+* **The number of rolls of a die until the first six.** No: the number of trials is not fixed in
+  advance; it *is* the random variable. (This is the geometric distribution, textbook Section 4.4.)
 
-kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
+## The Poisson distribution
+
+The binomial counts successes out of a fixed number of trials. Some counts have no "number of
+trials" at all: the number of goals in a soccer match, of emails in an hour, of defects in a sheet
+of glass. The **Poisson distribution**, named after the French mathematician Siméon Denis Poisson
+(1781–1840), models counts like these. A Poisson random variable counts events in a **fixed interval**
+of time or space when
+
+* events occur **independently**: one event does not make another more or less likely;
+* events occur at a **constant average rate**, the same in every part of the interval;
+* two events cannot happen at exactly the same instant.
+
+The distribution has one parameter, the **rate** $\lambda$ (lambda), the average number of events in
+the interval. We write $X \sim \text{Poisson}(\lambda)$, and
+
+$$P(X = k) = \frac{\lambda^k\, e^{-\lambda}}{k!}, \qquad k = 0, 1, 2, \ldots$$
+
+$$\mu = \lambda \qquad\qquad \sigma^2 = \lambda \qquad\qquad \sigma = \sqrt{\lambda}$$
+
+There is no upper limit on $k$. The number $e \approx 2.718$ is **Euler's number**, a constant that
+turns up throughout mathematics; every scientific calculator has an $e^x$ button. (The textbook writes
+the parameter as $\mu$ and the distribution as $X \sim P(\mu)$.)
+
+Other counts that are often modeled as Poisson: mutations on a strand of DNA, defective products per
+hour on an assembly line, bankruptcies filed in a month, and internet outages in a month.
+
+### Example: World Cup goals
+
+The 2022 FIFA World Cup produced 172 goals in its 64 matches, so take
+$\lambda = 172/64 \approx 2.69$ goals per match and let $X$ = the number of goals in one match.
+
+* $P(X = 0) = e^{-2.69} \approx `r fmt(pois_pmf(0, lam), 3)`$.
+* So out of 64 matches the model expects $64 \times `r fmt(pois_pmf(0, lam), 3)` \approx
+  `r fmt(64 * pois_pmf(0, lam), 1)`$ to end 0–0. There were actually 7. Close, but a model is never a
+  perfect fit: real matches break the "constant rate" condition, since a team that falls behind
+  attacks harder.
+* **Change the interval, change $\lambda$.** A 45-minute half is half a match, so the rate for one
+  half is $\lambda = 2.69/2 \approx 1.34$, and
+  $P(\text{no goals in a half}) = e^{-1.34} \approx `r fmt(exp(-lam / 2), 2)`$.
+
+The standard deviation is $\sigma = \sqrt{2.69} \approx `r fmt(sqrt(lam), 2)`$ goals. Here is the whole
+distribution:
+
+```{r, echo=FALSE, out.width='80%', fig.align='center'}
+knitr::include_graphics('assets/l15_poisson_goals.png')
 ```
 
-Derive the sampling distribution for the mean number of fish caught from a random sample of $n = 3$ afternoons of fishing
+Two goals is the most likely score total, then three. The distribution is **skewed right**: $X$ cannot
+go below 0, but there is no upper limit.
 
-```{r, echo=FALSE, warning=F, message=FALSE}
-df = cbind.data.frame(`Mean Number of Salmon Caught` = c(0.00, 0.33, 0.67, 1.00, 1.33, 1.67, 2.00),
-                      `Outcomes giving result` = c('$(0,0,0) = \\color{red}{1}$', 
-                                                   '$(1,0,0), (0,1,0),(0,0,1) = \\color{red}{3}$',
-                                                   '$(1,1,0), (1,0,1), (0,1,1), (2,0,0), (0,2,0),(0,0,2) = \\color{red}{6}$',
-                                                   '$(1,1,1), (2,1,0), (2,0,1), (0,2,1), (1,2,0), (1,0,2), (0,1,2) = \\color{red}{7}$',
-                                                   '$(2,1,1), (1,2,1), (1,1,2), (2,2,0), (2,0,2),(0,2,2) = \\color{red}{6}$',
-                                                   '$(1,2,2), (2,1,2),(2,2,1) = \\color{red}{3}$',
-                                                   '$(2,2,2) = \\color{red}{1}$'),
-                      
-                      Probability = c('$0.589^3 = \\color{red}{0.204}$',
-                                      '$3(0.589^2\\times0.232) = \\color{red}{0.241}$',
-                                      '$3(0.232^2\\times0.589) + 3(0.589^2\\times 0.179) = \\color{red}{0.281}$',
-                                      '$0.232^3 + 6(0.589\\times 0.232\\times 0.179) = \\color{red}{0.159}$',
-                                      '$3(0.232^2\\times0.179) + 3(0.179^2\\times 0.589) = \\color{red}{0.085}$',
-                                      '$3(0.179^2\\times0.232) = \\color{red}{0.022}$',
-                                      '$0.179^3 = \\color{red}{0.006}$'))
+### The Poisson as an approximation to the binomial
 
-kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
+When $n$ is large and $p$ is small, a binomial count behaves like a Poisson count with
+$\lambda = np$. Back to the tiger trout: in a day's catch of 100 fish with $p = 0.05$, the number of
+tiger trout is $\text{Binom}(100, 0.05)$, and
+
+$$\text{binomial: } P(X = 5) = \frac{100!}{5!\,95!}(0.05)^5(0.95)^{95} \approx `r fmt(binom_pmf(5, 100, 0.05), 3)` \qquad
+\text{Poisson with } \lambda = 5\text{: } P(X = 5) = \frac{5^5 e^{-5}}{5!} \approx `r fmt(pois_pmf(5, 5), 3)`$$
+
+The Poisson is far easier to compute. The textbook's rule of thumb is that the approximation is good
+when $n$ is greater than 20 and $p$ is less than 0.05; at $p = 0.05$ we are right at the edge, and the
+two answers still agree to two decimal places.
+
+# Continuous probability distributions
+
+```{r continuous-setup, include=FALSE}
+# the step density (Lecture 16, kept from the 2024 page): heights in units of one box
+box_w <- 0.25; box_h <- 0.16
+step_boxes <- c(2, 3, 7, 5, 4, 2, 1, 1)               # on (-1,-0.75), ..., (0.75, 1)
+stopifnot(sum(step_boxes) * box_w * box_h == 1, sum(step_boxes[1:4]) == 17)
+
+# the density for quartiles (2024 Lecture 13 slide 16)
+q_edges <- c(0, 1, 2, 3, 5, 11); q_dens <- c(0.10, 0.15, 0.25, 0.10, 0.05)
+q_area  <- diff(q_edges) * q_dens
+stopifnot(abs(sum(q_area) - 1) < 1e-12, all.equal(cumsum(q_area), c(0.10, 0.25, 0.50, 0.70, 1.00)))
+
+# rectangles under the normal model for women's heights (Week 6: mean 65.4, sd 3.38)
+HM <- 65.4; HS <- 3.38; lo <- 62; hi <- 70
+exact <- pnorm(hi, HM, HS) - pnorm(lo, HM, HS)
+rect_area <- function(w) { mids <- seq(lo + w / 2, hi - w / 2, by = w); sum(w * dnorm(mids, HM, HS)) }
+areas <- sapply(c(2, 1, 0.25), rect_area)
+stopifnot(near(exact, 0.758, 5e-3), all(abs(areas - exact) < c(0.02, 0.005, 0.001)))
 ```
 
+## From histograms to density curves
 
-Therefore we can summarize the sampling distribution of the mean number $\bar{X}$ of Coho salmon caught over a random sample of $n = 3$ afternoons of fishing
+So far a random variable's values could be listed: 0, 1, 2, and so on. A **continuous** random
+variable, like a height, a time or a temperature, can take any value in an interval, so there are
+too many values to list and we cannot give each one a probability.
 
-```{r, echo=FALSE, warning=F, message=FALSE}
-df = cbind.data.frame(`Mean Number of Salmon Caught` = c(0.00, 0.33, 0.67, 1.00, 1.33, 1.67, 2.00),
-                      Probability = c(0.204, 0.241, 0.281, 0.159, 0.085, 0.022, 0.006))
+We have already seen the fix. In Week 6 a histogram of 150 years of Central Park January
+temperatures was smoothed into a **density curve**, and the proportion of Januaries in any range was
+the **area** under the curve over that range. A continuous probability distribution works the same
+way, with "proportion of the data" replaced by "probability".
 
-kable(df, format = 'html', col.names = c('$\\bar{X}$', '$P(\\bar{X})$'), digits = 3, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
+* The **probability density function** (pdf) of a continuous random variable $X$ is a curve $f(x)$
+  with three properties:
+  1. $f(x) \geq 0$ everywhere: the curve never dips below the $x$-axis;
+  2. the total area under the curve is 1;
+  3. **probability is area**: $P(a < X < b)$ is the area under the curve between $a$ and $b$.
+
+This is what the textbook means by "PROBABILITY = AREA". Three consequences that trip people up:
+
+* **The height of the curve is not a probability.** The $y$-axis measures *probability density*, and a
+  density can be bigger than 1. Only areas are probabilities.
+* **Any single value has probability 0**: $P(X = c) = 0$, because the "area" over a single point is a
+  line with no width. A height of *exactly* 70.000... inches has probability 0, even though heights
+  near 70 are common.
+* So for a continuous variable **$<$ and $\leq$ give the same answer**: $P(X < c) = P(X \leq c)$.
+
+Finding an area under a general curve takes calculus, which this course does not use. Instead we use
+simple shapes whose areas we can compute with geometry, and tables or software for the normal curve.
+
+### Example: a uniform distribution
+
+A campus shuttle arrives every 20 minutes and you show up at a random time, so your wait $X$ is equally
+likely to be anywhere between 0 and 20 minutes. Its density is flat:
+$$f(x) = \frac{1}{20} \quad\text{for } 0 \leq x \leq 20$$
+a rectangle with area $20 \times \frac{1}{20} = 1$. This is the **uniform distribution**. Every
+probability is the area of a smaller rectangle, base times height:
+
+* $P(X < 5) = 5 \times \frac{1}{20} = 0.25$;
+* $P(4 < X < 15) = (15 - 4) \times \frac{1}{20} = 0.55$;
+* $P(X = 15) = 0 \times \frac{1}{20} = 0$;
+* $P(X > 15) = (20 - 15) \times \frac{1}{20} = 0.25$.
+
+```{r, echo=FALSE, fig.height=3, fig.width=8, fig.align='center'}
+ggplot() +
+  annotate('rect', xmin = 4, xmax = 15, ymin = 0, ymax = 1/20, fill = 'lightblue', alpha = 0.8) +
+  annotate('segment', x = c(0, 0, 20), xend = c(20, 0, 20), y = c(1/20, 0, 0), yend = c(1/20, 1/20, 1/20),
+           linewidth = 1) +
+  annotate('text', x = 9.5, y = 0.025, label = 'P(4 < X < 15) = 0.55', size = 5) +
+  scale_x_continuous(breaks = c(0, 4, 5, 10, 15, 20)) +
+  scale_y_continuous(breaks = c(0, 1/20), labels = c('0', '1/20'), limits = c(0, 0.065)) +
+  labs(x = 'Wait (minutes)', y = 'Density') +
+  theme_classic2() +
+  theme(axis.text = element_text(size = 12), axis.title = element_text(size = 14))
 ```
 
+### Example: counting boxes
 
+The density of $X$ below is a step function on a grid. Each box is $0.25$ wide and $0.16$ tall, so
+each box has area $0.25 \times 0.16 = 0.04$.
 
+```{r, echo=FALSE, fig.height=4.5, fig.width=9, fig.align='center'}
+sx <- seq(-1, 0.75, by = box_w)
+sd_df <- data.frame(xmin = sx, xmax = sx + box_w, h = step_boxes * box_h)
+ggplot(sd_df) +
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = h),
+            fill = ifelse(sd_df$xmax <= 0, 'lightblue', 'white'), color = 'black', linewidth = 0.8) +
+  geom_hline(yintercept = seq(0, 7 * box_h, box_h), color = 'grey70', linetype = 'dashed', linewidth = 0.3) +
+  geom_vline(xintercept = seq(-1, 1, box_w), color = 'grey70', linetype = 'dashed', linewidth = 0.3) +
+  scale_x_continuous(breaks = seq(-1, 1, 0.25)) +
+  scale_y_continuous(breaks = seq(0, 7 * box_h, box_h)) +
+  labs(x = 'X', y = 'Probability density') +
+  theme_classic2() +
+  theme(axis.text = element_text(size = 12), axis.title = element_text(size = 14))
+```
 
+There are `r sum(step_boxes)` boxes under the curve in all, and $`r sum(step_boxes)` \times 0.04 = 1$,
+so this is a valid density. The shaded region, to the left of 0, holds
+$`r paste(step_boxes[1:4], collapse = ' + ')` = `r sum(step_boxes[1:4])`$ boxes, so
+$$P(X < 0) = `r sum(step_boxes[1:4])` \times 0.04 = `r fmt(sum(step_boxes[1:4]) * 0.04, 2)`$$
 
+### Example: a triangle
 
+The density of $W$ below rises in a straight line from 0 at $W = 0$ to a peak of 0.4 at $W = 2$, then
+falls back to 0 at $W = 5$. The whole triangle has area $\frac{1}{2} \times 5 \times 0.4 = 1$.
 
+```{r, echo=FALSE, fig.height=4, fig.width=9, fig.align='center'}
+tri <- data.frame(x = c(0, 2, 5), y = c(0, 0.4, 0))
+ggplot(tri, aes(x, y)) +
+  geom_polygon(data = data.frame(x = c(0, 1, 1), y = c(0, 0.2, 0)), fill = 'lightblue') +
+  geom_line(linewidth = 1) +
+  scale_x_continuous(breaks = 0:5) +
+  scale_y_continuous(breaks = seq(0, 0.4, 0.1), limits = c(0, 0.45)) +
+  labs(x = 'W', y = 'Probability density') +
+  theme_classic2() +
+  theme(axis.text = element_text(size = 12), axis.title = element_text(size = 14))
+```
 
+* $P(W \leq 1)$ is the small shaded triangle. The density climbs $0.4$ over 2 units, $0.2$ per unit,
+  so at $W = 1$ its height is $0.2$:
+  $$P(W \leq 1) = \tfrac{1}{2} \times 1 \times 0.2 = 0.1$$
+* $P(W > 2)$ is the right-hand triangle, base 3 and height 0.4:
+  $P(W > 2) = \frac{1}{2} \times 3 \times 0.4 = 0.6$. So $P(W \leq 2) = 1 - 0.6 = 0.4$.
+
+### Approximating an area with rectangles
+
+When the curve is not made of straight lines, we can still approximate the area under it with
+rectangles, just as a histogram does. Take the normal model for the women's heights from Week 6,
+$X \sim N(65.4, 3.38)$, and the probability that a woman is between 62 and 70 inches tall:
+
+```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center'}
+rect_plot <- function(w) {
+  mids <- seq(lo + w / 2, hi - w / 2, by = w)
+  r <- data.frame(xmin = mids - w / 2, xmax = mids + w / 2, h = dnorm(mids, HM, HS))
+  ggplot() +
+    geom_rect(data = r, aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = h),
+              fill = 'lightgrey', color = 'black', linewidth = 0.3) +
+    stat_function(fun = dnorm, args = list(mean = HM, sd = HS), xlim = c(55, 76), linewidth = 0.8) +
+    labs(x = 'Height (inches)', y = 'Density',
+         title = paste0('width ', w, ':  area ', fmt(rect_area(w), 4))) +
+    theme_classic2() +
+    theme(axis.text = element_text(size = 11), axis.title = element_text(size = 12),
+          plot.title = element_text(size = 13))
+}
+ggarrange(rect_plot(2), rect_plot(1), rect_plot(0.25), nrow = 1)
+```
+
+The rectangles give `r fmt(areas[1], 4)`, then `r fmt(areas[2], 4)`, then `r fmt(areas[3], 4)`; the
+exact area is $P(62 < X < 70) = `r fmt(exact, 4)`$. The thinner the rectangles, the closer the
+approximation. Calculus is what you get by letting the rectangles become infinitely thin; `pnorm` and
+the $z$-table from Week 6 have done that work for us.
+
+## Cumulative probability
+
+* The **cumulative distribution function** (cdf) of $X$ gives the probability that $X$ is at most a
+  value $x$, $P(X \leq x)$: the area under the density to the **left** of $x$.
+
+This is the probability version of the cumulative relative frequency from Week 3, and it is exactly
+what a $z$-table and `pnorm` give you. Every other probability comes from it with two rules:
+
+* **Area to the right** (complement rule): $P(X > x) = 1 - P(X \leq x)$.
+* **Area between**: $P(a < X < b) = P(X \leq b) - P(X \leq a)$.
+
+For the shuttle, $P(X \leq x) = x/20$, so $P(4 < X < 15) = 15/20 - 4/20 = 0.55$, the same answer as
+the rectangle.
+
+## Quartiles of a continuous distribution
+
+The quartiles of a continuous random variable are the values that cut the area into quarters:
+$$P(X < Q_1) = 0.25 \qquad P(X < Q_2) = 0.50 \qquad P(X < Q_3) = 0.75$$
+so $Q_2$ is the median. To find them, add up area from the left until you reach each target.
+
+```{r, echo=FALSE, fig.height=4, fig.width=10, fig.align='center'}
+qd_df <- data.frame(xmin = head(q_edges, -1), xmax = q_edges[-1], h = q_dens)
+ggplot(qd_df) +
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = h), fill = 'lightblue', color = 'black', linewidth = 0.8) +
+  geom_text(aes(x = (xmin + xmax) / 2, y = h + 0.012, label = paste0('area ', fmt(diff(q_edges) * q_dens, 2))),
+            size = 4) +
+  geom_vline(xintercept = c(2, 3, 6), color = 'red', linetype = 'dashed') +
+  annotate('text', x = c(2, 3, 6), y = 0.285, label = c('Q[1]', 'Q[2]', 'Q[3]'), parse = TRUE, color = 'red', size = 5) +
+  scale_x_continuous(breaks = 0:11) +
+  scale_y_continuous(breaks = seq(0, 0.25, 0.05), limits = c(0, 0.3)) +
+  labs(x = 'X', y = 'Probability density') +
+  theme_classic2() +
+  theme(axis.text = element_text(size = 12), axis.title = element_text(size = 14))
+```
+
+The areas of the five rectangles are 0.10, 0.15, 0.25, 0.20 and 0.30, and they add to 1.
+
+* After the first two rectangles the area is $0.10 + 0.15 = 0.25$, so $Q_1 = 2$.
+* The third rectangle adds 0.25, reaching $0.50$ at $x = 3$, so the median is $Q_2 = 3$.
+* At $x = 5$ the area is $0.70$. We need $0.05$ more, and the last rectangle has height 0.05, so it
+  takes 1 more unit: $Q_3 = 6$.
+
+The long right tail pulls $Q_3$ much further from the median than $Q_1$ is: this distribution is
+skewed right.
+
+## Mean and standard deviation of a continuous random variable
+
+The mean $\mu$ and standard deviation $\sigma$ of a continuous random variable mean exactly what they
+meant for a discrete one, but computing them generally takes calculus.
+
+* The **mean** $\mu$ is the **balance point** of the density curve: if the curve were cut out of
+  cardboard, it would balance on $\mu$. For a symmetric density it is the center (10 minutes for the
+  shuttle); for a skewed one it is pulled toward the long tail, past the median.
+* The **standard deviation** $\sigma$ measures the spread of the curve around $\mu$.
+
+The normal distribution, $X \sim N(\mu, \sigma)$, is the most important continuous distribution, and
+it is the one case where the two parameters *are* the mean and standard deviation. Everything in the
+Week 6 notes about finding areas under it, with $z$-scores, the $z$-table and `pnorm`, is the cdf
+rules above applied to a bell-shaped curve.
+
+# Sampling distributions and the central limit theorem
+
+```{r sampling-setup, include=FALSE}
+# Coho salmon (kept from the 2024 page): derive the sampling distribution of the mean of
+# n = 3 afternoons by enumerating all 27 outcomes
+cx <- 0:2; cp <- c(0.589, 0.232, 0.179)
+stopifnot(abs(sum(cp) - 1) < 1e-12)
+grid <- expand.grid(a = 1:3, b = 1:3, c = 1:3)
+gs <- cx[grid$a] + cx[grid$b] + cx[grid$c]           # total catch; x-bar = total / 3
+gp <- cp[grid$a] * cp[grid$b] * cp[grid$c]
+coho <- aggregate(gp, list(total = gs), sum)
+coho$xbar <- coho$total / 3
+c_mu <- sum(cx * cp); c_sd <- sqrt(sum((cx - c_mu)^2 * cp))
+cb_mu <- sum(coho$xbar * coho$x); cb_sd <- sqrt(sum((coho$xbar - cb_mu)^2 * coho$x))
+stopifnot(nrow(coho) == 7,
+          all(abs(coho$x - c(0.204, 0.241, 0.281, 0.159, 0.085, 0.022, 0.006)) < 6e-4),
+          abs(cb_mu - c_mu) < 1e-12, abs(cb_sd - c_sd / sqrt(3)) < 1e-12)
+
+# CLT pictures: minutes until the next goal (exponential, mean 90 / 2.69) and tiger trout p-hat
+gap <- 90 / lam
+set.seed(7)
+clt_n <- c(1, 2, 5, 30)
+clt <- do.call(rbind, lapply(clt_n, function(n)
+  data.frame(n = paste0('n = ', n), m = replicate(10000, mean(rexp(n, 1 / gap))))))
+clt$n <- factor(clt$n, levels = paste0('n = ', clt_n))
+chk <- tapply(clt$m, clt$n, sd) / (gap / sqrt(clt_n))
+stopifnot(near(gap, 33.5, 0.05), all(abs(tapply(clt$m, clt$n, mean) - gap) < 0.6), all(abs(chk - 1) < 0.03))
+
+phat_n <- c(10, 50, 450)
+phat <- do.call(rbind, lapply(phat_n, function(n)
+  data.frame(n = paste0('n = ', n), ph = (0:n) / n, p = dbinom(0:n, n, trout), w = 0.6 / n)))
+phat$n <- factor(phat$n, levels = paste0('n = ', phat_n))
+se_t <- sqrt(trout * (1 - trout) / 450)
+stopifnot(near(se_t, 0.0103, 5e-5), near(trout - 2 * se_t, 0.029), near(trout + 2 * se_t, 0.071),
+          450 * trout > 5, 450 * (1 - trout) > 5)
+
+# World Cup tournament average
+se_wc <- sqrt(lam) / sqrt(64)
+stopifnot(near(se_wc, 0.205, 5e-4), near(lam - 2 * se_wc, 2.28, 5e-3), near(lam + 2 * se_wc, 3.10, 5e-3))
+```
+
+## Three distributions
+
+In the Week 6 notes we met the **sampling distribution** by simulation: take sample after sample of
+20 heights, compute $\bar{x}$ each time, and plot the results. This week we can say what is going on
+in the language of probability. A statistic computed from a random sample is a **random variable**,
+because its value depends on which units chance put in the sample, and so it has a probability
+distribution of its own. Keep three distributions apart:
+
+* The **population distribution** is the probability distribution of a single observation $X$. It is
+  described by **parameters** such as $\mu$, $\sigma$ and $p$, which we usually do not know.
+* The **data distribution** is the distribution of the $n$ observations we actually have in our sample,
+  the histogram of our data. It is described by **statistics** such as $\bar{x}$, $s$ and $\hat{p}$.
+* The **sampling distribution** is the probability distribution of a statistic, such as $\bar{x}$
+  or $\hat{p}$, over all possible samples of size $n$ from the population. It tells us how close an
+  estimate is likely to be to the parameter.
+
+## Deriving a sampling distribution by hand
+
+For a discrete population and a small sample we can find a sampling distribution exactly, with the
+rules from Week 6:
+
+1. List every possible sample of size $n$ and compute the statistic for each.
+2. Find the probability of each sample. When the observations are independent, multiply.
+3. Add up the probabilities of the samples that give the same value of the statistic.
+
+**Example.** Let $X$ be the number of Coho salmon a fly fisherman catches in an afternoon on the
+Clearwater River, with this (hypothetical) population distribution:
+
+```{r, echo=FALSE}
+tab(data.frame(x = cx, p = fmt(cp, 3)), col.names = c('$x$', '$P(x)$'))
+```
+
+Its mean is $\mu = 0(0.589) + 1(0.232) + 2(0.179) = `r fmt(c_mu, 2)`$ fish and its standard deviation
+is $\sigma = `r fmt(c_sd, 3)`$. Now find the sampling distribution of $\bar{x}$, the mean catch over
+a random sample of $n = 3$ afternoons. There are $3 \times 3 \times 3 = 27$ possible samples:
+
+```{r, echo=FALSE}
+tab(data.frame(
+  xbar = c('0', '1/3', '2/3', '1', '4/3', '5/3', '2'),
+  outs = c('(0,0,0) = $\\color{red}{1}$',
+           '(1,0,0), (0,1,0), (0,0,1) = $\\color{red}{3}$',
+           '(1,1,0), (1,0,1), (0,1,1), (2,0,0), (0,2,0), (0,0,2) = $\\color{red}{6}$',
+           '(1,1,1), (2,1,0), (2,0,1), (0,2,1), (1,2,0), (1,0,2), (0,1,2) = $\\color{red}{7}$',
+           '(2,1,1), (1,2,1), (1,1,2), (2,2,0), (2,0,2), (0,2,2) = $\\color{red}{6}$',
+           '(1,2,2), (2,1,2), (2,2,1) = $\\color{red}{3}$',
+           '(2,2,2) = $\\color{red}{1}$'),
+  calc = c('$0.589^3$',
+           '$3(0.589^2 \\times 0.232)$',
+           '$3(0.232^2 \\times 0.589) + 3(0.589^2 \\times 0.179)$',
+           '$0.232^3 + 6(0.589 \\times 0.232 \\times 0.179)$',
+           '$3(0.232^2 \\times 0.179) + 3(0.179^2 \\times 0.589)$',
+           '$3(0.179^2 \\times 0.232)$',
+           '$0.179^3$'),
+  p = paste0('$\\color{red}{', fmt(coho$x, 3), '}$')),
+  col.names = c('$\\bar{x}$', 'Samples giving it', 'Probability', '$P(\\bar{x})$'))
+```
+
+The counts in red add to 27 and the probabilities add to 1. Now compare this distribution with the
+population:
+
+* Its mean is $\mu_{\bar{x}} = \sum \bar{x}\, P(\bar{x}) = `r fmt(cb_mu, 2)`$, **the same as** $\mu$.
+* Its standard deviation is $\sigma_{\bar{x}} = `r fmt(cb_sd, 3)`$, which is exactly
+  $\sigma/\sqrt{n} = `r fmt(c_sd, 3)`/\sqrt{3}$.
+
+Those are the two facts about the sampling distribution of $\bar{x}$ from Week 6, now checked exactly
+rather than by simulation.
+
+## Center and spread of a sampling distribution
+
+For a random sample of size $n$ from a population with mean $\mu$ and standard deviation $\sigma$:
+
+* **The sample mean** $\bar{x}$ has mean $\mu_{\bar{x}} = \mu$ and standard deviation
+  $$\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}$$
+  the **standard error of the mean**.
+
+A **sample proportion** $\hat{p}$ is a sample mean too. Code each observation as a Bernoulli trial,
+1 for a success and 0 for a failure; then $\hat{p}$ is the mean of the 0s and 1s, the count of
+successes $X \sim \text{Binom}(n, p)$ divided by $n$. A Bernoulli population has mean $p$ and standard
+deviation $\sqrt{p(1 - p)}$, so:
+
+* **The sample proportion** $\hat{p} = X/n$ has mean $p$ and standard deviation
+  $$\sigma_{\hat{p}} = \sqrt{\frac{p(1 - p)}{n}}$$
+
+Both statistics are **unbiased** (centered at the parameter), and both standard errors shrink like
+$1/\sqrt{n}$.
+
+## The central limit theorem
+
+The formulas above give the center and spread of a sampling distribution. The **central limit
+theorem** (CLT) gives its shape, and it is one of the most useful results in all of statistics.
+
+* **Central limit theorem.** Take random samples of size $n$ from **any** population with mean $\mu$
+  and standard deviation $\sigma$. If $n$ is large enough, the sampling distribution of $\bar{x}$ is
+  approximately normal:
+  $$\bar{x} \sim N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right)$$
+  The larger $n$ is, the better the approximation.
+
+The remarkable part is "any population". The population can be skewed, lumpy, or discrete; the
+average of enough independent observations is still bell shaped, because the unusually high and
+unusually low values in a sample cancel out. In Week 6 we saw it for averages of dice, and the same
+reason explains why so many measurements in nature, which are the sum of many small effects, look
+normal.
+
+**How large is "large enough"?** The textbook's guide is $n \geq 30$. If the population is itself
+close to normal, much smaller samples will do; if it is very skewed, you may need more.
+
+Here is the CLT at work on a strongly skewed population. If goals arrive like a Poisson process at
+2.69 per 90-minute match, the time until the next goal averages $90/2.69 \approx `r fmt(gap, 1)`$
+minutes and has a long right tail: most waits are short, a few are very long. Each panel shows 10,000
+simulated sample means $\bar{x}$:
+
+```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center'}
+ggplot(clt, aes(m)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 40, color = 'black', fill = 'lightblue', linewidth = 0.2) +
+  geom_vline(xintercept = gap, color = 'red', linewidth = 0.8) +
+  facet_wrap(~n, nrow = 1, scales = 'free') +
+  labs(x = TeX('Sample mean $\\bar{x}$ (minutes until the next goal)'), y = 'Density') +
+  theme_classic2() +
+  theme(axis.text = element_text(size = 10), axis.title = element_text(size = 13),
+        strip.text = element_text(size = 13, face = 'bold'), strip.background = element_blank())
+```
+
+With $n = 1$ the "sample mean" is a single observation, so the panel is the skewed population itself.
+By $n = 5$ the skew is fading, and at $n = 30$ the distribution is close to a bell centered at $\mu$
+(the red line). Notice the axes: the spread shrinks as $n$ grows, just as $\sigma/\sqrt{n}$ says.
+
+The same thing happens to $\hat{p}$. Below are the exact sampling distributions of the proportion of
+tiger trout, $p = 0.05$, in catches of $n = 10$, 50 and 450 fish:
+
+```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center'}
+ggplot(phat[phat$p > 1e-4, ], aes(ph, p)) +
+  geom_col(aes(width = w), fill = 'lightblue', color = 'black', linewidth = 0.2) +
+  geom_vline(xintercept = trout, color = 'red', linewidth = 0.8) +
+  facet_wrap(~n, nrow = 1, scales = 'free') +
+  labs(x = TeX('Sample proportion $\\hat{p}$ of tiger trout'), y = 'Probability') +
+  theme_classic2() +
+  theme(axis.text = element_text(size = 10), axis.title = element_text(size = 13),
+        strip.text = element_text(size = 13, face = 'bold'), strip.background = element_blank())
+```
+
+With 10 fish, $\hat{p}$ is usually 0 and the distribution is badly skewed. With 450 fish it is a
+symmetric bell around $p = 0.05$. For a proportion the textbook's check is that both $np$ and
+$n(1 - p)$ are greater than 5: here $450 \times 0.05 = 22.5$ and $450 \times 0.95 = 427.5$. With 10 fish,
+$np = 0.5$, nowhere near.
+
+## Using the CLT
+
+Because the sampling distribution is approximately normal, the empirical rule applies to it: there is
+about a **95% probability** that a statistic lands within **2 standard errors** of its mean. That is
+exactly the margin of error from Week 6, now with a probability attached.
+
+### Example: a day of tiger trout
+
+A fisherman catches $n = 450$ fish and records the proportion that are tiger trout. With $p = 0.05$,
+$$\sigma_{\hat{p}} = \sqrt{\frac{0.05 \times 0.95}{450}} \approx `r fmt(se_t, 4)`$$
+so with probability about 0.95,
+$$0.05 - 2(`r fmt(se_t, 4)`) \;<\; \hat{p} \;<\; 0.05 + 2(`r fmt(se_t, 4)`), \qquad\text{that is}\qquad
+`r fmt(trout - 2 * se_t, 3)` < \hat{p} < `r fmt(trout + 2 * se_t, 3)`$$
+between about 13 and 32 tiger trout out of 450. A catch with 40 tiger trout ($\hat{p} \approx 0.089$)
+would be far outside this range: statistically significant evidence that tiger trout make up more
+than 5% of the reservoir.
+
+### Example: a tournament's average
+
+Back to the World Cup: if goals per match are $\text{Poisson}(2.69)$, a single match has
+$\sigma = \sqrt{2.69} \approx `r fmt(sqrt(lam), 2)`$ goals. The average over a 64-match tournament is a
+sample mean with $n = 64$, so by the CLT it is approximately normal with mean 2.69 and
+$$\sigma_{\bar{x}} = \frac{`r fmt(sqrt(lam), 2)`}{\sqrt{64}} \approx `r fmt(se_wc, 3)`$$
+With probability about 0.95 a tournament averages between
+$2.69 \pm 2(`r fmt(se_wc, 3)`)$, about `r fmt(lam - 2 * se_wc, 2)` to `r fmt(lam + 2 * se_wc, 2)` goals per
+match, if the scoring rate stays the same. A single match can easily have 0 or 6 goals; a
+tournament's average is far more predictable. That is the law of large numbers and the CLT working
+together: the average settles near $\mu$, and the CLT says how near.
+
+Next week we turn this around. In practice we know $\bar{x}$ or $\hat{p}$ but not $\mu$ or $p$, and the
+same "within 2 standard errors" reasoning gives a **confidence interval** for the parameter.
+
+# Conclusion: what you should take away
+
+## Named discrete distributions
+
+* **Bernoulli($p$):** one trial, success ($X = 1$) with probability $p$; $\mu = p$, $\sigma^2 = p(1 - p)$.
+* **Binomial($n$, $p$):** the number of successes in a fixed number $n$ of independent trials with the
+  same $p$. $P(X = k) = \frac{n!}{k!(n - k)!}p^k(1 - p)^{n - k}$; $\mu = np$, $\sigma^2 = np(1 - p)$.
+  Check all three conditions first: sampling without replacement from a small population, or a
+  number of trials that is not fixed, rules it out.
+* **Poisson($\lambda$):** the number of events in a fixed interval when events occur independently at a
+  constant average rate $\lambda$. $P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$; $\mu = \sigma^2 = \lambda$.
+  Rescale $\lambda$ when the interval changes.
+
+## Continuous distributions
+
+* A continuous random variable has a **density curve**: never negative, total area 1, and
+  **probability = area**. The height is density, not probability, and $P(X = c) = 0$.
+* $P(X \leq x)$ is the area to the left (the cdf). $P(X > x) = 1 - P(X \leq x)$ and
+  $P(a < X < b) = P(X \leq b) - P(X \leq a)$.
+* Quartiles cut the area into quarters; the mean is the balance point.
+
+## Sampling distributions
+
+* A statistic is a random variable; its **sampling distribution** is its distribution over all samples
+  of size $n$. Do not confuse it with the population distribution or the data distribution.
+* $\bar{x}$ has mean $\mu$ and standard error $\sigma/\sqrt{n}$; $\hat{p}$ has mean $p$ and standard
+  error $\sqrt{p(1 - p)/n}$.
+* **Central limit theorem:** for large $n$ (roughly $n \geq 30$, or $np$ and $n(1 - p)$ above 5 for a
+  proportion), the sampling distribution is approximately normal, whatever the shape of the
+  population, so a statistic falls within 2 standard errors of its mean with probability about 0.95.
+
+## Sources
+
+* Illowsky, B. and Dean, S. (2023). *Introductory Statistics 2e*, Sections 4.3, 4.6, 5.1 and 7.1–7.3.
+  OpenStax. <https://openstax.org/details/books/introductory-statistics-2e>
+* 2022 FIFA World Cup: 172 goals in 64 matches, seven of them 0–0. Wikipedia, "2022 FIFA World Cup",
+  tournament statistics; Eurosport, "What is the record number of 0-0 draws at the World Cup".
+* Stephen Curry's career free throws, 4,236 of 4,645. Basketball-Reference,
+  <https://www.basketball-reference.com/players/c/curryst01.html>, checked October 5, 2026.

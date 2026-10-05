@@ -346,6 +346,9 @@ $(document).ready(function () {
         <li>
           <a href="lecturemenu6.html">Week 6</a>
         </li>
+        <li>
+          <a href="lecturemenu7.html">Week 7</a>
+        </li>
       </ul>
     </li>
     <li>
@@ -526,16 +529,21 @@ $(document).ready(function () {
   delivered (or the day before). Dates and topics follow Course_Schedule.Rmd,
   which is the source of truth; when the schedule shifts, update this page too.
 
-  To add the next lecture: export its deck to
-      docs/lecture_slides/Week N/WeekN_LectureM_Slides_<month>_<day>_2026.pdf/.pptx
-  and copy the previous lecture's block below. Paths contain a space
-  ("Week 6"), so write it as %20 in the href.
+  DIRECTORY LAYOUT (Oct 5 2026). Every week folder is split by term:
+      docs/lecture_slides/Week N/2026/   this term's decks - the only ones linked here
+      docs/lecture_slides/Week N/2024/   the Spring 2024 decks, kept as source material
+  A folder with nothing in it yet holds a .gitkeep so git keeps it.
 
-  The Week folders still hold the Spring 2024 decks (files ending _2024) as
-  source material. They do not match this term's lecture numbering - the 2024
-  "Lecture 12" is a different lecture from Fall 2026 Lecture 12 - so never link
-  them here. The Week 1-2 decks were rebuilt for Fall 2026 and renamed to their
-  2026 dates on Sept 27, 2026.
+  To add the next lecture: export its deck to
+      docs/lecture_slides/Week N/2026/WeekN_LectureM_Slides_<month>_<day>_2026.pdf/.pptx
+  and copy the previous lecture's block below. Paths contain a space
+  ("Week 6"), so write it as %20 in the href:
+      ./lecture_slides/Week%206/2026/<file>
+
+  Never link anything under 2024/. Those decks do not match this term's lecture
+  numbering - the 2024 "Lecture 12" is a different lecture from Fall 2026
+  Lecture 12. The Week 1-2 decks were rebuilt for Fall 2026 and renamed to their
+  2026 dates on Sept 27, 2026, so Week 1/2024 and Week 2/2024 are empty.
 
   Only the links are staged: every file in docs/lecture_slides/ is still served
   by GitHub Pages to anyone who has its URL.
@@ -549,17 +557,17 @@ href="Course_Schedule.html">Course Schedule</a>.</p>
 <div id="lecture-1-wednesday-august-26" class="section level3">
 <h3>Lecture 1 · Wednesday, August 26</h3>
 <p>Introduction: the big picture</p>
-<p><a href="./lecture_slides/Week%201/Week1_Lecture1_Slides_8_26_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%201/2026/Week1_Lecture1_Slides_8_26_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%201/Week1_Lecture1_Slides_8_26_2026.pptx">Slides
+<a href="./lecture_slides/Week%201/2026/Week1_Lecture1_Slides_8_26_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 <div id="lecture-2-friday-august-28" class="section level3">
 <h3>Lecture 2 · Friday, August 28</h3>
 <p>Describing and visualizing distributions</p>
-<p><a href="./lecture_slides/Week%201/Week1_Lecture2_Slides_8_28_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%201/2026/Week1_Lecture2_Slides_8_28_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%201/Week1_Lecture2_Slides_8_28_2026.pptx">Slides
+<a href="./lecture_slides/Week%201/2026/Week1_Lecture2_Slides_8_28_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 </div>
@@ -568,26 +576,26 @@ href="Course_Schedule.html">Course Schedule</a>.</p>
 <div id="lecture-3-monday-august-31" class="section level3">
 <h3>Lecture 3 · Monday, August 31</h3>
 <p>Distributions and frequency tables</p>
-<p><a href="./lecture_slides/Week%202/Week2_Lecture3_Slides_8_31_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%202/2026/Week2_Lecture3_Slides_8_31_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%202/Week2_Lecture3_Slides_8_31_2026.pptx">Slides
+<a href="./lecture_slides/Week%202/2026/Week2_Lecture3_Slides_8_31_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 <div id="lecture-4-wednesday-september-2" class="section level3">
 <h3>Lecture 4 · Wednesday, September 2</h3>
 <p>Shape of a distribution; dot plots, stem-and-leaf plots,
 histograms</p>
-<p><a href="./lecture_slides/Week%202/Week2_Lecture4_Slides_9_2_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%202/2026/Week2_Lecture4_Slides_9_2_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%202/Week2_Lecture4_Slides_9_2_2026.pptx">Slides
+<a href="./lecture_slides/Week%202/2026/Week2_Lecture4_Slides_9_2_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 <div id="lecture-5-friday-september-4" class="section level3">
 <h3>Lecture 5 · Friday, September 4</h3>
 <p>Measures of location and position</p>
-<p><a href="./lecture_slides/Week%202/Week2_Lecture5_Slides_9_4_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%202/2026/Week2_Lecture5_Slides_9_4_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%202/Week2_Lecture5_Slides_9_4_2026.pptx">Slides
+<a href="./lecture_slides/Week%202/2026/Week2_Lecture5_Slides_9_4_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 </div>
@@ -597,17 +605,17 @@ histograms</p>
 <div id="lecture-6-wednesday-september-9" class="section level3">
 <h3>Lecture 6 · Wednesday, September 9</h3>
 <p>Measures of spread, boxplot</p>
-<p><a href="./lecture_slides/Week%203/Week3_Lecture6_Slides_9_9_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%203/2026/Week3_Lecture6_Slides_9_9_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%203/Week3_Lecture6_Slides_9_9_2026.pptx">Slides
+<a href="./lecture_slides/Week%203/2026/Week3_Lecture6_Slides_9_9_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 <div id="lecture-7-friday-september-11" class="section level3">
 <h3>Lecture 7 · Friday, September 11</h3>
 <p>Cumulative distributions</p>
-<p><a href="./lecture_slides/Week%203/Week3_Lecture7_Slides_9_11_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%203/2026/Week3_Lecture7_Slides_9_11_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%203/Week3_Lecture7_Slides_9_11_2026.pptx">Slides
+<a href="./lecture_slides/Week%203/2026/Week3_Lecture7_Slides_9_11_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 </div>
@@ -616,9 +624,9 @@ histograms</p>
 <div id="lecture-8-monday-september-14" class="section level3">
 <h3>Lecture 8 · Monday, September 14</h3>
 <p>Sampling designs: simple random, stratified, and cluster sampling</p>
-<p><a href="./lecture_slides/Week%204/Week4_Lecture8_Slides_9_14_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%204/2026/Week4_Lecture8_Slides_9_14_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%204/Week4_Lecture8_Slides_9_14_2026.pptx">Slides
+<a href="./lecture_slides/Week%204/2026/Week4_Lecture8_Slides_9_14_2026.pptx">Slides
 (PowerPoint)</a></p>
 <p><em>Wednesday, September 16: Exam 1 review. Friday, September 18:
 Exam 1.</em></p>
@@ -630,27 +638,27 @@ Exam 1.</em></p>
 <h3>Lecture 9 · Monday, September 21</h3>
 <p>Sampling designs continued: systematic, stratified, and cluster
 sampling; sampling and nonsampling error</p>
-<p><a href="./lecture_slides/Week%205/Week5_Lecture9_Slides_9_21_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%205/2026/Week5_Lecture9_Slides_9_21_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%205/Week5_Lecture9_Slides_9_21_2026.pptx">Slides
+<a href="./lecture_slides/Week%205/2026/Week5_Lecture9_Slides_9_21_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 <div id="lecture-10-wednesday-september-23" class="section level3">
 <h3>Lecture 10 · Wednesday, September 23</h3>
 <p>Course project discussion; basics of experimental design, association
 vs. causation</p>
-<p><a href="./lecture_slides/Week%205/Week5_Lecture10_Slides_9_23_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%205/2026/Week5_Lecture10_Slides_9_23_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%205/Week5_Lecture10_Slides_9_23_2026.pptx">Slides
+<a href="./lecture_slides/Week%205/2026/Week5_Lecture10_Slides_9_23_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 <div id="lecture-11-friday-september-25" class="section level3">
 <h3>Lecture 11 · Friday, September 25</h3>
 <p>Experimental design concluded: the three designs, randomization and
 research ethics; introduction to the normal distribution</p>
-<p><a href="./lecture_slides/Week%205/Week5_Lecture11_Slides_9_25_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%205/2026/Week5_Lecture11_Slides_9_25_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%205/Week5_Lecture11_Slides_9_25_2026.pptx">Slides
+<a href="./lecture_slides/Week%205/2026/Week5_Lecture11_Slides_9_25_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 </div>
@@ -660,27 +668,39 @@ research ethics; introduction to the normal distribution</p>
 <h3>Lecture 12 · Monday, September 28</h3>
 <p>The normal distribution: density curves, the standard normal,
 z-scores, the empirical rule</p>
-<p><a href="./lecture_slides/Week%206/Week6_Lecture12_Slides_9_28_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%206/2026/Week6_Lecture12_Slides_9_28_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%206/Week6_Lecture12_Slides_9_28_2026.pptx">Slides
+<a href="./lecture_slides/Week%206/2026/Week6_Lecture12_Slides_9_28_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 <div id="lecture-13-wednesday-september-30" class="section level3">
 <h3>Lecture 13 · Wednesday, September 30</h3>
 <p>The normal distribution continued: identifying outliers, normal
 quantiles, transformations; sampling distributions, margin of error</p>
-<p><a href="./lecture_slides/Week%206/Week6_Lecture13_Slides_9_30_2026.pdf">Slides
+<p><a href="./lecture_slides/Week%206/2026/Week6_Lecture13_Slides_9_30_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%206/Week6_Lecture13_Slides_9_30_2026.pptx">Slides
+<a href="./lecture_slides/Week%206/2026/Week6_Lecture13_Slides_9_30_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 <div id="lecture-14-friday-october-2" class="section level3">
 <h3>Lecture 14 · Friday, October 2</h3>
-<p>Statistical significance; introduction to probability, random
-variables, discrete probability distributions</p>
-<p><a href="./lecture_slides/Week%206/Week6_Lecture14_Slides_10_2_2026.pdf">Slides
+<p>Statistical significance; introduction to probability and its
+rules</p>
+<p><a href="./lecture_slides/Week%206/2026/Week6_Lecture14_Slides_10_2_2026.pdf">Slides
 (PDF)</a> ·
-<a href="./lecture_slides/Week%206/Week6_Lecture14_Slides_10_2_2026.pptx">Slides
+<a href="./lecture_slides/Week%206/2026/Week6_Lecture14_Slides_10_2_2026.pptx">Slides
+(PowerPoint)</a></p>
+</div>
+</div>
+<div id="week-7" class="section level1">
+<h1>Week 7</h1>
+<div id="lecture-15-monday-october-5" class="section level3">
+<h3>Lecture 15 · Monday, October 5</h3>
+<p>Probability continued: random variables; discrete probability
+distributions - Bernoulli, binomial and Poisson</p>
+<p><a href="./lecture_slides/Week%207/2026/Week7_Lecture15_Slides_10_5_2026.pdf">Slides
+(PDF)</a> ·
+<a href="./lecture_slides/Week%207/2026/Week7_Lecture15_Slides_10_5_2026.pptx">Slides
 (PowerPoint)</a></p>
 </div>
 </div>

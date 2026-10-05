@@ -349,6 +349,9 @@ $(document).ready(function () {
         <li>
           <a href="lecturemenu6.html">Week 6</a>
         </li>
+        <li>
+          <a href="lecturemenu7.html">Week 7</a>
+        </li>
       </ul>
     </li>
     <li>
@@ -525,591 +528,781 @@ $(document).ready(function () {
 </div>
 
 
-<div id="common-discrete-distributions" class="section level1">
-<h1>Common discrete distributions</h1>
-<p>We can think of a probability distribution as a model of a particular
-random process. Some types of random variables are commonly encountered
-and thus common models of these random variables have emerged to
-describe their probability distributions. Below we will introduce a few
-of the most commonly used probability distributions for discrete random
-variables.</p>
-<div id="the-bernoulli-distribution" class="section level3">
-<h3>The Bernoulli distribution</h3>
-<p>The Bernoulli distribution, named after Swiss mathematician Jacob
-Bernoulli, is the probability distribution of a discrete random variable
-with two possible outcomes <span class="math inline">\(\{0, 1\}\)</span>
-where the outcome <span class="math inline">\(X = 1\)</span> occurs with
-probability <span class="math inline">\(p\)</span> and the outcome <span
-class="math inline">\(X = 0\)</span> occurs with probability <span
-class="math inline">\(1-p\)</span>. This random variable can be used to
-model any binary random process like flipping a coin, or any categorical
-variable with two categories such as male or female. The
-<strong>probability mass function</strong> - which we can think of as
-the function which assigns probabilities to different outcomes of random
-variable - is given below</p>
-<p><span class="math display">\[ P(X) = \begin{cases} p &amp; \
-\text{if} \  X = 1 \\
-                      (1-p) &amp; \ \text{if} \ X = 0
-          \end{cases}
-\]</span></p>
-<p>The Bernoulli distribution has a single parameter <span
-class="math inline">\(p\)</span> which is referred to as the
-“probability of success” - referring to the probability that the outcome
-we are interested in happens - such as getting Heads in a single flip of
-a coin. We usually denote that a random variable <span
-class="math inline">\(X\)</span> follows a Bernoulli distribution
-mathematically as <span class="math display">\[ X \sim Bernoulli(p)
-\]</span></p>
-<p>In probability theory, the term <strong>expected value</strong> is
-often used instead of mean or average; however, they technically mean
-the same thing. The expected value of a probability distribution for a
-random variable <span class="math inline">\(X\)</span> is denoted
-mathematically as <span class="math inline">\(E[X]\)</span>. The
-Bernoulli distribution has the following expected value and
-variance:</p>
-<p><span class="math display">\[ E[X] = p  \]</span> <span
-class="math display">\[ Var[X] = p(1-p)\]</span></p>
-<p>where <span class="math inline">\(Var[X]\)</span> means the variance
-of the random variable <span class="math inline">\(X\)</span>.</p>
-<p>It’s important to note that many types of random variables can be
-remodeled into a Bernoulli distribution. Take for example a random
-variable <span class="math inline">\(Z\)</span> which assigns the
-numbers <span class="math inline">\(0\)</span>, <span
-class="math inline">\(1\)</span>, or <span
-class="math inline">\(2\)</span>, to people who have one of three
-categories of pets: cats, dogs, or fish, respectively. The following
-table gives the probability distribution of <span
-class="math inline">\(Z\)</span>:</p>
-<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-Z
-</th>
-<th style="text-align:left;">
-Probability
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(p_1\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(p_2\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(p_3\)</span>
-</td>
-</tr>
-</tbody>
-</table>
-<p>If we are interested in whether a single randomly sampled individual
-has a dog as a pet, then we may consider having a dog as the
-“successful” outcome and all other outcomes as “failures”. Then the
-random variable <span class="math inline">\(Y\)</span> assigns a value
-of <span class="math inline">\(1\)</span> to an individual who has a dog
-as a pet with probability <span class="math inline">\(p_2\)</span> and a
-value of <span class="math inline">\(0\)</span> to an individual who
-does not have a dog with probability <span class="math inline">\(1 - p_2
-= p_1+p_3\)</span>. Thus the random variable <span
-class="math inline">\(Y\)</span> follows a Bernoulli distribution:</p>
-<p><span class="math display">\[ Y \sim Bernoulli(p_2) \]</span></p>
-</div>
-<div id="the-binomial-distribution" class="section level3">
-<h3>The binomial distribution</h3>
-<p>The binomial distribution is probably the most widely used discrete
-probability model. A binomial random variable counts the number of
-“successful” outcomes out of <span class="math inline">\(n\)</span>
-independent trials where each trial has probability of success <span
-class="math inline">\(p\)</span>. Like the Bernoulli random variable,
-the binomial distribution deals with <i>dichotomous</i> outcomes. In
-fact, a binomial random variable is a sum of <span
-class="math inline">\(n\)</span> independent draws from a Bernoulli
-distribution. Thus the defining characteristics of a binomial
-distribution are</p>
-<ul>
-<li><p>There is a basic random process with two possible outcomes
-denoted as “success” or “failure”</p></li>
-<li><p>There are <span class="math inline">\(n\)</span> independent
-repetitions of the random process</p></li>
-<li><p>the probability of success <span class="math inline">\(p\)</span>
-is constant across all observations of the random process</p></li>
-</ul>
-<p>Thus the number of trials <span class="math inline">\(n\)</span> and
-the probability of success <span class="math inline">\(p\)</span> are
-parameters of the binomial distribution. A random variable <span
-class="math inline">\(X\)</span> which follows the binomial distribution
-is denoted mathematically as</p>
-<p><span class="math display">\[ X \sim Binom(n, p)  \]</span></p>
-<p>Typical applications of the binomial distribution involve
-experimental outcomes such as the number of patients who recovered from
-illness while taking an experimental drug. Or the number of salmon that
-successfully spawn in a creek on a given day of the week.</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-2-1.png" width="960" /></p>
-<p>The mean and variance of the binomial distribution are given by:</p>
-<p><span class="math display">\[ E[X] = np \]</span> <span
-class="math display">\[ Var[X] = np(1-p) \]</span></p>
-<p>The binomial distribution has the following probability mass
-function:</p>
-<p><span class="math display">\[ P(X = k) = \binom nk p^k
-(1-p)^{n-k}\]</span></p>
-<p>The first quantity is called the binomial coefficient and counts the
-number of ways to arrange <span class="math inline">\(k\)</span>
-successes among <span class="math inline">\(n\)</span> independent
-trials. Mathematically it is defined as</p>
-<p><span class="math display">\[ \binom nk =
-\frac{n!}{k!(n-k)!}  \]</span></p>
-<p>The symbol <span class="math inline">\(!\)</span> is called a
-factorial. In mathematics, a factorial is the product of all positive
-integers less than or equal to a given positive integer and not
-including <span class="math inline">\(0\)</span>. <span
-class="math display">\[n! = n \times (n-1) \times (n-2) \times \dots
-\times 1 \]</span></p>
-<p>For example the quantity <span class="math inline">\(5!\)</span> is
-computed as</p>
-<p><span class="math display">\[ 5! = 5\times 4\times 3\times 2\times
-1\]</span></p>
-<p>It is also important to note that the quantity <span
-class="math inline">\(0! = 1\)</span> which is admittedly not
-intuitive.</p>
-<p>To explain in more detail, if we think of the <span
-class="math inline">\(n\)</span> trials as a sequence of <span
-class="math inline">\(k\)</span> ones (successes) and <span
-class="math inline">\(n-k\)</span> zeros (failures), then the binomial
-coefficient is essentially enumerating and counting all possible
-<i>permutations</i> of that sequence. Consider the possible sequences of
-two successes in three trials: there are three possible sequences of
-successes and failures we could observe:</p>
-<p><span class="math display">\[ (1, 1, 0) \\
-   (1, 0, 1) \\
-   (0, 1, 1)\]</span></p>
-<p>Using the binomial coefficient we have</p>
-<p><span class="math display">\[ \binom 32 = \frac{3!}{2! (3-2)!} =
-\frac{3\times 2\times 1}{2\times 1 \times 1} = 3 \]</span></p>
-<p>Example: The random variable <span class="math inline">\(X\)</span>
-models the number of hits in five at-bats for professional baseball
-player Luis Arraez of the Miami Marlins who has a hit percentage of
-<span class="math inline">\(35\%\)</span> (a batting average of <span
-class="math inline">\(.350\)</span>). Thus <span
-class="math inline">\(X\)</span> is a binomial random variable <span
-class="math display">\[ X \sim Binom(n=5, p=0.35) \]</span></p>
-<ul>
-<li>Compute the probability that Luis Arraez gets <u>one hit</u> in the
-next five at-bats</li>
-</ul>
-<p><span class="math display">\[ P(X = 1) = \binom 51 (0.35)^1 (0.65)^4
-= 5 \times 0.35 \times 0.1785 \approx 0.312 \]</span></p>
-<ul>
-<li>Compute the probability that Luis Arraez gets more than 4 hits in
-the next five at-bats</li>
-</ul>
-<p>Here “more than 4 hits” out of 5 at-bats means all 5 are hits: <span
-class="math display">\[ P(X &gt; 4) = P(X = 5) = \binom 55 (0.35)^5
-(0.65)^0 = (0.35)^5 \approx 0.005 \]</span></p>
-</div>
-</div>
-<div id="the-poisson-distribution" class="section level1">
-<h1>The Poisson distribution</h1>
-<p>The Poisson (pronounced “<span class="math inline">\(\text{Pwa -
-s}\tilde o\)</span>”) distribution is named after French Scientist
-Siméon Denis Poisson (1781–1840). It models the probability that a given
-number of events occur in a fixed interval of time, assuming the events
-occur independently of each other and with a known constant mean rate
-<span class="math inline">\(\lambda\)</span>. Thus, a Poisson random
-variable has the following characteristics:</p>
-<ul>
-<li><p>The occurrence of one event does not affect the probability that
-a second event will occur. That is, events occur independently.</p></li>
-<li><p>The rate at which events occur is constant. The rate cannot be
-higher in some intervals and lower in other intervals.</p></li>
-<li><p>Two events cannot occur at exactly the same instant; instead, at
-each very small sub-interval exactly one event either occurs or does not
-occur.</p></li>
-<li><p>the events occur at rate <span
-class="math inline">\(\lambda\)</span> - also called the rate parameter
-- and is strictly positive <span class="math inline">\(\lambda \in
-(0,\infty)\)</span>.</p></li>
-</ul>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-3-1.png" width="960" /></p>
-<p>The probability mass function is given by</p>
-<p><span class="math display">\[ P(X = k) = \frac{\lambda^k
-e^{-\lambda}}{k!}\]</span></p>
-<p>where <span class="math inline">\(k\)</span> is the number of events
-occurring, <span class="math inline">\(\lambda\)</span> is the rate at
-which events occur. The quantity <span class="math inline">\(e\)</span>
-is called <i>Euler’s number</i>. It is a numerical constant that arises
-often in mathematics and can be characterized in many different ways.
-One definition occurs as the limit point of the sequence <span
-class="math inline">\((1+1/n)^n\)</span>:</p>
-<p><span class="math display">\[e = \lim_{n\rightarrow \infty} \left(
-1+\frac{1}{n} \right)^n \approx 2.7183 \]</span></p>
-<p>virtually all calculators will have a <i>natural exponentiation</i>
-button for this quantity which is defined as</p>
-<p><span class="math display">\[ e = \exp(1) \]</span></p>
-<p>The expected value and variance of a Poisson random variable are both
-given by the rate parameter <span
-class="math inline">\(\lambda\)</span></p>
-<p><span class="math display">\[ E[X] = \lambda\]</span> <span
-class="math display">\[ Var[X] = \lambda\]</span></p>
-<p>The Poisson distribution has a wide range of applications across
-scientific disciplines including finance, genetics, infectious disease,
-manufacturing and many more. Some examples of the poisson random
-variables are given below:</p>
-<ul>
-<li><p>The number of mutations on a strand of DNA occurring in a given
-unit of time</p></li>
-<li><p>The number of defective products produced per hour of assembly at
-a factory</p></li>
-<li><p>The number of bankruptcies filed in a given month</p></li>
-<li><p>The number of internet connection failures in a given
-month</p></li>
-</ul>
-<p>Example: Let the random variable <span
-class="math inline">\(Y\)</span> represent the number of phone calls
-placed to a call center each hour during peak customer service hours.
-Assume that calls typically occur at a rate of <span
-class="math inline">\(10\)</span> calls per hour.</p>
-<ul>
-<li>What is the probability that the call center receives <span
-class="math inline">\(8\)</span> calls in the next hour?</li>
-</ul>
-<p>Here <span class="math inline">\(Y \sim Poisson(\lambda =
-10)\)</span>, so <span class="math display">\[ P(Y = 8) = \frac{10^8
-e^{-10}}{8!} \approx 0.113 \]</span></p>
-<ul>
-<li>What is the probability that the call center receives fewer than
-<span class="math inline">\(2\)</span> calls in the next hour?</li>
-</ul>
-<p>“Fewer than 2 calls” means <span class="math inline">\(0\)</span> or
-<span class="math inline">\(1\)</span> call: <span
-class="math display">\[ P(Y &lt; 2) = P(Y = 0) + P(Y = 1) = \frac{10^0
-e^{-10}}{0!} + \frac{10^1 e^{-10}}{1!} = 11 e^{-10} \approx 0.0005
-\]</span></p>
-<div id="continuous-random-variables" class="section level3">
-<h3>Continuous random variables</h3>
-<p>Recall that continuous random variables have an uncountable number of
-outcomes. As a result, finding probabilities for continuous random
-variables requires a heavier mathematical treatment. For continuous
-random variables, the function which assigns probabilities to different
-outcomes is called a <strong>probability density function</strong>.</p>
-<p>Since we cannot simply list the possible values of a continuous
-random variable and their probabilities, we have to rely on graphically
-displaying their distributions as we have done before. Consider the
-random variable <span class="math inline">\(X\)</span> with probability
-density function <span class="math inline">\(f(x)\)</span> given
-below</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-4-1.png" width="960" /></p>
-<p>For a continuous distribution we cannot compute the probability that
-<span class="math inline">\(X\)</span> is equal to some particular value
-because <span class="math inline">\(X\)</span> can take on infinite
-number of values within a range. Thus the probability density is divided
-among an infinite number of outcomes making the probability of any one
-outcome effectively zero. We can however consider the probability that
-<span class="math inline">\(X\)</span> takes on a value in some
-sub-interval of its domain. For example, we can compute the probability
-<span class="math inline">\(P(X&lt;0)\)</span>. Finding this probability
-amounts to finding the area underneath the probability density curve of
-<span class="math inline">\(X\)</span> in the interval <span
-class="math inline">\([-1, 0)\)</span>.</p>
-<div id="finding-probabilities-from-continuous-distributions"
-class="section level4">
-<h4>Finding probabilities from continuous distributions</h4>
-<p>Normally, the mathematics of calculus would be required to compute
-this probability and we would need to integrate <span
-class="math inline">\(f(x)\)</span> over this range of values. However,
-in the example above we can manually extrapolate the area under the
-curve. Notice that the area of the curve is divided into a grid. By
-finding the area of a single box in the graph, we can multiply this area
-by the number of boxes in the previously specified range to compute the
-total area under the curve. For example, the area of a single box is</p>
-<p><span class="math display">\[ \text{Area} = 0.25 \times 0.16 =
-0.04\]</span></p>
-<p>Now that we know the area of a single box on the plot</p>
-<p><span class="math display">\[P(X &lt; 0) = 0.04 \times 17 = 0.68
-\]</span></p>
-<p>Lets consider another example: Below is the probability density
-function for a random variable <span
-class="math inline">\(W\)</span></p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-5-1.png" width="960" /></p>
-<ul>
-<li>Find the probability <span class="math inline">\(P(W \leq
-1)\)</span>. Again, to solve this we can extrapolate the area under the
-curve. Since the area between <span class="math inline">\(0\)</span> and
-<span class="math inline">\(1\)</span> of the distribution forms a
-right-angle triangle we can compute the area using the formula for the
-area of a triangle:</li>
-</ul>
-<p><span class="math display">\[\text{area of triangle} = \frac{1}{2}(b
-\times h) \]</span></p>
-<p>where <span class="math inline">\(b\)</span> is the base length and
-<span class="math inline">\(h\)</span> is the height of the triangle.
-The base runs from <span class="math inline">\(0\)</span> to <span
-class="math inline">\(1\)</span>, so <span class="math inline">\(b =
-1\)</span>. The density rises in a straight line from <span
-class="math inline">\((0, 0)\)</span> to the peak at <span
-class="math inline">\((2, 0.4)\)</span>, giving a slope of <span
-class="math inline">\(0.4/2 = 0.2\)</span>; therefore the height of the
-curve at <span class="math inline">\(W = 1\)</span> is <span
-class="math inline">\(h = 0.2 \times 1 = 0.2\)</span>.</p>
-<p><span class="math display">\[ P(W\leq 1) = \frac{1}{2}(1\times 0.2) =
-0.1 \]</span></p>
-</div>
-<div id="mean-and-variance-of-continuous-random-variables"
-class="section level4">
-<h4>Mean and variance of continuous random variables</h4>
-<ul>
-<li>The mean <span class="math inline">\(\mu\)</span> and variance <span
-class="math inline">\(\sigma^2\)</span> of a continuous random variable
-cannot (usually) be defined or computed without calculus but their
-interpretations are the same as for discrete distributions</li>
-</ul>
 <!--
-  MOVED HERE Sept 28 2026 from the 2024 Week 6 page, when that page was rewritten
-  for Fall 2026. It sets up the central limit theorem (Fri Oct 9), so it belongs in
-  Week 7. Still 2024 material awaiting its Fall 2026 revision.
+  SCOPE OF THIS PAGE (Fall 2026 rewrite, Oct 5 2026).
+
+  Week 7 is three lectures (see Course_Schedule.Rmd, the date source of truth):
+    Mon Oct 5    Lecture 15  opens with the end of the Week 6 probability section
+                             (independence through expected value, carried from
+                             Lecture 14 and written up on the Week 6 page), then the
+                             Bernoulli, binomial and Poisson distributions
+                             lecture_slides/Week 7/2026/Week7_Lecture15_Slides_10_5_2026.pptx
+    Wed Oct 7    Lecture 16  continuous probability distributions
+    Fri Oct 9    Lecture 17  sampling distributions and the central limit theorem
+  The sections below follow that order. The Lecture 15 examples (guessing on a quiz,
+  Stephen Curry's free throws, goals at the 2022 World Cup) are the slide examples;
+  their numbers and sources are in assets/make_lecture15_figures.R.
+
+  Sources. Terms follow OpenStax Introductory Statistics 2e, Sections 4.3, 4.6, 5.1
+  and 7.1-7.3 (the Week 7 reading). This page rewrites the 2024 Week 7 page and
+  pulls in 2024 lecture material:
+    * kept from the 2024 page: recoding a category as a Bernoulli trial, the
+      binomial coefficient and factorials, the Poisson conditions and examples of
+      Poisson counts, counting boxes under a step density, the triangle density,
+      and the Coho salmon sampling-distribution derivation;
+    * from the 2024 decks: the tiger trout (2024 Lecture 13 slide 8, Lecture 15
+      slide 19), the density-quartiles example (2024 Lecture 13 slide 16), the
+      rectangles that approximate an area (2024 Lecture 13 slides 13-15), "height
+      is density, not probability" and the cumulative-probability rules (2024
+      Lecture 15 slides 3-6), and the three kinds of distribution (2024 Lecture 15
+      slide 10);
+    * moved here from the 2024 Week 8 page: the central limit theorem and the
+      sampling distribution of p-hat. The Week 8 page still has its 2024 copy and
+      will be revised with the Oct 12 lecture.
+  Dropped: the Luis Arraez and call-center examples (replaced by the slide examples),
+  the Star Wars Poisson example, and the 2024 Texas hold'em table, whose probabilities
+  were wrong (P(no ace in two cards) = C(48,2)/C(52,2) = 0.851, not 0.559).
+  The 2024 "four-sided die, n = 2" derivation is NOT used: it is Homework 3 problem 1.
+  Homework 2 problem 10 asks students to confirm mu = p and sigma^2 = p(1-p) for a
+  Bernoulli, so this page states those results without deriving them.
 -->
-</div>
-</div>
-<div id="deriving-sampling-distributions" class="section level3">
-<h3>Deriving sampling distributions</h3>
-<p>Two important probability distributions we encounter often in the
-statistics are the population distribution of a random variable and the
-sampling distribution of a statistic</p>
+<div id="named-discrete-distributions" class="section level1">
+<h1>Named discrete distributions</h1>
+<p>Monday opens with the end of the probability section from the <a
+href="lecturemenu6.html">Week 6 notes</a>: the general addition rule and
+independence, the examples on the heights table, sampling with and
+without replacement, random variables, discrete probability
+distributions and expected value. Those are written up there, starting
+at <a href="lecturemenu6.html#combining-two-events">Combining two
+events</a>.</p>
+<p>Last week every probability distribution was built by hand: list the
+outcomes, count, add. Some random processes come up so often that their
+distributions have names and formulas. Each one is a <strong>probability
+model</strong>: a description of a chance process that, once we know a
+parameter or two, tells us the probability of every possible value. This
+week we meet three discrete models.</p>
+<div id="the-bernoulli-distribution" class="section level2">
+<h2>The Bernoulli distribution</h2>
 <ul>
-<li><p>The <strong>population distribution</strong> is the probability
-distribution for the outcomes of a random variable</p></li>
-<li><p>The <strong>sampling distribution</strong> is the probability
-distribution for a statistic</p></li>
+<li>A <strong>Bernoulli trial</strong> is a single random trial with
+exactly two possible outcomes, called “success” and “failure”. The
+random variable <span class="math inline">\(X\)</span> records a success
+as <span class="math inline">\(X = 1\)</span> and a failure as <span
+class="math inline">\(X = 0\)</span>.</li>
+<li>Its distribution has one parameter, the <strong>probability of
+success</strong> <span class="math inline">\(p\)</span>:</li>
 </ul>
-<p>For a discrete random variable, the sampling distribution of a
-statistic can be derived through the following steps:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+<span class="math inline">\(x\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(P(x)\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+0 (failure)
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(1 - p\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1 (success)
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(p\)</span>
+</td>
+</tr>
+</tbody>
+</table>
+<p>We write <span class="math inline">\(X \sim
+\text{Bernoulli}(p)\)</span>. Its mean and variance are <span
+class="math display">\[\mu = p \qquad\qquad \sigma^2 = p(1 - p)\]</span>
+(Homework 2 asks you to check these with the formulas <span
+class="math inline">\(\mu = \sum x\, P(x)\)</span> and <span
+class="math inline">\(\sigma^2 = \sum (x - \mu)^2 P(x)\)</span> from
+Week 6.) The name honors Jacob Bernoulli, the same Swiss mathematician
+who proved the law of large numbers.</p>
+<p>“Success” does not have to be good news; it is just the outcome we
+are counting. A coin landing heads, a patient recovering, a part being
+defective and a voter supporting a candidate can all be successes.</p>
+<p><strong>Any categorical variable can be turned into a Bernoulli
+trial.</strong> Suppose <span class="math inline">\(Z\)</span> records
+whether a randomly chosen person’s pet is a cat, a dog or a fish, with
+probabilities <span class="math inline">\(p_1\)</span>, <span
+class="math inline">\(p_2\)</span> and <span
+class="math inline">\(p_3\)</span>. If what we care about is whether the
+person has a dog, call “dog” a success and everything else a failure.
+Then <span class="math inline">\(Y = 1\)</span> for a dog owner, with
+probability <span class="math inline">\(p_2\)</span>, and <span
+class="math inline">\(Y = 0\)</span> otherwise, with probability <span
+class="math inline">\(p_1 + p_3 = 1 - p_2\)</span>, so <span
+class="math inline">\(Y \sim \text{Bernoulli}(p_2)\)</span>.</p>
+<div id="example-guessing-one-question" class="section level3">
+<h3>Example: guessing one question</h3>
+<p>You guess on a multiple-choice question with 4 options, one of them
+correct. Let <span class="math inline">\(X = 1\)</span> if the guess is
+right. Then <span class="math inline">\(X \sim
+\text{Bernoulli}(0.25)\)</span>:</p>
+<ul>
+<li><span class="math inline">\(P(X = 0) = 1 - 0.25 =
+0.75\)</span>;</li>
+<li><span class="math inline">\(\mu = 0.25\)</span> and <span
+class="math inline">\(\sigma^2 = 0.25 \times 0.75 =
+0.1875\)</span>.</li>
+</ul>
+<p>The mean of a 0/1 variable is the proportion of 1s, so <span
+class="math inline">\(\mu = 0.25\)</span> says that in the long run a
+quarter of your guesses are right.</p>
+</div>
+</div>
+<div id="the-binomial-distribution" class="section level2">
+<h2>The binomial distribution</h2>
+<p>One Bernoulli trial is not very interesting. Repeat it, and count the
+successes. The textbook lists three characteristics of this
+<strong>binomial setting</strong>:</p>
 <ol style="list-style-type: decimal">
-<li><p>Enumerate all possible samples of size <span
-class="math inline">\(n\)</span> that can be drawn from the population.
-For each sample, calculate the sample mean, sample variance, or any
-other relevant statistic of interest.</p></li>
-<li><p>Determine the probability associated with each possible sample
-statistic. This involves using the population distribution to calculate
-the probability of obtaining each value of the sample
-statistic.</p></li>
-<li><p>Assemble the probabilities for each sample statistic to create
-the sampling distribution. This distribution describes the probabilities
-of observing different values of the sample statistic across all
-possible samples of size <span
-class="math inline">\(n\)</span>.</p></li>
+<li><strong>A fixed number of trials</strong> <span
+class="math inline">\(n\)</span>, decided in advance.</li>
+<li><strong>Two outcomes on every trial</strong>, success or failure,
+with <strong>the same probability of success</strong> <span
+class="math inline">\(p\)</span> each time (and probability of failure
+<span class="math inline">\(q = 1 - p\)</span>).</li>
+<li><strong>Independent trials</strong>: the outcome of one trial does
+not change the probability of success on any other.</li>
 </ol>
-<p><strong>Example</strong>: Texas hold’em is a gambling game which
-starts with each player receiving two cards. Here is the population
-distribution for the number of aces dealt in a two-card hand</p>
-<p><span class="math display">\[X = \text{Number of aces in a hand of
-poker} \]</span></p>
+<ul>
+<li>A <strong>binomial random variable</strong> <span
+class="math inline">\(X\)</span> is the number of successes in such a
+setting. Its distribution, the <strong>binomial distribution</strong>,
+has two parameters, <span class="math inline">\(n\)</span> and <span
+class="math inline">\(p\)</span>, and we write <span
+class="math inline">\(X \sim \text{Binom}(n, p)\)</span>. (The textbook
+writes <span class="math inline">\(X \sim B(n, p)\)</span>.) A Bernoulli
+random variable is the special case <span class="math inline">\(n =
+1\)</span>.</li>
+</ul>
+<p>The probability of exactly <span class="math inline">\(k\)</span>
+successes is <span class="math display">\[P(X = k) = \frac{n!}{k!\,(n -
+k)!}\; p^k\, (1 - p)^{n - k}, \qquad k = 0, 1, \ldots, n\]</span> and
+the mean and variance are <span class="math display">\[\mu = np
+\qquad\qquad \sigma^2 = np(1 - p) \qquad\qquad \sigma = \sqrt{np(1 -
+p)}\]</span></p>
+<p>The mean makes sense: in <span class="math inline">\(n\)</span>
+trials that each succeed with probability <span
+class="math inline">\(p\)</span>, you expect <span
+class="math inline">\(np\)</span> successes.</p>
+<p><strong>Where the formula comes from.</strong> The symbol <span
+class="math inline">\(!\)</span> is a <strong>factorial</strong>: the
+product of all the positive whole numbers up to that number, <span
+class="math display">\[n! = n \times (n - 1) \times (n - 2) \times
+\cdots \times 1, \qquad\text{so } 5! = 5 \times 4 \times 3 \times 2
+\times 1 = 120\]</span> and, by definition, <span
+class="math inline">\(0! = 1\)</span>. The first factor in the formula,
+the <strong>binomial coefficient</strong> <span
+class="math display">\[\binom{n}{k} = \frac{n!}{k!\,(n - k)!}\]</span>
+counts the number of different orders in which <span
+class="math inline">\(k\)</span> successes can fall among <span
+class="math inline">\(n\)</span> trials. Each one of those orders has
+probability <span class="math inline">\(p^k (1 - p)^{n - k}\)</span> by
+the multiplication rule, because the trials are independent. Multiplying
+the two gives <span class="math inline">\(P(X = k)\)</span>.</p>
+<div id="example-three-tosses-again" class="section level3">
+<h3>Example: three tosses again</h3>
+<p>In Week 6 we found the distribution of <span
+class="math inline">\(X\)</span> = the number of heads in 3 tosses of a
+fair coin by listing all 8 outcomes. That is the binomial setting with
+<span class="math inline">\(n = 3\)</span> and <span
+class="math inline">\(p = 0.5\)</span>, so the formula should give the
+same answer: <span class="math display">\[P(X = 2) =
+\frac{3!}{2!\,1!}\,(0.5)^2\,(0.5)^1 = 3 \times \frac{1}{8} =
+\frac{3}{8}\]</span> The coefficient <span
+class="math inline">\(3!/(2!\,1!) = 3\)</span> counts the three orders
+with 2 heads, HHT, HTH and THH, exactly the outcomes we counted by hand.
+The formula just saves us from listing them when <span
+class="math inline">\(n\)</span> is large.</p>
+</div>
+<div id="example-guessing-a-whole-quiz" class="section level3">
+<h3>Example: guessing a whole quiz</h3>
+<p>You guess on all 10 questions of a 4-option multiple-choice quiz, so
+the number right is <span class="math inline">\(X \sim \text{Binom}(10,
+0.25)\)</span>.</p>
+<ul>
+<li><span class="math inline">\(P(X = 3) =
+\dfrac{10!}{3!\,7!}(0.25)^3(0.75)^7 = 120 \times 0.0156 \times 0.1335
+\approx 0.250\)</span></li>
+<li><span class="math inline">\(P(X = 0) = (0.75)^{10} \approx
+0.056\)</span>: about 1 time in 18 you get every question wrong.</li>
+<li><span class="math inline">\(\mu = 10 \times 0.25 = 2.5\)</span>
+questions and <span class="math inline">\(\sigma = \sqrt{10 \times 0.25
+\times 0.75} \approx 1.37\)</span>.</li>
+</ul>
+<p>The whole distribution:</p>
 <table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
-<th style="text-align:left;">
-X
+<th style="padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="11">
+<div style="border-bottom: 1px solid #111111; margin-bottom: -1px; ">
+<span class="math inline">\(P(X = k)\)</span> for <span
+class="math inline">\(k =\)</span>
+</div>
 </th>
-<th style="text-align:right;">
-Probability
+</tr>
+<tr>
+<th style="text-align:left;">
+<span class="math inline">\(0\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(1\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(2\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(3\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(4\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(5\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(6\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(7\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(8\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(9\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(10\)</span>
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-0.56
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-0.38
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-0.06
-</td>
-</tr>
-</tbody>
-</table>
-<p>Derive the sampling distribution for the number of aces in two
-consecutive hands of texas hold’em. To derive the sampling distribution
-we must define the sample space for the number of aces in two hands. The
-possibilities are given below (here we assume the two hands are
-independent, so the joint probabilities are the products of the
-individual-hand probabilities).</p>
-<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-Number of Aces in two hands
-</th>
-<th style="text-align:left;">
-Outcomes giving result
-</th>
-<th style="text-align:left;">
-Probability
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
+0.056
 </td>
 <td style="text-align:left;">
-<span class="math inline">\((0,0) = \color{red}{1}\)</span>
+0.188
 </td>
 <td style="text-align:left;">
-<span class="math inline">\(0.559\times 0.559 =
-\color{red}{0.312}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
+0.282
 </td>
 <td style="text-align:left;">
-<span class="math inline">\((0,1), (1,0) = \color{red}{2}\)</span>
+0.250
 </td>
 <td style="text-align:left;">
-<span class="math inline">\(2(0.559\times 0.382) =
-\color{red}{0.427}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
+0.146
 </td>
 <td style="text-align:left;">
-<span class="math inline">\((0, 2), (2,0), (1,1) =
-\color{red}{3}\)</span>
+0.058
 </td>
 <td style="text-align:left;">
-<span class="math inline">\(2(0.559\times 0.059) + (0.382\times 0.382) =
-\color{red}{0.212}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
+0.016
 </td>
 <td style="text-align:left;">
-<span class="math inline">\((1,2), (2,1) = \color{red}{2}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(2(0.382\times 0.059) =
-\color{red}{0.045}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:left;">
-<span class="math inline">\((2,2) = \color{red}{1}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(0.059\times 0.059 =
-\color{red}{0.003}\)</span>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Therefore we can summarize the sampling distribution of the number
-<span class="math inline">\(Y\)</span> of Aces in two hands of texas
-hold’em</p>
-<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-<span class="math inline">\(Y\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(P(Y)\)</span>
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.312
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.427
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.212
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.045
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
 0.003
 </td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Example</strong> Consider the probability distribution of the
-random variable <span class="math inline">\(X\)</span>. Let <span
-class="math inline">\(X\)</span> represent the number of Coho salmon
-caught in an afternoon by a fly fisherman fishing the Clearwater
-river.</p>
+<p>To pass with 6 or more right you need <span class="math inline">\(P(X
+\geq 6) = P(6) + P(7) + \cdots + P(10) \approx
+0.020\)</span>, about a 2% chance. Guessing is not a strategy.</p>
+</div>
+<div id="example-tiger-trout" class="section level3">
+<h3>Example: tiger trout</h3>
+<p>A tiger trout is a sterile cross between a brown trout and a brook
+trout, raised in hatcheries and stocked into lakes and ponds. Suppose
+500 of the 10,000 trout stocked in a reservoir are tiger trout and the
+fish are well mixed, so each fish caught is a tiger trout with
+probability <span class="math inline">\(p = 500/10{,}000 =
+0.05\)</span>. (With 10,000 fish, catching a few barely changes the mix,
+so the catches behave like independent trials; see “Sampling with and
+without replacement” in the Week 6 notes.)</p>
+<ul>
+<li>The probability that the first fish you catch is a tiger trout is
+just <span class="math inline">\(p = 0.05\)</span>.</li>
+<li>The probability of at least one tiger trout among your first 10 fish
+is easiest through the complement: <span class="math display">\[P(X \geq
+1) = 1 - P(X = 0) = 1 - (0.95)^{10} \approx 0.401\]</span></li>
+</ul>
+</div>
+<div id="example-free-throws" class="section level3">
+<h3>Example: free throws</h3>
+<p>Stephen Curry has made 4,236 of the 4,645 free throws he has
+attempted in the NBA, so take <span class="math inline">\(p = 4236/4645
+\approx 0.912\)</span>. If he shoots 10 free throws and the shots are
+independent, <span class="math inline">\(X \sim \text{Binom}(10,
+0.912)\)</span>:</p>
+<ul>
+<li><span class="math inline">\(P(\text{all } 10) = (0.912)^{10} \approx
+0.40\)</span>, so even one of the best free-throw shooters ever misses
+at least one of 10 about 60% of the time;</li>
+<li><span class="math inline">\(P(X = 9) = 10\,(0.912)^9(0.088) \approx
+0.38\)</span>;</li>
+<li>on average he makes <span class="math inline">\(\mu = np = 10 \times
+0.912 \approx 9.1\)</span>.</li>
+</ul>
+</div>
+</div>
+<div id="the-shape-of-a-binomial-distribution" class="section level2">
+<h2>The shape of a binomial distribution</h2>
+<p><img src="assets/l15_binomial_shapes.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Each panel is <span class="math inline">\(\text{Binom}(10,
+p)\)</span>. With <span class="math inline">\(p = 0.5\)</span> the
+distribution is <strong>symmetric</strong>. When <span
+class="math inline">\(p\)</span> is small, the counts pile up near 0 and
+the distribution is <strong>skewed right</strong>; when <span
+class="math inline">\(p\)</span> is large it is <strong>skewed
+left</strong>. In each case the peak sits near the mean <span
+class="math inline">\(np\)</span>: 2, 5 and 8. As <span
+class="math inline">\(n\)</span> grows, the distribution becomes more
+and more bell shaped even when <span class="math inline">\(p\)</span> is
+not 0.5, which is the central limit theorem at the end of this page.</p>
+</div>
+<div id="is-it-binomial" class="section level2">
+<h2>Is it binomial?</h2>
+<p>Check the three conditions before reaching for the formula.</p>
+<ul>
+<li><strong>The number of heads in 20 flips of a coin.</strong> Yes:
+<span class="math inline">\(n = 20\)</span> is fixed, <span
+class="math inline">\(p = 0.5\)</span> on every flip, and the flips are
+independent.</li>
+<li><strong>The number of aces in a 5-card hand.</strong> No: the cards
+are dealt without replacement, so the draws are not independent. After
+an ace, only 3 of the 51 remaining cards are aces.</li>
+<li><strong>The number of rolls of a die until the first six.</strong>
+No: the number of trials is not fixed in advance; it <em>is</em> the
+random variable. (This is the geometric distribution, textbook Section
+4.4.)</li>
+</ul>
+</div>
+<div id="the-poisson-distribution" class="section level2">
+<h2>The Poisson distribution</h2>
+<p>The binomial counts successes out of a fixed number of trials. Some
+counts have no “number of trials” at all: the number of goals in a
+soccer match, of emails in an hour, of defects in a sheet of glass. The
+<strong>Poisson distribution</strong>, named after the French
+mathematician Siméon Denis Poisson (1781–1840), models counts like
+these. A Poisson random variable counts events in a <strong>fixed
+interval</strong> of time or space when</p>
+<ul>
+<li>events occur <strong>independently</strong>: one event does not make
+another more or less likely;</li>
+<li>events occur at a <strong>constant average rate</strong>, the same
+in every part of the interval;</li>
+<li>two events cannot happen at exactly the same instant.</li>
+</ul>
+<p>The distribution has one parameter, the <strong>rate</strong> <span
+class="math inline">\(\lambda\)</span> (lambda), the average number of
+events in the interval. We write <span class="math inline">\(X \sim
+\text{Poisson}(\lambda)\)</span>, and</p>
+<p><span class="math display">\[P(X = k) = \frac{\lambda^k\,
+e^{-\lambda}}{k!}, \qquad k = 0, 1, 2, \ldots\]</span></p>
+<p><span class="math display">\[\mu = \lambda \qquad\qquad \sigma^2 =
+\lambda \qquad\qquad \sigma = \sqrt{\lambda}\]</span></p>
+<p>There is no upper limit on <span class="math inline">\(k\)</span>.
+The number <span class="math inline">\(e \approx 2.718\)</span> is
+<strong>Euler’s number</strong>, a constant that turns up throughout
+mathematics; every scientific calculator has an <span
+class="math inline">\(e^x\)</span> button. (The textbook writes the
+parameter as <span class="math inline">\(\mu\)</span> and the
+distribution as <span class="math inline">\(X \sim P(\mu)\)</span>.)</p>
+<p>Other counts that are often modeled as Poisson: mutations on a strand
+of DNA, defective products per hour on an assembly line, bankruptcies
+filed in a month, and internet outages in a month.</p>
+<div id="example-world-cup-goals" class="section level3">
+<h3>Example: World Cup goals</h3>
+<p>The 2022 FIFA World Cup produced 172 goals in its 64 matches, so take
+<span class="math inline">\(\lambda = 172/64 \approx 2.69\)</span> goals
+per match and let <span class="math inline">\(X\)</span> = the number of
+goals in one match.</p>
+<ul>
+<li><span class="math inline">\(P(X = 0) = e^{-2.69} \approx
+0.068\)</span>.</li>
+<li>So out of 64 matches the model expects <span
+class="math inline">\(64 \times 0.068 \approx
+4.4\)</span> to end 0–0. There were actually 7. Close, but a model is
+never a perfect fit: real matches break the “constant rate” condition,
+since a team that falls behind attacks harder.</li>
+<li><strong>Change the interval, change <span
+class="math inline">\(\lambda\)</span>.</strong> A 45-minute half is
+half a match, so the rate for one half is <span
+class="math inline">\(\lambda = 2.69/2 \approx 1.34\)</span>, and <span
+class="math inline">\(P(\text{no goals in a half}) = e^{-1.34} \approx
+0.26\)</span>.</li>
+</ul>
+<p>The standard deviation is <span class="math inline">\(\sigma =
+\sqrt{2.69} \approx 1.64\)</span> goals. Here is the whole
+distribution:</p>
+<p><img src="assets/l15_poisson_goals.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Two goals is the most likely score total, then three. The
+distribution is <strong>skewed right</strong>: <span
+class="math inline">\(X\)</span> cannot go below 0, but there is no
+upper limit.</p>
+</div>
+<div id="the-poisson-as-an-approximation-to-the-binomial"
+class="section level3">
+<h3>The Poisson as an approximation to the binomial</h3>
+<p>When <span class="math inline">\(n\)</span> is large and <span
+class="math inline">\(p\)</span> is small, a binomial count behaves like
+a Poisson count with <span class="math inline">\(\lambda = np\)</span>.
+Back to the tiger trout: in a day’s catch of 100 fish with <span
+class="math inline">\(p = 0.05\)</span>, the number of tiger trout is
+<span class="math inline">\(\text{Binom}(100, 0.05)\)</span>, and</p>
+<p><span class="math display">\[\text{binomial: } P(X = 5) =
+\frac{100!}{5!\,95!}(0.05)^5(0.95)^{95} \approx 0.180 \qquad
+\text{Poisson with } \lambda = 5\text{: } P(X = 5) = \frac{5^5
+e^{-5}}{5!} \approx 0.175\]</span></p>
+<p>The Poisson is far easier to compute. The textbook’s rule of thumb is
+that the approximation is good when <span
+class="math inline">\(n\)</span> is greater than 20 and <span
+class="math inline">\(p\)</span> is less than 0.05; at <span
+class="math inline">\(p = 0.05\)</span> we are right at the edge, and
+the two answers still agree to two decimal places.</p>
+</div>
+</div>
+</div>
+<div id="continuous-probability-distributions" class="section level1">
+<h1>Continuous probability distributions</h1>
+<div id="from-histograms-to-density-curves" class="section level2">
+<h2>From histograms to density curves</h2>
+<p>So far a random variable’s values could be listed: 0, 1, 2, and so
+on. A <strong>continuous</strong> random variable, like a height, a time
+or a temperature, can take any value in an interval, so there are too
+many values to list and we cannot give each one a probability.</p>
+<p>We have already seen the fix. In Week 6 a histogram of 150 years of
+Central Park January temperatures was smoothed into a <strong>density
+curve</strong>, and the proportion of Januaries in any range was the
+<strong>area</strong> under the curve over that range. A continuous
+probability distribution works the same way, with “proportion of the
+data” replaced by “probability”.</p>
+<ul>
+<li>The <strong>probability density function</strong> (pdf) of a
+continuous random variable <span class="math inline">\(X\)</span> is a
+curve <span class="math inline">\(f(x)\)</span> with three properties:
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(f(x) \geq 0\)</span> everywhere: the
+curve never dips below the <span
+class="math inline">\(x\)</span>-axis;</li>
+<li>the total area under the curve is 1;</li>
+<li><strong>probability is area</strong>: <span
+class="math inline">\(P(a &lt; X &lt; b)\)</span> is the area under the
+curve between <span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>.</li>
+</ol></li>
+</ul>
+<p>This is what the textbook means by “PROBABILITY = AREA”. Three
+consequences that trip people up:</p>
+<ul>
+<li><strong>The height of the curve is not a probability.</strong> The
+<span class="math inline">\(y\)</span>-axis measures <em>probability
+density</em>, and a density can be bigger than 1. Only areas are
+probabilities.</li>
+<li><strong>Any single value has probability 0</strong>: <span
+class="math inline">\(P(X = c) = 0\)</span>, because the “area” over a
+single point is a line with no width. A height of <em>exactly</em>
+70.000… inches has probability 0, even though heights near 70 are
+common.</li>
+<li>So for a continuous variable <strong><span
+class="math inline">\(&lt;\)</span> and <span
+class="math inline">\(\leq\)</span> give the same answer</strong>: <span
+class="math inline">\(P(X &lt; c) = P(X \leq c)\)</span>.</li>
+</ul>
+<p>Finding an area under a general curve takes calculus, which this
+course does not use. Instead we use simple shapes whose areas we can
+compute with geometry, and tables or software for the normal curve.</p>
+<div id="example-a-uniform-distribution" class="section level3">
+<h3>Example: a uniform distribution</h3>
+<p>A campus shuttle arrives every 20 minutes and you show up at a random
+time, so your wait <span class="math inline">\(X\)</span> is equally
+likely to be anywhere between 0 and 20 minutes. Its density is flat:
+<span class="math display">\[f(x) = \frac{1}{20} \quad\text{for } 0 \leq
+x \leq 20\]</span> a rectangle with area <span class="math inline">\(20
+\times \frac{1}{20} = 1\)</span>. This is the <strong>uniform
+distribution</strong>. Every probability is the area of a smaller
+rectangle, base times height:</p>
+<ul>
+<li><span class="math inline">\(P(X &lt; 5) = 5 \times \frac{1}{20} =
+0.25\)</span>;</li>
+<li><span class="math inline">\(P(4 &lt; X &lt; 15) = (15 - 4) \times
+\frac{1}{20} = 0.55\)</span>;</li>
+<li><span class="math inline">\(P(X = 15) = 0 \times \frac{1}{20} =
+0\)</span>;</li>
+<li><span class="math inline">\(P(X &gt; 15) = (20 - 15) \times
+\frac{1}{20} = 0.25\)</span>.</li>
+</ul>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="example-counting-boxes" class="section level3">
+<h3>Example: counting boxes</h3>
+<p>The density of <span class="math inline">\(X\)</span> below is a step
+function on a grid. Each box is <span
+class="math inline">\(0.25\)</span> wide and <span
+class="math inline">\(0.16\)</span> tall, so each box has area <span
+class="math inline">\(0.25 \times 0.16 = 0.04\)</span>.</p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>There are 25 boxes under the curve in all, and <span
+class="math inline">\(25 \times 0.04 = 1\)</span>, so this is a valid
+density. The shaded region, to the left of 0, holds <span
+class="math inline">\(2 + 3 + 7 + 5 = 17\)</span> boxes, so <span
+class="math display">\[P(X &lt; 0) = 17 \times 0.04 = 0.68\]</span></p>
+</div>
+<div id="example-a-triangle" class="section level3">
+<h3>Example: a triangle</h3>
+<p>The density of <span class="math inline">\(W\)</span> below rises in
+a straight line from 0 at <span class="math inline">\(W = 0\)</span> to
+a peak of 0.4 at <span class="math inline">\(W = 2\)</span>, then falls
+back to 0 at <span class="math inline">\(W = 5\)</span>. The whole
+triangle has area <span class="math inline">\(\frac{1}{2} \times 5
+\times 0.4 = 1\)</span>.</p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-7-1.png" width="864" style="display: block; margin: auto;" /></p>
+<ul>
+<li><span class="math inline">\(P(W \leq 1)\)</span> is the small shaded
+triangle. The density climbs <span class="math inline">\(0.4\)</span>
+over 2 units, <span class="math inline">\(0.2\)</span> per unit, so at
+<span class="math inline">\(W = 1\)</span> its height is <span
+class="math inline">\(0.2\)</span>: <span class="math display">\[P(W
+\leq 1) = \tfrac{1}{2} \times 1 \times 0.2 = 0.1\]</span></li>
+<li><span class="math inline">\(P(W &gt; 2)\)</span> is the right-hand
+triangle, base 3 and height 0.4: <span class="math inline">\(P(W &gt; 2)
+= \frac{1}{2} \times 3 \times 0.4 = 0.6\)</span>. So <span
+class="math inline">\(P(W \leq 2) = 1 - 0.6 = 0.4\)</span>.</li>
+</ul>
+</div>
+<div id="approximating-an-area-with-rectangles" class="section level3">
+<h3>Approximating an area with rectangles</h3>
+<p>When the curve is not made of straight lines, we can still
+approximate the area under it with rectangles, just as a histogram does.
+Take the normal model for the women’s heights from Week 6, <span
+class="math inline">\(X \sim N(65.4, 3.38)\)</span>, and the probability
+that a woman is between 62 and 70 inches tall:</p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-8-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p>The rectangles give 0.7628, then 0.7577, then 0.7561; the exact area
+is <span class="math inline">\(P(62 &lt; X &lt; 70) = 0.7560\)</span>.
+The thinner the rectangles, the closer the approximation. Calculus is
+what you get by letting the rectangles become infinitely thin;
+<code>pnorm</code> and the <span class="math inline">\(z\)</span>-table
+from Week 6 have done that work for us.</p>
+</div>
+</div>
+<div id="cumulative-probability" class="section level2">
+<h2>Cumulative probability</h2>
+<ul>
+<li>The <strong>cumulative distribution function</strong> (cdf) of <span
+class="math inline">\(X\)</span> gives the probability that <span
+class="math inline">\(X\)</span> is at most a value <span
+class="math inline">\(x\)</span>, <span class="math inline">\(P(X \leq
+x)\)</span>: the area under the density to the <strong>left</strong> of
+<span class="math inline">\(x\)</span>.</li>
+</ul>
+<p>This is the probability version of the cumulative relative frequency
+from Week 3, and it is exactly what a <span
+class="math inline">\(z\)</span>-table and <code>pnorm</code> give you.
+Every other probability comes from it with two rules:</p>
+<ul>
+<li><strong>Area to the right</strong> (complement rule): <span
+class="math inline">\(P(X &gt; x) = 1 - P(X \leq x)\)</span>.</li>
+<li><strong>Area between</strong>: <span class="math inline">\(P(a &lt;
+X &lt; b) = P(X \leq b) - P(X \leq a)\)</span>.</li>
+</ul>
+<p>For the shuttle, <span class="math inline">\(P(X \leq x) =
+x/20\)</span>, so <span class="math inline">\(P(4 &lt; X &lt; 15) =
+15/20 - 4/20 = 0.55\)</span>, the same answer as the rectangle.</p>
+</div>
+<div id="quartiles-of-a-continuous-distribution" class="section level2">
+<h2>Quartiles of a continuous distribution</h2>
+<p>The quartiles of a continuous random variable are the values that cut
+the area into quarters: <span class="math display">\[P(X &lt; Q_1) =
+0.25 \qquad P(X &lt; Q_2) = 0.50 \qquad P(X &lt; Q_3) = 0.75\]</span> so
+<span class="math inline">\(Q_2\)</span> is the median. To find them,
+add up area from the left until you reach each target.</p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>The areas of the five rectangles are 0.10, 0.15, 0.25, 0.20 and 0.30,
+and they add to 1.</p>
+<ul>
+<li>After the first two rectangles the area is <span
+class="math inline">\(0.10 + 0.15 = 0.25\)</span>, so <span
+class="math inline">\(Q_1 = 2\)</span>.</li>
+<li>The third rectangle adds 0.25, reaching <span
+class="math inline">\(0.50\)</span> at <span class="math inline">\(x =
+3\)</span>, so the median is <span class="math inline">\(Q_2 =
+3\)</span>.</li>
+<li>At <span class="math inline">\(x = 5\)</span> the area is <span
+class="math inline">\(0.70\)</span>. We need <span
+class="math inline">\(0.05\)</span> more, and the last rectangle has
+height 0.05, so it takes 1 more unit: <span class="math inline">\(Q_3 =
+6\)</span>.</li>
+</ul>
+<p>The long right tail pulls <span class="math inline">\(Q_3\)</span>
+much further from the median than <span
+class="math inline">\(Q_1\)</span> is: this distribution is skewed
+right.</p>
+</div>
+<div id="mean-and-standard-deviation-of-a-continuous-random-variable"
+class="section level2">
+<h2>Mean and standard deviation of a continuous random variable</h2>
+<p>The mean <span class="math inline">\(\mu\)</span> and standard
+deviation <span class="math inline">\(\sigma\)</span> of a continuous
+random variable mean exactly what they meant for a discrete one, but
+computing them generally takes calculus.</p>
+<ul>
+<li>The <strong>mean</strong> <span class="math inline">\(\mu\)</span>
+is the <strong>balance point</strong> of the density curve: if the curve
+were cut out of cardboard, it would balance on <span
+class="math inline">\(\mu\)</span>. For a symmetric density it is the
+center (10 minutes for the shuttle); for a skewed one it is pulled
+toward the long tail, past the median.</li>
+<li>The <strong>standard deviation</strong> <span
+class="math inline">\(\sigma\)</span> measures the spread of the curve
+around <span class="math inline">\(\mu\)</span>.</li>
+</ul>
+<p>The normal distribution, <span class="math inline">\(X \sim N(\mu,
+\sigma)\)</span>, is the most important continuous distribution, and it
+is the one case where the two parameters <em>are</em> the mean and
+standard deviation. Everything in the Week 6 notes about finding areas
+under it, with <span class="math inline">\(z\)</span>-scores, the <span
+class="math inline">\(z\)</span>-table and <code>pnorm</code>, is the
+cdf rules above applied to a bell-shaped curve.</p>
+</div>
+</div>
+<div id="sampling-distributions-and-the-central-limit-theorem"
+class="section level1">
+<h1>Sampling distributions and the central limit theorem</h1>
+<div id="three-distributions" class="section level2">
+<h2>Three distributions</h2>
+<p>In the Week 6 notes we met the <strong>sampling distribution</strong>
+by simulation: take sample after sample of 20 heights, compute <span
+class="math inline">\(\bar{x}\)</span> each time, and plot the results.
+This week we can say what is going on in the language of probability. A
+statistic computed from a random sample is a <strong>random
+variable</strong>, because its value depends on which units chance put
+in the sample, and so it has a probability distribution of its own. Keep
+three distributions apart:</p>
+<ul>
+<li>The <strong>population distribution</strong> is the probability
+distribution of a single observation <span
+class="math inline">\(X\)</span>. It is described by
+<strong>parameters</strong> such as <span
+class="math inline">\(\mu\)</span>, <span
+class="math inline">\(\sigma\)</span> and <span
+class="math inline">\(p\)</span>, which we usually do not know.</li>
+<li>The <strong>data distribution</strong> is the distribution of the
+<span class="math inline">\(n\)</span> observations we actually have in
+our sample, the histogram of our data. It is described by
+<strong>statistics</strong> such as <span
+class="math inline">\(\bar{x}\)</span>, <span
+class="math inline">\(s\)</span> and <span
+class="math inline">\(\hat{p}\)</span>.</li>
+<li>The <strong>sampling distribution</strong> is the probability
+distribution of a statistic, such as <span
+class="math inline">\(\bar{x}\)</span> or <span
+class="math inline">\(\hat{p}\)</span>, over all possible samples of
+size <span class="math inline">\(n\)</span> from the population. It
+tells us how close an estimate is likely to be to the parameter.</li>
+</ul>
+</div>
+<div id="deriving-a-sampling-distribution-by-hand"
+class="section level2">
+<h2>Deriving a sampling distribution by hand</h2>
+<p>For a discrete population and a small sample we can find a sampling
+distribution exactly, with the rules from Week 6:</p>
+<ol style="list-style-type: decimal">
+<li>List every possible sample of size <span
+class="math inline">\(n\)</span> and compute the statistic for
+each.</li>
+<li>Find the probability of each sample. When the observations are
+independent, multiply.</li>
+<li>Add up the probabilities of the samples that give the same value of
+the statistic.</li>
+</ol>
+<p><strong>Example.</strong> Let <span class="math inline">\(X\)</span>
+be the number of Coho salmon a fly fisherman catches in an afternoon on
+the Clearwater River, with this (hypothetical) population
+distribution:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+<span class="math inline">\(x\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(P(x)\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+0.589
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+0.232
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0.179
+</td>
+</tr>
+</tbody>
+</table>
+<p>Its mean is <span class="math inline">\(\mu = 0(0.589) + 1(0.232) +
+2(0.179) = 0.59\)</span> fish and its standard deviation is <span
+class="math inline">\(\sigma = 0.775\)</span>. Now find the sampling
+distribution of <span class="math inline">\(\bar{x}\)</span>, the mean
+catch over a random sample of <span class="math inline">\(n = 3\)</span>
+afternoons. There are <span class="math inline">\(3 \times 3 \times 3 =
+27\)</span> possible samples:</p>
 <table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
-X
+<span class="math inline">\(\bar{x}\)</span>
 </th>
-<th style="text-align:right;">
+<th style="text-align:left;">
+Samples giving it
+</th>
+<th style="text-align:left;">
 Probability
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(P(\bar{x})\)</span>
 </th>
 </tr>
 </thead>
@@ -1118,209 +1311,347 @@ Probability
 <td style="text-align:left;">
 0
 </td>
-<td style="text-align:right;">
-0.59
+<td style="text-align:left;">
+(0,0,0) = <span class="math inline">\(\color{red}{1}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(0.589^3\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.204}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1/3
+</td>
+<td style="text-align:left;">
+(1,0,0), (0,1,0), (0,0,1) = <span
+class="math inline">\(\color{red}{3}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(3(0.589^2 \times 0.232)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.241}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2/3
+</td>
+<td style="text-align:left;">
+(1,1,0), (1,0,1), (0,1,1), (2,0,0), (0,2,0), (0,0,2) = <span
+class="math inline">\(\color{red}{6}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(3(0.232^2 \times 0.589) + 3(0.589^2 \times
+0.179)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.281}\)</span>
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 1
 </td>
-<td style="text-align:right;">
-0.23
+<td style="text-align:left;">
+(1,1,1), (2,1,0), (2,0,1), (0,2,1), (1,2,0), (1,0,2), (0,1,2) = <span
+class="math inline">\(\color{red}{7}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(0.232^3 + 6(0.589 \times 0.232 \times
+0.179)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.159}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4/3
+</td>
+<td style="text-align:left;">
+(2,1,1), (1,2,1), (1,1,2), (2,2,0), (2,0,2), (0,2,2) = <span
+class="math inline">\(\color{red}{6}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(3(0.232^2 \times 0.179) + 3(0.179^2 \times
+0.589)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.086}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5/3
+</td>
+<td style="text-align:left;">
+(1,2,2), (2,1,2), (2,2,1) = <span
+class="math inline">\(\color{red}{3}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(3(0.179^2 \times 0.232)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.022}\)</span>
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 2
 </td>
-<td style="text-align:right;">
-0.18
+<td style="text-align:left;">
+(2,2,2) = <span class="math inline">\(\color{red}{1}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(0.179^3\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.006}\)</span>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Derive the sampling distribution for the mean number of fish caught
-from a random sample of <span class="math inline">\(n = 3\)</span>
-afternoons of fishing</p>
-<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-Mean Number of Salmon Caught
-</th>
-<th style="text-align:left;">
-Outcomes giving result
-</th>
-<th style="text-align:left;">
-Probability
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:left;">
-<span class="math inline">\((0,0,0) = \color{red}{1}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(0.589^3 = \color{red}{0.204}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.33
-</td>
-<td style="text-align:left;">
-<span class="math inline">\((1,0,0), (0,1,0),(0,0,1) =
-\color{red}{3}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(3(0.589^2\times0.232) =
-\color{red}{0.241}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.67
-</td>
-<td style="text-align:left;">
-<span class="math inline">\((1,1,0), (1,0,1), (0,1,1), (2,0,0),
-(0,2,0),(0,0,2) = \color{red}{6}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(3(0.232^2\times0.589) + 3(0.589^2\times
-0.179) = \color{red}{0.281}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.00
-</td>
-<td style="text-align:left;">
-<span class="math inline">\((1,1,1), (2,1,0), (2,0,1), (0,2,1), (1,2,0),
-(1,0,2), (0,1,2) = \color{red}{7}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(0.232^3 + 6(0.589\times 0.232\times 0.179) =
-\color{red}{0.159}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.33
-</td>
-<td style="text-align:left;">
-<span class="math inline">\((2,1,1), (1,2,1), (1,1,2), (2,2,0),
-(2,0,2),(0,2,2) = \color{red}{6}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(3(0.232^2\times0.179) + 3(0.179^2\times
-0.589) = \color{red}{0.085}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.67
-</td>
-<td style="text-align:left;">
-<span class="math inline">\((1,2,2), (2,1,2),(2,2,1) =
-\color{red}{3}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(3(0.179^2\times0.232) =
-\color{red}{0.022}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.00
-</td>
-<td style="text-align:left;">
-<span class="math inline">\((2,2,2) = \color{red}{1}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(0.179^3 = \color{red}{0.006}\)</span>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Therefore we can summarize the sampling distribution of the mean
-number <span class="math inline">\(\bar{X}\)</span> of Coho salmon
-caught over a random sample of <span class="math inline">\(n =
-3\)</span> afternoons of fishing</p>
-<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-<span class="math inline">\(\bar{X}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(P(\bar{X})\)</span>
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.204
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.33
-</td>
-<td style="text-align:right;">
-0.241
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.67
-</td>
-<td style="text-align:right;">
-0.281
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.00
-</td>
-<td style="text-align:right;">
-0.159
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.33
-</td>
-<td style="text-align:right;">
-0.085
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.67
-</td>
-<td style="text-align:right;">
-0.022
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.00
-</td>
-<td style="text-align:right;">
-0.006
-</td>
-</tr>
-</tbody>
-</table>
+<p>The counts in red add to 27 and the probabilities add to 1. Now
+compare this distribution with the population:</p>
+<ul>
+<li>Its mean is <span class="math inline">\(\mu_{\bar{x}} = \sum
+\bar{x}\, P(\bar{x}) = 0.59\)</span>, <strong>the same as</strong> <span
+class="math inline">\(\mu\)</span>.</li>
+<li>Its standard deviation is <span
+class="math inline">\(\sigma_{\bar{x}} = 0.447\)</span>, which is
+exactly <span class="math inline">\(\sigma/\sqrt{n} =
+0.775/\sqrt{3}\)</span>.</li>
+</ul>
+<p>Those are the two facts about the sampling distribution of <span
+class="math inline">\(\bar{x}\)</span> from Week 6, now checked exactly
+rather than by simulation.</p>
+</div>
+<div id="center-and-spread-of-a-sampling-distribution"
+class="section level2">
+<h2>Center and spread of a sampling distribution</h2>
+<p>For a random sample of size <span class="math inline">\(n\)</span>
+from a population with mean <span class="math inline">\(\mu\)</span> and
+standard deviation <span class="math inline">\(\sigma\)</span>:</p>
+<ul>
+<li><strong>The sample mean</strong> <span
+class="math inline">\(\bar{x}\)</span> has mean <span
+class="math inline">\(\mu_{\bar{x}} = \mu\)</span> and standard
+deviation <span class="math display">\[\sigma_{\bar{x}} =
+\frac{\sigma}{\sqrt{n}}\]</span> the <strong>standard error of the
+mean</strong>.</li>
+</ul>
+<p>A <strong>sample proportion</strong> <span
+class="math inline">\(\hat{p}\)</span> is a sample mean too. Code each
+observation as a Bernoulli trial, 1 for a success and 0 for a failure;
+then <span class="math inline">\(\hat{p}\)</span> is the mean of the 0s
+and 1s, the count of successes <span class="math inline">\(X \sim
+\text{Binom}(n, p)\)</span> divided by <span
+class="math inline">\(n\)</span>. A Bernoulli population has mean <span
+class="math inline">\(p\)</span> and standard deviation <span
+class="math inline">\(\sqrt{p(1 - p)}\)</span>, so:</p>
+<ul>
+<li><strong>The sample proportion</strong> <span
+class="math inline">\(\hat{p} = X/n\)</span> has mean <span
+class="math inline">\(p\)</span> and standard deviation <span
+class="math display">\[\sigma_{\hat{p}} = \sqrt{\frac{p(1 -
+p)}{n}}\]</span></li>
+</ul>
+<p>Both statistics are <strong>unbiased</strong> (centered at the
+parameter), and both standard errors shrink like <span
+class="math inline">\(1/\sqrt{n}\)</span>.</p>
+</div>
+<div id="the-central-limit-theorem" class="section level2">
+<h2>The central limit theorem</h2>
+<p>The formulas above give the center and spread of a sampling
+distribution. The <strong>central limit theorem</strong> (CLT) gives its
+shape, and it is one of the most useful results in all of
+statistics.</p>
+<ul>
+<li><strong>Central limit theorem.</strong> Take random samples of size
+<span class="math inline">\(n\)</span> from <strong>any</strong>
+population with mean <span class="math inline">\(\mu\)</span> and
+standard deviation <span class="math inline">\(\sigma\)</span>. If <span
+class="math inline">\(n\)</span> is large enough, the sampling
+distribution of <span class="math inline">\(\bar{x}\)</span> is
+approximately normal: <span class="math display">\[\bar{x} \sim
+N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right)\]</span> The larger <span
+class="math inline">\(n\)</span> is, the better the approximation.</li>
+</ul>
+<p>The remarkable part is “any population”. The population can be
+skewed, lumpy, or discrete; the average of enough independent
+observations is still bell shaped, because the unusually high and
+unusually low values in a sample cancel out. In Week 6 we saw it for
+averages of dice, and the same reason explains why so many measurements
+in nature, which are the sum of many small effects, look normal.</p>
+<p><strong>How large is “large enough”?</strong> The textbook’s guide is
+<span class="math inline">\(n \geq 30\)</span>. If the population is
+itself close to normal, much smaller samples will do; if it is very
+skewed, you may need more.</p>
+<p>Here is the CLT at work on a strongly skewed population. If goals
+arrive like a Poisson process at 2.69 per 90-minute match, the time
+until the next goal averages <span class="math inline">\(90/2.69 \approx
+33.5\)</span> minutes and has a long right tail: most waits are short, a
+few are very long. Each panel shows 10,000 simulated sample means <span
+class="math inline">\(\bar{x}\)</span>:</p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-12-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p>With <span class="math inline">\(n = 1\)</span> the “sample mean” is
+a single observation, so the panel is the skewed population itself. By
+<span class="math inline">\(n = 5\)</span> the skew is fading, and at
+<span class="math inline">\(n = 30\)</span> the distribution is close to
+a bell centered at <span class="math inline">\(\mu\)</span> (the red
+line). Notice the axes: the spread shrinks as <span
+class="math inline">\(n\)</span> grows, just as <span
+class="math inline">\(\sigma/\sqrt{n}\)</span> says.</p>
+<p>The same thing happens to <span
+class="math inline">\(\hat{p}\)</span>. Below are the exact sampling
+distributions of the proportion of tiger trout, <span
+class="math inline">\(p = 0.05\)</span>, in catches of <span
+class="math inline">\(n = 10\)</span>, 50 and 450 fish:</p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-13-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p>With 10 fish, <span class="math inline">\(\hat{p}\)</span> is usually
+0 and the distribution is badly skewed. With 450 fish it is a symmetric
+bell around <span class="math inline">\(p = 0.05\)</span>. For a
+proportion the textbook’s check is that both <span
+class="math inline">\(np\)</span> and <span class="math inline">\(n(1 -
+p)\)</span> are greater than 5: here <span class="math inline">\(450
+\times 0.05 = 22.5\)</span> and <span class="math inline">\(450 \times
+0.95 = 427.5\)</span>. With 10 fish, <span class="math inline">\(np =
+0.5\)</span>, nowhere near.</p>
+</div>
+<div id="using-the-clt" class="section level2">
+<h2>Using the CLT</h2>
+<p>Because the sampling distribution is approximately normal, the
+empirical rule applies to it: there is about a <strong>95%
+probability</strong> that a statistic lands within <strong>2 standard
+errors</strong> of its mean. That is exactly the margin of error from
+Week 6, now with a probability attached.</p>
+<div id="example-a-day-of-tiger-trout" class="section level3">
+<h3>Example: a day of tiger trout</h3>
+<p>A fisherman catches <span class="math inline">\(n = 450\)</span> fish
+and records the proportion that are tiger trout. With <span
+class="math inline">\(p = 0.05\)</span>, <span
+class="math display">\[\sigma_{\hat{p}} = \sqrt{\frac{0.05 \times
+0.95}{450}} \approx 0.0103\]</span> so with probability about 0.95,
+<span class="math display">\[0.05 - 2(0.0103) \;&lt;\; \hat{p} \;&lt;\;
+0.05 + 2(0.0103), \qquad\text{that is}\qquad
+0.029 &lt; \hat{p} &lt; 0.071\]</span> between about 13 and 32 tiger
+trout out of 450. A catch with 40 tiger trout (<span
+class="math inline">\(\hat{p} \approx 0.089\)</span>) would be far
+outside this range: statistically significant evidence that tiger trout
+make up more than 5% of the reservoir.</p>
+</div>
+<div id="example-a-tournaments-average" class="section level3">
+<h3>Example: a tournament’s average</h3>
+<p>Back to the World Cup: if goals per match are <span
+class="math inline">\(\text{Poisson}(2.69)\)</span>, a single match has
+<span class="math inline">\(\sigma = \sqrt{2.69} \approx 1.64\)</span>
+goals. The average over a 64-match tournament is a sample mean with
+<span class="math inline">\(n = 64\)</span>, so by the CLT it is
+approximately normal with mean 2.69 and <span
+class="math display">\[\sigma_{\bar{x}} = \frac{1.64}{\sqrt{64}} \approx
+0.205\]</span> With probability about 0.95 a tournament averages between
+<span class="math inline">\(2.69 \pm 2(0.205)\)</span>, about 2.28 to
+3.10 goals per match, if the scoring rate stays the same. A single match
+can easily have 0 or 6 goals; a tournament’s average is far more
+predictable. That is the law of large numbers and the CLT working
+together: the average settles near <span
+class="math inline">\(\mu\)</span>, and the CLT says how near.</p>
+<p>Next week we turn this around. In practice we know <span
+class="math inline">\(\bar{x}\)</span> or <span
+class="math inline">\(\hat{p}\)</span> but not <span
+class="math inline">\(\mu\)</span> or <span
+class="math inline">\(p\)</span>, and the same “within 2 standard
+errors” reasoning gives a <strong>confidence interval</strong> for the
+parameter.</p>
+</div>
+</div>
+</div>
+<div id="conclusion-what-you-should-take-away" class="section level1">
+<h1>Conclusion: what you should take away</h1>
+<div id="named-discrete-distributions-1" class="section level2">
+<h2>Named discrete distributions</h2>
+<ul>
+<li><strong>Bernoulli(<span class="math inline">\(p\)</span>):</strong>
+one trial, success (<span class="math inline">\(X = 1\)</span>) with
+probability <span class="math inline">\(p\)</span>; <span
+class="math inline">\(\mu = p\)</span>, <span
+class="math inline">\(\sigma^2 = p(1 - p)\)</span>.</li>
+<li><strong>Binomial(<span class="math inline">\(n\)</span>, <span
+class="math inline">\(p\)</span>):</strong> the number of successes in a
+fixed number <span class="math inline">\(n\)</span> of independent
+trials with the same <span class="math inline">\(p\)</span>. <span
+class="math inline">\(P(X = k) = \frac{n!}{k!(n - k)!}p^k(1 - p)^{n -
+k}\)</span>; <span class="math inline">\(\mu = np\)</span>, <span
+class="math inline">\(\sigma^2 = np(1 - p)\)</span>. Check all three
+conditions first: sampling without replacement from a small population,
+or a number of trials that is not fixed, rules it out.</li>
+<li><strong>Poisson(<span
+class="math inline">\(\lambda\)</span>):</strong> the number of events
+in a fixed interval when events occur independently at a constant
+average rate <span class="math inline">\(\lambda\)</span>. <span
+class="math inline">\(P(X = k) = \frac{\lambda^k
+e^{-\lambda}}{k!}\)</span>; <span class="math inline">\(\mu = \sigma^2 =
+\lambda\)</span>. Rescale <span class="math inline">\(\lambda\)</span>
+when the interval changes.</li>
+</ul>
+</div>
+<div id="continuous-distributions" class="section level2">
+<h2>Continuous distributions</h2>
+<ul>
+<li>A continuous random variable has a <strong>density curve</strong>:
+never negative, total area 1, and <strong>probability = area</strong>.
+The height is density, not probability, and <span
+class="math inline">\(P(X = c) = 0\)</span>.</li>
+<li><span class="math inline">\(P(X \leq x)\)</span> is the area to the
+left (the cdf). <span class="math inline">\(P(X &gt; x) = 1 - P(X \leq
+x)\)</span> and <span class="math inline">\(P(a &lt; X &lt; b) = P(X
+\leq b) - P(X \leq a)\)</span>.</li>
+<li>Quartiles cut the area into quarters; the mean is the balance
+point.</li>
+</ul>
+</div>
+<div id="sampling-distributions" class="section level2">
+<h2>Sampling distributions</h2>
+<ul>
+<li>A statistic is a random variable; its <strong>sampling
+distribution</strong> is its distribution over all samples of size <span
+class="math inline">\(n\)</span>. Do not confuse it with the population
+distribution or the data distribution.</li>
+<li><span class="math inline">\(\bar{x}\)</span> has mean <span
+class="math inline">\(\mu\)</span> and standard error <span
+class="math inline">\(\sigma/\sqrt{n}\)</span>; <span
+class="math inline">\(\hat{p}\)</span> has mean <span
+class="math inline">\(p\)</span> and standard error <span
+class="math inline">\(\sqrt{p(1 - p)/n}\)</span>.</li>
+<li><strong>Central limit theorem:</strong> for large <span
+class="math inline">\(n\)</span> (roughly <span class="math inline">\(n
+\geq 30\)</span>, or <span class="math inline">\(np\)</span> and <span
+class="math inline">\(n(1 - p)\)</span> above 5 for a proportion), the
+sampling distribution is approximately normal, whatever the shape of the
+population, so a statistic falls within 2 standard errors of its mean
+with probability about 0.95.</li>
+</ul>
+</div>
+<div id="sources" class="section level2">
+<h2>Sources</h2>
+<ul>
+<li>Illowsky, B. and Dean, S. (2023). <em>Introductory Statistics
+2e</em>, Sections 4.3, 4.6, 5.1 and 7.1–7.3. OpenStax. <a
+href="https://openstax.org/details/books/introductory-statistics-2e"
+class="uri">https://openstax.org/details/books/introductory-statistics-2e</a></li>
+<li>2022 FIFA World Cup: 172 goals in 64 matches, seven of them 0–0.
+Wikipedia, “2022 FIFA World Cup”, tournament statistics; Eurosport,
+“What is the record number of 0-0 draws at the World Cup”.</li>
+<li>Stephen Curry’s career free throws, 4,236 of 4,645.
+Basketball-Reference, <a
+href="https://www.basketball-reference.com/players/c/curryst01.html"
+class="uri">https://www.basketball-reference.com/players/c/curryst01.html</a>,
+checked October 5, 2026.</li>
+</ul>
 </div>
 </div>
 
