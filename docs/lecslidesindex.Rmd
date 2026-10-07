@@ -139,7 +139,13 @@ Statistical significance; introduction to probability and its rules
 # Week 7
 
 ### Lecture 15 &middot; Monday, October 5
-Probability continued: random variables; discrete probability distributions - Bernoulli, binomial and Poisson
+Probability continued: independence, random variables and discrete probability distributions
 
 <a href="./lecture_slides/Week%207/2026/Week7_Lecture15_Slides_10_5_2026.pdf">Slides (PDF)</a> &middot;
 <a href="./lecture_slides/Week%207/2026/Week7_Lecture15_Slides_10_5_2026.pptx">Slides (PowerPoint)</a>
+
+### Lecture 16 &middot; Wednesday, October 7
+Discrete distributions continued: expected value, Bernoulli, binomial and Poisson; continuous probability distributions
+
+<a href="./lecture_slides/Week%207/2026/Week7_Lecture16_Slides_10_7_2026.pdf">Slides (PDF)</a> &middot;
+<a href="./lecture_slides/Week%207/2026/Week7_Lecture16_Slides_10_7_2026.pptx">Slides (PowerPoint)</a>

@@ -57,7 +57,11 @@ stopifnot(near(quiz[4], 0.250), near(quiz[1], 0.056), near(sum(quiz[7:11]), 0.02
                              Lecture 14 and written up on the Week 6 page), then the
                              Bernoulli, binomial and Poisson distributions
                              lecture_slides/Week 7/2026/Week7_Lecture15_Slides_10_5_2026.pptx
-    Wed Oct 7    Lecture 16  continuous probability distributions
+    Wed Oct 7    Lecture 16  expected value and the Bernoulli, binomial and Poisson
+                             distributions (carried from Lecture 15, which stopped at
+                             its slide 15 on Oct 5 2026), then continuous probability
+                             distributions as time allows
+                             lecture_slides/Week 7/2026/Week7_Lecture16_Slides_10_7_2026.pptx
     Fri Oct 9    Lecture 17  sampling distributions and the central limit theorem
   The sections below follow that order. The Lecture 15 examples (guessing on a quiz,
   Stephen Curry's free throws, goals at the 2022 World Cup) are the slide examples;

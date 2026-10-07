@@ -166,6 +166,14 @@ outlined below. Any changes will be announced in class and posted here.**
   (lecture_slides/Week 7/2026/Week7_Lecture15_Slides_10_5_2026.pptx). If Lecture 15
   runs short, the Poisson block (its slides 27-29) is the clean thing to carry
   into Oct 7, ahead of continuous distributions.
+
+  CARRY-OVER, Oct 7 2026. No dates changed. Lecture 15 (Mon Oct 5) stopped after
+  "Example: using a distribution" (its slide 15). Expected value, the Bernoulli,
+  binomial and Poisson distributions open Lecture 16 (Wed Oct 7), followed by a short
+  continuous-distributions block (density curves, the uniform and triangle examples,
+  cumulative probability) for whatever time is left
+  (lecture_slides/Week 7/2026/Week7_Lecture16_Slides_10_7_2026.pptx). If that block
+  is not reached it moves to the front of Friday Oct 9; nothing later shifts.
 -->
 
 
@@ -305,12 +313,12 @@ outlined below. Any changes will be announced in class and posted here.**
 <tr>
   <th scope="row">Monday</th>
   <td>October  5, 2026</td>
-  <td>Probability continued: random variables; discrete probability distributions - Bernoulli, binomial and Poisson</td>
+  <td>Probability continued: independence, random variables and discrete probability distributions</td>
 </tr>
 <tr>
   <th scope="row">Wednesday</th>
   <td>October  7, 2026</td>
-  <td>Continuous probability distributions</td>
+  <td>Discrete distributions continued: expected value, Bernoulli, binomial and Poisson; continuous probability distributions</td>
 </tr>
 <tr>
   <th scope="row">Friday</th>

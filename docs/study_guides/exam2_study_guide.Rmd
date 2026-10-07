@@ -50,7 +50,7 @@ Exam 2 will cover material beginning on **Monday of Week 4 (September 14)** thro
 
 * Identifying outliers, margin of error, statistical significance - September 30
 
-* Probability theory, random variables and discrete distributions - October 2 and 5
+* Probability theory, random variables and discrete distributions - October 2, 5 and 7
 
 * Continuous distributions - October 7
 
