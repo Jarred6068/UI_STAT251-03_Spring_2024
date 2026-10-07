@@ -145,7 +145,13 @@ Probability continued: independence, random variables and discrete probability d
 <a href="./lecture_slides/Week%207/2026/Week7_Lecture15_Slides_10_5_2026.pptx">Slides (PowerPoint)</a>
 
 ### Lecture 16 &middot; Wednesday, October 7
-Discrete distributions continued: expected value, Bernoulli, binomial and Poisson; continuous probability distributions
+Discrete distributions continued: expected value, Bernoulli and binomial distributions
 
 <a href="./lecture_slides/Week%207/2026/Week7_Lecture16_Slides_10_7_2026.pdf">Slides (PDF)</a> &middot;
 <a href="./lecture_slides/Week%207/2026/Week7_Lecture16_Slides_10_7_2026.pptx">Slides (PowerPoint)</a>
+
+### Lecture 17 &middot; Friday, October 9
+Binomial examples and the Poisson distribution; the normal as a continuous distribution
+
+<a href="./lecture_slides/Week%207/2026/Week7_Lecture17_Slides_10_9_2026.pdf">Slides (PDF)</a> &middot;
+<a href="./lecture_slides/Week%207/2026/Week7_Lecture17_Slides_10_9_2026.pptx">Slides (PowerPoint)</a>

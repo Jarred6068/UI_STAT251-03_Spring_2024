@@ -537,12 +537,19 @@ $(document).ready(function () {
                              Lecture 14 and written up on the Week 6 page), then the
                              Bernoulli, binomial and Poisson distributions
                              lecture_slides/Week 7/2026/Week7_Lecture15_Slides_10_5_2026.pptx
-    Wed Oct 7    Lecture 16  expected value and the Bernoulli, binomial and Poisson
-                             distributions (carried from Lecture 15, which stopped at
-                             its slide 15 on Oct 5 2026), then continuous probability
-                             distributions as time allows
+    Wed Oct 7    Lecture 16  expected value and the Bernoulli and binomial distributions
+                             (carried from Lecture 15, which stopped at its slide 15)
                              lecture_slides/Week 7/2026/Week7_Lecture16_Slides_10_7_2026.pptx
-    Fri Oct 9    Lecture 17  sampling distributions and the central limit theorem
+    Fri Oct 9    Lecture 17  two more binomial examples (Curry free throws, a lymphoma
+                             cluster), the Poisson distribution, and continuous
+                             distributions through the normal only (Lecture 16 stopped
+                             at its slide 11). The uniform, step, triangle and quartile
+                             examples below are reading, not slide material.
+                             lecture_slides/Week 7/2026/Week7_Lecture17_Slides_10_9_2026.pptx
+    Mon Oct 12   Lecture 18  (Week 8) sampling distributions and the central limit
+                             theorem, combined with the introduction to confidence
+                             intervals. The CLT section at the end of this page is
+                             that lecture.
   The sections below follow that order. The Lecture 15 examples (guessing on a quiz,
   Stephen Curry's free throws, goals at the 2022 World Cup) are the slide examples;
   their numbers and sources are in assets/make_lecture15_figures.R.
@@ -871,6 +878,38 @@ at least one of 10 about 60% of the time;</li>
 <li>on average he makes <span class="math inline">\(\mu = np = 10 \times
 0.912 \approx 9.1\)</span>.</li>
 </ul>
+<p>“At least” questions are easiest through the complement. The
+probability he makes <strong>at least 2</strong> of the 10 is one minus
+the probability he makes fewer than 2: <span class="math display">\[P(X
+\geq 2) = 1 - P(X &lt; 2) = 1 - [P(0) + P(1)] = 1 - [0.088^{10} +
+10(0.912)(0.088)^9] \approx 1 - 0.000000003\]</span> which is 1 to eight
+decimal places.</p>
+</div>
+<div id="example-a-lymphoma-cluster" class="section level3">
+<h3>Example: a lymphoma cluster?</h3>
+<p>A doctor in a rural California county finds that 71 of his 893
+patients, about 8%, were diagnosed with lymphoma in the last year. In
+the US the rate of new lymphoma cases is about 21 per 100,000 people a
+year (SEER, 2018–2022: 18.7 for non-Hodgkin and 2.5 for Hodgkin
+lymphoma), so take <span class="math inline">\(p = 0.00021\)</span>.
+Before reporting to the CDC, the doctor asks how likely so many cases
+would be if his patients had only the national rate: <span
+class="math inline">\(X \sim \text{Binom}(893, 0.00021)\)</span>.</p>
+<ul>
+<li>At the national rate he should expect <span
+class="math inline">\(\mu = 893 \times 0.00021 \approx 0.19\)</span>
+cases, less than one.</li>
+<li><span class="math inline">\(P(X \geq 71) = 1 - P(X \leq
+70)\)</span>, which is 71 terms of the formula. Software does it:
+<code>pbinom(70, size = 893, prob = 0.00021, lower.tail = FALSE)</code>
+returns about <span class="math inline">\(1 \times 10^{-155}\)</span>.
+(Typing <code>1 - pbinom(70, 893, 0.00021)</code> returns exactly 0: the
+true answer is too small for the computer to tell apart from 1 -
+1.)</li>
+</ul>
+<p>A count this large is essentially impossible by chance at the
+national rate, so the doctor should report it. That is the logic of a
+hypothesis test, which is coming after Exam 2.</p>
 </div>
 </div>
 <div id="the-shape-of-a-binomial-distribution" class="section level2">

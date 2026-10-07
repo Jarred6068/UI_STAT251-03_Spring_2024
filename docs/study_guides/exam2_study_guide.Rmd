@@ -50,11 +50,11 @@ Exam 2 will cover material beginning on **Monday of Week 4 (September 14)** thro
 
 * Identifying outliers, margin of error, statistical significance - September 30
 
-* Probability theory, random variables and discrete distributions - October 2, 5 and 7
+* Probability theory, random variables and discrete distributions - October 2, 5, 7 and 9
 
-* Continuous distributions - October 7
+* Continuous distributions - October 9 (the normal distribution)
 
-* Sampling distributions and the Central Limit Theorem - October 9 and 12
+* Sampling distributions and the Central Limit Theorem - October 12
 
 **Confidence intervals are not on this exam.** Confidence intervals for a
 proportion are introduced on October 12 and covered on October 19, after the
