@@ -124,10 +124,12 @@ tryCatch({
   #Chrome is optional: if it is not found the PDFs keep their previous
   #contents and the build still succeeds. Set CHROME_BIN to override.
   #The two example course projects are linked from their own pages and from
-  #project.Rmd as downloadable PDFs, so they are printed here too.
+  #project.Rmd as downloadable PDFs, so they are printed here too, as is the
+  #project check instructions page.
   pdf_pages <- c("syllabus", "Course_Schedule", "sac_schedule", "university_resources",
                  paste0("lecturemenu", 1:16),
-                 "example_project_categorical", "example_project_continuous")
+                 "example_project_categorical", "example_project_continuous",
+                 "project_check")
 
   #Chrome-finding and the print call itself live in _chrome.R, shared with
   #build_review.R so the logic is written once. That file also carries the

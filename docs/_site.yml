@@ -152,6 +152,8 @@ navbar:
       menu:
       - text: "Project Description"
         href: project.html
+      - text: "Project Check"
+        href: project_check.html
       - text: "Data"
         href: data.html
       - text: "Example Project 1: Categorical"

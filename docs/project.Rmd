@@ -84,13 +84,15 @@ The project is worth **20% of your course grade**. Your report is graded on:
 | 5. Appropriateness of the chosen test, and accuracy of the hypotheses, computations, and shown work   |    25%     |
 | 6. Conclusion and interpretation of the results                                                      |    10%     |
 
-## Project Check (due Sunday, October 18th, 2026 at 11:59PM):
+## Project Check (due Sunday, October 25th, 2026 at 11:59PM):
 
-The purpose of this checkpoint is to ensure that you have a clear and well-defined understanding of the data you intend to use for the course project and the statistical question you plan to investigate. Upload a short description of the dataset you have selected for your project (**2 page maximum**) to Canvas. Make sure to address the following points:
+The purpose of this checkpoint is to ensure that you have a clear and well-defined understanding of the data you intend to use for the course project and the statistical question you plan to investigate. Upload a short description of the dataset you have selected for your project (**1 page maximum**) to Canvas. It is worth **5 points**. Make sure to address the following points:
 
-* Provide the source of the data (website link or citation) and briefly describe the variable(s) that interest you.
-* Highlight any potential challenges or limitations associated with the data, such as missing values, outliers, or data quality issues, and how you plan to address these issues.
-* Clearly state the specific statistical question you plan to address in your project.
+* Provide the source of the data (a working link and a citation) and briefly describe the variable(s) that interest you. **(2 points)**
+* Highlight any potential challenges or limitations associated with the data, such as missing values, outliers, or data quality issues, and how you plan to address these issues. **(1 point)**
+* Clearly state the specific statistical question you plan to address in your project. **(2 points)**
+
+The full instructions, grading rubric, and an example of a full-credit submission are on the [**Project Check**](project_check.html) page.
 
 ## Deliverables:
 

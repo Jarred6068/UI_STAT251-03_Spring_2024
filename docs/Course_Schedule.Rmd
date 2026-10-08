@@ -185,6 +185,12 @@ outlined below. Any changes will be announced in class and posted here.**
   shift the schedule, sampling distributions and the central limit theorem are
   COMBINED with the introduction to confidence intervals on Monday Oct 12, so Exam 2
   (Oct 16) still ends with that lecture.
+
+  DUE DATES, Oct 8 2026. No lecture dates changed. Exam 2 became a TAKE-HOME exam in
+  Canvas, due Sunday Oct 18 at 11:59PM (it was an in-class exam on Fri Oct 16). The
+  course project check moved from Sunday Oct 18 to Sunday Oct 25 at 11:59PM so it no
+  longer lands on the exam weekend; its instructions are project_check.Rmd. The
+  syllabus was deliberately NOT changed and still says 10/18 for the project check.
 -->
 
 
@@ -354,7 +360,7 @@ outlined below. Any changes will be announced in class and posted here.**
 <tr>
   <th scope="row">Friday</th>
   <td>October 16, 2026</td>
-  <td>Exam 2 -- **Course project check due Sunday at 11:59PM**</td>
+  <td>Exam 2 (take-home, in Canvas) -- **due Sunday, October 18 at 11:59PM**</td>
 </tr>
 </tbody>
 <tbody>
@@ -374,7 +380,7 @@ outlined below. Any changes will be announced in class and posted here.**
 <tr>
   <th scope="row">Friday</th>
   <td>October 23, 2026</td>
-  <td>Choosing a minimum sample size, assumptions of estimators</td>
+  <td>Choosing a minimum sample size, assumptions of estimators -- **[Course project check](project_check.html) due Sunday, October 25 at 11:59PM**</td>
 </tr>
 </tbody>
 <tbody>

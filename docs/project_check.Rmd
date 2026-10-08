@@ -1,0 +1,154 @@
+---
+title: "Course Project Check"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<!-- Print rules for the downloadable PDF (build_site.R prints this page with headless Chrome). -->
+<style>
+@media print {
+  .pdf-download { display: none; }
+  a.uri::after { content: none !important; }
+  h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+  .callout, table { break-inside: avoid; page-break-inside: avoid; }
+  /* The example starts a fresh page and may run onto the next; site.css keeps blockquotes
+     whole in print, which would strand the heading and note on a page of their own. */
+  #full-credit-example { break-before: page; page-break-before: always; }
+  #full-credit-example blockquote { break-inside: auto !important; page-break-inside: auto !important; }
+}
+</style>
+<div class="pdf-download">
+**[Download these instructions as a PDF](project_check.pdf)**
+</div>
+
+**Due: Sunday, October 25, 2026 at 11:59PM, in Canvas. Worth 5 points.**
+
+## Purpose
+
+The purpose of this checkpoint is to make sure you have a clear and well-defined
+understanding of the data you intend to use for the [course project](project.html) and the
+statistical question you plan to investigate. Getting these two things right now saves you
+from discovering in December that your data cannot answer your question.
+
+## What to submit
+
+Upload a short description of the dataset you have selected for your project
+(**1 page maximum**) to Canvas. It must address the three points below.
+
+1. **The dataset (2 points).** Give the source of the data: a **working link** to the
+   dataset, plus a citation (who collected or published it, and when). Then briefly describe
+   the variable(s) that interest you: what each one measures, its units, and whether it is
+   **quantitative** or **categorical**.
+
+2. **Problems with the data (1 point).** Highlight any potential challenges or limitations
+   of the data, such as missing values, outliers, data quality issues, or limits on who or
+   what the data describe. For each one, say **how you plan to handle it**.
+
+3. **Your statistical question (2 points).** Clearly state the specific statistical question
+   you plan to address in your project. A good question:
+    * is about the variable(s) you described in point 1, and can be answered with the data
+      you actually have;
+    * names the group (population) it is about;
+    * asks about a **summary** such as a mean, a proportion, or a difference between groups,
+      rather than about a single individual;
+    * could be answered with a method from this class (for example, a test for a mean or a
+      proportion, a comparison of two groups, or a $\chi^2$ test).
+
+You do not need to draw your sample, compute any statistics, or write hypotheses in
+symbols yet. Those are Steps 3--5 of the project.
+
+## Grading
+
+| **Component**             | **Full credit**                                                                                                     | **Partial credit**                                                                    | **Points** |
+| :------------------------ | :------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------ | ---------: |
+| 1. Dataset and source     | A real dataset, a working link and a citation; the variable(s) of interest described, with type and units          | 1 pt: dataset identified, but the link is missing or broken, or the variables are not described | 2 |
+| 2. Problems with the data | At least one real problem with **this** dataset, and a plan for dealing with it                                     | 0.5 pt: a problem is named but there is no plan, or it is generic ("data can have errors") | 1 |
+| 3. Statistical question   | One specific question, answerable with this dataset's variables and a method from class, naming its population     | 1 pt: the question is vague, is about a single individual, or the data cannot answer it | 2 |
+| **Total**                 |                                                                                                                     |                                                                                       | **5** |
+
+**Common ways to lose points:**
+
+* Linking to a search page, a website's home page, or a paper behind a paywall instead of
+  to the data itself. Click your link from a private browser window before you submit.
+* Naming a topic instead of a question ("I want to look at sleep and grades").
+* Asking a question your dataset cannot answer, such as asking about income when the
+  dataset has no income variable, or asking about a change over time in data from a
+  single year.
+* Writing "there are no problems with this data." Every real dataset has limits, even if
+  it is only that it describes one place or one period of time.
+
+If you use AI in any capacity, the [AI Use](project.html#ai-use) rules for the project apply
+to this checkpoint too.
+
+## Full-credit example
+
+::: {.callout}
+<div class="callout-title">Instructor note</div>
+Below is an example of a submission that would earn **5 out of 5**. The notes in
+*italics* explain why each part earns its points and are not part of the submission.
+It fits within the **1 page limit**. **Do not use this
+dataset or question for your own project.** The example was prepared with the help of
+Claude (Anthropic), and every number in it was checked against the data file.
+:::
+
+> ### Project check: body mass of male and female Gentoo penguins
+>
+> #### 1. The dataset
+>
+> I will use the **Palmer Penguins** dataset, which records body measurements of 344 adult
+> penguins of three species (Adélie, Chinstrap and Gentoo) nesting on three islands near
+> Palmer Station, Antarctica, during the 2007, 2008 and 2009 seasons. The data were
+> collected by Dr. Kristen Gorman and the Palmer Station Long Term Ecological Research
+> (LTER) program.
+>
+> * **Link to the data:** <https://allisonhorst.github.io/palmerpenguins/> (the data file
+>   itself is
+>   [penguins.csv](https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv)).
+> * **Citation:** Horst, A. M., Hill, A. P., & Gorman, K. B. (2020). *palmerpenguins: Palmer
+>   Archipelago (Antarctica) penguin data* (R package version 0.1.0) [Data set].
+>   <https://doi.org/10.5281/zenodo.3960218>. Originally published in Gorman, K. B.,
+>   Williams, T. D., & Fraser, W. R. (2014). Ecological sexual dimorphism and environmental
+>   variability within a community of Antarctic penguins (genus *Pygoscelis*). *PLoS ONE,
+>   9*(3), e90081. <https://doi.org/10.1371/journal.pone.0090081>
+>
+> I will only use the **124 Gentoo penguins**, all of which were measured on Biscoe Island.
+> The two variables I am interested in are:
+>
+> * `body_mass_g`, the penguin's body mass in grams. This is **quantitative**.
+> * `sex`, whether the penguin is female or male. This is **categorical**, with two
+>   categories.
+>
+> #### 2. Problems with the data
+>
+> * **Missing values.** Five of the 124 Gentoo penguins have no value for `sex`, and one of
+>   those five also has no body mass. I cannot put these penguins in either group, so I
+>   will remove them before I draw my sample. That leaves 119 penguins. Since only 5 are
+>   removed, this should not change the results much, but I will mention it in my report.
+> * **Limited scope.** All of the Gentoo penguins come from one island and three nesting
+>   seasons (2007--2009). My conclusions will only describe Gentoo penguins nesting on
+>   Biscoe Island in those years, not Gentoo penguins everywhere or today.
+> * **Possible outliers.** Body mass can be affected by an unusually large or small bird.
+>   Once I draw my sample, I will check for outliers with the $1.5 \times IQR$ rule and
+>   report whether any outliers change my conclusion.
+>
+> #### 3. My statistical question
+>
+> **On average, do male Gentoo penguins nesting on Biscoe Island weigh more than female
+> Gentoo penguins?**
+>
+> I will answer this by comparing the mean body mass of the males and the females in my
+> sample.
+
+*Why it earns full credit:*
+
+* *Dataset (2/2): there is a working link straight to the data file, a full citation, and
+  each variable is described with its units and its type.*
+* *Problems (1/1): every problem is specific to this dataset (the five penguins with
+  missing sex are counted), and each one comes with a plan for handling it.*
+* *Question (2/2): it is one question, it names its population (Gentoo penguins on
+  Biscoe Island), it asks about a summary (the mean body mass of each sex), and the two
+  variables in the dataset are exactly what is needed to answer it with a comparison of
+  two means.*
