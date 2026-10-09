@@ -125,7 +125,7 @@ This probability is called the **p-value** and it measures the probability of ob
 
 We prefer the second conclusion when the $p$-value is "sufficiently" small and take it as evidence against the null hypothesis. So how small is small enough? By convention, most tests use a probability cutoff of $5\%$ or less which is called the **significance level** of the test. The significance level of a test is denoted as $\alpha$. For the gardeners test $\alpha = 0.05$. $\alpha$ sets the boundary for how big (or small) the test statistic needs to be to conclude that the test statistic is <u>statistically significant</u>.
 
-```{r, echo=FALSE, warning=F, message=F}
+```{r, echo=FALSE, warning=F, message=F, fig.alt = "Distribution under H0: a bell-shaped t distribution centered at 0, with t on the x-axis and probability density on the y-axis. The upper tail to the right of the critical value t sub 1 minus alpha is shaded as the rejection region, and the observed t sub obs is marked farther right, inside the shaded tail."}
 set.seed(123)
 
 x = rnorm(40, 45, 2.5)
@@ -170,7 +170,7 @@ As we stated previously, the null hypothesis is a statement about the value of a
 
 Because the alternative hypothesis expresses some effect that we hope to find evidence for, we often begin by stating $H_A$ and then set up $H_0$ as the statement that the "hoped-for" effect is not present. It's important to note that the alternative hypothesis should express the hopes or suspicions we bring to the data. It is biased to first look at the data and then set up the alternative hypothesis based on what the data show. If you do not have a direction firmly in mind before gathering the data you must use a two-sided test.
 
-### Significance level, critical value, and decision making
+## Significance level, critical value, and decision making
 
 The **significance level** of test (denoted $\alpha$) is how we turn the $p$-value of a significance test into a <i>reject/not reject</i> decision about the null hypothesis. It sets how "strong" the evidence against the null needs to be in order for a result to be deemed statistically significant. The researcher determines the significance level before conducting the experiment.
 
@@ -200,7 +200,7 @@ The **critical value** and **rejection region** of a test depend on the signific
 
 
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=12, fig.width=10, fig.cap='This plot depicts the decision rule for a given alternative hypothesis at a significance level $\\alpha = 0.05$. In each subplot, the rejection region is highlighted in turquoise and the critical value(s) are denoted by the vertical dashed lines.'}
+```{r, echo=FALSE, warning=F, message=F, fig.height=12, fig.width=10, fig.cap='This plot depicts the decision rule for a given alternative hypothesis at a significance level $\\alpha = 0.05$. In each subplot, the rejection region is highlighted in turquoise and the critical value(s) are denoted by the vertical dashed lines.', fig.alt = 'Three stacked standard normal curves of Z under the null, each with Reject H0 and Do Not Reject H0 regions labeled. Top, alternative p not equal to c: both tails shaded, with dashed critical lines near z equals -2 and 2. Middle, alternative p greater than p0: only the upper tail shaded. Bottom, alternative p less than p0: only the lower tail shaded.'}
 
 A = ggplot()+xlim(-4, 4)+theme_bw()+
   stat_function(fun = dnorm,
@@ -286,7 +286,7 @@ ggarrange(A, B, C, nrow = 3)
 Consider the six plots below which show the position of the critical value, and rejection region for the three types of alternative hypotheses at two significance levels. What do you notice about the relationship between the significance level and the rejection region?
 
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=12, fig.width=14}
+```{r, echo=FALSE, warning=F, message=F, fig.height=12, fig.width=14, fig.alt = "Six standard normal curves in two columns, alpha equals 0.05 on the left and alpha equals 0.01 on the right. Rows show the alternatives p greater than p0 (upper tail shaded), p less than p0 (lower tail shaded) and p not equal to p0 (both tails shaded), with critical values marked. The shaded rejection regions in the alpha equals 0.01 column are smaller and farther out in the tails."}
 set.seed(123)
 
 md = NA
@@ -394,7 +394,7 @@ kable(df, format = 'html', digits = 2,
 
 
 
-### Significance tests concerning $\mu$
+## Significance tests concerning $\mu$
 
 The following are the steps for conducting a significance test for a population mean:
 
@@ -463,7 +463,7 @@ kable(df, format = 'html', digits = 2,
 
   * **Conclusion.** Since the $p$-value $\approx 0.0006$ is less than $\alpha = 0.05$, we *reject* $H_0$. There is strong evidence that the mean annual household income differs from $\$50{,}000$ (specifically, the data suggest it is lower).
 
-### Relationship between two-sided tests and confidence intervals
+## Relationship between two-sided tests and confidence intervals
 
 Recall the basic idea of a confidence interval. We construct an interval that includes the true value of the parameter $\mu$ or $p$ with specified frequency $100(1-\alpha)\%$. Now consider a two-sided significance test for a population mean. A two-sided test constructs an **acceptance region** around the value of the parameter suggested in the null hypothesis (i.e $\mu_0$). At the $100(1-\alpha)\%$ confidence level, this acceptance region is given by $[\mu_0-t_{1-\alpha/2} \times \frac{s}{\sqrt{n}}, \mu_0 + t_{1-\alpha/2}\times \frac{s}{\sqrt{n}}]$. Values of $\bar{x}$ that are not in this interval seem to be incompatible with the data. Thus when $\bar{x}$ is not in this interval, it is statistically significant and the null hypothesis is rejected. This produces a significance test at $\alpha = 0.05$ significance level.
 
@@ -477,7 +477,7 @@ Return to the household income problem above ($\mu_0 = 50{,}000$, $n = 100$, $\b
 The observed sample mean $\bar{x} = 45{,}323$ falls **outside** this interval, so we reject $H_0$ at the $\alpha = 0.05$ level. This is exactly the same decision we reached with the test statistic ($t_{obs} = -3.57$, $p$-value $\approx 0.0006 < 0.05$): a two-sided test rejects $H_0$ precisely when the observed $\bar{x}$ lies outside the $100(1-\alpha)\%$ acceptance region centered at $\mu_0$.
 
 
-### Types of Errors
+## Types of Errors
 
 Conducting a hypothesis test is a simple-enough procedure in the modern age as many software programs effortlessly give out a $p$-value for a chosen test and dataset. However, using tests wisely is another matter entirely. A single significant result is not irrefutable evidence of a statistical relationship. This is because all tests come with a probability of making an error. Moreover, other factors can influence the outcome of a test such as the presence of outliers in the data. In addition, when sample sizes are very large, even tiny deviations from the null hypothesis can be deemed significant - this is related to the **power** of a test. 
 
@@ -528,7 +528,7 @@ kable(df, format = 'html', digits = 2, col.names = c('', '$H_0$ is True', '$H_0$
 
 This can be visualized in terms the distribution of the test statistic under the null and alternative hypotheses. The plot below shows the relationship between power, type I and type II error rates in a right-tailed test of a population mean conducted at the $\alpha$ significance level. 
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=12}
+```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=12, fig.alt = "Two overlapping normal curves: the distribution under H0 (solid line) centered at mu0, and the distribution under HA (dashed line) centered at a larger mu. A dotted vertical line marks the critical value Z sub 1 minus alpha. The area under the H0 curve right of the line is labeled alpha, the area under the HA curve left of the line is labeled beta, and the area under the HA curve right of the line is labeled 1 minus beta, the power."}
 
 dlim_A = function(x, q, mean, sd, test){
   q_a = q
@@ -618,7 +618,7 @@ ggplot(data = data, aes(x = x, fill = 'grey'))+theme_bw()+
 
 
 **Below** the three panels show the relationship between power, the probability of a type I error and the probability of a type II error.
-```{r, echo=F, message=F, warning=F, fig.height=6, fig.width=10}
+```{r, echo=F, message=F, warning=F, fig.height=6, fig.width=10, fig.alt = "Three line plots. Top left: power rises as the significance level alpha increases from 0 to 0.5, steeply at first and then leveling off. Top right: power falls in a straight line as the type II error rate beta increases. Bottom: alpha decreases as beta increases, a downward curve showing the trade-off between the two error rates."}
 significance.level = seq(0.001, 0.5, 0.001)
 t = qnorm(1-significance.level)
 beta = pnorm(t, mean = 1)

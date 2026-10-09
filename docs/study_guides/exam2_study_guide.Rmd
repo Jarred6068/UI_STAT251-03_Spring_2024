@@ -19,14 +19,18 @@ library(plyr)
 
 # Exam Logistics:
 
-  * Exam 2 is a **take-home exam** completed in **Canvas**. It is due **Sunday, October 18, 2026 at 11:59PM**. An in-class review will be held on **Wednesday, October 14, 2026**
-  * The exam will be about 20 - 25 questions long, with at least one bonus question. Questions are mostly multiple choice, short answer, or labeling problems, with the possibility of one or two short essay / longer explanation problems
+  * Exam 2 is a **take-home, open-note exam** completed in **Canvas**. You may use your notes, the textbook and the course website. It is due **Sunday, October 18, 2026 at 11:59PM**. An in-class review will be held on **Wednesday, October 14, 2026**
+  * The exam is 22 questions plus 2 bonus questions. Most are multiple choice or true/false, and four are short written explanations
 
 # How to prepare
 
 The exam asks you to **interpret** values, **identify** the correct equation, and **choose**
-the right method for a situation. Long calculations are not required: where a number is
-needed it is given, or the arithmetic is simple enough to do in your head.
+the right method for a situation. Some questions are **"show how to compute"** problems: a
+short story problem gives you every number you need, and you choose the formula with the
+correct values filled in. You will not have to carry out long calculations or look up
+values in a table, but you do need to recognise which formula fits, which numbers go where,
+and the common mistakes (for example, using $\sigma$ where $\sigma/\sqrt{n}$ belongs, or
+forgetting to take the complement for a "greater than" probability).
 
 Study by computing anyway. Work the
 [Exam 2 Review Problems](../Review_problems/exam2_review_problems.html) through, then check
@@ -57,7 +61,7 @@ proportion are introduced on October 12 and covered on October 19, after the
 exam, so you are responsible only for what a confidence interval *is*, not for
 computing one.
 
-### Experimental and Sampling Designs
+## Experimental and Sampling Designs
 
   1. Know how to define and identify the three experimental designs we discussed: **Completely randomized design**, **matched pairs design** and **randomized block design**.
 
@@ -85,7 +89,7 @@ computing one.
 
   13. Recognize unethical data practices, such as fabricating data or quietly leaving out people who were hard to reach (textbook Section 1.4)
 
-### The Normal Distribution
+## The Normal Distribution
 
   1. Know how the mean and standard deviation affect the shape and location of a normal distribution
 
@@ -249,6 +253,8 @@ The following formulas will be provided on the exam
 \[ \sigma^2 = \sum_x (x-\mu)^2\cdot P(x) \]
 
 \[\sigma = \sqrt{\sum_x (x-\mu)^2\cdot P(x)} \]
+
+\[P(A') = 1-P(A) \]
 
 \[P(A\cup B) = P(A)+P(B)-P(A\cap B) \]
 

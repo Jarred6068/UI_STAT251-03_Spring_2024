@@ -36,11 +36,11 @@ source('misc/stat251_tools.R')
 
 In many studies, the goal is to show that changes in one or more explanatory variables actually cause changes in a response variable. The statistical techniques we will describe this week will require us to distinguish between explanatory and response variables. You will often see explanatory variables called the **independent variable** and response variable called the **dependent variable**. The idea behind this language is that the response variable depends on the outcomes of the explanatory variable (if they share a statistical relationship).  
 
-### Scatterplots and statistical associations
+## Scatterplots and statistical associations
 
 A **scatterplot** is a type of descriptive plot that shows the relationship between two quantitative variables (denoted $X$ and $Y$) measured on the same individual usually. The horizontal axis is called the $x$-axis and the vertical axis is called the $y$-axis. Typically the independent or explanatory variable is represented on the $x$-axis and the response variable is represented on the $y$-axis. Consider the four scatterplots below which plot the relationship between the independent variable $X$ and the dependent variable $Y$:
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=8, fig.width=10}
+```{r, echo=FALSE, warning=F, message=F, fig.height=8, fig.width=10, fig.alt = "Six scatterplots of Y against X labelled A to F. A: a shapeless cloud with no trend. B: a moderate negative linear trend. C: a strong, tight positive linear trend. D: every point at the same Y value, a flat horizontal row. E: a curved, increasing pattern. F: two separate clusters of points following a decreasing curve."}
 set.seed(123)
 x1 = rnorm(50, 5, 2)
 x2 = rnorm(50, 10, 5)
@@ -129,13 +129,13 @@ In general, we say that two variables are **positively associated** when larger 
 It may also be important to note if the points form specific clusters as this may indicate a hidden grouping in the data that is not accounted for by the independent variable. When a scatterplot shows distinct clusters it is often most useful to describe the pattern in each cluster.
 
 
-### Measures of association
+## Measures of association
 
 As we just saw, scatterplots display the form, direction, and strength of the relationship between two quantitative variables. Linear (straight-line) relationships are often of interest because they occur most often. If the points in a scatterplot lie close to a straight line we say that they have a strong linear relationship. However, scatterplots can be misleading when trying to judge the strength of a linear relationship. Consider the two plots below which show the relationship between highway fuel efficiency (in miles per gallon) and weight of cars from the classic 1993 New Car dataset [@lock1993; @MASS].
 
 
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=10}
+```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=10, fig.alt = "Two side-by-side scatterplots of the same 93 cars, car weight against highway MPG, both showing heavier cars getting lower MPG. The left plot is zoomed to the data, so the points look spread out; the right plot uses wide axes (MPG 0 to 70, weight 1000 to 5000), so the points look like a tight downward band."}
 set.seed(123)
 
 
@@ -185,7 +185,7 @@ Each pair of $x$ and $y$ values $(x_i, y_i)$ constitutes a point in a scatterplo
 In general, if two variables share a strong positive or strong negative relationship, they will have a large positive or large negative covariance, and if two variables are independent their covariance should be close to zero. Consider the first three scatterplots and the covariances between $X$ and $Y$ from *figure 1* seen earlier
 
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=10}
+```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=10, fig.alt = "Three scatterplots repeating plots A, B and C from figure 1, each titled with its covariance: the no-trend cloud has Cov(X,Y) = -0.2, the moderate negative trend has Cov(X,Y) = -2.4, and the strong positive trend has Cov(X,Y) = 18.2."}
 set.seed(123)
 x1 = rnorm(50, 5, 2)
 x2 = rnorm(50, 10, 5)
@@ -236,7 +236,7 @@ ggarrange(p1, p2, p3, nrow = 1, ncol = 3)
 As we can see from above the plots that show a stronger linear relationship are paired with larger covariances for $X$ and $Y$. However, you may have noticed that covariance depends on the units of $X$ and $Y$. This makes covariance hard to interpret because one or both of the variables exists on a large scale the covariance will naturally take on large values. Consider the scatterplot below which shows the relationship and covariance between median house value and population for 30 districts in California from 1990 [@geron2022hands]
 
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=8}
+```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=8, fig.alt = "Scatterplot of median house value against population for 30 California districts, titled with a covariance of about 26.4 million. Most districts have populations under about 2000 and the points show only a weak, scattered upward tendency."}
 set.seed(222)
 
 hs = read.csv(file = paste0(path, 'housing.csv'))
@@ -284,7 +284,7 @@ It's important to note that correlation can only be used to measure the strength
 In the earlier example comparing population to median home value, the correlation coefficient between these two variables is $r \approx 0.2$. Now consider the first three plots from *figure 1* but this time with correlations plotted for each scatterplot
 
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=10}
+```{r, echo=FALSE, warning=F, message=F, fig.height=6, fig.width=10, fig.alt = "The same three scatterplots, now titled with correlations: the no-trend cloud has r = -0.1, the moderate negative trend has r = -0.8, and the strong positive trend has r = 1 (rounded)."}
 set.seed(123)
 x1 = rnorm(50, 5, 2)
 x2 = rnorm(50, 10, 5)
@@ -369,7 +369,7 @@ The correlation is given by
 
 
 
-### Introduction to simple linear regression
+## Introduction to simple linear regression
 
 Correlation measures the strength of a linear relationship between two variables, but what if you want to go a step further and find the best-fit line that connects those dots? That's where linear regression comes in. It's a statistical technique that finds the straight line that best describes the relationship between two quantitative variables, often visualized on a scatterplot. The most basic version of this technique, where you fit a line to two quantitative variables, is called *simple linear regression*. 
 
@@ -378,7 +378,7 @@ When a scatterplot shows a linear pattern we can describe the overall linear rel
 
 It turns out that the line that comes as close as possible to all of the points is the line that minimizes the squared deviations of the **residuals**. 
 
-```{r, echo=FALSE, warning=F, message=F}
+```{r, echo=FALSE, warning=F, message=F, fig.alt = "Scatterplot of five points with a dotted upward-sloping regression line. A solid red vertical segment joins each point to the line, showing its residual; some points lie above the line and some below."}
 set.seed(222)
 X = runif(5)
 Y = 0.5*X+rnorm(5)
@@ -405,14 +405,14 @@ ggplot()+
 ```
 
 
-Residuals are the vertical distances (red lines in the plot above) between each point and the regression line. If you think of the regression line as our best guess at the relationship between $X$ and $Y$, then the residuals represent the error in that guess for each point. The line that "best" fits the data is the one with the smallest average residual—essentially, the one with the least error across all the points in the plot. This line gives us the best model to describe the relationship between the $X$ and $Y$ variables. You can take a look at [https://www.geogebra.org/m/xC6zq7Zv](https://www.geogebra.org/m/xC6zq7Zv) to practice fitting the "best" line.
+Residuals are the vertical distances (red lines in the plot above) between each point and the regression line. If you think of the regression line as our best guess at the relationship between $X$ and $Y$, then the residuals represent the error in that guess for each point. The line that "best" fits the data is the one with the smallest average residual—essentially, the one with the least error across all the points in the plot. This line gives us the best model to describe the relationship between the $X$ and $Y$ variables. You can take a look at [this GeoGebra line-fitting activity](https://www.geogebra.org/m/xC6zq7Zv) to practice fitting the "best" line.
 
 
 # Lecture 31
 
 Monday was about *describing* the association between two quantitative variables: a scatterplot to see it, and the correlation coefficient to measure its strength and direction. Today we move from describing that association to *modelling* it. We will write down a straight-line model for the relationship, find the line that fits the data best, use it to predict values of the response, and then measure how much of the variation in the response that line actually explains.
 
-### The simple linear model
+## The simple linear model
 
 We learned on Monday that a scatterplot can be used to visualize and check for a **linear** relationship between two quantitative variables. We also learned that straight line fitted through the data points can be used to describe that trend. We will use the notation 
 
@@ -421,7 +421,7 @@ We learned on Monday that a scatterplot can be used to visualize and check for a
 to display this line mathematically, called the **regression line**. The equation above is often referred to as the *prediction equation*. The symbol $\hat{y}_i$ represents the *predicted value* for the $i^{th}$ observation of the dependent variable $Y$ given the $i^{th}$ value of the independent variable $x_i$. The symbol $\alpha$ is called the $y$-axis intercept and $\beta$ is called the slope. The **slope** of a regression line relating $X$ and $Y$ describes how much $\hat{y}$ changes per unit change in $X$ (sometimes called *rise over run*). This is visualized in the plot below. 
 
 
-```{r, echo=FALSE, warning=F, message=F}
+```{r, echo=FALSE, warning=F, message=F, fig.alt = "A dotted upward-sloping regression line on axes X (3 to 7) and Y, with a few points. At X = 5 a red point sits just below the line; a horizontal segment labelled 'Change in X' runs from the line to the point and a vertical segment labelled 'Change in Y' runs from the point up to the line, forming the rise-over-run triangle that defines the slope."}
 set.seed(222)
 X = 0:10
 Y = 0.5*X+rnorm(11)
@@ -473,7 +473,7 @@ ggplot()+
 * The slope is dependent on the units of $X$. A 1-unit increase in $X$ could be a trivial amount or it could be huge. 
 
 
-### Finding a regression line and the least-squares estimator
+## Finding a regression line and the least-squares estimator
 
 On Monday, we also briefly introduced the idea of a **residual** - the disparity (error) between the values predicted by the regression line $\hat{y}_i$ and the actual values of the response variable $y_i$. We will use the symbol $\epsilon_i$ (called epsilon) to represent the residual for the $i^{th}$ observation of the response variable. We can write the observations of the response variable in terms of the predicted values and the residuals:
 
@@ -492,7 +492,7 @@ Thus each observation of the response variable has a residual. Some of the resid
   * The smaller the absolute value of the residual the closer the predicted value is to the actual value of the response variable
   
 
-```{r, echo=FALSE, warning=F, message=F}
+```{r, echo=FALSE, warning=F, message=F, fig.alt = "Scatterplot of five points with a dotted upward-sloping regression line. One point, highlighted in red, lies below the line, and a red vertical segment from it up to the line is labelled 'absolute value of epsilon i', the size of its residual."}
 set.seed(222)
 X = runif(5)
 Y = 0.5*X+rnorm(5)
@@ -545,7 +545,7 @@ Even though we will typically rely on software to compute a regression line, the
 Notice that the slope $\hat{\beta}$ is directly related to the correlation coefficient $r$
 
 
-### Predicting values of the dependent variable: Batting averages
+## Predicting values of the dependent variable: Batting averages
 
 A regression line allows us to further describe the relationship between two variables that goes beyond just stating the strength of the relationship using the correlation coefficient $r_{X,Y}$. Consider the following data which gives observations of team batting average and average score for teams in the American League of baseball.  
 
@@ -582,15 +582,15 @@ kable(t(df), format = 'html', digits = 3, col.names = c('Team Batting Average', 
 Now consider fitting a line to estimate the relationship between team batting average (independent variable) and average runs scored per game (dependent variable). The plot below gives the least-squares regression line relating these two variables. Based on the plot, is team batting average a good predictor of the average number of runs a team will score ?
 
 
-```{r, echo=FALSE, warning=F, message=F}
+```{r, echo=FALSE, warning=F, message=F, fig.alt = "Scatterplot titled American League Baseball of average runs scored against team batting average for 14 teams, each labelled by name, with r = 0.568 and a dotted upward-sloping least-squares line. Teams with higher batting averages tend to score more, with considerable scatter; Seattle is lowest on both."}
 set.seed(222)
 AL = read.csv(paste0(path, 'AL_team_statistics.csv'))
 mod = lm(scoring ~ batting, data = AL)
 ggplot(aes(x = batting, y = scoring), data = AL)+
   theme_bw()+
-  geom_abline(slope = mod$coefficients[2], 
+  geom_abline(slope = mod$coefficients[2],
               intercept = mod$coefficients[1],
-              linetype = 'dotted', 
+              linetype = 'dotted',
               size = 1.5)+
   geom_point(shape = 21, size = 4.5, 
              color = 'black', fill = 'grey')+
@@ -627,19 +627,19 @@ The scatterplot shows a moderate positive linear trend with $r \approx 0.568$, s
 
 In other words, regression models are built to represent trends within the scope of the available data. Once you go beyond the minimum or maximum observed values of the explanatory variable, you enter a zone where the relationship between $X$ and $Y$ could be different. This uncertainty can lead to inaccurate or misleading predictions. Therefore, always ensure that predictions are made within the range of data used to fit the model to maintain reliability and accuracy.
 
-### Coefficient of determination $r^2$
+## Coefficient of determination $r^2$
 
 When we predict a value of $Y$, why should we use the regression line? We could instead use the center of $Y$'s distribution as our prediction for $Y$ such as the sample mean $\bar{y}$. One reason is that if the explanatory variable $X$ and response $Y$ have an approximate linear relationship then the prediction equation $\hat{y}_i = \alpha + \beta x_i$ will give more accurate predictions than simply using the sample mean $\bar{y}$. Consider again the example of teams in the American League for Major League Baseball
 
-```{r, echo=FALSE, warning=F, message=F}
+```{r, echo=FALSE, warning=F, message=F, fig.alt = "The same American League scatterplot of average runs scored against team batting average, with two prediction lines: a blue dotted upward-sloping regression line and a red dashed horizontal line at the mean runs scored, about 4.45. The points sit closer to the regression line than to the flat mean line."}
 set.seed(222)
 AL = read.csv(paste0(path, 'AL_team_statistics.csv'))
 mod = lm(scoring ~ batting, data = AL)
 ggplot(aes(x = batting, y = scoring), data = AL)+
   theme_bw()+
-  geom_abline(slope = mod$coefficients[2], 
+  geom_abline(slope = mod$coefficients[2],
               intercept = mod$coefficients[1],
-              linetype = 'dotted', 
+              linetype = 'dotted',
               size = 1.2, color = 'blue')+
     #geom_segment(aes(x = AL$batting, y = AL$scoring, xend = AL$batting, yend = mod$fitted.values),
     #           linetype = 'solid', color = 'green', size = 1)+
@@ -708,11 +708,11 @@ Thus team batting average explains roughly $32\%$ of the variation in the averag
 
 So far the regression line has been a *description* of the sample: we found the least-squares line, used it to predict, and measured its fit with $r^2$. But the slope we computed is a statistic, and like any statistic it would change if we collected a different sample. Today we treat regression as *inference*. We ask whether the association we see is strong enough to conclude that a relationship exists in the population, we test the slope, we look at a second test of the same question based on variances, and we finish by checking the assumptions that make any of those conclusions trustworthy.
 
-### Regression relates the mean of $Y$ to $X$
+## Regression relates the mean of $Y$ to $X$
 
 The prediction equation $\hat{y}_i = \alpha + \beta x_i$ yields the predicted value the response $Y$ for a given value of the independent variable $X$. However, we don't expect all observations of $Y$ that depend on a given value of $X$ to have the same value because naturally there is variation among individuals in the population. For example, consider the linear regression below which relates the age of $189$ mothers in the U.S to the birth weight of their infants [@MASS].
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=8, fig.width=10}
+```{r, echo=FALSE, warning=F, message=F, fig.height=8, fig.width=10, fig.alt = "Two panels for 189 mothers. A: scatterplot of infant birth weight (about 700 to 5000 grams) against mother's age (14 to 45 years) with a dotted, nearly flat, slightly rising regression line and r squared = 0.008157; the points form a wide cloud. B: side-by-side boxplots of birth weight for each age, showing a wide spread of weights at every age."}
 set.seed(123)
 
 data = MASS::birthwt
@@ -770,7 +770,7 @@ The **population regression equation** relates the predictor $x$ to the means of
 
 where $\alpha$, and $\beta$ are population parameters that are unknown. The quantity $\mu_y$ is the population mean of $y$ for a given value of $x$. 
 
-### Statistical inference for linear regression
+## Statistical inference for linear regression
 
 A linear regression model: 
 
@@ -848,7 +848,7 @@ You can confirm the $p$-value is $\approx 0.22$ using the $t$-table on the resou
 
 
 
-### An alternative way to test association
+## An alternative way to test association
 
 Consider the following dataset containing information about 1,143 social media ads from an anonymous company, detailing the number of times each ad was viewed and the total number of customers who made a purchase after viewing each ad [@liver].
 
@@ -980,7 +980,7 @@ anova(model)
 
 ```
 
-### An Application Example 
+## An Application Example 
 
 **Example:** Consider the following dataset which records the nutrition information for nearly 80 popular brands of cereal [@liver]. 
 
@@ -1014,7 +1014,7 @@ kable(data, format = 'html', digits = 2, col.names = c('Brand', 'Manuf.', "Type"
 
 The final column, *Customer Rating*, represents the percentage of customers who gave a favorable rating to each cereal in consumer reports. Now consider the question, *"Do sugary cereals tend to receive higher ratings?"*. To answer this question, we will fit a linear model using the variable *Added Sugar* as a predictor of *Customer Rating*. The fitted linear model is displayed in the plot below. 
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=8, fig.width=10}
+```{r, echo=FALSE, warning=F, message=F, fig.height=8, fig.width=10, fig.alt = "Two panels for the cereal data. A: scatterplot of customer rating against added sugars (0 to 15 grams) with a dotted downward-sloping least-squares line; larger translucent red dots mark the mean rating at each sugar value and lie close to the line. B: boxplots of customer rating for each sugar value, with centres that generally fall as sugar increases."}
 library(liver)
 data('cereal')
 data = cereal[-58, -14]
@@ -1120,7 +1120,7 @@ The $p$-value is
 
 \[F_0 = \frac{8711.93/1}{6217.36/(76-2)} = 103.69 \sim F(1, 74)\]
 
-### Checking Assumptions 
+## Checking Assumptions 
 
 Checking assumptions in simple linear regression is crucial because it ensures the validity and reliability of your model's predictions and conclusions. Recall that the least-squares estimator makes several strong assumptions about the structure of the data (*linearity*, *independence*, *constant variance*, and *normality* of residuals). If these assumptions are violated, it can lead to biased estimates of the slope and intercept, incorrect inferences, or unreliable predictions. Our estimates for the slope and intercept can also be biased by influential points such as outliers in the data. Thus, when fitting the least-squares model, it is best to pair results with a thorough investigation of the residuals and any potential outliers.
 
@@ -1137,7 +1137,7 @@ data = cereal[-58, -14]
 model = lm(rating ~ sugars, data = data)
 ```
 
-```{r, echo=F, warning=F, message=F, fig.height=5, fig.width=10}
+```{r, echo=F, warning=F, message=F, fig.height=5, fig.width=10, fig.alt = "Left: normal Q-Q plot of the regression residuals; points follow the diagonal line through the middle but bend above it in the upper tail, with two large positive residuals near 23 and 34. Right: histogram of the residuals, peaked just below 0 with a long right tail out to about 35, so the residuals are right-skewed."}
 par(mfrow = c(1,2))
 # creates qq plot
 qqnorm(model$residuals)
@@ -1163,7 +1163,7 @@ Residuals are typically standardized to help improve the ability to identify out
 
 
 
-```{r, echo=F, warning=F, message=F, fig.height=8, fig.width=10}
+```{r, echo=F, warning=F, message=F, fig.height=8, fig.width=10, fig.alt = "Four R diagnostic plots for the cereal regression. Residuals vs Fitted: a cloud of points around zero; the red trend line starts a little above zero at low fitted values, then stays close to zero. Scale-Location: the red trend line is a shallow U, nearly flat. Q-Q Residuals: points near the line except points 4 and 1, far above it at the top. Residuals vs Leverage: all leverages below about 0.06; point 4 has a large standardized residual, about 3.8, but stays below the 0.5 Cook's distance dashed line."}
 library(liver)
 data('cereal')
 data = cereal[-58, -14]
@@ -1175,7 +1175,7 @@ plot(model)
 par(mfrow= c(1,1))
 ```
 
-In the four plots above, the residuals vs leverage plot is given in the bottom-right panel. The $x$-axis is *leverage* or influence that each data point has on the regression line. This plot also features something called **Cook's Distance** given by the dashed lines on the plot. Cook's distance is another metric to assess the influence of individual points. Generally speaking, points that fall above or below the dashed lines (i.e the Cook's distance) are potential outliers. As we can see from the residual vs leverage plot above, the data point labeled "4" is close but not above the dashed line indicating there are no outliers. Another example of a residual vs leverage plot and how to address potential outliers can be found here [https://www.statology.org/residuals-vs-leverage-plot/](https://www.statology.org/residuals-vs-leverage-plot/) 
+In the four plots above, the residuals vs leverage plot is given in the bottom-right panel. The $x$-axis is *leverage* or influence that each data point has on the regression line. This plot also features something called **Cook's Distance** given by the dashed lines on the plot. Cook's distance is another metric to assess the influence of individual points. Generally speaking, points that fall above or below the dashed lines (i.e the Cook's distance) are potential outliers. As we can see from the residual vs leverage plot above, the data point labeled "4" is close but not above the dashed line indicating there are no outliers. Another example of a residual vs leverage plot and how to address potential outliers can be found here [Statology: How to Interpret a Residuals vs. Leverage Plot](https://www.statology.org/residuals-vs-leverage-plot/) 
 
 The last two plots we will discuss are the *Scale-Location plot* (bottom left panel in the figure above) and the *Residuals vs Fitted plot* (top left panel in the figure above). These two plots are crucial for assessing the constant variance assumption of the residuals in a linear model.
 
@@ -1183,14 +1183,14 @@ In both plots, the x-axis represents the predicted values $\hat{y}_i$, while the
 
 In the Residuals vs Fitted plot, the residuals should form a cloud-like shape around the horizontal line representing zero. If the red line, which represents a smooth trend through the residuals, is roughly horizontal, this suggests that the variance is constant across the predicted values. However, if the red line exhibits a discernible pattern, such as a curve or slope, this could indicate non-constant variance.
 
-Similarly, in the Scale-Location plot, the y-axis represents the square root of the absolute standardized residuals, and the red line shows the trend of these scaled residuals. The interpretation is the same as it is for the Residuals vs Fitted plot, however scaling the residuals in this way can make it easier to visually identify patterns that might suggest non-constant variance. You can see another example of these two plot types here [https://www.statology.org/scale-location-plot/](https://www.statology.org/scale-location-plot/)
+Similarly, in the Scale-Location plot, the y-axis represents the square root of the absolute standardized residuals, and the red line shows the trend of these scaled residuals. The interpretation is the same as it is for the Residuals vs Fitted plot, however scaling the residuals in this way can make it easier to visually identify patterns that might suggest non-constant variance. You can see another example of these two plot types here [Statology: How to Interpret a Scale-Location Plot](https://www.statology.org/scale-location-plot/)
 
 <br>
 <br>
 <br>
 <br>
 
-### References
+## References
 
 
 

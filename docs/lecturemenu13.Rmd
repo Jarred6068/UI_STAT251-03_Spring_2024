@@ -58,7 +58,7 @@ kable(df, format = 'html', digits = 2,
 
 Let $\mu_d = \mu_1 - \mu_2$ be the mean difference between the two populations. We can construct confidence intervals to estimate the average difference as well as conduct hypothesis tests to determine if two populations are significantly different.
 
-### A confidence interval for the mean difference $\mu_d$
+## A confidence interval for the mean difference $\mu_d$
 
 We will begin by assuming that we are dealing with two independent samples from two distinct populations. The natural estimator of $\mu_d$ is the difference between the sample means 
 
@@ -123,7 +123,7 @@ Which yields the follow margin of error
 
 The $95\%$ confidence interval is $[0.24, 0.56]$. Thus, at the $95\%$ confidence level we estimate the mean difference in customer satisfaction score to be no less than $0.24$ and no more than $0.56$. Notice that the above confidence interval does not span zero and thus likely constitutes a real, but small, difference between the companies
 
-### A significance test for comparing two means: independent samples
+## A significance test for comparing two means: independent samples
 
 We can also test for a difference between two groups on a quantitative response variable by comparing their means. The set up for a significance test for a difference in two means is more or less the same as we saw previously for two proportions, however, the calculations now involve $\bar{x}_1$, $\bar{x}_2$, $s_1$ and $s_2$. Recall that, under the assumption of normality for both populations and when using the sample standard deviations to estimate $\sigma_1$ and $\sigma_2$ the difference in means is $t$-distributed. We will see that test statistic $t_{obs}$ is the standardized difference and has approximately the same distribution. Here’s how we set up a two-sample hypothesis test for means:
 
@@ -195,7 +195,7 @@ kable(df, format = 'html', digits = 2,
   
   
 
-#### The pooled $t$ test
+### The pooled $t$ test
 
 There is one situation where the above test statistic has exactly a $t$-distribution and that occurs when we can assume that both populations have the same standard deviation. In this case, we need only substitute a single sample standard deviation for $\sigma_1$ and $\sigma_2$. We call this the pooled estimate of the standard deviation:
 
@@ -211,7 +211,7 @@ which is exactly distributed as a $t$ distribution with $n_1+n_2 - 2$ degrees of
 
 Which test should you use?
 
-  * In practice, a significance test for determining equality of variances can be run prior to the $t$-test to determine if the pooled or unpooled test statistic should be used. More information about this test can be found <a href="https://www.itl.nist.gov/div898/handbook/eda/section3/eda359.htm#:~:text=An%20F%2Dtest%20(Snedecor%20and,the%20variances%20are%20not%20equal.">here</a>
+  * In practice, a significance test for determining equality of variances can be run prior to the $t$-test to determine if the pooled or unpooled test statistic should be used. More information about this test can be found in <a href="https://www.itl.nist.gov/div898/handbook/eda/section3/eda359.htm#:~:text=An%20F%2Dtest%20(Snedecor%20and,the%20variances%20are%20not%20equal.">the NIST/SEMATECH e-Handbook of Statistical Methods: F-Test for Equality of Two Variances</a>
 
 
 **Example: NCAA Women's Basketball** - Sunday April 7th South Carolina and Iowa contended for the NCAA women's basketball championship. Consider the following table which gives the opponent and number of points scored for both teams in their last $15$ games leading up to the championship.
@@ -353,7 +353,7 @@ kable(df, format = 'html', digits = 2,
 
 Conduct a paired $t$-test at the $\alpha = 0.05$ significance level to determine if husbands and wives differ in their perceived influence on financial decision making
 
-### Summary of inference procedures
+## Summary of inference procedures
 
 The table below summarizes the procedures we have learned so far in the course
 
@@ -394,14 +394,14 @@ kable(df, format = 'html', digits = 2,
 
 ```
 
-### Statistical Inference for qualitative data
+## Statistical Inference for qualitative data
 
 Despite significantly expanding our statistical tools for inference, we are still quite limited in our ability to analyze qualitative responses. Our tests for a proportion are useful for comparing a single category of a qualitative variable across one or two samples, but what if we are interested in comparing multiple categories across more than one population? We will now explore some of the common tools for analyzing qualitative data. The inference techniques for analyzing qualitative variables are generally concerned with comparing a response variable with two or more categories across an explanatory variable with two or more groupings by exploring how the conditional distribution of the response varies across the groups of the explanatory variable. In other words, these inference procedures are designed to analyze the statistical association between two multi-category qualitative variables. 
 
 Such problems are typically represented as a table where the rows represent the groupings of the explanatory variable and columns represent the categories of the response variable - often referred to as "two-way tables". 
 
 
-### The Chi-square goodness of fit test
+## The Chi-square goodness of fit test
 
 Like we have done with means and proportions, we will begin with a one-sample procedure for comparing the distribution of a categorical variable to some hypothesized model. This procedure is called the $\chi^2$ ("chi-squared") goodness of fit test because it used to determine how well the observed distribution fits some proposed model of the data. We will illustrate this idea by starting with an example:
 
@@ -473,12 +473,12 @@ Referring back to Mendel's pea plants we compute the expected number of yellow p
 
 \[ \approx 0.015\]
 
-#### The Chi-square distribution
+### The Chi-square distribution
 
 To convert the above statistic into a $p$-value we need to know its sampling distribution. The statistic $X^2$ is called a $\chi^2$ ("chi-squared") test statistic because its sampling distribution follows a special type of probability distribution called the $\chi^2$ distribution. Like the $t$ distribution, the $\chi^2$ distributions form a family of distributions controlled by a single parameter - the degrees of freedom. We will use the notation $\chi^2(df)$ to depict a specific member of this family. For the goodness of fit test, the test statistic $X^2$ follows a $\chi^2$ distribution with $k-1$ degrees of freedom where $k$ represents the number of categories of the qualitative variable
 
 
-```{r, echo=FALSE, warning=F, message=F, fig.width=10, fig.height=6, results = 'hide'}
+```{r, echo=FALSE, warning=F, message=F, fig.width=10, fig.height=6, results = 'hide', fig.alt = "Density curves of the chi-square distribution for 1, 2, 4, 6 and 8 degrees of freedom, with chi-square from 0 to 20 on the x-axis. All are right-skewed and start at 0. The df equals 1 and 2 curves are highest near 0 and decrease; for larger df the peak moves right, gets lower, and the curve spreads out and becomes more symmetric."}
 
 x = seq(0, 20, 0.01)
 df1 = dchisq(x, 1)
@@ -564,11 +564,11 @@ Conduct a $\chi^2$ goodness of fit test to determine if the dogs show any prefer
 
 Note that the GOF test doesn't tell us anything about the range of plausible values for the frequency parameters.
 
-### Measuring statistical association in two categorical variables
+## Measuring statistical association in two categorical variables
 
 As stated previously, the goodness of fit test is a one-sample procedure for comparing the observed distribution of a single categorical variable to a specific model that we hypothesize under the null. We will now explore another type of inference which is also based on the $\chi^2$ ("chi-square") distribution. This procedure is used to determine if two categorical variables share an association by exploring how the distribution of counts of one variable changes as we condition on the categories of another variable. 
 
-### $\chi^2$ test of independence
+## $\chi^2$ test of independence
 
 The $\chi^2$ test of independence is used to examine the relationship between two categorical variables in a two-way table (also called a **contingency table**). Consider the following hypothetical table which compares the categorical variable $A$, which has two categories, with the categorical variable $B$ which has three categories.
 
@@ -778,7 +778,7 @@ Thus, at $\alpha = 0.05$ level we would conclude that there is significant evide
 <br>
 <br>
 
-### References
+## References
 
 
 

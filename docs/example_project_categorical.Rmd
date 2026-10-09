@@ -180,7 +180,7 @@ classes that each contain about a quarter of historical Januaries.
 I entered the `r nrow(hist_jan)` historical January totals into the stat-tools **Statistic Calculator**,
 which computes quartiles with R's default (type 7) definition:
 
-```{r, fig.cap="**Figure 1.** Statistic Calculator summary and boxplot of the 94 historical January totals (inches), 1895–1990. The quartiles set the class cutoffs.", out.width="80%", fig.align="center"}
+```{r, fig.alt="Statistic Calculator summary of 94 January totals: mean 2.8753, median 2.685, standard deviation 1.4936, minimum 0.45, maximum 7.67, Q1 1.8425, Q3 3.65, IQR 1.8075. The boxplot beside it is right-skewed with 4 high outliers between about 6.7 and 7.7 inches.", fig.cap="**Figure 1.** Statistic Calculator summary and boxplot of the 94 historical January totals (inches), 1895–1990. The quartiles set the class cutoffs.", out.width="80%", fig.align="center"}
 include_graphics("example_projects/figs/p1_historical_summary.png")
 ```
 
@@ -235,7 +235,7 @@ To repeat it:
 3. Keep all variables, set **Sample size = 24** and **Seed = 251**, and press *Draw sample*.
    The same seed always draws the same 24 years.
 
-```{r, fig.cap="**Figure 2.** The Simple Random Sample tool after the draw: 24 of 36 rows sampled with seed 251.", out.width="85%", fig.align="center"}
+```{r, fig.alt="Simple Random Sample tool: 36 rows in the data set, 24 rows sampled, sampling fraction 0.667, seed 251. A table lists the first 10 sampled rows with columns year_id, year and jan_prcp_in, starting with 2003 at 6.47 inches.", fig.cap="**Figure 2.** The Simple Random Sample tool after the draw: 24 of 36 rows sampled with seed 251.", out.width="85%", fig.align="center"}
 include_graphics("example_projects/figs/p1_srs.png")
 ```
 
@@ -281,7 +281,7 @@ kable(freq_tab, escape = FALSE, align = c("l", "r", "r"),
   kable_styling(full_width = FALSE, bootstrap_options = c("striped", "condensed"))
 ```
 
-```{r, fig.cap="**Figure 3.** The Frequency Tables tool's output, which matches Table 2.", out.width="85%", fig.align="center"}
+```{r, fig.alt="Frequency Tables tool output for the 24 sampled classes: Very dry 2 (0.083), Dry 8 (0.333), Wet 3 (0.125), Very wet 11 (0.458).", fig.cap="**Figure 3.** The Frequency Tables tool's output, which matches Table 2.", out.width="85%", fig.align="center"}
 include_graphics("example_projects/figs/p1_freq_table.png")
 ```
 
@@ -290,7 +290,7 @@ only 25% of Januaries would.
 
 **(B) Plots.**
 
-```{r, fig.cap="**Figure 4.** Bar chart (Make Graphs tool) of the precipitation class for the 24 sampled recent Januaries. If recent Januaries followed the historical pattern, each bar would be close to 6.", out.width="85%", fig.align="center"}
+```{r, fig.alt="Bar chart of counts by precipitation class for the 24 sampled Januaries: Very dry 2, Dry 8, Wet 3, Very wet 11.", fig.cap="**Figure 4.** Bar chart (Make Graphs tool) of the precipitation class for the 24 sampled recent Januaries. If recent Januaries followed the historical pattern, each bar would be close to 6.", out.width="85%", fig.align="center"}
 include_graphics("example_projects/figs/p1_bar_chart.png")
 ```
 
@@ -310,7 +310,7 @@ kable(desc, align = c("l", "r", "r"),
   kable_styling(full_width = FALSE, bootstrap_options = c("striped", "condensed"))
 ```
 
-```{r, fig.cap="**Figure 5.** Statistic Calculator output and boxplot for the 24 sampled January totals (inches).", out.width="80%", fig.align="center"}
+```{r, fig.alt="Statistic Calculator summary of the 24 sampled January totals: mean 3.4229, median 3.285, standard deviation 1.3952, minimum 1.45, maximum 6.87, Q1 2.33, Q3 4.0775, IQR 1.7475, no mode. The boxplot has a long upper whisker reaching 6.87.", fig.cap="**Figure 5.** Statistic Calculator output and boxplot for the 24 sampled January totals (inches).", out.width="80%", fig.align="center"}
 include_graphics("example_projects/figs/p1_sample_summary.png")
 ```
 
@@ -383,7 +383,7 @@ I ran the same test in the stat-tools **Categorical Tests** tool. I uploaded my 
 `jan_class` column, and set the expected proportions to 0.25, 0.25, 0.25, 0.25. The tool lists the classes
 alphabetically, and it reproduces every number above:
 
-```{r, fig.cap="**Figure 6.** Categorical Tests tool output for the goodness-of-fit test: X² = 9.0000, df = 3, critical value 7.8147, p = 0.0293.", out.width="80%", fig.align="center"}
+```{r, fig.alt="Chi-square goodness-of-fit output: observed counts Dry 8, Very dry 2, Very wet 11, Wet 3; expected count 6 in every class; contributions 0.667, 2.667, 4.167 and 1.500; chi-square 9.0000 on 3 degrees of freedom, critical value 7.8147, p 0.0293. Conclusion: reject H0 at alpha 0.05.", fig.cap="**Figure 6.** Categorical Tests tool output for the goodness-of-fit test: X² = 9.0000, df = 3, critical value 7.8147, p = 0.0293.", out.width="80%", fig.align="center"}
 include_graphics("example_projects/figs/p1_chisq_test.png")
 ```
 

@@ -61,26 +61,42 @@
 </script>
 
 <!--
-  MathJax: render with SVG rather than the default HTML-CSS output.
+  MathJax 4, SVG output, with speech.
 
-  HTML-CSS builds a square root's overline out of stretched glyph pieces, and
-  headless Chrome prints the result too wide: on the Exam 1 study guide the bar
-  over sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran well past the expression and
-  collided with the line above it. The same overshoot showed up wherever a tall
-  \sqrt was printed, including the Exam 1 review problems.
+  WHY VERSION 4. The pages used to load MathJax 2.7 from mathjax.rstudio.com.
+  Its SVG output is aria-hidden and has no spoken text. The only thing assistive
+  technology got was a hidden MathML copy, which only a screen reader with a math
+  module (NVDA + MathCAT, JAWS, VoiceOver) can voice. Read-aloud tools (Edge and
+  Chrome Read Aloud, Read&Write, Speechify, phone Speak Screen) read nothing, or
+  stray letters, for all ~6,000 expressions on the site. MathJax 4 runs Speech
+  Rule Engine on every expression and attaches a natural-language label, e.g.
+  "P of open paren X is greater than or equal to 2 close paren equals ...",
+  that any text-to-speech tool or screen reader reads.
 
-  Checked by printing the identical formula three ways before changing anything:
-  HTML-CSS overshoots, MathJax 3 (CHTML) overshoots more, and the v2 SVG
-  renderer draws the rule to exactly the right width. It is not a timing
-  problem - reprinting with a 90-second budget produced the same bad bar.
+  WHY SVG. CHTML output (v2 HTML-CSS, and v3 CHTML) prints square-root bars too
+  wide in headless Chrome: on the Exam 1 study guide the bar over
+  sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran past the expression into the line
+  above. SVG draws it the right width; re-checked with v4 SVG before switching.
 
-  This has to live in <head>: rmarkdown injects the MathJax <script> at the end
-  of <body>, and MathJax applies any text/x-mathjax-config block it finds in the
-  document when it starts. SVG output inherits currentColor, so both themes are
-  unaffected (see the MathJax rule in assets/brand/site.css).
+  The script URL itself is set by `mathjax:` in _site.yml and in every
+  per-directory _output.yml (rmarkdown injects it at the end of <body>). This
+  block has to be in <head> so window.MathJax exists before that script runs.
+  Keep the version pinned and the same in all seven places.
+
+  inTabOrder: false. MathJax makes every expression a Tab stop by default (for
+  its keyboard explorer), which put ~300 Tab stops on a single lecture page in
+  front of the links a keyboard user is trying to reach. Screen-reader users
+  still reach every expression in browse mode, and the label is on the
+  expression either way. It is options.a11y, NOT menuOptions.settings - the
+  menu setting is accepted but ignored at startup.
+
+  SVG output inherits currentColor, so both themes are unaffected (see the
+  MathJax rule in assets/brand/site.css).
 -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({ menuSettings: { renderer: "SVG" } });
+<script>
+window.MathJax = {
+  options: { a11y: { inTabOrder: false } }
+};
 </script>
 
 <style type="text/css">
@@ -646,7 +662,7 @@ red) has a mean of 4.4 hours, which is our <strong>statistic</strong>.
 The <strong>sampling error</strong> is then 4.4 - 4.6 = -0.2 hours. If
 we took another random sample, we would get a different sampling
 error.</p>
-<p><img src="assets/l8_frame_example.png" width="55%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_frame_example.png" alt="Grid of 100 dots representing the school's students. A dashed box labelled sampling frame: the registrar's list encloses 90 of them; the 10 grey dots below the box are labelled 10 late enrollees - not on the list. Ten dots scattered inside the box are filled red, marking the simple random sample." width="55%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="practice-find-the-sampling-frame" class="section level3">
 <h3>Practice: find the sampling frame</h3>
@@ -722,7 +738,7 @@ pretty gentle. The figure below is only an illustration and is not
 Purdue’s actual data. It shows a single curve matched to the values in
 the 2008 FDA label for a 10 mg dose (a peak of 10.6 ng/mL at about 2.7
 hours and a half-life of 4.5 hours), drawn on both types of axis.</p>
-<p><img src="assets/l8_oxycontin_axes.png" width="55%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_oxycontin_axes.png" alt="The same illustrative OxyContin blood-level curve, in ng/mL against hours after one 10 mg dose, drawn twice. Top, on a log axis from 1 to 100, the curve rises to its peak near 3 hours and then looks almost flat out to 12 hours. Bottom, on a linear axis, the same curve clearly falls from its peak of about 10.6 to about 3.2 by 12 hours." width="55%" style="display: block; margin: auto;" /></p>
 <p>On the linear axis, the blood level drops from 10.6 to 3.2 ng/mL over
 the 12 hours, which is a drop of about 70%. In 2007, The Purdue
 Frederick Company pleaded guilty to misbranding OxyContin “with the
@@ -849,7 +865,7 @@ parameter is the bullseye, and each estimate is one shot at the target.
 Every time we take a sample and compute the statistic, we take a shot
 and see where it lands. If we take a new sample, we take a new shot.
 There are two different things that can go wrong:</p>
-<p><img src="assets/l8_bullseye.png" width="55%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_bullseye.png" alt="Four targets in a 2 by 2 grid, columns labelled precise and not precise, rows labelled accurate and not accurate. Accurate and precise: shots tightly grouped on the bullseye. Accurate, not precise: shots scattered widely around the bullseye. Precise, not accurate: a tight group off to one side. Neither: shots scattered and off to one side." width="55%" style="display: block; margin: auto;" /></p>
 <ul>
 <li><strong>Bias</strong> is a problem with <i>accuracy</i>. The shots
 are centered away from the bullseye and miss in the same direction every
@@ -871,7 +887,7 @@ class="math inline">\(n = 2000\)</span> people at the Student Recreation
 Center, where 75% of the people exercise that often. The other survey is
 a simple random sample of only <span class="math inline">\(n =
 200\)</span> students. We repeat each survey 5000 times.</p>
-<p><img src="assets/l8_bias_vs_n.png" width="75%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_bias_vs_n.png" alt="Two histograms of the estimates from 5000 repeated surveys, with a vertical line marking the truth at 40%. The simple random sample of 200 gives a wide bell-shaped spread from about 30% to 50%, centred on the 40% line. The Rec Center survey of 2000 gives a very narrow spike around 75%, far to the right of the truth." width="75%" style="display: block; margin: auto;" /></p>
 <p>Notice that the Rec Center survey is much more <i>precise</i>, since
 its estimates barely change from one repeat to the next. But every
 single one of its 5000 estimates misses the true value by about 35
@@ -908,7 +924,7 @@ Every design draws a sample of <span class="math inline">\(n =
 20\)</span> students, so each student in the SRS below had a <span
 class="math inline">\(20/100\)</span>, or 1 in 5, chance of being
 selected.</p>
-<p><img src="assets/l8_design_srs.png" width="45%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_design_srs.png" alt="10 by 10 grid of 100 students, one row per class year: four rows of first-years, three of sophomores, two of juniors and one of seniors, identified by a legend. Twenty dots scattered across the grid are filled red as the simple random sample: 8 first-years, 6 sophomores, 2 juniors and 4 seniors." width="45%" style="display: block; margin: auto;" /></p>
 <p>Take a look at the class years of the students in red. This SRS
 happened to pick 4 seniors but only 2 juniors, even though there are
 twice as many juniors as seniors. This isn’t a problem with the method.
@@ -950,7 +966,7 @@ class="math inline">\(N\)</span> is much larger than <span
 class="math inline">\(n\)</span>, the two methods are practically the
 same, because the chance of drawing the same unit twice is very
 small.</p>
-<p><img src="assets/l8_replacement.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_replacement.png" alt="Two rows of drawings from a box of balls numbered 1 to 5. Without replacement: draw 3, draw 1, draw 5, and each drawn ball is shown greyed out and removed, giving the sample 3, 1, 5. With replacement: draw 3, draw 1, draw 3, and all five balls stay in the box every time, giving the sample 3, 1, 3." width="100%" style="display: block; margin: auto;" /></p>
 <p>In the figure above, when we sample without replacement each ball
 that is drawn is removed from the bag, so the sample 3, 1, 5 can’t have
 any repeats. When we sample with replacement, every ball goes back in
@@ -1009,7 +1025,7 @@ class="math inline">\(N = 100\)</span> and <span class="math inline">\(n
 In the figure below, the 100 students are numbered in list order. The
 random starting point was 2, so the sample is made up of positions 2, 7,
 12, 17, …, 97.</p>
-<p><img src="assets/l8_design_systematic.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_design_systematic.png" alt="The 100 students numbered 1 to 100 in four rows of 25. Starting at 2, curved arrows labelled +5 jump to every fifth number, and the selected cells 2, 7, 12, 17 and so on up to 97 are highlighted, making 20 in all. The highlighted cells line up in the same columns in every row." width="100%" style="display: block; margin: auto;" /></p>
 <p>Systematic sampling is easy to carry out in the field, where there
 often isn’t a list at all until the units show up. As long as the order
 of the list has nothing to do with what we are measuring, a systematic
@@ -1042,7 +1058,7 @@ share of the total sample size <span class="math inline">\(n\)</span>.
 Our population is 40% first-years, 30% sophomores, 20% juniors, and 10%
 seniors, so a sample of 20 students would take 8, 6, 4, and 2 students
 from each class year, respectively.</p>
-<p><img src="assets/l8_design_stratified.png" width="45%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_design_stratified.png" alt="The same 10 by 10 grid of students, with dashed lines separating the four class-year strata. Red dots mark a separate random sample within each stratum: 8 of the 40 first-years, 6 of the 30 sophomores, 4 of the 20 juniors and 2 of the 10 seniors." width="45%" style="display: block; margin: auto;" /></p>
 <p>Stratifying guarantees that every group is represented in the sample,
 so we can’t end up with only 2 juniors by bad luck. It also gives more
 precise estimates than an SRS of the same size, <u>as long as units are
@@ -1059,7 +1075,7 @@ class="section level3">
 <p><span class="math display">\[\text{female: } 30 \times
 \frac{262}{379} = 20.74 \approx 21, \qquad
 \text{male: } 30 \times \frac{117}{379} = 9.26 \approx 9\]</span></p>
-<p><img src="assets/l8_heights_allocation.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_heights_allocation.png" alt="Two stacked bars comparing proportions. Population, N = 379: Female 262 (69%) and Male 117 (31%). Sample, n = 30: Female 21 (70%) and Male 9 (30%). The two bars are split at almost the same point." width="80%" style="display: block; margin: auto;" /></p>
 <p>We would then draw an SRS of 21 of the women and a separate SRS of 9
 of the men:</p>
 <pre class="r"><code>set.seed(251)
@@ -1087,7 +1103,7 @@ such as a dorm, a classroom, a city block, or a village. A
 measures <i>every</i> unit in the clusters that were chosen. In the
 figure below, each column is a cluster, and two columns were chosen at
 random.</p>
-<p><img src="assets/l8_design_cluster.png" width="45%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_design_cluster.png" alt="The same 10 by 10 grid of students, with each of the 10 columns outlined as a cluster. Two columns are highlighted and every student in them is filled red, giving 20 students; each chosen column contains all four class years." width="45%" style="display: block; margin: auto;" /></p>
 <p>The main appeal of cluster sampling is practical. We only need a list
 of the clusters rather than a list of every individual, and visiting a
 few clusters is much cheaper than traveling to units spread out across a
@@ -1104,7 +1120,7 @@ precise.</p>
 clusters (stage 1) and then takes an SRS of units within each chosen
 cluster (stage 2). In the figure below, 4 of the 10 columns were chosen,
 and then 5 students were chosen from each of those columns.</p>
-<p><img src="assets/l8_design_two_stage.png" width="45%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_design_two_stage.png" alt="The same 10 by 10 grid of students with the columns outlined as clusters. Four columns are highlighted as chosen at stage 1, and within each of them 5 students are filled red as the stage 2 sample, giving 20 students." width="45%" style="display: block; margin: auto;" /></p>
 <p>Election exit polls are a good example of combining several of these
 designs. For the 2024 election, the National Election Pool drew a
 stratified probability sample of 279 polling places. Within each polling
@@ -1125,7 +1141,7 @@ NHANES sample design</a>).</p>
 <p>Strata and clusters are easy to mix up, since both involve dividing
 the population into groups. The difference is in what the groups look
 like inside, and as a result, how many of the groups we sample:</p>
-<p><img src="assets/l8_three_designs.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_three_designs.png" alt="Three versions of the 10 by 10 student grid side by side, each with 20 students in red. Simple random: red dots scattered unevenly over the grid. Stratified: dashed lines split the grid into class-year rows, with red dots taken from every stratum in proportion. Cluster: two whole columns outlined and filled red." width="100%" style="display: block; margin: auto;" /></p>
 <table>
 <colgroup>
 <col width="33%" />
@@ -1319,7 +1335,7 @@ researchers and not included in the study, which is associated with
 the response cannot be separated, so neither effect can be credited to
 one variable alone.</li>
 </ul>
-<p><img src="assets/l8_confounding.png" width="65%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_confounding.png" alt="Diagram with three boxes. A box labelled Lurking variable Z at the top has arrows pointing down to both Explanatory variable X and Response variable Y. Between X and Y a dashed arrow is labelled association above and cause? below." width="65%" style="display: block; margin: auto;" /></p>
 <p>For example, towns that sell more ice cream also have more drownings.
 This association is real (it shows up in the data every year), but the
 causal story is wrong. Hot weather is a lurking variable that drives
@@ -1745,7 +1761,7 @@ debated, though, and every such trial is judged case by case.</p>
 randomized design</strong>, where every unit is assigned to a treatment
 completely at random. The COVID-19 vaccine trial above was a completely
 randomized design with two groups.</p>
-<p><img src="assets/l8_crd.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_crd.png" alt="Flow chart: 40 experimental units go to random assignment, which splits them into Group 1, 20 units given the treatment, and Group 2, 20 units given a control (placebo). Both groups then feed into compare responses." width="85%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="randomized-block-design" class="section level3">
 <h3>Randomized block design</h3>
@@ -1754,7 +1770,7 @@ way that we expect to affect the response. Blocks are formed
 <i>before</i> the treatments are assigned. In a <strong>randomized block
 design</strong>, the random assignment is done separately within each
 block, and the treatments are compared within blocks.</p>
-<p><img src="assets/l8_rcbd.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_rcbd.png" alt="Flow chart with two separate rows. Block 1, 30 women, goes to its own random assignment into treatment and control, then compare within the block. Block 2, 20 men, does the same: random assignment into treatment and control, then compare within the block." width="85%" style="display: block; margin: auto;" /></p>
 <p>For example, suppose men and women respond differently to a
 treatment. In a completely randomized design, that difference would add
 to the variation within each treatment group. Blocking on sex removes
@@ -1770,7 +1786,7 @@ or two plots of land side by side. Within each pair, we flip a coin to
 decide which unit gets which treatment. Another option is to have each
 subject serve as their own pair by receiving both treatments in a random
 order.</p>
-<p><img src="assets/l8_matched_pairs.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_matched_pairs.png" alt="Flow chart with three rows, Pair 1, Pair 2 and Pair 3, each a pair of twins. For each pair a coin flip decides that one twin gets the treatment and the other gets the control." width="85%" style="display: block; margin: auto;" /></p>
 <p>Measurements taken before and after on the same people (for example,
 blood pressure before and after an exercise program) also give us paired
 data. However, there is no random order and no control group, so
@@ -1807,7 +1823,7 @@ but the person measuring reaction times can be.</li>
 <h2>Random sampling vs. random assignment</h2>
 <p>Chance plays two different roles in a study, and each one lets us
 draw a different kind of conclusion:</p>
-<p><img src="assets/l8_sampling_vs_assignment.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_sampling_vs_assignment.png" alt="A 2 by 2 table: rows ask randomly sampled? yes or no, columns ask randomly assigned to treatments? yes or no. Both yes: cause, and generalize to the population, rare, an experiment on a random sample. Sampled only: generalize but not cause, e.g. a random-sample survey. Assigned only: cause, but only for units like these, e.g. most clinical trials, which use volunteers. Neither: association in these units only, e.g. volunteers who chose their own treatment." width="80%" style="display: block; margin: auto;" /></p>
 <ul>
 <li><strong>Random sampling</strong> allows us to
 <strong>generalize</strong> from the sample to the population it was
@@ -2037,35 +2053,35 @@ no causal link anywhere in sight.</p>
 Summary</em>. American Association for Public Opinion Research.</li>
 <li>AP-NORC Center for Public Affairs Research and USAFacts (2026).
 <em>State of the Facts 2026</em>. <a
-href="https://apnorc.org/projects/state-of-the-facts-2026/"
-class="uri">https://apnorc.org/projects/state-of-the-facts-2026/</a>
-(report: <a
-href="https://apnorc.org/wp-content/uploads/2026/09/State_of_the_facts_2026.pdf"
-class="uri">https://apnorc.org/wp-content/uploads/2026/09/State_of_the_facts_2026.pdf</a>)</li>
+href="https://apnorc.org/projects/state-of-the-facts-2026/">AP-NORC
+project page: State of the Facts 2026</a> (report: <a
+href="https://apnorc.org/wp-content/uploads/2026/09/State_of_the_facts_2026.pdf">State
+of the Facts 2026 full report (PDF)</a>)</li>
 <li>Blackburn, I. and Kunadian, V. (2026). Hormone replacement therapy
 and cardiovascular risk in postmenopausal women. <em>European Heart
 Journal Open</em>, 6(2), oeag054. <a
-href="https://doi.org/10.1093/ehjopen/oeag054"
-class="uri">https://doi.org/10.1093/ehjopen/oeag054</a></li>
+href="https://doi.org/10.1093/ehjopen/oeag054">Blackburn and Kunadian
+(2026), European Heart Journal Open article</a></li>
 <li>Bofill Rodriguez, M., Yong, L. N., Mirkov, S., Bekos, C., Lethaby,
 A. and Farquhar, C. (2025). Long-term hormone therapy for perimenopausal
 and postmenopausal women. <em>Cochrane Database of Systematic
 Reviews</em>, 11, CD004143. <a
-href="https://doi.org/10.1002/14651858.CD004143.pub6"
-class="uri">https://doi.org/10.1002/14651858.CD004143.pub6</a></li>
+href="https://doi.org/10.1002/14651858.CD004143.pub6">Bofill Rodriguez
+et al. (2025), Cochrane review</a></li>
 <li>Dai, J., Dai, W., Heianza, Y. and Qi, L. (2026). Nighttime light
 exposure and cardiac structure and function. <em>European Heart
-Journal</em>. <a href="https://doi.org/10.1093/eurheartj/ehag563"
-class="uri">https://doi.org/10.1093/eurheartj/ehag563</a></li>
+Journal</em>. <a href="https://doi.org/10.1093/eurheartj/ehag563">Dai et
+al. (2026), European Heart Journal article</a></li>
 <li>European Society of Cardiology (2026, September 10). Too much light
 at night changes the shape and working of the heart. Press release. <a
-href="https://www.escardio.org/news/press/press-releases/too-much-light-at-night-changes-the-shape-and-working-of-the-heart/"
-class="uri">https://www.escardio.org/news/press/press-releases/too-much-light-at-night-changes-the-shape-and-working-of-the-heart/</a></li>
+href="https://www.escardio.org/news/press/press-releases/too-much-light-at-night-changes-the-shape-and-working-of-the-heart/">ESC
+press release: Too much light at night changes the heart</a></li>
 <li>Freedman, N. D., Park, Y., Abnet, C. C., Hollenbeck, A. R. and
 Sinha, R. (2012). Association of coffee drinking with total and
 cause-specific mortality. <em>New England Journal of Medicine</em>,
-366(20), 1891–1904. <a href="https://doi.org/10.1056/NEJMoa1112010"
-class="uri">https://doi.org/10.1056/NEJMoa1112010</a></li>
+366(20), 1891–1904. <a
+href="https://doi.org/10.1056/NEJMoa1112010">Freedman et al. (2012), New
+England Journal of Medicine article</a></li>
 <li>Grodstein, F. et al. (1996). Postmenopausal estrogen and progestin
 use and the risk of cardiovascular disease. <em>New England Journal of
 Medicine</em>, 335, 453–461.</li>
@@ -2077,83 +2093,86 @@ hormone replacement therapy and the primary prevention of cardiovascular
 disease. <em>Annals of Internal Medicine</em>, 137, 273–284.</li>
 <li>Illowsky, B. and Dean, S. (2023). <em>Introductory Statistics
 2e</em>, Sections 1.2 and 1.4–1.6. OpenStax. <a
-href="https://openstax.org/details/books/introductory-statistics-2e"
-class="uri">https://openstax.org/details/books/introductory-statistics-2e</a></li>
+href="https://openstax.org/details/books/introductory-statistics-2e">OpenStax:
+Introductory Statistics 2e</a></li>
 <li>Kennedy, C. and Hartig, H. (2019). Response rates in telephone
 surveys have resumed their decline. Pew Research Center.</li>
 <li>Kim, H.-S. et al. (2026). Coffee consumption and improved liver
 outcomes: clinical, imaging, and proteomic evidence from the UK Biobank.
 <em>Clinical Gastroenterology and Hepatology</em>. <a
-href="https://doi.org/10.1016/j.cgh.2026.04.035"
-class="uri">https://doi.org/10.1016/j.cgh.2026.04.035</a></li>
+href="https://doi.org/10.1016/j.cgh.2026.04.035">Kim et al. (2026),
+Clinical Gastroenterology and Hepatology article</a></li>
 <li>Kramer, A. D. I., Guillory, J. E. and Hancock, J. T. (2014).
 Experimental evidence of massive-scale emotional contagion through
 social networks. <em>PNAS</em>, 111(24), 8788–8790. <a
-href="https://doi.org/10.1073/pnas.1320040111"
-class="uri">https://doi.org/10.1073/pnas.1320040111</a></li>
+href="https://doi.org/10.1073/pnas.1320040111">Kramer, Guillory and
+Hancock (2014), PNAS article</a></li>
 <li>Lu, T. F. et al. (2026). Long-term systemic outcomes of
 postmenopausal hormone replacement therapy by age at menopause: a
 real-world cohort study. <em>Human Reproduction Open</em>, 2026(3),
-hoag072. <a href="https://doi.org/10.1093/hropen/hoag072"
-class="uri">https://doi.org/10.1093/hropen/hoag072</a></li>
+hoag072. <a href="https://doi.org/10.1093/hropen/hoag072">Lu et
+al. (2026), Human Reproduction Open article</a></li>
 <li>Manson, J. E. et al. (2019a). Vitamin D supplements and prevention
 of cancer and cardiovascular disease. <em>New England Journal of
 Medicine</em>, 380(1), 33–44. <a
-href="https://doi.org/10.1056/NEJMoa1809944"
-class="uri">https://doi.org/10.1056/NEJMoa1809944</a></li>
+href="https://doi.org/10.1056/NEJMoa1809944">Manson et al. (2019a), New
+England Journal of Medicine article</a></li>
 <li>Manson, J. E. et al. (2019b). Marine n−3 fatty acids and prevention
 of cardiovascular disease and cancer. <em>New England Journal of
 Medicine</em>, 380(1), 23–32. <a
-href="https://doi.org/10.1056/NEJMoa1811403"
-class="uri">https://doi.org/10.1056/NEJMoa1811403</a></li>
+href="https://doi.org/10.1056/NEJMoa1811403">Manson et al. (2019b), New
+England Journal of Medicine article</a></li>
 <li>Marcus, G. M., Hu, F. B., van Dam, R. M. et al. (2026). Caffeine and
 cardiovascular disease: a scientific statement from the American Heart
 Association. <em>Circulation</em>, 154, e345–e355. <a
-href="https://doi.org/10.1161/CIR.0000000000001454"
-class="uri">https://doi.org/10.1161/CIR.0000000000001454</a></li>
+href="https://doi.org/10.1161/CIR.0000000000001454">Marcus et
+al. (2026), AHA scientific statement in Circulation</a></li>
 <li>The Menopause Society (2025, October 10). <em>Oral or transdermal
 hormone therapy? The mental health risks are not the same</em>. Press
 release. <a
-href="https://menopause.org/press-releases/oral-or-transdermal-hormone-therapy-the-mental-health-risks-are-not-the-same"
-class="uri">https://menopause.org/press-releases/oral-or-transdermal-hormone-therapy-the-mental-health-risks-are-not-the-same</a></li>
+href="https://menopause.org/press-releases/oral-or-transdermal-hormone-therapy-the-mental-health-risks-are-not-the-same">The
+Menopause Society press release on oral vs. transdermal hormone
+therapy</a></li>
 <li>Mercer, A., Kennedy, C. and Keeter, S. (2024). Online opt-in polls
 can produce misleading results, especially for young people and Hispanic
 adults. Pew Research Center.</li>
 <li>Moseley, J. B. et al. (2002). A controlled trial of arthroscopic
 surgery for osteoarthritis of the knee. <em>New England Journal of
 Medicine</em>, 347(2), 81–88. <a
-href="https://doi.org/10.1056/NEJMoa013259"
-class="uri">https://doi.org/10.1056/NEJMoa013259</a></li>
+href="https://doi.org/10.1056/NEJMoa013259">Moseley et al. (2002), New
+England Journal of Medicine article</a></li>
 <li>Münzel, T., Kuntic, M. and Daiber, A. (2026). The dark night as a
 cardiovascular vital sign: personal light exposure, subclinical cardiac
 remodelling, and the urban exposome. <em>European Heart Journal</em>,
-ehag650. <a href="https://doi.org/10.1093/eurheartj/ehag650"
-class="uri">https://doi.org/10.1093/eurheartj/ehag650</a></li>
+ehag650. <a href="https://doi.org/10.1093/eurheartj/ehag650">Münzel,
+Kuntic and Daiber (2026), European Heart Journal article</a></li>
 <li>NORC at the University of Chicago (n.d.). About AmeriSpeak. <a
-href="https://www.norc.org/services-solutions/amerispeak/about.html"
-class="uri">https://www.norc.org/services-solutions/amerispeak/about.html</a></li>
+href="https://www.norc.org/services-solutions/amerispeak/about.html">NORC:
+About AmeriSpeak</a></li>
 <li>Polack, F. P. et al. (2020). Safety and efficacy of the BNT162b2
 mRNA Covid-19 vaccine. <em>New England Journal of Medicine</em>,
-383(27), 2603–2615. <a href="https://doi.org/10.1056/NEJMoa2034577"
-class="uri">https://doi.org/10.1056/NEJMoa2034577</a></li>
+383(27), 2603–2615. <a
+href="https://doi.org/10.1056/NEJMoa2034577">Polack et al. (2020), New
+England Journal of Medicine article</a></li>
 <li>U.S. Department of Health and Human Services (2014). <em>The Health
 Consequences of Smoking — 50 Years of Progress: A Report of the Surgeon
 General</em>.</li>
 <li>U.S. Food and Drug Administration (2025, November 10). <em>FDA
 requests labeling changes related to safety information to clarify the
 benefit/risk considerations for menopausal hormone therapies</em>. <a
-href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-requests-labeling-changes-related-safety-information-clarify-benefitrisk-considerations"
-class="uri">https://www.fda.gov/drugs/drug-alerts-and-statements/fda-requests-labeling-changes-related-safety-information-clarify-benefitrisk-considerations</a></li>
+href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-requests-labeling-changes-related-safety-information-clarify-benefitrisk-considerations">FDA
+statement, November 2025: labeling changes for menopausal hormone
+therapies</a></li>
 <li>U.S. Food and Drug Administration (2026, February 12). <em>FDA
 approves labeling changes to menopausal hormone therapy products</em>.
 <a
-href="https://www.fda.gov/news-events/press-announcements/fda-approves-labeling-changes-menopausal-hormone-therapy-products"
-class="uri">https://www.fda.gov/news-events/press-announcements/fda-approves-labeling-changes-menopausal-hormone-therapy-products</a></li>
+href="https://www.fda.gov/news-events/press-announcements/fda-approves-labeling-changes-menopausal-hormone-therapy-products">FDA
+press announcement, February 2026: labeling changes approved</a></li>
 <li>Writing Group for the Women’s Health Initiative Investigators
 (2002). Risks and benefits of estrogen plus progestin in healthy
 postmenopausal women. <em>JAMA</em>, 288(3), 321–333. <a
-href="https://doi.org/10.1001/jama.288.3.321"
-class="uri">https://doi.org/10.1001/jama.288.3.321</a></li>
+href="https://doi.org/10.1001/jama.288.3.321">Women’s Health Initiative
+(2002), JAMA article</a></li>
 </ul>
 </div>
 </div>
@@ -2321,6 +2340,66 @@ class="uri">https://doi.org/10.1001/jama.288.3.321</a></li>
     bar.appendChild(link);
     main.insertBefore(bar, main.firstChild);
   }
+
+  /* 6. Author / date are not headings (WCAG 1.3.1, 2.4.6).
+        pandoc's template emits them as <h4 class="author"> and
+        <h4 class="date"> straight after the <h1> title. Screen-reader users
+        navigating by heading hear "heading level 4, STAT 251 Section 01" as if
+        it were a section, and it puts an h1 -> h4 skip at the top of every
+        page. Re-tag them as paragraphs; site.css styles them by class. */
+  var meta = document.querySelectorAll('#header h4.author, #header h4.date');
+  for (var k = 0; k < meta.length; k++) {
+    var h4 = meta[k];
+    var p = document.createElement('p');
+    p.className = h4.className;
+    while (h4.firstChild) p.appendChild(h4.firstChild);
+    h4.parentNode.replaceChild(p, h4);
+  }
+
+  /* 7. Solution answers carry more than colour (WCAG 1.4.1, 1.4.3).
+        Answers are marked three ways across the solution pages: an inline
+        style="color: red", the RA/RZ <div style="color: red;"> helper, and
+        class="soln". Colour was the only cue, so a screen reader, a
+        read-aloud tool, or a colour-blind reader could not tell the answer
+        from the question. Each one gets class .answer (site.css section 20b:
+        AA-contrast red, shaded box) and a screen-reader-only "Answer:" label.
+        The label goes on the outermost answer element only, so an answer
+        that contains another red span is announced once. Matching the inline
+        style here rather than editing the sources keeps the 2024 archive
+        untouched. */
+  /* el.style.color rather than a [style*=...] selector, which would also catch
+     background-color and border-color. Empty placeholder spans are skipped so
+     they do not render as an empty shaded box. */
+  var candidates = document.querySelectorAll('.main-container .soln, .main-container [style*="color"]');
+  var answers = [];
+  for (var a = 0; a < candidates.length; a++) {
+    var c = candidates[a];
+    var isRed = c.style.color === 'red' || c.style.color === 'rgb(255, 0, 0)';
+    if (!isRed && !c.classList.contains('soln')) continue;
+    if (!c.textContent.replace(/\s+/g, '') && !c.querySelector('img, svg')) continue;
+    c.classList.add('answer');
+    answers.push(c);
+  }
+  for (var b = 0; b < answers.length; b++) {
+    var el = answers[b];
+    if (el.parentNode.closest && el.parentNode.closest('.answer')) continue;
+    var label = document.createElement('span');
+    label.className = 'sr-only';
+    label.textContent = 'Answer: ';
+    el.insertBefore(label, el.firstChild);
+  }
+
+  /* 8. The decorative arrow in the back link (item 5) is read aloud as
+        "leftwards arrow". */
+  var back = document.querySelector('.site-backlink');
+  if (back) {
+    back.textContent = '';
+    var arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '\u2190 ';
+    back.appendChild(arrow);
+    back.appendChild(document.createTextNode('Back to course site'));
+  }
 })();
 </script>
 
@@ -2363,7 +2442,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-svg.js";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

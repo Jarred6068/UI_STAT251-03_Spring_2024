@@ -169,7 +169,7 @@ Use this table to answer parts a - d
 * **(a)** Compute the relative frequency for each age group
 
 * **(b)** Make a bar graph where the heights of the bars are relative frequencies
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=6}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=6, fig.alt = "Bar graph of relative frequency by age group: 1-18 about 0.04, 19-24 about 0.42, 25-35 about 0.30, 36-50 about 0.16, 51-69 about 0.06, 70 and over about 0.02. Most respondents were between 19 and 35."}
 set.seed(123)
 
 ag = c('1-18','19-24','25-35','36-50','51-69','70 and over')
@@ -210,7 +210,7 @@ Use the table to answer the questions a and b
 * **(a)** Report the modal spam category
 <span class="soln">The modal category is "Products" because it has the highest frequency</span>
 * **(b)** Construct a **Pareto chart** using the table above
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=3, fig.width=4}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=3, fig.width=4, fig.alt = "Pareto chart of spam categories with bars in decreasing order of percentage: Products 21.0, Financial 16.2, Adult 14.5, Scams 14.2, Leisure 7.8, Health 7.3."}
 
 ggplot(data = spam.dist, aes(x = reorder(`Type of Spam`, -Percentage), y = Percentage))+
   geom_bar(stat = 'identity', color = 'black', fill = 'lightblue2')+
@@ -287,7 +287,7 @@ $$\bar{x} = \frac{2(2.0)+1(2.5)+12(3.0)+14(3.5)+6(4.0)}{35} = \frac{115.5}{35} =
 
 
 * **(g)** Construct a dot plot for the variable GPA (hint use the frequency table)
-```{r, fig.cap = "(A) Dot plot using the rounded GPA values from the frequency table (B) Dot plot using the raw GPA values", fig.height=3, fig.width=7, echo=FALSE, message = FALSE, warning=FALSE}
+```{r, fig.cap = "(A) Dot plot using the rounded GPA values from the frequency table (B) Dot plot using the raw GPA values", fig.height=3, fig.width=7, echo=FALSE, message = FALSE, warning=FALSE, fig.alt = "Two dot plots side by side. (A) Rounded GPA: 2 dots at 2.0, 1 at 2.5, 12 at 3.0, 14 at 3.5 and 6 at 4.0. (B) Raw GPA, one stack per observed value from 2.0 to 4.0, with the tallest stack (9 dots) at 3.0 and 4 dots each at 3.4, 3.5 and 3.8; its x-axis is labeled Sugar (g)."}
 
 df = cbind.data.frame(Raw = x_raw, Rounded = x)
 B = ggplot(data = df, aes(x = Rounded))+
@@ -315,7 +315,7 @@ ggarrange(B, A, labels = c("A", "B"), nrow = 1, ncol = 2)
 ```
 
 * **(h)** Construct a histogram for the variable GPA (hint use the frequency table)
-```{r, fig.cap = "(A) Histogram using the rounded GPA values (e.g 4 total bins) from the frequency table", fig.height=3, fig.width=4, echo=FALSE, message = FALSE, warning=FALSE, comment="", results="asis"}
+```{r, fig.cap = "(A) Histogram using the rounded GPA values (e.g 4 total bins) from the frequency table", fig.height=3, fig.width=4, echo=FALSE, message = FALSE, warning=FALSE, comment="", results="asis", fig.alt = "Histogram of rounded high school GPA with four bins: 2.0-2.5 frequency 3, 2.5-3.0 frequency 12, 3.0-3.5 frequency 14, 3.5-4.0 frequency 6."}
 A = ggplot(data = df, aes(x = Rounded))+
   geom_histogram(breaks = seq(2, 4, 0.5), color = 'black', fill = 'grey')+
   theme_classic()+
@@ -346,7 +346,7 @@ ${\bf (12)}$ Describe the shape of the following distributions and for each dist
 <span class="soln">Skew right. The mean will be greater than median because the center of the data is pulled toward the right side of the distribution</span>
 
 
-```{r, fig.height=3, fig.width=4, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, fig.height=3, fig.width=4, echo=FALSE, message=FALSE, warning=FALSE, fig.alt = "Right-skewed histogram of a large sample with no y-axis scale; the x-axis runs from 0 to 0.8. The bars rise quickly from near zero at 0 to their tallest at about 0.1, then shrink gradually, becoming very short by about 0.5 and reaching zero near 0.75."}
 set.seed(123)
 sr = ggplot()+
   geom_histogram(aes(x = rbeta(100000, 2, 10)), fill = 'lightblue', size = 1)+
@@ -363,7 +363,7 @@ plot(sr)
 <span class="soln">Symmetric/Bell shaped. The mean and the median will be equal</span>
 
 
-```{r, echo=FALSE, fig.height=3, fig.width=4, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, fig.height=3, fig.width=4, message=FALSE, warning=FALSE, fig.alt = "Symmetric, bell-shaped histogram of a large sample with no y-axis scale; the x-axis runs from about -4 to 4 (labeled at -2.5, 0 and 2.5). The bars are tallest at 0 and shrink at the same rate moving left or right, becoming very short beyond about -3 and 3."}
 set.seed(123)
 sym = ggplot()+
   geom_histogram(aes(x = rnorm(100000)), fill = 'lightblue', size = 1)+
@@ -380,7 +380,7 @@ plot(sym)
 <span class="soln">Skew left. The mean will be less than median because the center of the data is pulled toward the left side of the distribution</span>
 
 
-```{r, echo=FALSE, fig.height=3, fig.width=4, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, fig.height=3, fig.width=4, message=FALSE, warning=FALSE, fig.alt = "Left-skewed histogram of a large sample with no y-axis scale; the x-axis runs from about 0.2 to 1. The bars are near zero up to about 0.5, grow gradually to their tallest at about 0.9, then drop quickly to near zero at 1."}
 set.seed(123)
 sl = ggplot()+
   geom_histogram(aes(x = rbeta(100000, 10, 2)), fill = 'lightblue', size = 1)+
@@ -405,7 +405,7 @@ $$\text{Dataset 1} = \{0.1, 1.1, 2.6, 2.7, 3.4, 3.4, 4.1, 4.4, 8.8, 9.6\}$$
 $$\text{Dataset 2}= \{0.1, 0.3, 1.2, 2.4, 4.4, 4.5, 8.0, 8.9, 9.3, 9.3\}$$
 $$\text{Dataset 3} = \{1.1, 3.8, 5.3, 6.0, 6.2, 6.9, 7.9, 7.9, 8.1, 8.7\}$$
 $$\text{Dataset 4} = \{3.4, 4.5, 5.4, 5.6, 7.0, 8.5, 8.9, 9.2, 9.7, 9.7\}$$
-```{r, echo=FALSE, message=FALSE, warning=F}
+```{r, echo=FALSE, message=FALSE, warning=F, fig.alt = "Four histograms in a 2 by 2 grid, each using bins 0-2, 2-4, 4-6, 6-8 and 8-10 with frequency on the y-axis. Bar heights, in bin order: Distribution A: 2, 4, 2, 0, 2. Distribution B: 1, 1, 2, 4, 2. Distribution C: 0, 1, 3, 1, 5. Distribution D: 3, 1, 2, 1, 3."}
 
 set.seed(123)
 
@@ -461,7 +461,7 @@ kable(cereal, format = tbl_fmt, col.names = c("Brand", "Sodium (mg)", "Sugar (g)
 * **(a)** Construct a histogram of the data using the following bins: $\leq 2 (g)$, $2 - 4 (g)$, 
 $4 - 6 (g)$, $6 - 8 (g)$,$8 - 10 (g)$, $10 - 12 (g)$, $12 - 14 (g)$,$14 - 16 (g)$,$> 16 (g)$ (hint start by creating a frequency table) 
 
-```{r, fig.cap = "(A) Histogram of the variable sugar (g) using the bins in the frequency table (above)", fig.height=3, fig.width=4, echo=FALSE, message = FALSE, warning=FALSE}
+```{r, fig.cap = "(A) Histogram of the variable sugar (g) using the bins in the frequency table (above)", fig.height=3, fig.width=4, echo=FALSE, message = FALSE, warning=FALSE, fig.alt = "Histogram of sugar (g) with 2-gram bins: 0-2 frequency 2, 2-4 frequency 4, 4-6 frequency 2, 6-8 frequency 1, 8-10 frequency 2, 10-12 frequency 4, 12-14 frequency 2, 14-16 frequency 2, 16-18 frequency 1, 18-20 frequency 0."}
 A = ggplot(data = cereal, aes(x = Sugar))+
   geom_histogram(breaks = seq(0, 20, 2), color = 'black', fill = 'grey')+
   theme_classic()+
@@ -514,7 +514,7 @@ mode(s) $= 3,4,11,12,14$</span>
 
 * **(e)** Create a box and whisker plot for the variable "Sugar (g)" and mark the Q1, Q2, and Q3 quartiles, the median and any potential outliers
 
-```{r, fig.cap = "Boxplot of Sugar content in 20 cereal brands", fig.height=5, fig.width=6, echo=FALSE, message = FALSE, warning=FALSE}
+```{r, fig.cap = "Boxplot of Sugar content in 20 cereal brands", fig.height=5, fig.width=6, echo=FALSE, message = FALSE, warning=FALSE, fig.alt = "Horizontal box plot of sugar (g) for 20 cereals, labeled Min = 0, Q1 = 4, Median = 9.5, Q3 = 13, Max = 18 and IQR = 9. The whiskers reach the minimum and maximum; there are no outliers."}
 X = cereal$Sugar
 
 mi = min(X)
@@ -531,7 +531,7 @@ text(x=Q3-Q1, labels =paste("IQR", Q3 - Q1, sep = " = "), y=1.5, cex = 0.68)
 
 * **(f)** Plot the Cumulative Distribution of the variable "Sugar (g)"
 
-```{r, fig.cap = "Cumulative Distribution of Sugar (g)", fig.height=3, fig.width=4, echo=FALSE, message = FALSE, warning=FALSE}
+```{r, fig.cap = "Cumulative Distribution of Sugar (g)", fig.height=3, fig.width=4, echo=FALSE, message = FALSE, warning=FALSE, fig.alt = "Step plot of the cumulative relative frequency of sugar (g), with points at the upper end of each 2-gram bin: 0.10 at 2, 0.30 at 4, 0.40 at 6, 0.45 at 8, 0.55 at 10, 0.75 at 12, 0.85 at 14, 0.95 at 16 and 1.00 at 18."}
 
 A=ggplot()+geom_step(aes(x = x_rounded$breaks[2:10], y = x_crf[1:9]), size = 0.8)+
   geom_point(aes(x = x_rounded$breaks[2:10], y = x_crf[1:9]), size = 3)+

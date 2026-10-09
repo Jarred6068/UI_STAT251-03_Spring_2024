@@ -120,7 +120,7 @@ kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = T)%
 
 $\bf 11.)$ Consider the following distribution of the diameter at breast height (DBH) of a sample of Western red cedar trees. Assume that these trees have an average DBH of about $35$ inches and the standard deviation for DBH is $6$ inches. Use the empirical rule to help you answer parts (a) and (b) and show any/all work.
 
-```{r, echo=FALSE, fig.height=2.5, fig.width=4, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, fig.height=2.5, fig.width=4, message=FALSE, warning=FALSE, fig.alt = "Histogram titled Distribution of Tree DBH, For Western Red Cedars, showing the frequency of diameter at breast height for 1,000 trees in 16 bins about 2.75 inches wide, with the x-axis labeled at 17, 23, 29, 35, 41, 47 and 53. The bars form a single peak of about 165 trees near 35 and fall off on both sides to only a few trees below 20 and above 50, with one tree near 60."}
 set.seed(592)
 x = rnorm(1000, mean = 35, sd = 6)
 

@@ -446,7 +446,7 @@ kable(rbind.data.frame(GaltonFamilies[1:10,], rep('$\\vdots$', 8), GaltonFamilie
 
    Now consider the histogram for child height:
   
-```{r, eval = T, echo = F, message=F, warning=F, fig.height=4, fig.width=10}
+```{r, eval = T, echo = F, message=F, warning=F, fig.height=4, fig.width=10, fig.alt = "Two histograms of the heights of 934 children in Galton's data, ranging from 56 to 79 inches. Left, all children together, showing two peaks. Right, the same heights with separate bars for females and males: female heights cluster around 64 inches and male heights around 69 inches, matching the two peaks on the left."}
 library(HistData)
 n = dim(GaltonFamilies)[1]
 #k = round(sqrt(n))
@@ -470,7 +470,7 @@ ggarrange(A, B, nrow = 1)
 
 * Another question we may ask about the shape of a distribution is whether the distribution is symmetric or if it is skewed. A distribution is **symmetric** if the values that are smaller and larger than its midpoint are mirror images. A distribution is **skewed right** if the values larger than the midpoint form a long tail. Conversely, a distribution is **skewed left** if the values less than the midpoint form a long tail to the left
 
-```{r, eval = T, echo = F, message=F, warning=F, fig.height=5, fig.width=6}
+```{r, eval = T, echo = F, message=F, warning=F, fig.height=5, fig.width=6, fig.alt = 'Four smooth density curves in a 2 by 2 grid, each with a dashed vertical line labelled midpoint. Symmetric: a bell shape whose two sides mirror each other. Skew Left: a peak on the right with a long tail stretching left. Skew Right: a peak on the left with a long tail stretching right. Bimodal: two separate humps with the midpoint in the dip between them.'}
 #distribution shapes
 set.seed(123)
 x1 = rbeta(100000, 2, 10)
@@ -523,7 +523,7 @@ ggarrange(sym, sl, sr, bm, nrow = 2, ncol = 2)
 
 Many types of variables have distributions with predictable shapes. For example, variables that represent measurements of size from the same species and sex such as height, length, and age will have symmetric distributions. Variables related to money or finance on the other hand will often have skewed distributions. Skewness arises when there is a strict boundary on the values of a variable. For example, housing prices are always positive numbers and many houses will be a similar price while some houses may be really expensive. For example, consider the distribution of housing prices from the 1990 california housing census data downloaded from [Kaggle](https://www.kaggle.com/datasets/camnugent/california-housing-prices?resource=download)
 
-```{r, eval = T, echo = F, message=F, warning=F, fig.height=5, fig.width=8}
+```{r, eval = T, echo = F, message=F, warning=F, fig.height=5, fig.width=8, fig.alt = 'Histogram of median house value, in thousands of dollars, for 20,640 California districts, ranging from 15 to 500. Most districts fall between about 100 and 270, with a long tail stretching to the right, plus a tall isolated spike at the top value of 500.'}
 
 housing = read.csv('Data/housing.csv')
 k = round(sqrt(dim(housing)[1]))
@@ -534,9 +534,9 @@ ggplot(data = housing, aes(x = median_house_value/1000))+
   ylab('Frequency')
 ```
 
-Lastly, one of the most important things a graphical summary of a variable can show is **outliers**. As previously noted, these are extreme values that fall far away from the normal pattern of the data. An outlier may be a result of measurement error or it can represent a real datapoint. Either way, outliers can strongly influence any analyses we conduct later on during statistical inference and are crucial to be aware of. Consider the following histogram of fuel efficiency (measured in miles per gallon) of several different car brands between 1999 and 2008 obtained from [https://fueleconomy.gov/](https://fueleconomy.gov/)
+Lastly, one of the most important things a graphical summary of a variable can show is **outliers**. As previously noted, these are extreme values that fall far away from the normal pattern of the data. An outlier may be a result of measurement error or it can represent a real datapoint. Either way, outliers can strongly influence any analyses we conduct later on during statistical inference and are crucial to be aware of. Consider the following histogram of fuel efficiency (measured in miles per gallon) of several different car brands between 1999 and 2008 obtained from [FuelEconomy.gov, the U.S. government fuel economy site](https://fueleconomy.gov/)
 
-```{r, eval = T, echo = F, message=F, warning=F, fig.height=5, fig.width=8}
+```{r, eval = T, echo = F, message=F, warning=F, fig.height=5, fig.width=8, fig.alt = 'Histogram of highway miles per gallon for 234 cars, with bars shaded according to a legend as Not Outlier or Outlier. Nearly all cars fall between 12 and 37 mpg, with one cluster in the high teens and another in the mid twenties. Past an empty gap, two short bars at about 41 and 44 mpg on the far right are shaded as Outlier.'}
 temp = ggplot2::mpg
 k = round(sqrt(dim(temp)[1]))
 
@@ -595,7 +595,7 @@ Notice that in the first set of calculations the mean was less than the median. 
 
  * This example illustrates how the mean and median behave depending the shape of a distribution. Distributions with skew will pull the value of the mean in the direction of the tail while the median will typically lie between the mode and the mean of the distribution
  
-```{r, eval = T, echo = F, message=F, warning=F, fig.height=5, fig.width=8}
+```{r, eval = T, echo = F, message=F, warning=F, fig.height=5, fig.width=8, fig.alt = 'Four histograms in a 2 by 2 grid, each marked with a dashed line labelled mean and a solid line labelled median. Symmetric and Bimodal: the two lines sit almost together in the middle. Skew Left: the mean lies to the left of the median, toward the long left tail. Skew Right: the mean lies to the right of the median, toward the long right tail.'}
 #distribution shapes
 set.seed(123)
 x1 = rbeta(100000, 2, 10)
@@ -711,7 +711,7 @@ Two other commonly useful percentiles are the $25^{th}$, and $75^{th}$ percentil
 * We denote the third quartile ($75^{th}$ percentile) as $Q3$. It is the median of the upper half of the data 
 
 
-```{r, echo=F, message=F, warning=F, fig.height=4, fig.width=8}
+```{r, echo=F, message=F, warning=F, fig.height=4, fig.width=8, fig.alt = 'A symmetric bell-shaped curve split by three dashed vertical lines marked Q1, Q2 and Q3 on the horizontal axis. The lines divide the area under the curve into four shaded regions, each holding one quarter of the distribution; Q2 sits at the centre, with Q1 and Q3 equally far on either side.'}
 #normal quantiles
 x = rnorm(1000000)
 probs <- c(0.25, 0.5, 0.75)

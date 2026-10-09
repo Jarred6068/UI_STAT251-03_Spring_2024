@@ -116,7 +116,7 @@ error** is then `r sprintf("%.1f", fx$xbar)` - `r sprintf("%.1f", fx$mu)` =
 `r sprintf("%.1f", fx$error)` hours. If we took another random sample, we would get a different
 sampling error.
 
-```{r, echo=FALSE, out.width='55%', fig.align='center'}
+```{r, echo=FALSE, out.width='55%', fig.align='center', fig.alt = "Grid of 100 dots representing the school's students. A dashed box labelled sampling frame: the registrar's list encloses 90 of them; the 10 grey dots below the box are labelled 10 late enrollees - not on the list. Ten dots scattered inside the box are filled red, marking the simple random sample."}
 knitr::include_graphics('assets/l8_frame_example.png')
 ```
 
@@ -181,7 +181,7 @@ actual data. It shows a single curve matched to the values in the 2008 FDA label
 ox <- read.csv('assets/l8_oxy_example.csv')
 ```
 
-```{r, echo=FALSE, out.width='55%', fig.align='center'}
+```{r, echo=FALSE, out.width='55%', fig.align='center', fig.alt = "The same illustrative OxyContin blood-level curve, in ng/mL against hours after one 10 mg dose, drawn twice. Top, on a log axis from 1 to 100, the curve rises to its peak near 3 hours and then looks almost flat out to 12 hours. Bottom, on a linear axis, the same curve clearly falls from its peak of about 10.6 to about 3.2 by 12 hours."}
 knitr::include_graphics('assets/l8_oxycontin_axes.png')
 ```
 
@@ -283,7 +283,7 @@ estimate is one shot at the target. Every time we take a sample and compute the 
 a shot and see where it lands. If we take a new sample, we take a new shot. There are two different
 things that can go wrong:
 
-```{r, echo=FALSE, out.width='55%', fig.align='center'}
+```{r, echo=FALSE, out.width='55%', fig.align='center', fig.alt = "Four targets in a 2 by 2 grid, columns labelled precise and not precise, rows labelled accurate and not accurate. Accurate and precise: shots tightly grouped on the bullseye. Accurate, not precise: shots scattered widely around the bullseye. Precise, not accurate: a tight group off to one side. Neither: shots scattered and off to one side."}
 knitr::include_graphics('assets/l8_bullseye.png')
 ```
 
@@ -304,7 +304,7 @@ times a week. One survey asks $n = 2000$ people at the Student Recreation Center
 people exercise that often. The other survey is a simple random sample of only $n = 200$ students.
 We repeat each survey 5000 times.
 
-```{r, echo=FALSE, out.width='75%', fig.align='center'}
+```{r, echo=FALSE, out.width='75%', fig.align='center', fig.alt = "Two histograms of the estimates from 5000 repeated surveys, with a vertical line marking the truth at 40%. The simple random sample of 200 gives a wide bell-shaped spread from about 30% to 50%, centred on the 40% line. The Rec Center survey of 2000 gives a very narrow spike around 75%, far to the right of the truth."}
 knitr::include_graphics('assets/l8_bias_vs_n.png')
 ```
 
@@ -334,7 +334,7 @@ $10 \times 10$ grid, where each row is a class year (40 first-years, 30 sophomor
 10 seniors). Every design draws a sample of $n = 20$ students, so each student in the SRS below had
 a $20/100$, or 1 in 5, chance of being selected.
 
-```{r, echo=FALSE, out.width='45%', fig.align='center'}
+```{r, echo=FALSE, out.width='45%', fig.align='center', fig.alt = "10 by 10 grid of 100 students, one row per class year: four rows of first-years, three of sophomores, two of juniors and one of seniors, identified by a legend. Twenty dots scattered across the grid are filled red as the simple random sample: 8 first-years, 6 sophomores, 2 juniors and 4 seniors."}
 knitr::include_graphics('assets/l8_design_srs.png')
 ```
 
@@ -367,7 +367,7 @@ unit is put back after it is drawn, so the same unit could show up in the sample
 (`sample(..., replace = TRUE)`). When $N$ is much larger than $n$, the two methods are practically
 the same, because the chance of drawing the same unit twice is very small.
 
-```{r, echo=FALSE, out.width='100%', fig.align='center'}
+```{r, echo=FALSE, out.width='100%', fig.align='center', fig.alt = "Two rows of drawings from a box of balls numbered 1 to 5. Without replacement: draw 3, draw 1, draw 5, and each drawn ball is shown greyed out and removed, giving the sample 3, 1, 5. With replacement: draw 3, draw 1, draw 3, and all five balls stay in the box every time, giving the sample 3, 1, 3."}
 knitr::include_graphics('assets/l8_replacement.png')
 ```
 
@@ -413,7 +413,7 @@ A **systematic sample** selects every $k^{th}$ unit from an ordered list, starti
 $k = N/n = 5$. In the figure below, the 100 students are numbered in list order. The random
 starting point was 2, so the sample is made up of positions 2, 7, 12, 17, ..., 97.
 
-```{r, echo=FALSE, out.width='100%', fig.align='center'}
+```{r, echo=FALSE, out.width='100%', fig.align='center', fig.alt = "The 100 students numbered 1 to 100 in four rows of 25. Starting at 2, curved arrows labelled +5 jump to every fifth number, and the selected cells 2, 7, 12, 17 and so on up to 97 are highlighted, making 20 in all. The highlighted cells line up in the same columns in every row."}
 knitr::include_graphics('assets/l8_design_systematic.png')
 ```
 
@@ -444,7 +444,7 @@ Under **proportional allocation**, each stratum gets its share of the total samp
 population is 40% first-years, 30% sophomores, 20% juniors, and 10% seniors, so a sample of 20
 students would take 8, 6, 4, and 2 students from each class year, respectively.
 
-```{r, echo=FALSE, out.width='45%', fig.align='center'}
+```{r, echo=FALSE, out.width='45%', fig.align='center', fig.alt = "The same 10 by 10 grid of students, with dashed lines separating the four class-year strata. Red dots mark a separate random sample within each stratum: 8 of the 40 first-years, 6 of the 30 sophomores, 4 of the 20 juniors and 2 of the 10 seniors."}
 knitr::include_graphics('assets/l8_design_stratified.png')
 ```
 
@@ -471,7 +471,7 @@ stratified sample of $n = 30$ we would take
 $$\text{female: } 30 \times \frac{262}{379} = `r round(30 * n_f / 379, 2)` \approx `r alloc_f`, \qquad
 \text{male: } 30 \times \frac{117}{379} = `r round(30 * n_m / 379, 2)` \approx `r alloc_m`$$
 
-```{r, echo=FALSE, out.width='80%', fig.align='center'}
+```{r, echo=FALSE, out.width='80%', fig.align='center', fig.alt = "Two stacked bars comparing proportions. Population, N = 379: Female 262 (69%) and Male 117 (31%). Sample, n = 30: Female 21 (70%) and Male 9 (30%). The two bars are split at almost the same point."}
 knitr::include_graphics('assets/l8_heights_allocation.png')
 ```
 
@@ -498,7 +498,7 @@ or a village. A **cluster sample** takes an SRS of clusters and then measures <i
 the clusters that were chosen. In the figure below, each column is a cluster, and two columns were
 chosen at random.
 
-```{r, echo=FALSE, out.width='45%', fig.align='center'}
+```{r, echo=FALSE, out.width='45%', fig.align='center', fig.alt = "The same 10 by 10 grid of students, with each of the 10 columns outlined as a cluster. Two columns are highlighted and every student in them is filled red, giving 20 students; each chosen column contains all four class years."}
 knitr::include_graphics('assets/l8_design_cluster.png')
 ```
 
@@ -516,7 +516,7 @@ A **two-stage cluster sample** first takes an SRS of clusters (stage 1) and then
 units within each chosen cluster (stage 2). In the figure below, 4 of the 10 columns were chosen,
 and then 5 students were chosen from each of those columns.
 
-```{r, echo=FALSE, out.width='45%', fig.align='center'}
+```{r, echo=FALSE, out.width='45%', fig.align='center', fig.alt = "The same 10 by 10 grid of students with the columns outlined as clusters. Four columns are highlighted as chosen at stage 1, and within each of them 5 students are filled red as the stage 2 sample, giving 20 students."}
 knitr::include_graphics('assets/l8_design_two_stage.png')
 ```
 
@@ -536,7 +536,7 @@ Strata and clusters are easy to mix up, since both involve dividing the populati
 difference is in what the groups look like inside, and as a result, how many of the groups we
 sample:
 
-```{r, echo=FALSE, out.width='100%', fig.align='center'}
+```{r, echo=FALSE, out.width='100%', fig.align='center', fig.alt = "Three versions of the 10 by 10 student grid side by side, each with 20 students in red. Simple random: red dots scattered unevenly over the grid. Stratified: dashed lines split the grid into class-year rows, with red dots taken from every stratum in proportion. Cluster: two whole columns outlined and filled red."}
 knitr::include_graphics('assets/l8_three_designs.png')
 ```
 
@@ -666,7 +666,7 @@ study.
 * Two variables are **confounded** when their effects on the response cannot be separated, so
   neither effect can be credited to one variable alone.
 
-```{r, echo=FALSE, out.width='65%', fig.align='center'}
+```{r, echo=FALSE, out.width='65%', fig.align='center', fig.alt = "Diagram with three boxes. A box labelled Lurking variable Z at the top has arrows pointing down to both Explanatory variable X and Response variable Y. Between X and Y a dashed arrow is labelled association above and cause? below."}
 knitr::include_graphics('assets/l8_confounding.png')
 ```
 
@@ -977,7 +977,7 @@ The simplest type of experimental design is the **completely randomized design**
 is assigned to a treatment completely at random. The COVID-19 vaccine trial above was a completely
 randomized design with two groups.
 
-```{r, echo=FALSE, out.width='85%', fig.align='center'}
+```{r, echo=FALSE, out.width='85%', fig.align='center', fig.alt = "Flow chart: 40 experimental units go to random assignment, which splits them into Group 1, 20 units given the treatment, and Group 2, 20 units given a control (placebo). Both groups then feed into compare responses."}
 knitr::include_graphics('assets/l8_crd.png')
 ```
 
@@ -988,7 +988,7 @@ Blocks are formed <i>before</i> the treatments are assigned. In a **randomized b
 random assignment is done separately within each block, and the treatments are compared within
 blocks.
 
-```{r, echo=FALSE, out.width='85%', fig.align='center'}
+```{r, echo=FALSE, out.width='85%', fig.align='center', fig.alt = "Flow chart with two separate rows. Block 1, 30 women, goes to its own random assignment into treatment and control, then compare within the block. Block 2, 20 men, does the same: random assignment into treatment and control, then compare within the block."}
 knitr::include_graphics('assets/l8_rcbd.png')
 ```
 
@@ -1004,7 +1004,7 @@ similar units, such as twins or two plots of land side by side. Within each pair
 decide which unit gets which treatment. Another option is to have each subject serve as their own
 pair by receiving both treatments in a random order.
 
-```{r, echo=FALSE, out.width='85%', fig.align='center'}
+```{r, echo=FALSE, out.width='85%', fig.align='center', fig.alt = "Flow chart with three rows, Pair 1, Pair 2 and Pair 3, each a pair of twins. For each pair a coin flip decides that one twin gets the treatment and the other gets the control."}
 knitr::include_graphics('assets/l8_matched_pairs.png')
 ```
 
@@ -1038,7 +1038,7 @@ Here is one way to think about it:
 Chance plays two different roles in a study, and each one lets us draw a different kind of
 conclusion:
 
-```{r, echo=FALSE, out.width='80%', fig.align='center'}
+```{r, echo=FALSE, out.width='80%', fig.align='center', fig.alt = "A 2 by 2 table: rows ask randomly sampled? yes or no, columns ask randomly assigned to treatments? yes or no. Both yes: cause, and generalize to the population, rare, an experiment on a random sample. Sampled only: generalize but not cause, e.g. a random-sample survey. Assigned only: cause, but only for units like these, e.g. most clinical trials, which use volunteers. Neither: association in these units only, e.g. volunteers who chose their own treatment."}
 knitr::include_graphics('assets/l8_sampling_vs_assignment.png')
 ```
 
@@ -1207,22 +1207,22 @@ associated with both can produce that association with no causal link anywhere i
 * AAPOR Task Force on 2020 Pre-Election Polling (2021). *Executive Summary*. American Association
   for Public Opinion Research.
 * AP-NORC Center for Public Affairs Research and USAFacts (2026). *State of the Facts 2026*.
-  <https://apnorc.org/projects/state-of-the-facts-2026/> (report:
-  <https://apnorc.org/wp-content/uploads/2026/09/State_of_the_facts_2026.pdf>)
+  [AP-NORC project page: State of the Facts 2026](https://apnorc.org/projects/state-of-the-facts-2026/) (report:
+  [State of the Facts 2026 full report (PDF)](https://apnorc.org/wp-content/uploads/2026/09/State_of_the_facts_2026.pdf))
 * Blackburn, I. and Kunadian, V. (2026). Hormone replacement therapy and cardiovascular risk in
   postmenopausal women. *European Heart Journal Open*, 6(2), oeag054.
-  <https://doi.org/10.1093/ehjopen/oeag054>
+  [Blackburn and Kunadian (2026), European Heart Journal Open article](https://doi.org/10.1093/ehjopen/oeag054)
 * Bofill Rodriguez, M., Yong, L. N., Mirkov, S., Bekos, C., Lethaby, A. and Farquhar, C. (2025).
   Long-term hormone therapy for perimenopausal and postmenopausal women. *Cochrane Database of
-  Systematic Reviews*, 11, CD004143. <https://doi.org/10.1002/14651858.CD004143.pub6>
+  Systematic Reviews*, 11, CD004143. [Bofill Rodriguez et al. (2025), Cochrane review](https://doi.org/10.1002/14651858.CD004143.pub6)
 * Dai, J., Dai, W., Heianza, Y. and Qi, L. (2026). Nighttime light exposure and cardiac structure
-  and function. *European Heart Journal*. <https://doi.org/10.1093/eurheartj/ehag563>
+  and function. *European Heart Journal*. [Dai et al. (2026), European Heart Journal article](https://doi.org/10.1093/eurheartj/ehag563)
 * European Society of Cardiology (2026, September 10). Too much light at night changes the shape and
   working of the heart. Press release.
-  <https://www.escardio.org/news/press/press-releases/too-much-light-at-night-changes-the-shape-and-working-of-the-heart/>
+  [ESC press release: Too much light at night changes the heart](https://www.escardio.org/news/press/press-releases/too-much-light-at-night-changes-the-shape-and-working-of-the-heart/)
 * Freedman, N. D., Park, Y., Abnet, C. C., Hollenbeck, A. R. and Sinha, R. (2012). Association of
   coffee drinking with total and cause-specific mortality. *New England Journal of Medicine*,
-  366(20), 1891–1904. <https://doi.org/10.1056/NEJMoa1112010>
+  366(20), 1891–1904. [Freedman et al. (2012), New England Journal of Medicine article](https://doi.org/10.1056/NEJMoa1112010)
 * Grodstein, F. et al. (1996). Postmenopausal estrogen and progestin use and the risk of
   cardiovascular disease. *New England Journal of Medicine*, 335, 453–461.
 * Hill, A. B. (1965). The environment and disease: association or causation? *Proceedings of the
@@ -1230,47 +1230,47 @@ associated with both can produce that association with no causal link anywhere i
 * Humphrey, L. L., Chan, B. K. and Sox, H. C. (2002). Postmenopausal hormone replacement therapy
   and the primary prevention of cardiovascular disease. *Annals of Internal Medicine*, 137, 273–284.
 * Illowsky, B. and Dean, S. (2023). *Introductory Statistics 2e*, Sections 1.2 and 1.4–1.6.
-  OpenStax. <https://openstax.org/details/books/introductory-statistics-2e>
+  OpenStax. [OpenStax: Introductory Statistics 2e](https://openstax.org/details/books/introductory-statistics-2e)
 * Kennedy, C. and Hartig, H. (2019). Response rates in telephone surveys have resumed their
   decline. Pew Research Center.
 * Kim, H.-S. et al. (2026). Coffee consumption and improved liver outcomes: clinical, imaging, and
   proteomic evidence from the UK Biobank. *Clinical Gastroenterology and Hepatology*.
-  <https://doi.org/10.1016/j.cgh.2026.04.035>
+  [Kim et al. (2026), Clinical Gastroenterology and Hepatology article](https://doi.org/10.1016/j.cgh.2026.04.035)
 * Kramer, A. D. I., Guillory, J. E. and Hancock, J. T. (2014). Experimental evidence of
   massive-scale emotional contagion through social networks. *PNAS*, 111(24), 8788–8790.
-  <https://doi.org/10.1073/pnas.1320040111>
+  [Kramer, Guillory and Hancock (2014), PNAS article](https://doi.org/10.1073/pnas.1320040111)
 * Lu, T. F. et al. (2026). Long-term systemic outcomes of postmenopausal hormone replacement
   therapy by age at menopause: a real-world cohort study. *Human Reproduction Open*, 2026(3),
-  hoag072. <https://doi.org/10.1093/hropen/hoag072>
+  hoag072. [Lu et al. (2026), Human Reproduction Open article](https://doi.org/10.1093/hropen/hoag072)
 * Manson, J. E. et al. (2019a). Vitamin D supplements and prevention of cancer and cardiovascular
-  disease. *New England Journal of Medicine*, 380(1), 33–44. <https://doi.org/10.1056/NEJMoa1809944>
+  disease. *New England Journal of Medicine*, 380(1), 33–44. [Manson et al. (2019a), New England Journal of Medicine article](https://doi.org/10.1056/NEJMoa1809944)
 * Manson, J. E. et al. (2019b). Marine n−3 fatty acids and prevention of cardiovascular disease and
-  cancer. *New England Journal of Medicine*, 380(1), 23–32. <https://doi.org/10.1056/NEJMoa1811403>
+  cancer. *New England Journal of Medicine*, 380(1), 23–32. [Manson et al. (2019b), New England Journal of Medicine article](https://doi.org/10.1056/NEJMoa1811403)
 * Marcus, G. M., Hu, F. B., van Dam, R. M. et al. (2026). Caffeine and cardiovascular disease: a
   scientific statement from the American Heart Association. *Circulation*, 154, e345–e355.
-  <https://doi.org/10.1161/CIR.0000000000001454>
+  [Marcus et al. (2026), AHA scientific statement in Circulation](https://doi.org/10.1161/CIR.0000000000001454)
 * The Menopause Society (2025, October 10). *Oral or transdermal hormone therapy? The mental health
   risks are not the same*. Press release.
-  <https://menopause.org/press-releases/oral-or-transdermal-hormone-therapy-the-mental-health-risks-are-not-the-same>
+  [The Menopause Society press release on oral vs. transdermal hormone therapy](https://menopause.org/press-releases/oral-or-transdermal-hormone-therapy-the-mental-health-risks-are-not-the-same)
 * Mercer, A., Kennedy, C. and Keeter, S. (2024). Online opt-in polls can produce misleading results,
   especially for young people and Hispanic adults. Pew Research Center.
 * Moseley, J. B. et al. (2002). A controlled trial of arthroscopic surgery for osteoarthritis of
-  the knee. *New England Journal of Medicine*, 347(2), 81–88. <https://doi.org/10.1056/NEJMoa013259>
+  the knee. *New England Journal of Medicine*, 347(2), 81–88. [Moseley et al. (2002), New England Journal of Medicine article](https://doi.org/10.1056/NEJMoa013259)
 * Münzel, T., Kuntic, M. and Daiber, A. (2026). The dark night as a cardiovascular vital sign:
   personal light exposure, subclinical cardiac remodelling, and the urban exposome. *European Heart
-  Journal*, ehag650. <https://doi.org/10.1093/eurheartj/ehag650>
+  Journal*, ehag650. [Münzel, Kuntic and Daiber (2026), European Heart Journal article](https://doi.org/10.1093/eurheartj/ehag650)
 * NORC at the University of Chicago (n.d.). About AmeriSpeak.
-  <https://www.norc.org/services-solutions/amerispeak/about.html>
+  [NORC: About AmeriSpeak](https://www.norc.org/services-solutions/amerispeak/about.html)
 * Polack, F. P. et al. (2020). Safety and efficacy of the BNT162b2 mRNA Covid-19 vaccine. *New
-  England Journal of Medicine*, 383(27), 2603–2615. <https://doi.org/10.1056/NEJMoa2034577>
+  England Journal of Medicine*, 383(27), 2603–2615. [Polack et al. (2020), New England Journal of Medicine article](https://doi.org/10.1056/NEJMoa2034577)
 * U.S. Department of Health and Human Services (2014). *The Health Consequences of Smoking — 50
   Years of Progress: A Report of the Surgeon General*.
 * U.S. Food and Drug Administration (2025, November 10). *FDA requests labeling changes related to
   safety information to clarify the benefit/risk considerations for menopausal hormone therapies*.
-  <https://www.fda.gov/drugs/drug-alerts-and-statements/fda-requests-labeling-changes-related-safety-information-clarify-benefitrisk-considerations>
+  [FDA statement, November 2025: labeling changes for menopausal hormone therapies](https://www.fda.gov/drugs/drug-alerts-and-statements/fda-requests-labeling-changes-related-safety-information-clarify-benefitrisk-considerations)
 * U.S. Food and Drug Administration (2026, February 12). *FDA approves labeling changes to
   menopausal hormone therapy products*.
-  <https://www.fda.gov/news-events/press-announcements/fda-approves-labeling-changes-menopausal-hormone-therapy-products>
+  [FDA press announcement, February 2026: labeling changes approved](https://www.fda.gov/news-events/press-announcements/fda-approves-labeling-changes-menopausal-hormone-therapy-products)
 * Writing Group for the Women's Health Initiative Investigators (2002). Risks and benefits of
   estrogen plus progestin in healthy postmenopausal women. *JAMA*, 288(3), 321–333.
-  <https://doi.org/10.1001/jama.288.3.321>
+  [Women's Health Initiative (2002), JAMA article](https://doi.org/10.1001/jama.288.3.321)

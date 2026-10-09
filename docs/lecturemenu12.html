@@ -61,26 +61,42 @@
 </script>
 
 <!--
-  MathJax: render with SVG rather than the default HTML-CSS output.
+  MathJax 4, SVG output, with speech.
 
-  HTML-CSS builds a square root's overline out of stretched glyph pieces, and
-  headless Chrome prints the result too wide: on the Exam 1 study guide the bar
-  over sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran well past the expression and
-  collided with the line above it. The same overshoot showed up wherever a tall
-  \sqrt was printed, including the Exam 1 review problems.
+  WHY VERSION 4. The pages used to load MathJax 2.7 from mathjax.rstudio.com.
+  Its SVG output is aria-hidden and has no spoken text. The only thing assistive
+  technology got was a hidden MathML copy, which only a screen reader with a math
+  module (NVDA + MathCAT, JAWS, VoiceOver) can voice. Read-aloud tools (Edge and
+  Chrome Read Aloud, Read&Write, Speechify, phone Speak Screen) read nothing, or
+  stray letters, for all ~6,000 expressions on the site. MathJax 4 runs Speech
+  Rule Engine on every expression and attaches a natural-language label, e.g.
+  "P of open paren X is greater than or equal to 2 close paren equals ...",
+  that any text-to-speech tool or screen reader reads.
 
-  Checked by printing the identical formula three ways before changing anything:
-  HTML-CSS overshoots, MathJax 3 (CHTML) overshoots more, and the v2 SVG
-  renderer draws the rule to exactly the right width. It is not a timing
-  problem - reprinting with a 90-second budget produced the same bad bar.
+  WHY SVG. CHTML output (v2 HTML-CSS, and v3 CHTML) prints square-root bars too
+  wide in headless Chrome: on the Exam 1 study guide the bar over
+  sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran past the expression into the line
+  above. SVG draws it the right width; re-checked with v4 SVG before switching.
 
-  This has to live in <head>: rmarkdown injects the MathJax <script> at the end
-  of <body>, and MathJax applies any text/x-mathjax-config block it finds in the
-  document when it starts. SVG output inherits currentColor, so both themes are
-  unaffected (see the MathJax rule in assets/brand/site.css).
+  The script URL itself is set by `mathjax:` in _site.yml and in every
+  per-directory _output.yml (rmarkdown injects it at the end of <body>). This
+  block has to be in <head> so window.MathJax exists before that script runs.
+  Keep the version pinned and the same in all seven places.
+
+  inTabOrder: false. MathJax makes every expression a Tab stop by default (for
+  its keyboard explorer), which put ~300 Tab stops on a single lecture page in
+  front of the links a keyboard user is trying to reach. Screen-reader users
+  still reach every expression in browse mode, and the label is on the
+  expression either way. It is options.a11y, NOT menuOptions.settings - the
+  menu setting is accepted but ignored at startup.
+
+  SVG output inherits currentColor, so both themes are unaffected (see the
+  MathJax rule in assets/brand/site.css).
 -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({ menuSettings: { renderer: "SVG" } });
+<script>
+window.MathJax = {
+  options: { a11y: { inTabOrder: false } }
+};
 </script>
 
 <style type="text/css">
@@ -582,8 +598,8 @@ Do the data provide enough evidence to show that the proportion of
 deaths of Aboriginal prisoners is more than <span
 class="math inline">\(0.27\%\)</span>?</li>
 </ol>
-<div id="parametric-vs-non-parametric-tests" class="section level3">
-<h3>Parametric vs Non-parametric tests</h3>
+<div id="parametric-vs-non-parametric-tests" class="section level2">
+<h2>Parametric vs Non-parametric tests</h2>
 <p>The hypothesis tests that we have learned up to this point are called
 <strong>parametric</strong> tests. Parametric tests make assumptions
 about the population distribution from which the data are sampled. For
@@ -624,8 +640,8 @@ analogues</li>
 </ol></li>
 </ul>
 </div>
-<div id="the-sign-test" class="section level3">
-<h3>The sign test</h3>
+<div id="the-sign-test" class="section level2">
+<h2>The sign test</h2>
 <p>The sign test is a non-parametric significance test that is typically
 used for paired observations such as data gathered from a matched-pairs
 designs. For example, consider an experiment where individuals are
@@ -981,7 +997,7 @@ binomial random variable with probability <span class="math inline">\(p
 signs and <span class="math inline">\(s\)</span> is the number of
 positive signs. Thus the sampling distribution of the number of positive
 signs is a binomial distribution</p>
-<p><img src="lecturemenu12_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="lecturemenu12_files/figure-html/unnamed-chunk-2-1.png" alt="Bar chart of the binomial distribution with n equals 14 and p equals 0.5: probability for each number of positive signs from 0 to 14. The bars are symmetric, peaking at 7 with probability 0.2095. The bars for 11 through 14 are highlighted, and the plot is labeled P of X greater than or equal to 11 equals 0.0287." width="672" /></p>
 <p>Recall that the <span class="math inline">\(p\)</span>-value of a
 significance test is the probability of observing a value as or more
 extreme than the test statistic. In the case of the sign test, the test
@@ -1975,8 +1991,8 @@ the null hypothesis and conclude the number of fish caught with each fly
 lure is not significantly different (i.e the probability of a positive
 sign is not significantly different than <span class="math inline">\(p =
 0.5\)</span>)</p>
-<div id="comparing-two-groups" class="section level3">
-<h3>Comparing Two Groups</h3>
+<div id="comparing-two-groups" class="section level2">
+<h2>Comparing Two Groups</h2>
 <p>Up to this point in the course we have learned how to conduct
 inference on a single sample. Analyzing a single variable is referred to
 as <strong>univariate</strong> analysis. However, in statistics we are
@@ -1998,8 +2014,8 @@ sample from a distinct population. Thus two-sample tests are used to
 compare the population parameters of <u>two different
 populations</u>.</p>
 </div>
-<div id="independent-vs-dependent-samples" class="section level3">
-<h3>Independent vs Dependent Samples</h3>
+<div id="independent-vs-dependent-samples" class="section level2">
+<h2>Independent vs Dependent Samples</h2>
 <p>In bivariate analyses, we have to be considerate of whether the
 samples belonging to the two groups are dependent or independent.</p>
 <ul>
@@ -2017,11 +2033,11 @@ matched pair designs</p></li>
 two groups. This is because computing the standard error under dependent
 samples can be a very complex computation (more on this later).</p>
 </div>
-<div id="introduction-to-two-sample-tests" class="section level3">
-<h3>Introduction to two-sample tests</h3>
+<div id="introduction-to-two-sample-tests" class="section level2">
+<h2>Introduction to two-sample tests</h2>
 </div>
-<div id="comparing-two-proportions" class="section level3">
-<h3>Comparing two proportions</h3>
+<div id="comparing-two-proportions" class="section level2">
+<h2>Comparing two proportions</h2>
 <p>Comparative studies, such as comparing two related but distinct
 groups, are by far the most common type of statistical analysis. We
 often want to compare the proportions of individuals from two groups
@@ -2300,8 +2316,8 @@ can easily construct a hypothesis test which will allow us to formally
 evaluate whether an observed difference between two groups is
 statistically significant or merely due to random variation.</p>
 <div id="significance-tests-for-comparing-two-proportions"
-class="section level3">
-<h3>Significance tests for comparing two proportions</h3>
+class="section level2">
+<h2>Significance tests for comparing two proportions</h2>
 <p>A hypothesis test used to compare the population proportions from two
 different but independent groups is based on the standardized difference
 in proportion <span class="math inline">\(D\)</span>. Recall that, if
@@ -2583,9 +2599,9 @@ relative proportion of manuscripts with female first authors
 significantly decreased after the start of the COVID-19 pandemic.</p>
 <p><br> <br></p>
 </div>
-<div id="d-as-a-measure-of-association" class="section level3">
-<h3><span class="math inline">\(D\)</span> as a measure of
-association</h3>
+<div id="d-as-a-measure-of-association" class="section level2">
+<h2><span class="math inline">\(D\)</span> as a measure of
+association</h2>
 <p>Consider again the difference in proportion <span
 class="math inline">\(D\)</span>. In statistical analysis, we often
 study the relationship between two categorical variables. We are
@@ -2618,8 +2634,8 @@ each other</p></li>
 </ul>
 <p><br> <br> <br> <br></p>
 </div>
-<div id="references" class="section level3 unnumbered">
-<h3 class="unnumbered">References</h3>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0">
 <div id="ref-mogensen2021impact" class="csl-entry">
@@ -2801,6 +2817,66 @@ Medicine</em> 321 (3): 129–35.
     bar.appendChild(link);
     main.insertBefore(bar, main.firstChild);
   }
+
+  /* 6. Author / date are not headings (WCAG 1.3.1, 2.4.6).
+        pandoc's template emits them as <h4 class="author"> and
+        <h4 class="date"> straight after the <h1> title. Screen-reader users
+        navigating by heading hear "heading level 4, STAT 251 Section 01" as if
+        it were a section, and it puts an h1 -> h4 skip at the top of every
+        page. Re-tag them as paragraphs; site.css styles them by class. */
+  var meta = document.querySelectorAll('#header h4.author, #header h4.date');
+  for (var k = 0; k < meta.length; k++) {
+    var h4 = meta[k];
+    var p = document.createElement('p');
+    p.className = h4.className;
+    while (h4.firstChild) p.appendChild(h4.firstChild);
+    h4.parentNode.replaceChild(p, h4);
+  }
+
+  /* 7. Solution answers carry more than colour (WCAG 1.4.1, 1.4.3).
+        Answers are marked three ways across the solution pages: an inline
+        style="color: red", the RA/RZ <div style="color: red;"> helper, and
+        class="soln". Colour was the only cue, so a screen reader, a
+        read-aloud tool, or a colour-blind reader could not tell the answer
+        from the question. Each one gets class .answer (site.css section 20b:
+        AA-contrast red, shaded box) and a screen-reader-only "Answer:" label.
+        The label goes on the outermost answer element only, so an answer
+        that contains another red span is announced once. Matching the inline
+        style here rather than editing the sources keeps the 2024 archive
+        untouched. */
+  /* el.style.color rather than a [style*=...] selector, which would also catch
+     background-color and border-color. Empty placeholder spans are skipped so
+     they do not render as an empty shaded box. */
+  var candidates = document.querySelectorAll('.main-container .soln, .main-container [style*="color"]');
+  var answers = [];
+  for (var a = 0; a < candidates.length; a++) {
+    var c = candidates[a];
+    var isRed = c.style.color === 'red' || c.style.color === 'rgb(255, 0, 0)';
+    if (!isRed && !c.classList.contains('soln')) continue;
+    if (!c.textContent.replace(/\s+/g, '') && !c.querySelector('img, svg')) continue;
+    c.classList.add('answer');
+    answers.push(c);
+  }
+  for (var b = 0; b < answers.length; b++) {
+    var el = answers[b];
+    if (el.parentNode.closest && el.parentNode.closest('.answer')) continue;
+    var label = document.createElement('span');
+    label.className = 'sr-only';
+    label.textContent = 'Answer: ';
+    el.insertBefore(label, el.firstChild);
+  }
+
+  /* 8. The decorative arrow in the back link (item 5) is read aloud as
+        "leftwards arrow". */
+  var back = document.querySelector('.site-backlink');
+  if (back) {
+    back.textContent = '';
+    var arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '\u2190 ';
+    back.appendChild(arrow);
+    back.appendChild(document.createTextNode('Back to course site'));
+  }
 })();
 </script>
 
@@ -2843,7 +2919,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-svg.js";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

@@ -45,7 +45,7 @@ Consider the following $95\%$ confidence interval for the null hypothesis $\mu =
   
   2. A concern was raised in Australia that the percentage of deaths of Aboriginal prisoners was higher than the percent of deaths of non-Aboriginal prisoners, which is $0.27\%$. A sample of six years (1990-1995) of data was collected, and it was found that out of $14,495$ Aboriginal prisoners, $51$ died ("Indigenous deaths in," 1996). Do the data provide enough evidence to show that the proportion of deaths of Aboriginal prisoners is more than $0.27\%$?
   
-### Parametric vs Non-parametric tests
+## Parametric vs Non-parametric tests
 
 The hypothesis tests that we have learned up to this point are called **parametric** tests. Parametric tests make assumptions about the population distribution from which the data are sampled. For example:
 
@@ -70,7 +70,7 @@ Another group of hypothesis tests are said to be **non-parametric**. Non-paramet
   1. They are generally less powerful than their parametric analogues
 
 
-### The sign test
+## The sign test
 
 The sign test is a non-parametric significance test that is typically used for paired observations such as data gathered from a matched-pairs designs. For example, consider an experiment where individuals are weighed before and after a treatment with a weight loss drug and the difference in weight is recorded. Such data is appropriate for the sign test. 
 
@@ -110,7 +110,7 @@ The null hypothesis indicates that the presence of a positive or negative sign i
 
 where $n$ is the total number of signs and $s$ is the number of positive signs. Thus the sampling distribution of the number of positive signs is a binomial distribution
 
-```{r, echo=FALSE, warning=F, message=F}
+```{r, echo=FALSE, warning=F, message=F, fig.alt = "Bar chart of the binomial distribution with n equals 14 and p equals 0.5: probability for each number of positive signs from 0 to 14. The bars are symmetric, peaking at 7 with probability 0.2095. The bars for 11 through 14 are highlighted, and the plot is labeled P of X greater than or equal to 11 equals 0.0287."}
 
 probtype = 'P(X >= k)'
 k = 11
@@ -249,13 +249,13 @@ The null hypothesis is $H_0: p_0 = 0.5$ the probability of positive sign is $50\
 
 Our $p$-value is greater than $\alpha$ and thus we fail to reject the null hypothesis and conclude the number of fish caught with each fly lure is not significantly different (i.e the probability of a positive sign is not significantly different than $p = 0.5$)
 
-### Comparing Two Groups
+## Comparing Two Groups
 
 Up to this point in the course we have learned how to conduct inference on a single sample. Analyzing a single variable is referred to as **univariate** analysis. However, in statistics we are often interested in comparing two different groups across some measurement. This involves exploring the relationship between two variables: An **explanatory variable** which defines the groups of interests and a **response variable** which measures the outcome of interest from each group. Examples include exploring the relationship between gender and height or between treatment group (i.e placebo group and treatment group) and patient outcome. 
 
 Statistical analyses that explore the relationship between two variables are called **bivariate** analyses. Just as we had univariate significance tests for a population mean and population proportion, we also have well defined significance tests for the inference of two variables - these are often called **two-sample tests** because we treat the observations in each group as a sample from a distinct population. Thus two-sample tests are used to compare the population parameters of <u>two different populations</u>. 
 
-### Independent vs Dependent Samples
+## Independent vs Dependent Samples
 In bivariate analyses, we have to be considerate of whether the samples belonging to the two groups are dependent or independent. 
   
   * **independent samples** - occur when the observations in one sample are independent (have no statistical association) of the observations in the other sample. This is most always the case in experiments that use randomization to allocate subjects to treatment groups
@@ -264,9 +264,9 @@ In bivariate analyses, we have to be considerate of whether the samples belongin
 
 Dependent samples cause some difficulties for bivariate analyses of two groups. This is because computing the standard error under dependent samples can be a very complex computation (more on this later).
 
-### Introduction to two-sample tests
+## Introduction to two-sample tests
 
-### Comparing two proportions
+## Comparing two proportions
 
 Comparative studies, such as comparing two related but distinct groups, are by far the most common type of statistical analysis. We often want to compare the proportions of individuals from two groups that share some characteristic. Examples include:
 
@@ -402,7 +402,7 @@ Recall the Aspirin and Heart Attacks example from **Lecture 25**. In that exampl
 
 Just as we did for population proportions in the univariate case, we can easily construct a hypothesis  test which will allow us to formally evaluate whether an observed difference between two groups is statistically significant or merely due to random variation. 
 
-### Significance tests for comparing two proportions
+## Significance tests for comparing two proportions
 
 A hypothesis test used to compare the population proportions from two different but independent groups is based on the standardized difference in proportion $D$. Recall that, if the samples obtained from each group are sufficiently large, then the sampling distribution of $D$ is approximately distributed as standard normal. Here’s how we set up a two-sample hypothesis test for proportions:
 
@@ -550,7 +550,7 @@ Since the $p$-value is less than the significance level of $5\%$, we reject the 
 <br>
 <br>
 
-### $D$ as a measure of association 
+## $D$ as a measure of association 
 
 Consider again the difference in proportion $D$. In statistical analysis, we often study the relationship between two categorical variables. We are regularly interested in whether one variable (the explanatory variable) influences or explains the outcomes of another variable (the response variable). The statistic $D$ is a measure of the strength of statistical association between some grouping variable and some response that is measured across those groups. Consider two populations (groups) based on some characteristic (e.g., treatment vs. control, male vs. female, etc). For each population the response variable records the fraction of the population that relates to some category or specific outcome (e.g. patient outcome, preference, occurrence of an event). The value of $D$ ranges between $-1$ and $1$ and has the following interpretation:
 
@@ -568,7 +568,7 @@ Given $D = p_1 - p_2$ which compares the difference in proportion across groups/
 <br>
 <br>
 
-### References
+## References
 
 
 

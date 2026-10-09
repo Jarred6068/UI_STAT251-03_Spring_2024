@@ -61,26 +61,42 @@
 </script>
 
 <!--
-  MathJax: render with SVG rather than the default HTML-CSS output.
+  MathJax 4, SVG output, with speech.
 
-  HTML-CSS builds a square root's overline out of stretched glyph pieces, and
-  headless Chrome prints the result too wide: on the Exam 1 study guide the bar
-  over sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran well past the expression and
-  collided with the line above it. The same overshoot showed up wherever a tall
-  \sqrt was printed, including the Exam 1 review problems.
+  WHY VERSION 4. The pages used to load MathJax 2.7 from mathjax.rstudio.com.
+  Its SVG output is aria-hidden and has no spoken text. The only thing assistive
+  technology got was a hidden MathML copy, which only a screen reader with a math
+  module (NVDA + MathCAT, JAWS, VoiceOver) can voice. Read-aloud tools (Edge and
+  Chrome Read Aloud, Read&Write, Speechify, phone Speak Screen) read nothing, or
+  stray letters, for all ~6,000 expressions on the site. MathJax 4 runs Speech
+  Rule Engine on every expression and attaches a natural-language label, e.g.
+  "P of open paren X is greater than or equal to 2 close paren equals ...",
+  that any text-to-speech tool or screen reader reads.
 
-  Checked by printing the identical formula three ways before changing anything:
-  HTML-CSS overshoots, MathJax 3 (CHTML) overshoots more, and the v2 SVG
-  renderer draws the rule to exactly the right width. It is not a timing
-  problem - reprinting with a 90-second budget produced the same bad bar.
+  WHY SVG. CHTML output (v2 HTML-CSS, and v3 CHTML) prints square-root bars too
+  wide in headless Chrome: on the Exam 1 study guide the bar over
+  sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran past the expression into the line
+  above. SVG draws it the right width; re-checked with v4 SVG before switching.
 
-  This has to live in <head>: rmarkdown injects the MathJax <script> at the end
-  of <body>, and MathJax applies any text/x-mathjax-config block it finds in the
-  document when it starts. SVG output inherits currentColor, so both themes are
-  unaffected (see the MathJax rule in assets/brand/site.css).
+  The script URL itself is set by `mathjax:` in _site.yml and in every
+  per-directory _output.yml (rmarkdown injects it at the end of <body>). This
+  block has to be in <head> so window.MathJax exists before that script runs.
+  Keep the version pinned and the same in all seven places.
+
+  inTabOrder: false. MathJax makes every expression a Tab stop by default (for
+  its keyboard explorer), which put ~300 Tab stops on a single lecture page in
+  front of the links a keyboard user is trying to reach. Screen-reader users
+  still reach every expression in browse mode, and the label is on the
+  expression either way. It is options.a11y, NOT menuOptions.settings - the
+  menu setting is accepted but ignored at startup.
+
+  SVG output inherits currentColor, so both themes are unaffected (see the
+  MathJax rule in assets/brand/site.css).
 -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({ menuSettings: { renderer: "SVG" } });
+<script>
+window.MathJax = {
+  options: { a11y: { inTabOrder: false } }
+};
 </script>
 
 <style type="text/css">
@@ -917,7 +933,7 @@ hypothesis test, which is coming after Exam 2.</p>
 </div>
 <div id="the-shape-of-a-binomial-distribution" class="section level2">
 <h2>The shape of a binomial distribution</h2>
-<p><img src="assets/l15_binomial_shapes.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l15_binomial_shapes.png" alt="Three bar charts of Binom(10, p), P(k) against k = 0 to 10. With p = 0.2 the bars peak at k = 2 and trail off to the right (skewed right); with p = 0.5 they are symmetric about k = 5; with p = 0.8 they peak at k = 8 and trail off to the left (skewed left)." width="100%" style="display: block; margin: auto;" /></p>
 <p>Each panel is <span class="math inline">\(\text{Binom}(10,
 p)\)</span>. With <span class="math inline">\(p = 0.5\)</span> the
 distribution is <strong>symmetric</strong>. When <span
@@ -1005,7 +1021,7 @@ class="math inline">\(P(\text{no goals in a half}) = e^{-1.34} \approx
 <p>The standard deviation is <span class="math inline">\(\sigma =
 \sqrt{2.69} \approx 1.64\)</span> goals. Here is the whole
 distribution:</p>
-<p><img src="assets/l15_poisson_goals.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l15_poisson_goals.png" alt="Bar chart of the Poisson(2.69) distribution of goals in a match, k = 0 to 8, with probabilities 0.07, 0.18, 0.25, 0.22, 0.15, 0.08, 0.04, 0.01 and less than 0.01. The peak is at 2 goals and there is a long right tail." width="80%" style="display: block; margin: auto;" /></p>
 <p>Two goals is the most likely score total, then three. The
 distribution is <strong>skewed right</strong>: <span
 class="math inline">\(X\)</span> cannot go below 0, but there is no
@@ -1102,7 +1118,7 @@ rectangle, base times height:</p>
 <li><span class="math inline">\(P(X &gt; 15) = (20 - 15) \times
 \frac{1}{20} = 0.25\)</span>.</li>
 </ul>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-5-1.png" alt="Uniform density for wait time: a flat line at height 1/20 from 0 to 20 minutes, with the rectangle from 4 to 15 minutes shaded and labelled P(4 &lt; X &lt; 15) = 0.55." width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="example-counting-boxes" class="section level3">
 <h3>Example: counting boxes</h3>
@@ -1111,7 +1127,7 @@ function on a grid. Each box is <span
 class="math inline">\(0.25\)</span> wide and <span
 class="math inline">\(0.16\)</span> tall, so each box has area <span
 class="math inline">\(0.25 \times 0.16 = 0.04\)</span>.</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-6-1.png" alt="Step-function density on a grid of dashed lines, X from -1 to 1 in steps of 0.25, density in steps of 0.16. Bar heights, in boxes, are 2, 3, 7, 5, 4, 2, 1 and 1 from left to right; the four bars left of 0 are shaded." width="864" style="display: block; margin: auto;" /></p>
 <p>There are 25 boxes under the curve in all, and <span
 class="math inline">\(25 \times 0.04 = 1\)</span>, so this is a valid
 density. The shaded region, to the left of 0, holds <span
@@ -1126,7 +1142,7 @@ a peak of 0.4 at <span class="math inline">\(W = 2\)</span>, then falls
 back to 0 at <span class="math inline">\(W = 5\)</span>. The whole
 triangle has area <span class="math inline">\(\frac{1}{2} \times 5
 \times 0.4 = 1\)</span>.</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-7-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-7-1.png" alt="Triangular density for W: a line rising from 0 at W = 0 to a peak of 0.4 at W = 2, then falling to 0 at W = 5. The small triangle from W = 0 to 1, reaching height 0.2, is shaded." width="864" style="display: block; margin: auto;" /></p>
 <ul>
 <li><span class="math inline">\(P(W \leq 1)\)</span> is the small shaded
 triangle. The density climbs <span class="math inline">\(0.4\)</span>
@@ -1147,7 +1163,7 @@ approximate the area under it with rectangles, just as a histogram does.
 Take the normal model for the women’s heights from Week 6, <span
 class="math inline">\(X \sim N(65.4, 3.38)\)</span>, and the probability
 that a woman is between 62 and 70 inches tall:</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-8-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-8-1.png" alt="Three panels, each the normal curve for women's heights with mean 65.4 and sd 3.38, with rectangles under the curve between 62 and 70 inches. The rectangles are 2, 1 and 0.25 inches wide from left to right, each panel titled with the total rectangle area; the thinner rectangles follow the curve more closely." width="1056" style="display: block; margin: auto;" /></p>
 <p>The rectangles give 0.7628, then 0.7577, then 0.7561; the exact area
 is <span class="math inline">\(P(62 &lt; X &lt; 70) = 0.7560\)</span>.
 The thinner the rectangles, the closer the approximation. Calculus is
@@ -1187,7 +1203,7 @@ the area into quarters: <span class="math display">\[P(X &lt; Q_1) =
 0.25 \qquad P(X &lt; Q_2) = 0.50 \qquad P(X &lt; Q_3) = 0.75\]</span> so
 <span class="math inline">\(Q_2\)</span> is the median. To find them,
 add up area from the left until you reach each target.</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-9-1.png" alt="Step density for X from 0 to 11 made of five rectangles: 0 to 1 at height 0.10, 1 to 2 at 0.15, 2 to 3 at 0.25, 3 to 5 at 0.10 and 5 to 11 at 0.05, labelled with areas 0.10, 0.15, 0.25, 0.20 and 0.30. Dashed vertical lines mark Q1 at 2, Q2 at 3 and Q3 at 6." width="960" style="display: block; margin: auto;" /></p>
 <p>The areas of the five rectangles are 0.10, 0.15, 0.25, 0.20 and 0.30,
 and they add to 1.</p>
 <ul>
@@ -1543,7 +1559,7 @@ until the next goal averages <span class="math inline">\(90/2.69 \approx
 33.5\)</span> minutes and has a long right tail: most waits are short, a
 few are very long. Each panel shows 10,000 simulated sample means <span
 class="math inline">\(\bar{x}\)</span>:</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-12-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-12-1.png" alt="Four histograms of 10,000 simulated sample means of minutes until the next goal, for n = 1, 2, 5 and 30, each with a vertical line at the mean of about 33.5 minutes and its own axis scale. At n = 1 the histogram is strongly skewed right; the skew fades as n grows, and at n = 30 it is a narrow, nearly symmetric bell." width="1056" style="display: block; margin: auto;" /></p>
 <p>With <span class="math inline">\(n = 1\)</span> the “sample mean” is
 a single observation, so the panel is the skewed population itself. By
 <span class="math inline">\(n = 5\)</span> the skew is fading, and at
@@ -1557,7 +1573,7 @@ class="math inline">\(\hat{p}\)</span>. Below are the exact sampling
 distributions of the proportion of tiger trout, <span
 class="math inline">\(p = 0.05\)</span>, in catches of <span
 class="math inline">\(n = 10\)</span>, 50 and 450 fish:</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-13-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-13-1.png" alt="Three bar charts of the exact sampling distribution of the sample proportion of tiger trout for n = 10, 50 and 450, each with a vertical line at p = 0.05 and its own axis scale. At n = 10 most probability is at 0 and the distribution is strongly skewed right; at n = 450 it is a symmetric bell centered at 0.05." width="1056" style="display: block; margin: auto;" /></p>
 <p>With 10 fish, <span class="math inline">\(\hat{p}\)</span> is usually
 0 and the distribution is badly skewed. With 450 fish it is a symmetric
 bell around <span class="math inline">\(p = 0.05\)</span>. For a
@@ -1687,16 +1703,15 @@ with probability about 0.95.</li>
 <ul>
 <li>Illowsky, B. and Dean, S. (2023). <em>Introductory Statistics
 2e</em>, Sections 4.3, 4.6, 5.1 and 7.1–7.3. OpenStax. <a
-href="https://openstax.org/details/books/introductory-statistics-2e"
-class="uri">https://openstax.org/details/books/introductory-statistics-2e</a></li>
+href="https://openstax.org/details/books/introductory-statistics-2e">OpenStax:
+Introductory Statistics 2e</a></li>
 <li>2022 FIFA World Cup: 172 goals in 64 matches, seven of them 0–0.
 Wikipedia, “2022 FIFA World Cup”, tournament statistics; Eurosport,
 “What is the record number of 0-0 draws at the World Cup”.</li>
 <li>Stephen Curry’s career free throws, 4,236 of 4,645.
 Basketball-Reference, <a
-href="https://www.basketball-reference.com/players/c/curryst01.html"
-class="uri">https://www.basketball-reference.com/players/c/curryst01.html</a>,
-checked October 5, 2026.</li>
+href="https://www.basketball-reference.com/players/c/curryst01.html">Basketball-Reference:
+Stephen Curry career stats</a>, checked October 5, 2026.</li>
 </ul>
 </div>
 </div>
@@ -1864,6 +1879,66 @@ checked October 5, 2026.</li>
     bar.appendChild(link);
     main.insertBefore(bar, main.firstChild);
   }
+
+  /* 6. Author / date are not headings (WCAG 1.3.1, 2.4.6).
+        pandoc's template emits them as <h4 class="author"> and
+        <h4 class="date"> straight after the <h1> title. Screen-reader users
+        navigating by heading hear "heading level 4, STAT 251 Section 01" as if
+        it were a section, and it puts an h1 -> h4 skip at the top of every
+        page. Re-tag them as paragraphs; site.css styles them by class. */
+  var meta = document.querySelectorAll('#header h4.author, #header h4.date');
+  for (var k = 0; k < meta.length; k++) {
+    var h4 = meta[k];
+    var p = document.createElement('p');
+    p.className = h4.className;
+    while (h4.firstChild) p.appendChild(h4.firstChild);
+    h4.parentNode.replaceChild(p, h4);
+  }
+
+  /* 7. Solution answers carry more than colour (WCAG 1.4.1, 1.4.3).
+        Answers are marked three ways across the solution pages: an inline
+        style="color: red", the RA/RZ <div style="color: red;"> helper, and
+        class="soln". Colour was the only cue, so a screen reader, a
+        read-aloud tool, or a colour-blind reader could not tell the answer
+        from the question. Each one gets class .answer (site.css section 20b:
+        AA-contrast red, shaded box) and a screen-reader-only "Answer:" label.
+        The label goes on the outermost answer element only, so an answer
+        that contains another red span is announced once. Matching the inline
+        style here rather than editing the sources keeps the 2024 archive
+        untouched. */
+  /* el.style.color rather than a [style*=...] selector, which would also catch
+     background-color and border-color. Empty placeholder spans are skipped so
+     they do not render as an empty shaded box. */
+  var candidates = document.querySelectorAll('.main-container .soln, .main-container [style*="color"]');
+  var answers = [];
+  for (var a = 0; a < candidates.length; a++) {
+    var c = candidates[a];
+    var isRed = c.style.color === 'red' || c.style.color === 'rgb(255, 0, 0)';
+    if (!isRed && !c.classList.contains('soln')) continue;
+    if (!c.textContent.replace(/\s+/g, '') && !c.querySelector('img, svg')) continue;
+    c.classList.add('answer');
+    answers.push(c);
+  }
+  for (var b = 0; b < answers.length; b++) {
+    var el = answers[b];
+    if (el.parentNode.closest && el.parentNode.closest('.answer')) continue;
+    var label = document.createElement('span');
+    label.className = 'sr-only';
+    label.textContent = 'Answer: ';
+    el.insertBefore(label, el.firstChild);
+  }
+
+  /* 8. The decorative arrow in the back link (item 5) is read aloud as
+        "leftwards arrow". */
+  var back = document.querySelector('.site-backlink');
+  if (back) {
+    back.textContent = '';
+    var arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '\u2190 ';
+    back.appendChild(arrow);
+    back.appendChild(document.createTextNode('Back to course site'));
+  }
 })();
 </script>
 
@@ -1906,7 +1981,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-svg.js";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

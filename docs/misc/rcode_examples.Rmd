@@ -189,13 +189,13 @@ print(ft)
 Use `?pie` and `?barplot` to read the documentation for these and see every
 argument they accept.
 
-```{r fig.height=3, fig.width=4}
-pie(ft$Proportion,        # first argument: non-negative values (counts or proportions)
+```{r fig.height=3, fig.width=4, fig.alt = "Base R pie chart of gender with two slices: Male takes about 71 percent of the circle and Female about 29 percent."}
+pie(ft$Proportion,       # first argument: non-negative values (counts or proportions)
     labels = ft$Gender,   # category names
     col = c('red','orange'))
 ```
 
-```{r fig.height=3, fig.width=4}
+```{r fig.height=3, fig.width=4, fig.alt = "Base R bar chart of the proportion of students by gender, with a legend in the top left: the Female bar is at about 0.29 and the Male bar at about 0.71."}
 barplot(height = ft$Proportion,   # first argument: the bar heights
         legend = ft$Gender,       # legend labels
         col = c('red','orange'),
@@ -218,8 +218,8 @@ tells ggplot which variable is x, which is y, and which controls colour or size.
 ggplot2 has no pie chart. You make one by drawing a stacked bar and then bending
 it around a circle with `coord_polar()`:
 
-```{r fig.height=3, fig.width=4}
-pie1 = ggplot(ft, aes(x = "", y = Proportion, fill = Gender)) +
+```{r fig.height=3, fig.width=4, fig.alt = "ggplot2 pie chart titled Gender, with each slice labelled by its proportion: Male 0.71 and Female 0.29, plus a legend for the two categories."}
+pie1 =ggplot(ft, aes(x = "", y = Proportion, fill = Gender)) +
   # geom_col is a bar whose height IS the value, rather than a count
   geom_col(color = "black") +
   # print the proportion on each slice
@@ -238,8 +238,8 @@ plot(pie1)
 
 The bar chart uses the same frequency table:
 
-```{r fig.height=3, fig.width=4}
-BP1 = ggplot(data = ft, aes(x = Gender, y = Proportion, fill = Gender)) +
+```{r fig.height=3, fig.width=4, fig.alt = "ggplot2 bar chart titled Gender with Proportion on the vertical axis: the Female bar reaches about 0.29 and the Male bar about 0.71."}
+BP1 =ggplot(data = ft, aes(x = Gender, y = Proportion, fill = Gender)) +
   # stat = 'identity' means "use the value I gave you", not "count the rows"
   geom_bar(stat = 'identity', color = 'black', linewidth = 0.8) +
   theme_hc() +
@@ -288,7 +288,7 @@ stem(gss$Studytime, scale = 2)
 
 Base R has no good dot plot, so this one is ggplot2 only.
 
-```{r fig.height=4, fig.width=5}
+```{r fig.height=4, fig.width=5, fig.alt = "Dot plot titled 'Dotplot of Student Study Time (Hrs)', one dot per student stacked above study times from 2 to 15 hours. The tallest stacks are at 3 and 4 hours, most students fall between 2 and 6 hours, and a few dots trail out to the right, so the data are right-skewed."}
 ggplot(data = gss, aes(x = Studytime)) +
   geom_dotplot(dotsize = 0.5) +
   theme_classic() +
@@ -315,14 +315,14 @@ Both packages choose a number of bins for you, but they choose differently.
 `hist()` uses Sturges' method, the reasonable default we discussed in class.
 `geom_histogram()` just uses 30 bins and warns you to pick your own.
 
-```{r fig.height=4, fig.width=5}
+```{r fig.height=4, fig.width=5, fig.alt = "Base R histogram titled 'College Student Weekly Time Spent Studying' with 2-hour bins from 2 to 16 hours. The 2 to 4 hour bin is tallest at about 29 students, counts drop steadily after that, and single students sit in the 10 to 12 and 14 to 16 bins: a strongly right-skewed shape."}
 hist(gss$Studytime,
      xlab = 'Study Time (hrs)',
      ylab = 'Frequency',
      main = 'College Student Weekly Time Spent Studying')
 ```
 
-```{r fig.height=4, fig.width=5}
+```{r fig.height=4, fig.width=5, fig.alt = "ggplot2 histogram of study time in hours using the default 30 bins: many narrow bars with gaps between them, tallest around 3 and 4 hours, with a long thin tail to the right out to 15 hours."}
 ggplot(data = gss, aes(x = Studytime)) +
   geom_histogram(color = 'black', fill = 'lightblue') +
   theme_classic2() +
@@ -335,7 +335,7 @@ ggplot(data = gss, aes(x = Studytime)) +
 To set the bins yourself, use the `bins` or `binwidth` argument — see
 `?geom_histogram`. Here is the square-root rule from class:
 
-```{r fig.height=4, fig.width=5}
+```{r fig.height=4, fig.width=5, fig.alt = "ggplot2 histogram of study time in hours using 8 bins from the square-root rule: a short first bar, the tallest bar at roughly 3 to 5 hours (about 28 students), then steadily shorter bars to the right with a gap before a single student near 15 hours, a clear right-skewed shape."}
 n = length(gss$Studytime)
 k = ceiling(sqrt(n))   # number of bins = square root of n, rounded up
 
@@ -350,7 +350,7 @@ ggplot(data = gss, aes(x = Studytime)) +
 
 ## Boxplot
 
-```{r fig.height=4, fig.width=6}
+```{r fig.height=4, fig.width=6, fig.alt = "Horizontal base R boxplot titled 'College Student Weekly Study Time'. The box runs from 3 to 6 hours with the median at 4.5; the left whisker reaches 2, the right whisker reaches 10, and two outliers are plotted as circles at 12 and 15 hours."}
 boxplot(gss$Studytime,
         horizontal = T,                 # lay it on its side
         xlab = 'Study Time (Hrs)',
@@ -362,8 +362,8 @@ boxplot(gss$Studytime,
 `text()` adds labels to any base R plot, so we can write the five-number summary
 directly onto the boxplot. Compute the five numbers first:
 
-```{r fig.height=4, fig.width=6}
-minss = min(gss$Studytime)
+```{r fig.height=4, fig.width=6, fig.alt = "The same horizontal boxplot of weekly study time with text labels added: Min=2, Q1=3, Median=4.5, Q3=6 and Max=15 written at their positions, and 'IQR = 3' above the box. Outliers appear as circles at 12 and 15 hours."}
+minss =min(gss$Studytime)
 Q1    = quantile(gss$Studytime, 0.25, type = 2)
 medss = median(gss$Studytime)
 Q3    = quantile(gss$Studytime, 0.75, type = 2)
@@ -392,7 +392,7 @@ text(x = medss, labels = paste("IQR", Q3 - Q1, sep = " = "), y = 1.5, cex = 0.7)
 Labelling takes more work here, using `geom_label()` — one call per label, each
 positioned by hand.
 
-```{r fig.height=6, fig.width=8}
+```{r fig.height=6, fig.width=8, fig.alt = "ggplot2 horizontal boxplot titled 'College Student Weekly Study Time' with boxed labels: min = 2, Q1 = 3, median = 4.5, Q3 = 6, max = 15 and IQR = 3. The box spans 3 to 6 hours, the right whisker ends at 10, outliers at 12 and 15 are drawn as diamonds, and red dots mark the minimum and maximum."}
 ggplot() +
   geom_boxplot(aes(x = gss$Studytime),
                fill = 'lightgrey',

@@ -221,6 +221,9 @@ output:
     ## which is what assets/brand/site.css styles. Other values switch to
     ## pandoc's own highlighter with a completely different class vocabulary.
     highlight: textmate
+    ## MathJax 4 for its speech labels - see assets/brand/theme-init.html.
+    ## Pinned; keep identical in _site.yml and every _output.yml.
+    mathjax: "https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-svg.js"
     css:
       - assets/brand/uidaho-branding.css
       - assets/brand/site.css

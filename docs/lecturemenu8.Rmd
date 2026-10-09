@@ -68,7 +68,7 @@ Thus asking to find $P(X \geq 25)$ is the same as $P(Z \geq 2)$. But we are not 
 
 \[P(Z\geq 2) = 1 - P(Z < 2) \]
 
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Two side-by-side normal curves. Left: the standard normal Z distribution with mean 0 and standard deviation 1, with the area to the right of z equals 2 shaded. Right: the distribution of X, normal with mean 5 and standard deviation 10, with the matching area to the right of X equals 25 shaded."}
 
 std = 10
 avg = 5
@@ -121,7 +121,7 @@ We can take a similar approach to answer this problem. One major difference is t
 
 \[P(-3 \leq X \leq 1) = P(X\leq 1) - P(X\leq -3) \]
 
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Two side-by-side normal curves. Left: the standard normal Z distribution with the area between z equals -0.25 and z equals 0.75 shaded. Right: the distribution of X, normal with mean -2 and standard deviation 4, with the matching area between X equals -3 and X equals 1 shaded."}
 
 std = 4
 avg = -2
@@ -200,7 +200,7 @@ Now that we have a strong understanding of the theory of mathematical probabilit
 
 * The **sampling distribution** is the probability distribution of a statistic that is computed from the observations in a sample. This distribution arises from repeated sampling from the same population with the same sample size and computing statistics from those samples. It tells us how close a given estimate is to the true population parameter it is estimating (sampling error). 
 
-### The Central Limit Theorem
+## The Central Limit Theorem
 
 A statistic computed from a random sample or randomized experiment is a random variable whose probability distribution is given by the sampling distribution. One of the most famous results from probability theory says that the distribution of the mean $\bar{x}$ of a random variable computed from a sample of size $n$ will be approximately normally distributed if $n$ is large. This result is referred to as the **Central Limit Theorem (CLT)**. Formally, the CLT states that for a set of independent and identically distributed random variables $X_1, X_2, ... X_n$, 
 
@@ -259,7 +259,7 @@ ggplot(data = data.final, aes(x = props))+geom_histogram(aes(y = ..density..),
 anim_save(paste0('misc/CLT.gif'))
 ```
 
-```{r, eval = T, echo=F, warning=F, message=F, fig.height=6, fig.width=10}
+```{r, eval = T, echo=F, warning=F, message=F, fig.height=6, fig.width=10, fig.alt = "Animated histogram with a density curve of the sampling distribution of the sample proportion p-hat, with p equals 0.5, cycling through sample sizes n from 2 up to 200. At small n there are only a few separated bars; as n grows the bars fill in and the shape becomes a smooth, symmetric bell curve centered at 0.5."}
 knitr::include_graphics("misc/CLT.gif")
 ```
 
@@ -322,7 +322,7 @@ Consider the sample mean $\bar{x}$ computed from a sample of $n$ observations of
 
 ```
 
-```{r, eval = T, echo=F, warning=F, message=F, fig.height=6, fig.width=10}
+```{r, eval = T, echo=F, warning=F, message=F, fig.height=6, fig.width=10, fig.alt = "Animated histogram with a density curve of the sampling distribution of x-bar, the mean of n rolls of a fair six-sided die, cycling through sample sizes n from 2 up to 200. At small n the shape is lumpy and spread out; as n grows it narrows into a smooth, symmetric bell curve centered at 3.5."}
 knitr::include_graphics("Data/CLT_mean.gif")
 
 
@@ -347,14 +347,14 @@ We can use the CLT to compute the probability of a given value of a statistic. C
 
 Thus it is highly unlikely that the scientist would observe a mean length this short. 
 
-### Applying The Central Limit Theorem  
+## Applying The Central Limit Theorem  
 
 The CLT allows us to identify the sampling distribution of $\bar{x}$ or $\hat{p}$. Now that we know the distribution of these two statistics we can make statements about the probability that $\bar{x}$ or $\hat{p}$ will be within a certain distance of the parameters $\mu$ and $p$. 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "A normal curve with the x-axis labeled mu minus 2 sigma, mu, and mu plus 2 sigma. The area between mu minus 2 sigma and mu plus 2 sigma is shaded and labeled 0.95."}
 set.seed(123)
 #normal quantiles
-A = ggplot(data.frame(x = c(-4, 4)), aes(x))+
+A =ggplot(data.frame(x = c(-4, 4)), aes(x))+
   stat_function(fun = dnorm,
                 size = 1) + 
     stat_function(fun = dnorm,
@@ -419,7 +419,7 @@ Statistical inference is used to draw conclusions about a population or process 
 
 Regardless of the type of inference that is being done, the underlying reasoning remains the same. In statistics, we use probability as a means of substantiating our conclusions about a particular population or result. Probability allows us to determine the "strength" of a conclusion by taking into account the ordinary variation in estimation.
 
-### Confidence Intervals
+## Confidence Intervals
 
 A **interval estimate** aims to place bounds on the value of a population parameter. We saw previously that we can talk about the probability with which an estimate falls within a particular interval. For example, we said that the interval which has a probability of 0.95 of containing $\bar{x}$ is given by 
 
@@ -439,7 +439,7 @@ The general formula of a confidence interval consists of three parts:
   2. the standard score - used to control the confidence level of the interval
   3. the standard error (standard deviation) of the point estimate
 
-```{r, eval = T, echo=F, warning=F, message=F, fig.height=6, fig.width=10}
+```{r, eval = T, echo=F, warning=F, message=F, fig.height=6, fig.width=10, fig.alt = "Formula diagram: point estimate plus or minus standard score times standard error. A brace over the whole expression labels it the confidence interval, and a brace under 'standard score times standard error' labels that part the margin of error."}
 knitr::include_graphics("misc/Screenshot 2024-02-29 230856.png")
 ```
 
@@ -480,7 +480,7 @@ Assume that the true population blaster accuracy is $\mu = 77.9\%$ and the popul
 * Does the interval cover the true population mean?
 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Sampling distribution of x-bar: a normal curve centered at mu equals 77.9 with the middle 0.95 area, within 2 standard errors of mu, shaded. Below the curve a square marks mu and a dot marks x-bar equals 78.5, with a horizontal bar showing the confidence interval from 77.6 to 79.4."}
 set.seed(123)
 mu = 77.9
 sigma = 4.2
@@ -520,7 +520,7 @@ In practice, once we compute the confidence interval we don't know for sure whet
 
 As we can see in the plot below, the interval is now wider 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12, fig.alt = "Two sampling distributions of x-bar side by side, both normal curves centered at mu equals 77.9. Left: middle 0.95 area shaded, with the 95 percent interval from 77.6 to 79.4 drawn around x-bar equals 78.5. Right: a wider middle 0.99 area shaded, with the wider 99 percent interval from about 77.3 to 79.7 around the same x-bar."}
 set.seed(123)
 mu = 77.9
 sigma = 4.2
@@ -565,7 +565,7 @@ To further illustrate the concept of confidence and its correspondence to the lo
 * What proportion of these confidence intervals are expected to contain the true population mean accuracy. What proportion do not? The plot below gives the results of all $100$ confidence intervals 
 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "100 confidence intervals drawn as vertical error bars, one per sample number on the x-axis, with x-bar on the y-axis and a dashed horizontal line at mu equals 77.9. A legend marks whether each interval covers the parameter: 98 intervals cross the dashed line and 2 (samples 38 and 62) miss it."}
 
 set.seed(123)
 mu = 77.9

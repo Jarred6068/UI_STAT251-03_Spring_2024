@@ -49,7 +49,7 @@ library(plyr)
 ```
 
 
-### Definitions
+## Definitions
 
 Define the following terms/concepts. (The language of probability - sample space, event,
 random trial, union, intersection, random variable, probability distribution and the Law of
@@ -310,7 +310,7 @@ so
 
 ${\bf (9)}$ Use the plot below of the probability distribution of a continuous random variable $X$ to answer the following questions
 
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Step-shaped probability density for X from 0 to 2.1, with x-axis ticks every 0.3 and y-axis (probability density) ticks at 0, 0.167, 0.334, 0.501, 0.668 and 0.835. The density height on each interval is: 0 to 0.3: 0.334; 0.3 to 0.6: 0.668; 0.6 to 0.9: 0.668; 0.9 to 1.2: 0.835; 1.2 to 1.5: 0.167; 1.5 to 1.8: 0.167; 1.8 to 2.1: 0.501; zero outside 0 to 2.1."}
 #C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/PMFplot1.pdf}
 h1 = round(1/6, 3)
 #homework 4 plots
@@ -352,7 +352,7 @@ there are six grid squares between $0$ and $0.6$, therefore
 
 ${\bf (10)}$ Use the plot below of the probability distribution of a continuous random variable $Y$ to answer the following questions
 
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Step-shaped probability density for Y from -1 to 1, with x-axis ticks every 0.25 and y-axis (probability density) ticks every 0.16 from 0 to 1.12. The density height on each interval is: -1 to -0.75: 0.48; -0.75 to -0.5: 0.32; -0.5 to -0.25: 0.96; -0.25 to 0: 0.80; 0 to 0.25: 0.80; 0.25 to 0.5: 0.32; 0.5 to 0.75: 0.16; 0.75 to 1: 0.16; zero outside -1 to 1."}
 #C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/PMFplot2.pdf
 
 h2 = round(1/(25*0.25), 2)
@@ -388,7 +388,7 @@ Use the plot to find the following probabilities (recall that the area of a tria
 
 ${\bf (11)}$ Use the plot below of the probability distribution of a continuous random variable $Z$ to answer the following questions
 
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Probability density for Z drawn as straight line segments, with x-axis ticks every 1 from 0 to 6 and y-axis (probability density) ticks every 0.05 from 0 to 0.35. The density rises in a straight line from 0 at Z = 0 to 0.3 at Z = 2, falls to 0.1 at Z = 3, rises to 0.3 at Z = 4, and falls back to 0 at Z = 6."}
 #C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/PMF_triangular_plot1.pdf
 dist3 = cbind.data.frame(val = c(0, 2, 3, 4, 6), 
                          dens = c(0,0.3, 0.1, 0.3, 0))
@@ -431,7 +431,7 @@ $P(2<Z<3)=2(0.05)+(0.5)(1)(0.2) = 0.2$</span>
 
 ${\bf 12.)}$ Assume the continuous random variable $X$ follows a normal distribution with mean $\mu = 25$ and variance $\sigma^2 = 16$. 
 
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Normal density curve for X with mean 25 and standard deviation 4, drawn on an x-axis from 0 to 50 with ticks every 10 and a y-axis labeled Density. The curve peaks at X = 25 (density about 0.10) and is close to zero below about 13 and above about 37."}
 ggplot()+xlim(c(-40, 90))+
   stat_function(fun = dnorm, 
                 args = list(mean = 25, sd = 4),
@@ -492,7 +492,7 @@ ${\bf 13.)}$ Suppose that a random variable $X$ follows a normal distribution wi
 \[ z_{\text{upper}} = \frac{0.5 - (-5)}{1.8} = 3.06\]
 \[P(-2<X<0.5) = P(1.67< Z < 3.06)  \]</span>
 
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10}
+```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Two normal density curves side by side. Left: standard normal Z distribution, Z ~ N(mu = 0, sigma = 1), Z-axis from -4 to 4, with the area between Z = 1.67 and Z = 3.06 shaded. Right: distribution of X ~ N(mu = -5, sigma = 1.8), X-axis from -12.2 to 2.2 in steps of 1.8, with the area between X = -2 and X = 0.5 shaded. The shaded regions are the same small upper-tail area."}
 
 A = ggplot(data.frame(x = c(-4, 4)), aes(x)) +
   stat_function(fun = dnorm) + 

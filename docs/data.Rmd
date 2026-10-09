@@ -108,7 +108,7 @@ K=Kelloggs, N=Nabisco, P=Post, Q=Quaker Oats, R=Ralston Purina.
 
 Venables, W. N. and Ripley, B. D. (1999)** Modern Applied Statistics with S-PLUS. Third Edition. Springer.
 
-A detailed description of this data can be found [here](http://lib.stat.cmu.edu/datasets/1993.expo/)
+A detailed description of this data can be found on the [StatLib 1993 Data Exposition page](http://lib.stat.cmu.edu/datasets/1993.expo/)
 
 <br>
 

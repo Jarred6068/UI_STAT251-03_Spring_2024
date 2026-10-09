@@ -68,6 +68,11 @@
   --site-figure-bg:      transparent;
   --site-figure-border:  var(--site-border);
 
+  /* Solution answers (section 20b). #c00000 is 6.5:1 on white; the old
+     inline pure red was 4.0:1. */
+  --site-answer:         #c00000;
+  --site-answer-bg:      rgba(192, 0, 0, 0.06);
+
   --site-font-sans:      var(--uidaho-brand-font-sans);
   /* Brand gap: no monospace stack is defined upstream. See README.md. */
   --site-font-mono:      ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas,
@@ -96,6 +101,10 @@
      white plate rather than letting them float as bright rectangles. */
   --site-figure-bg:      var(--uidaho-white);
   --site-figure-border:  rgba(var(--uidaho-silver-rgb), 0.45);
+
+  /* 7.7:1 on #191919. */
+  --site-answer:         #ff8a80;
+  --site-answer-bg:      rgba(255, 138, 128, 0.10);
 }
 
 
@@ -176,8 +185,10 @@ h6 {
   margin-bottom: 0.35rem;
 }
 
-#header h4.author,
-#header h4.date {
+/* a11y.html turns these from <h4> into <p> (they are not headings), so the
+   selectors must not name the tag. */
+#header .author,
+#header .date {
   font-size: 1rem;
   font-weight: 600;
   color: var(--site-text-muted);
@@ -1190,7 +1201,11 @@ table.dataTable thead td {
    square-root bars too wide) wraps its output in its own container classes, so
    both sets are listed here. */
 .MathJax, .MathJax_Display,
-.MathJax_SVG, .MathJax_SVG_Display { color: var(--site-text); }
+.MathJax_SVG, .MathJax_SVG_Display,
+mjx-container { color: var(--site-text); }
+
+/* ...except inside an answer, where it must follow the answer colour. */
+.answer mjx-container { color: inherit; }
 
 
 /* 19. Focus ==========================================================
@@ -1280,6 +1295,40 @@ button:focus-visible,
 }
 
 
+/* 20b. Solution answers ==============================================
+   Solution pages mark answers three different ways: inline
+   style="color: red", the `RA`/`RZ` <div style="color: red;"> helper, and
+   class="soln". a11y.html tags all three with .answer and puts a
+   screen-reader "Answer:" label at the start of each one.
+
+   Two WCAG problems this fixes:
+   - 1.4.3: pure red (#FF0000) is 4.0:1 on white, below AA. The token
+     below is 6.5:1 on white and 7.7:1 on the dark page. The override has
+     to be !important to beat the inline style attribute.
+   - 1.4.1: colour was the ONLY thing separating an answer from the
+     question. Colour-blind readers and anyone printing in black and white
+     could not tell them apart. The shaded box, plus a left rule on block
+     answers, carries the distinction without colour.
+   ==================================================================== */
+
+.answer {
+  color: var(--site-answer) !important;
+  background-color: var(--site-answer-bg);
+  border-radius: 3px;
+}
+
+span.answer { padding: 0 0.2em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+div.answer, pre.answer, p.answer {
+  border-left: 3px solid var(--site-answer);
+  padding: 0.35em 0.75em;
+  margin: 0.5em 0;
+}
+
+/* MathJax SVG inherits currentColor, so expressions inside an answer follow
+   the answer colour with no extra rule. */
+
+
 /* 21. Print ==========================================================
    Students print homework and study guides. Force the light palette so a
    dark-mode reader doesn't produce a black page, and drop the chrome.
@@ -1300,6 +1349,8 @@ button:focus-visible,
     --site-figure-bg: transparent;
     --site-figure-border: transparent;
     --site-link: #000;
+    --site-answer: #c00000;
+    --site-answer-bg: rgba(192, 0, 0, 0.06);
   }
 
   .navbar,

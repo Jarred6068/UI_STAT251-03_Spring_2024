@@ -98,14 +98,14 @@ shading lands only on the tail(s).
 2.1. The critical value is 1.645, the observed value is past it, so this is a
 rejection:
 
-```{r}
+```{r, fig.alt = "Standard normal curve titled 'Distribution under H0', z from -4 to 4. The upper tail beyond the critical value at about 1.645 is shaded as the rejection region and marked with a dashed line; a second dashed line marks the observed z of 2.1, which falls inside the shaded tail."}
 gen.density.plot(dist = 'z', alpha = 0.05, obs = 2.1, test = 'upper.tail')
 ```
 
 The same picture for a t test with 15 observations — note the heavier tails,
 which push the critical value further out than the z:
 
-```{r}
+```{r, fig.alt = "t distribution curve (14 degrees of freedom) titled 'Distribution under H0', t from -4 to 4, with both tails shaded as rejection regions and dashed critical-value lines near -1.8 and 1.8. A third dashed line marks the observed t of 2.1, which falls inside the shaded upper tail."}
 gen.density.plot(dist = 't', n = 15, alpha = 0.05, obs = 2.1, test = 'two.tailed')
 ```
 

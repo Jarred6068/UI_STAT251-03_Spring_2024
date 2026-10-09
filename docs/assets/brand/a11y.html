@@ -94,5 +94,65 @@
     bar.appendChild(link);
     main.insertBefore(bar, main.firstChild);
   }
+
+  /* 6. Author / date are not headings (WCAG 1.3.1, 2.4.6).
+        pandoc's template emits them as <h4 class="author"> and
+        <h4 class="date"> straight after the <h1> title. Screen-reader users
+        navigating by heading hear "heading level 4, STAT 251 Section 01" as if
+        it were a section, and it puts an h1 -> h4 skip at the top of every
+        page. Re-tag them as paragraphs; site.css styles them by class. */
+  var meta = document.querySelectorAll('#header h4.author, #header h4.date');
+  for (var k = 0; k < meta.length; k++) {
+    var h4 = meta[k];
+    var p = document.createElement('p');
+    p.className = h4.className;
+    while (h4.firstChild) p.appendChild(h4.firstChild);
+    h4.parentNode.replaceChild(p, h4);
+  }
+
+  /* 7. Solution answers carry more than colour (WCAG 1.4.1, 1.4.3).
+        Answers are marked three ways across the solution pages: an inline
+        style="color: red", the RA/RZ <div style="color: red;"> helper, and
+        class="soln". Colour was the only cue, so a screen reader, a
+        read-aloud tool, or a colour-blind reader could not tell the answer
+        from the question. Each one gets class .answer (site.css section 20b:
+        AA-contrast red, shaded box) and a screen-reader-only "Answer:" label.
+        The label goes on the outermost answer element only, so an answer
+        that contains another red span is announced once. Matching the inline
+        style here rather than editing the sources keeps the 2024 archive
+        untouched. */
+  /* el.style.color rather than a [style*=...] selector, which would also catch
+     background-color and border-color. Empty placeholder spans are skipped so
+     they do not render as an empty shaded box. */
+  var candidates = document.querySelectorAll('.main-container .soln, .main-container [style*="color"]');
+  var answers = [];
+  for (var a = 0; a < candidates.length; a++) {
+    var c = candidates[a];
+    var isRed = c.style.color === 'red' || c.style.color === 'rgb(255, 0, 0)';
+    if (!isRed && !c.classList.contains('soln')) continue;
+    if (!c.textContent.replace(/\s+/g, '') && !c.querySelector('img, svg')) continue;
+    c.classList.add('answer');
+    answers.push(c);
+  }
+  for (var b = 0; b < answers.length; b++) {
+    var el = answers[b];
+    if (el.parentNode.closest && el.parentNode.closest('.answer')) continue;
+    var label = document.createElement('span');
+    label.className = 'sr-only';
+    label.textContent = 'Answer: ';
+    el.insertBefore(label, el.firstChild);
+  }
+
+  /* 8. The decorative arrow in the back link (item 5) is read aloud as
+        "leftwards arrow". */
+  var back = document.querySelector('.site-backlink');
+  if (back) {
+    back.textContent = '';
+    var arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '\u2190 ';
+    back.appendChild(arrow);
+    back.appendChild(document.createTextNode('Back to course site'));
+  }
 })();
 </script>

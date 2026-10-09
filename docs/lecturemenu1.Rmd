@@ -16,7 +16,7 @@ library(ggpubr)
 
 # Introduction to statistical methods
 
-### Where does statistics come from?
+## Where does statistics come from?
 
 Statistics began as bookkeeping about people. Long before it was a mathematical discipline, it was the practice of counting births, deaths, and taxpayers so that a state could describe itself - which is also where the word comes from.
 
@@ -38,7 +38,7 @@ Statistics began as bookkeeping about people. Long before it was a mathematical 
 
 <span style="font-size:80%">Sources: J. Graunt (1662), *Natural and Political Observations Made upon the Bills of Mortality*. E. Halley (1693), *Phil. Trans. R. Soc.* 17:596-610. G. Achenwall (1749), *Abriss der neuesten Staatswissenschaft*. A. Quetelet (1835), *Sur l'homme et le developpement de ses facultes*. R. A. Fisher (1925), *Statistical Methods for Research Workers*.</span>
 
-### Data, observations, variables
+## Data, observations, variables
 
 * **Statistics** is a scientific field that deals with the collection, description, analysis, interpretation, and presentation of data. We see and use data in nearly all aspects of our everyday lives: politics, medicine, forecasting, finance, marketing, etc. In short, we use statistics to ask and answer scientific questions and make predictions. To put it another way, statistics is the science of **data**
 
@@ -81,7 +81,7 @@ kable(skull.data, format = 'html', digits = 2, row.names = F, booktabs = T)%>%
   kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
 ```
 
-### Types of variables 
+## Types of variables 
 
 * Variables are distinguished by the type of information they represent. One basic distinction is between **qualitative** variables and **quantitative** variables. 
 
@@ -105,7 +105,7 @@ kable(skull.data, format = 'html', digits = 2, row.names = F, booktabs = T)%>%
 
 
 
-### Populations and samples 
+## Populations and samples 
 * Statistics is generally concerned with studying properties of a **population**. You can think of a population as a collection of all possible persons, things, or objects that you are studying. Another way to think of a population is as a collection of all possible observations of a variable - both observed and unobserved.
 
   * A population can be finite (countable) or infinite (uncountable). Many populations are so large that we treat them as if they are infinite. For example, the population of students taking STAT 251 Section 01 is a finite set of 60 individuals. Alternatively, the number of germs living in a patient's body is effectively infinite.
@@ -119,7 +119,7 @@ kable(skull.data, format = 'html', digits = 2, row.names = F, booktabs = T)%>%
 * In statistics we typically represent the size (i.e number of observations) of a population with the letter $N$ and the size of a sample with the letter $n$. In the above example of the wildlife biologist studying mountain lion paw size, the population has size $N = 2,000$ and the sample the biologist took was of size $n = 20$. 
 
 
-### A quick note on mathematical notation
+## A quick note on mathematical notation
 
 Before we introduce our first formulas, it is worth taking a moment to get comfortable with some of the mathematical notation we will use throughout the course. Statistics uses a compact "shorthand" to describe calculations on data, and once it becomes familiar, formulas that look intimidating at first become easy to read. If you have never seen this notation before, don't worry - we will assume you know very little and build it up from scratch.
 
@@ -149,7 +149,7 @@ Before we introduce our first formulas, it is worth taking a moment to get comfo
 With this notation in hand, we are ready to write down our first statistics.
 
 
-### Statistics vs. Parameters
+## Statistics vs. Parameters
 
 * Statistics primarily deals with **estimation** – the process of inferring an unknown quantity about a population using a set of sample data. An **estimator** is a mathematical function that **estimates** a given **parameter** based on observed data.
   
@@ -176,7 +176,7 @@ With this notation in hand, we are ready to write down our first statistics.
    * Then we can ask and answer questions or formally, test and evaluate hypotheses.
 
 
-### Descriptive vs Inferential Statistics
+## Descriptive vs Inferential Statistics
 
 Recall that statistics is a science that deals with the collection, description, analysis, interpretation, and presentation of data. The collection of data is referred to as the **design**. In statistics, design concerns the formulation of statistical questions and the process/method in which we plan to collect data to answer our statistical question. 
 

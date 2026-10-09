@@ -48,7 +48,7 @@ Earlier in the semester we compared the means of **two** independent groups usin
 
 The method for answering questions like these is called the **Analysis of Variance**, almost always shortened to **ANOVA**. The name sounds like it is about variances, and in a sense it is, but the question it answers is about **means**. The central idea is one you have already met in a different guise: we split the total variation in the response into a part explained by the groups and a part left over, and then judge whether the explained part is large enough to take seriously.
 
-### Why not just run several two-sample $t$-tests?
+## Why not just run several two-sample $t$-tests?
 
 The obvious thing to try is to test every pair of groups separately. With three groups $A$, $B$ and $C$ that means three tests: $A$ vs $B$, $A$ vs $C$, and $B$ vs $C$. Why not do that?
 
@@ -78,7 +78,7 @@ With six groups you would be wrong more often than a coin flip. This is called t
 
 Notice how modest the alternative is. ANOVA does not claim to tell you *which* means differ, or by how much — only that they are not all the same. Finding out which ones differ is the subject of the next lecture.
 
-### The idea behind the analysis of variance
+## The idea behind the analysis of variance
 
 Suppose we measure a response in each of three groups. There are two quite different reasons the observations are not all identical:
 
@@ -89,7 +89,7 @@ The first is noise. The second is signal. ANOVA compares the size of the second 
 
 The plot below shows the same three group means in two situations. On the left the within-group scatter is small and the separation between groups stands out clearly. On the right the group means sit in exactly the same places, but the noise is so large that the separation is unconvincing.
 
-```{r, echo=FALSE, warning=F, message=F, fig.height=4, fig.width=10}
+```{r, echo=FALSE, warning=F, message=F, fig.height=4, fig.width=10, fig.alt = "Two panels of jittered dot plots of a response for groups A, B and C, each with a black bar at the group mean; the means are the same in both panels, about 9, 13 and 11. Left, small within-group variation: tight clusters that are clearly separated. Right, large within-group variation: wide, heavily overlapping clouds."}
 set.seed(123)
 
 # Each group is re-centred on its target mean so that the group means are
@@ -123,7 +123,7 @@ ggplot(d, aes(x = group, y = y, colour = group)) +
 
 The black bars mark the group means. They sit in the same places in both panels — what changes is how believable the separation is. ANOVA turns that visual judgement into a number.
 
-### Notation
+## Notation
 
 Suppose we have $k$ groups. Write
 
@@ -132,7 +132,7 @@ Suppose we have $k$ groups. Write
 * $\bar{y}_i$ for the mean of group $i$ (the **group mean**);
 * $\bar{y}$ for the mean of all $N$ observations together (the **grand mean**).
 
-### Partitioning the total variation
+## Partitioning the total variation
 
 Measure the total variation in the response as the sum of squared deviations of every observation from the grand mean:
 
@@ -152,7 +152,7 @@ and these add up:
 
 This should look familiar. In simple linear regression we split the total variation the same way, into a part explained by the model and a part left over, $SS_T = SS_R + SS_E$. ANOVA is the same idea with a categorical explanatory variable instead of a quantitative one: $SS_B$ plays the role of $SS_R$, and $SS_W$ plays the role of $SS_E$.
 
-### From sums of squares to the $F$-statistic
+## From sums of squares to the $F$-statistic
 
 We cannot compare $SS_B$ and $SS_W$ directly, because each is built from a different number of free quantities. As always, we divide by degrees of freedom to get a **mean square**, which is just a variance:
 
@@ -187,7 +187,7 @@ kable(df, format = 'html', digits = 2,
 
 ```
 
-### A worked example by hand
+## A worked example by hand
 
 A greenhouse trial compares three fertilizers. Four plants are grown with each, and the height of each plant is recorded in centimetres after four weeks.
 
@@ -265,7 +265,7 @@ summary(model)
 
 ```
 
-### Assumptions
+## Assumptions
 
 The $F$-test above is trustworthy only when three conditions hold:
 
@@ -279,7 +279,7 @@ A useful rule of thumb for the third condition: if the **largest group standard 
 
 Last time we built the ANOVA $F$-test and used it to reject the hypothesis that three fertilizers produce the same mean plant height. But rejecting $H_0$ leaves the interesting question unanswered: the means are not all equal, so *which* ones differ? Today we answer that, we check the assumptions the $F$-test rests on, and we connect ANOVA back to two tests you already know.
 
-### Running an ANOVA in R
+## Running an ANOVA in R
 
 R ships with a data set called `PlantGrowth`, which records the dried weight of plants grown under a control condition and two different treatments, with ten plants in each group [@dobson1983].
 
@@ -294,7 +294,7 @@ str(PlantGrowth)
 
 Always plot the data before testing. Side-by-side boxplots show the group centres and spreads at a glance:
 
-```{r, echo=T, warning=F, message=F, fig.height=5, fig.width=8}
+```{r, echo=T, warning=F, message=F, fig.height=5, fig.width=8, fig.alt = "Side-by-side boxplots with the individual points overlaid of dried plant weight in grams for groups ctrl, trt1 and trt2, ten plants each. trt1 has the lowest centre (median about 4.55), ctrl is in the middle (about 5.16) and trt2 the highest (about 5.44); the boxes overlap, and trt2 is the least spread out."}
 
 ggplot(PlantGrowth, aes(x = group, y = weight, fill = group)) +
   geom_boxplot(alpha = 0.5, outlier.shape = NA) +
@@ -334,13 +334,13 @@ summary(model)
 
 The $F$-statistic is $F_0 = 4.85$ on $2$ and $27$ degrees of freedom, with a $p$-value of $0.016$. Since $0.016 < 0.05$ we reject $H_0$ and conclude that the three groups do not all have the same mean dried weight.
 
-### A significant $F$ does not tell you which means differ
+## A significant $F$ does not tell you which means differ
 
 This is the point where it is tempting to look at the group means, notice that `trt2` has the largest and `trt1` the smallest, and announce that both treatments differ from the control. The $F$-test does not license any of that. It says only that the three means are not all equal.
 
 To find out *which* pairs differ we need a procedure that compares pairs while keeping the overall Type I error rate at $\alpha$ — exactly the problem that stopped us running separate $t$-tests in the first place.
 
-### Multiple comparisons: Tukey's Honest Significant Difference
+## Multiple comparisons: Tukey's Honest Significant Difference
 
 The standard tool is **Tukey's Honest Significant Difference** (HSD) [@tukey1949]. It compares every pair of group means and widens the intervals just enough that the $95\%$ confidence level applies to the whole *family* of comparisons at once, not to each one separately. In R it is one line:
 
@@ -373,13 +373,13 @@ The result is worth pausing on. The only significant pair is `trt2` versus `trt1
 
 An alternative you may see is the **Bonferroni correction**, which simply tests each of the $m$ pairs at level $\alpha/m$ instead of $\alpha$. With three comparisons at $\alpha = 0.05$, each pair is tested at $0.0167$. It is easy to explain and always valid, but it is more conservative than Tukey — it will miss real differences more often — so Tukey's HSD is generally preferred when all pairwise comparisons are of interest.
 
-### Checking the assumptions
+## Checking the assumptions
 
 **Equal variances.** From the table of group standard deviations above, the largest is $0.794$ and the smallest is $0.443$. Since $0.794 < 2 \times 0.443 = 0.886$, the rule of thumb is satisfied.
 
 **Normality and constant spread.** As in regression, we examine the residuals — the distance from each observation to its group mean. A normal quantile plot checks normality, and a plot of residuals against fitted values checks that the spread is similar across groups.
 
-```{r, echo=T, warning=F, message=F, fig.height=5, fig.width=10}
+```{r, echo=T, warning=F, message=F, fig.height=5, fig.width=10, fig.alt = "Left: normal Q-Q plot of the ANOVA residuals; the points lie close to the red reference line, with the few largest residuals slightly above it. Right: residuals against fitted values, forming three vertical strips at the group means (about 4.66, 5.03 and 5.53), centred on a red line at zero with comparable heights."}
 
 resid.df <- data.frame(fitted = fitted(model), residual = residuals(model))
 
@@ -400,7 +400,7 @@ ggarrange(p1, p2, ncol = 2)
 
 The points in the Q-Q plot lie close to the diagonal, so normality is reasonable. In the residual plot the three vertical strips have comparable heights, which again supports equal variances. **Independence** cannot be checked from these plots; it is a question about how the plants were assigned and measured.
 
-### Connections to what we already know
+## Connections to what we already know
 
 **ANOVA with two groups is the pooled two-sample $t$-test.** If $k = 2$, the ANOVA $F$-statistic is exactly the square of the two-sample $t$-statistic, and the two tests give identical $p$-values. Dropping `trt2` and comparing the remaining two groups both ways:
 
@@ -418,7 +418,7 @@ c(`t squared` = round(unname(t.stat)^2, 4), `F statistic` = round(f.stat, 4))
 
 **ANOVA and regression are the same partition.** In Week 15 the regression output ended with an omnibus $F$-statistic testing whether the predictor explained a significant share of the variation in the response. That test split $SS_T$ into $SS_R + SS_E$; ANOVA splits it into $SS_B + SS_W$. The arithmetic is identical — only the kind of explanatory variable changes, from quantitative in regression to categorical here.
 
-### Summary: carrying out a one-way ANOVA
+## Summary: carrying out a one-way ANOVA
 
 1. **Plot the data first.** Side-by-side boxplots show whether a difference is plausible before any test is run.
 2. **State the hypotheses.** $H_0: \mu_1 = \cdots = \mu_k$ against $H_A:$ at least one mean differs.
@@ -426,4 +426,4 @@ c(`t squared` = round(unname(t.stat)^2, 4), `F statistic` = round(f.stat, 4))
 4. **If you reject $H_0$**, follow up with Tukey's HSD to find *which* pairs differ. If you fail to reject, stop — there is nothing to follow up.
 5. **Check the assumptions**: independence from the study design, normality from a Q-Q plot of residuals, and equal variances from the residual plot and the largest-versus-smallest standard deviation rule.
 
-### References
+## References

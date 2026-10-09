@@ -61,26 +61,42 @@
 </script>
 
 <!--
-  MathJax: render with SVG rather than the default HTML-CSS output.
+  MathJax 4, SVG output, with speech.
 
-  HTML-CSS builds a square root's overline out of stretched glyph pieces, and
-  headless Chrome prints the result too wide: on the Exam 1 study guide the bar
-  over sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran well past the expression and
-  collided with the line above it. The same overshoot showed up wherever a tall
-  \sqrt was printed, including the Exam 1 review problems.
+  WHY VERSION 4. The pages used to load MathJax 2.7 from mathjax.rstudio.com.
+  Its SVG output is aria-hidden and has no spoken text. The only thing assistive
+  technology got was a hidden MathML copy, which only a screen reader with a math
+  module (NVDA + MathCAT, JAWS, VoiceOver) can voice. Read-aloud tools (Edge and
+  Chrome Read Aloud, Read&Write, Speechify, phone Speak Screen) read nothing, or
+  stray letters, for all ~6,000 expressions on the site. MathJax 4 runs Speech
+  Rule Engine on every expression and attaches a natural-language label, e.g.
+  "P of open paren X is greater than or equal to 2 close paren equals ...",
+  that any text-to-speech tool or screen reader reads.
 
-  Checked by printing the identical formula three ways before changing anything:
-  HTML-CSS overshoots, MathJax 3 (CHTML) overshoots more, and the v2 SVG
-  renderer draws the rule to exactly the right width. It is not a timing
-  problem - reprinting with a 90-second budget produced the same bad bar.
+  WHY SVG. CHTML output (v2 HTML-CSS, and v3 CHTML) prints square-root bars too
+  wide in headless Chrome: on the Exam 1 study guide the bar over
+  sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran past the expression into the line
+  above. SVG draws it the right width; re-checked with v4 SVG before switching.
 
-  This has to live in <head>: rmarkdown injects the MathJax <script> at the end
-  of <body>, and MathJax applies any text/x-mathjax-config block it finds in the
-  document when it starts. SVG output inherits currentColor, so both themes are
-  unaffected (see the MathJax rule in assets/brand/site.css).
+  The script URL itself is set by `mathjax:` in _site.yml and in every
+  per-directory _output.yml (rmarkdown injects it at the end of <body>). This
+  block has to be in <head> so window.MathJax exists before that script runs.
+  Keep the version pinned and the same in all seven places.
+
+  inTabOrder: false. MathJax makes every expression a Tab stop by default (for
+  its keyboard explorer), which put ~300 Tab stops on a single lecture page in
+  front of the links a keyboard user is trying to reach. Screen-reader users
+  still reach every expression in browse mode, and the label is on the
+  expression either way. It is options.a11y, NOT menuOptions.settings - the
+  menu setting is accepted but ignored at startup.
+
+  SVG output inherits currentColor, so both themes are unaffected (see the
+  MathJax rule in assets/brand/site.css).
 -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({ menuSettings: { renderer: "SVG" } });
+<script>
+window.MathJax = {
+  options: { a11y: { inTabOrder: false } }
+};
 </script>
 
 <style type="text/css">
@@ -566,8 +582,8 @@ variable</strong>. The idea behind this language is that the response
 variable depends on the outcomes of the explanatory variable (if they
 share a statistical relationship).</p>
 <div id="scatterplots-and-statistical-associations"
-class="section level3">
-<h3>Scatterplots and statistical associations</h3>
+class="section level2">
+<h2>Scatterplots and statistical associations</h2>
 <p>A <strong>scatterplot</strong> is a type of descriptive plot that
 shows the relationship between two quantitative variables (denoted <span
 class="math inline">\(X\)</span> and <span
@@ -581,7 +597,7 @@ represented on the <span class="math inline">\(y\)</span>-axis. Consider
 the four scatterplots below which plot the relationship between the
 independent variable <span class="math inline">\(X\)</span> and the
 dependent variable <span class="math inline">\(Y\)</span>:</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-1-1.png" alt="Six scatterplots of Y against X labelled A to F. A: a shapeless cloud with no trend. B: a moderate negative linear trend. C: a strong, tight positive linear trend. D: every point at the same Y value, a flat horizontal row. E: a curved, increasing pattern. F: two separate clusters of points following a decreasing curve." width="960" /></p>
 <ul>
 <li>Which of these plots indicate a statistical association between the
 two variables and which do not?</li>
@@ -616,8 +632,8 @@ for by the independent variable. When a scatterplot shows distinct
 clusters it is often most useful to describe the pattern in each
 cluster.</p>
 </div>
-<div id="measures-of-association" class="section level3">
-<h3>Measures of association</h3>
+<div id="measures-of-association" class="section level2">
+<h2>Measures of association</h2>
 <p>As we just saw, scatterplots display the form, direction, and
 strength of the relationship between two quantitative variables. Linear
 (straight-line) relationships are often of interest because they occur
@@ -628,7 +644,7 @@ linear relationship. Consider the two plots below which show the
 relationship between highway fuel efficiency (in miles per gallon) and
 weight of cars from the classic 1993 New Car dataset <span
 class="citation">(Lock 1993; Venables and Ripley 2002)</span>.</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-2-1.png" width="960" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-2-1.png" alt="Two side-by-side scatterplots of the same 93 cars, car weight against highway MPG, both showing heavier cars getting lower MPG. The left plot is zoomed to the data, so the points look spread out; the right plot uses wide axes (MPG 0 to 70, weight 1000 to 5000), so the points look like a tight downward band." width="960" /></p>
 <ul>
 <li>Which plot shows a stronger linear relationship?</li>
 </ul>
@@ -669,7 +685,7 @@ covariance, and if two variables are independent their covariance should
 be close to zero. Consider the first three scatterplots and the
 covariances between <span class="math inline">\(X\)</span> and <span
 class="math inline">\(Y\)</span> from <em>figure 1</em> seen earlier</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-3-1.png" width="960" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-3-1.png" alt="Three scatterplots repeating plots A, B and C from figure 1, each titled with its covariance: the no-trend cloud has Cov(X,Y) = -0.2, the moderate negative trend has Cov(X,Y) = -2.4, and the strong positive trend has Cov(X,Y) = 18.2." width="960" /></p>
 <p>As we can see from above the plots that show a stronger linear
 relationship are paired with larger covariances for <span
 class="math inline">\(X\)</span> and <span
@@ -936,7 +952,7 @@ Median Home Value
 </tr>
 </tbody>
 </table>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-4-1.png" width="768" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-4-1.png" alt="Scatterplot of median house value against population for 30 California districts, titled with a covariance of about 26.4 million. Most districts have populations under about 2000 and the points show only a weak, scattered upward tendency." width="768" /></p>
 <p>Even though the plot doesn’t really show a strong relationship
 between these two variables the covariance we compute is a whopping
 26,390,423. Moreover, because our two variables have different units,
@@ -996,7 +1012,7 @@ correlation coefficient between these two variables is <span
 class="math inline">\(r \approx 0.2\)</span>. Now consider the first
 three plots from <em>figure 1</em> but this time with correlations
 plotted for each scatterplot</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-5-1.png" width="960" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-5-1.png" alt="The same three scatterplots, now titled with correlations: the no-trend cloud has r = -0.1, the moderate negative trend has r = -0.8, and the strong positive trend has r = 1 (rounded)." width="960" /></p>
 <p>Computing the covariance or correlation is not an easy task. The
 formulas are quite involved and infeasible for any large number of
 observations. Thus it is best to rely on software to easily compute
@@ -1088,8 +1104,8 @@ class="math display">\[ \approx 17.24\]</span></p>
 9.02^2}} \approx 0.75\]</span></p>
 </div>
 <div id="introduction-to-simple-linear-regression"
-class="section level3">
-<h3>Introduction to simple linear regression</h3>
+class="section level2">
+<h2>Introduction to simple linear regression</h2>
 <p>Correlation measures the strength of a linear relationship between
 two variables, but what if you want to go a step further and find the
 best-fit line that connects those dots? That’s where linear regression
@@ -1108,7 +1124,7 @@ explanatory variable <span class="math inline">\(x\)</span> changes.</p>
 <p>It turns out that the line that comes as close as possible to all of
 the points is the line that minimizes the squared deviations of the
 <strong>residuals</strong>.</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-7-1.png" alt="Scatterplot of five points with a dotted upward-sloping regression line. A solid red vertical segment joins each point to the line, showing its residual; some points lie above the line and some below." width="672" /></p>
 <p>Residuals are the vertical distances (red lines in the plot above)
 between each point and the regression line. If you think of the
 regression line as our best guess at the relationship between <span
@@ -1120,8 +1136,8 @@ least error across all the points in the plot. This line gives us the
 best model to describe the relationship between the <span
 class="math inline">\(X\)</span> and <span
 class="math inline">\(Y\)</span> variables. You can take a look at <a
-href="https://www.geogebra.org/m/xC6zq7Zv">https://www.geogebra.org/m/xC6zq7Zv</a>
-to practice fitting the “best” line.</p>
+href="https://www.geogebra.org/m/xC6zq7Zv">this GeoGebra line-fitting
+activity</a> to practice fitting the “best” line.</p>
 </div>
 </div>
 <div id="lecture-31" class="section level1">
@@ -1134,8 +1150,8 @@ a straight-line model for the relationship, find the line that fits the
 data best, use it to predict values of the response, and then measure
 how much of the variation in the response that line actually
 explains.</p>
-<div id="the-simple-linear-model" class="section level3">
-<h3>The simple linear model</h3>
+<div id="the-simple-linear-model" class="section level2">
+<h2>The simple linear model</h2>
 <p>We learned on Monday that a scatterplot can be used to visualize and
 check for a <strong>linear</strong> relationship between two
 quantitative variables. We also learned that straight line fitted
@@ -1161,7 +1177,7 @@ class="math inline">\(Y\)</span> describes how much <span
 class="math inline">\(\hat{y}\)</span> changes per unit change in <span
 class="math inline">\(X\)</span> (sometimes called <em>rise over
 run</em>). This is visualized in the plot below.</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-8-1.png" alt="A dotted upward-sloping regression line on axes X (3 to 7) and Y, with a few points. At X = 5 a red point sits just below the line; a horizontal segment labelled 'Change in X' runs from the line to the point and a vertical segment labelled 'Change in Y' runs from the point up to the line, forming the rise-over-run triangle that defines the slope." width="672" /></p>
 <ul>
 <li><p>When the slope is negative the predicted values decrease as
 independent variable <span class="math inline">\(X\)</span>
@@ -1181,8 +1197,8 @@ be huge.</p></li>
 </ul>
 </div>
 <div id="finding-a-regression-line-and-the-least-squares-estimator"
-class="section level3">
-<h3>Finding a regression line and the least-squares estimator</h3>
+class="section level2">
+<h2>Finding a regression line and the least-squares estimator</h2>
 <p>On Monday, we also briefly introduced the idea of a
 <strong>residual</strong> - the disparity (error) between the values
 predicted by the regression line <span
@@ -1210,7 +1226,7 @@ class="math inline">\(\hat{y}_i\)</span></p></li>
 <li><p>The smaller the absolute value of the residual the closer the
 predicted value is to the actual value of the response variable</p></li>
 </ul>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-9-1.png" alt="Scatterplot of five points with a dotted upward-sloping regression line. One point, highlighted in red, lies below the line, and a red vertical segment from it up to the line is labelled 'absolute value of epsilon i', the size of its residual." width="672" /></p>
 <p>The length of the red line in the plot above represents the absolute
 value of the residual for observation <span
 class="math inline">\(y_i\)</span>. The residuals are all vertical
@@ -1252,8 +1268,8 @@ class="math inline">\(\hat{\beta}\)</span> is directly related to the
 correlation coefficient <span class="math inline">\(r\)</span></p>
 </div>
 <div id="predicting-values-of-the-dependent-variable-batting-averages"
-class="section level3">
-<h3>Predicting values of the dependent variable: Batting averages</h3>
+class="section level2">
+<h2>Predicting values of the dependent variable: Batting averages</h2>
 <p>A regression line allows us to further describe the relationship
 between two variables that goes beyond just stating the strength of the
 relationship using the correlation coefficient <span
@@ -1476,7 +1492,7 @@ batting average (independent variable) and average runs scored per game
 line relating these two variables. Based on the plot, is team batting
 average a good predictor of the average number of runs a team will score
 ?</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-12-1.png" alt="Scatterplot titled American League Baseball of average runs scored against team batting average for 14 teams, each labelled by name, with r = 0.568 and a dotted upward-sloping least-squares line. Teams with higher batting averages tend to score more, with considerable scatter; Seattle is lowest on both." width="672" /></p>
 <ul>
 <li>Use the plot and the summary information to compute the estimates
 for the slope and intercept</li>
@@ -1530,9 +1546,9 @@ uncertainty can lead to inaccurate or misleading predictions. Therefore,
 always ensure that predictions are made within the range of data used to
 fit the model to maintain reliability and accuracy.</p>
 </div>
-<div id="coefficient-of-determination-r2" class="section level3">
-<h3>Coefficient of determination <span
-class="math inline">\(r^2\)</span></h3>
+<div id="coefficient-of-determination-r2" class="section level2">
+<h2>Coefficient of determination <span
+class="math inline">\(r^2\)</span></h2>
 <p>When we predict a value of <span class="math inline">\(Y\)</span>,
 why should we use the regression line? We could instead use the center
 of <span class="math inline">\(Y\)</span>’s distribution as our
@@ -1545,7 +1561,7 @@ class="math inline">\(\hat{y}_i = \alpha + \beta x_i\)</span> will give
 more accurate predictions than simply using the sample mean <span
 class="math inline">\(\bar{y}\)</span>. Consider again the example of
 teams in the American League for Major League Baseball</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-13-1.png" alt="The same American League scatterplot of average runs scored against team batting average, with two prediction lines: a blue dotted upward-sloping regression line and a red dashed horizontal line at the mean runs scored, about 4.45. The points sit closer to the regression line than to the flat mean line." width="672" /></p>
 <p>The red line gives the predictions using the sample mean and the blue
 line is the using the least squares regression line. In general, the
 stronger the linear relationship between the independent and dependent
@@ -1611,10 +1627,10 @@ enough to conclude that a relationship exists in the population, we test
 the slope, we look at a second test of the same question based on
 variances, and we finish by checking the assumptions that make any of
 those conclusions trustworthy.</p>
-<div id="regression-relates-the-mean-of-y-to-x" class="section level3">
-<h3>Regression relates the mean of <span
+<div id="regression-relates-the-mean-of-y-to-x" class="section level2">
+<h2>Regression relates the mean of <span
 class="math inline">\(Y\)</span> to <span
-class="math inline">\(X\)</span></h3>
+class="math inline">\(X\)</span></h2>
 <p>The prediction equation <span class="math inline">\(\hat{y}_i =
 \alpha + \beta x_i\)</span> yields the predicted value the response
 <span class="math inline">\(Y\)</span> for a given value of the
@@ -1721,7 +1737,7 @@ individual 189
 </tr>
 </tbody>
 </table>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-14-1.png" width="960" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-14-1.png" alt="Two panels for 189 mothers. A: scatterplot of infant birth weight (about 700 to 5000 grams) against mother's age (14 to 45 years) with a dotted, nearly flat, slightly rising regression line and r squared = 0.008157; the points form a wide cloud. B: side-by-side boxplots of birth weight for each age, showing a wide spread of weights at every age." width="960" /></p>
 <p>The prediction equation for the regression model fit to the
 birthweight data is given by</p>
 <p><span class="math display">\[\hat{y} = 2655.7 + 12.43x_i\]</span></p>
@@ -1750,8 +1766,8 @@ population mean of <span class="math inline">\(y\)</span> for a given
 value of <span class="math inline">\(x\)</span>.</p>
 </div>
 <div id="statistical-inference-for-linear-regression"
-class="section level3">
-<h3>Statistical inference for linear regression</h3>
+class="section level2">
+<h2>Statistical inference for linear regression</h2>
 <p>A linear regression model:</p>
 <ul>
 <li><p>specifies the linear relationship between two quantitative
@@ -1898,8 +1914,8 @@ class="math inline">\(R\)</span> output, the hypothesis test also
 confirms that age of mother and infant birth weight are not
 significantly associated.</p>
 </div>
-<div id="an-alternative-way-to-test-association" class="section level3">
-<h3>An alternative way to test association</h3>
+<div id="an-alternative-way-to-test-association" class="section level2">
+<h2>An alternative way to test association</h2>
 <p>Consider the following dataset containing information about 1,143
 social media ads from an anonymous company, detailing the number of
 times each ad was viewed and the total number of customers who made a
@@ -2248,8 +2264,8 @@ anova(model)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
-<div id="an-application-example" class="section level3">
-<h3>An Application Example</h3>
+<div id="an-application-example" class="section level2">
+<h2>An Application Example</h2>
 <p><strong>Example:</strong> Consider the following dataset which
 records the nutrition information for nearly 80 popular brands of cereal
 <span class="citation">(Mohammadi and Burke 2023)</span>.</p>
@@ -5885,7 +5901,7 @@ receive higher ratings?”</em>. To answer this question, we will fit a
 linear model using the variable <em>Added Sugar</em> as a predictor of
 <em>Customer Rating</em>. The fitted linear model is displayed in the
 plot below.</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-23-1.png" width="960" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-23-1.png" alt="Two panels for the cereal data. A: scatterplot of customer rating against added sugars (0 to 15 grams) with a dotted downward-sloping least-squares line; larger translucent red dots mark the mean rating at each sugar value and lie close to the line. B: boxplots of customer rating for each sugar value, with centres that generally fall as sugar increases." width="960" /></p>
 <p>In panel <span class="math inline">\(\bf A\)</span> above, the red
 line indicates the least-squares regression line. The red dots give the
 mean of the distribution of customer ratings for each value of added
@@ -6008,8 +6024,8 @@ ANOVA test using the table above:</li>
 <p><span class="math display">\[F_0 = \frac{8711.93/1}{6217.36/(76-2)} =
 103.69 \sim F(1, 74)\]</span></p>
 </div>
-<div id="checking-assumptions" class="section level3">
-<h3>Checking Assumptions</h3>
+<div id="checking-assumptions" class="section level2">
+<h2>Checking Assumptions</h2>
 <p>Checking assumptions in simple linear regression is crucial because
 it ensures the validity and reliability of your model’s predictions and
 conclusions. Recall that the least-squares estimator makes several
@@ -6028,7 +6044,7 @@ the distribution of the computed residuals to the theoretical quantiles
 of a standard normal distribution. Below is the Q-Q plot and histogram
 for the residuals of the linear regression model fitting customer
 ratings as a response of added sugar content:</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-26-1.png" width="960" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-26-1.png" alt="Left: normal Q-Q plot of the regression residuals; points follow the diagonal line through the middle but bend above it in the upper tail, with two large positive residuals near 23 and 34. Right: histogram of the residuals, peaked just below 0 with a long right tail out to about 35, so the residuals are right-skewed." width="960" /></p>
 <p>If the residuals are approximately normally distributed, the points
 on the Q-Q plot will align along a diagonal line, indicating a
 one-to-one correspondence with the standard normal quantiles. However,
@@ -6059,7 +6075,7 @@ variance. Software like <span class="math inline">\(R\)</span> makes it
 easy to quickly produce several diagnostic plots to assess assumptions
 and outliers. The residual-leverage plot for the cereal example is shown
 below:</p>
-<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-27-1.png" width="960" /></p>
+<p><img src="lecturemenu15_files/figure-html/unnamed-chunk-27-1.png" alt="Four R diagnostic plots for the cereal regression. Residuals vs Fitted: a cloud of points around zero; the red trend line starts a little above zero at low fitted values, then stays close to zero. Scale-Location: the red trend line is a shallow U, nearly flat. Q-Q Residuals: points near the line except points 4 and 1, far above it at the top. Residuals vs Leverage: all leverages below about 0.06; point 4 has a large standardized residual, about 3.8, but stays below the 0.5 Cook's distance dashed line." width="960" /></p>
 <p>In the four plots above, the residuals vs leverage plot is given in
 the bottom-right panel. The <span class="math inline">\(x\)</span>-axis
 is <em>leverage</em> or influence that each data point has on the
@@ -6072,7 +6088,8 @@ residual vs leverage plot above, the data point labeled “4” is close but
 not above the dashed line indicating there are no outliers. Another
 example of a residual vs leverage plot and how to address potential
 outliers can be found here <a
-href="https://www.statology.org/residuals-vs-leverage-plot/">https://www.statology.org/residuals-vs-leverage-plot/</a></p>
+href="https://www.statology.org/residuals-vs-leverage-plot/">Statology:
+How to Interpret a Residuals vs. Leverage Plot</a></p>
 <p>The last two plots we will discuss are the <em>Scale-Location
 plot</em> (bottom left panel in the figure above) and the <em>Residuals
 vs Fitted plot</em> (top left panel in the figure above). These two
@@ -6098,11 +6115,12 @@ same as it is for the Residuals vs Fitted plot, however scaling the
 residuals in this way can make it easier to visually identify patterns
 that might suggest non-constant variance. You can see another example of
 these two plot types here <a
-href="https://www.statology.org/scale-location-plot/">https://www.statology.org/scale-location-plot/</a></p>
+href="https://www.statology.org/scale-location-plot/">Statology: How to
+Interpret a Scale-Location Plot</a></p>
 <p><br> <br> <br> <br></p>
 </div>
-<div id="references" class="section level3 unnumbered">
-<h3 class="unnumbered">References</h3>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0">
 <div id="ref-geron2022hands" class="csl-entry">
@@ -6290,6 +6308,66 @@ href="https://www.stats.ox.ac.uk/pub/MASS4/">https://www.stats.ox.ac.uk/pub/MASS
     bar.appendChild(link);
     main.insertBefore(bar, main.firstChild);
   }
+
+  /* 6. Author / date are not headings (WCAG 1.3.1, 2.4.6).
+        pandoc's template emits them as <h4 class="author"> and
+        <h4 class="date"> straight after the <h1> title. Screen-reader users
+        navigating by heading hear "heading level 4, STAT 251 Section 01" as if
+        it were a section, and it puts an h1 -> h4 skip at the top of every
+        page. Re-tag them as paragraphs; site.css styles them by class. */
+  var meta = document.querySelectorAll('#header h4.author, #header h4.date');
+  for (var k = 0; k < meta.length; k++) {
+    var h4 = meta[k];
+    var p = document.createElement('p');
+    p.className = h4.className;
+    while (h4.firstChild) p.appendChild(h4.firstChild);
+    h4.parentNode.replaceChild(p, h4);
+  }
+
+  /* 7. Solution answers carry more than colour (WCAG 1.4.1, 1.4.3).
+        Answers are marked three ways across the solution pages: an inline
+        style="color: red", the RA/RZ <div style="color: red;"> helper, and
+        class="soln". Colour was the only cue, so a screen reader, a
+        read-aloud tool, or a colour-blind reader could not tell the answer
+        from the question. Each one gets class .answer (site.css section 20b:
+        AA-contrast red, shaded box) and a screen-reader-only "Answer:" label.
+        The label goes on the outermost answer element only, so an answer
+        that contains another red span is announced once. Matching the inline
+        style here rather than editing the sources keeps the 2024 archive
+        untouched. */
+  /* el.style.color rather than a [style*=...] selector, which would also catch
+     background-color and border-color. Empty placeholder spans are skipped so
+     they do not render as an empty shaded box. */
+  var candidates = document.querySelectorAll('.main-container .soln, .main-container [style*="color"]');
+  var answers = [];
+  for (var a = 0; a < candidates.length; a++) {
+    var c = candidates[a];
+    var isRed = c.style.color === 'red' || c.style.color === 'rgb(255, 0, 0)';
+    if (!isRed && !c.classList.contains('soln')) continue;
+    if (!c.textContent.replace(/\s+/g, '') && !c.querySelector('img, svg')) continue;
+    c.classList.add('answer');
+    answers.push(c);
+  }
+  for (var b = 0; b < answers.length; b++) {
+    var el = answers[b];
+    if (el.parentNode.closest && el.parentNode.closest('.answer')) continue;
+    var label = document.createElement('span');
+    label.className = 'sr-only';
+    label.textContent = 'Answer: ';
+    el.insertBefore(label, el.firstChild);
+  }
+
+  /* 8. The decorative arrow in the back link (item 5) is read aloud as
+        "leftwards arrow". */
+  var back = document.querySelector('.site-backlink');
+  if (back) {
+    back.textContent = '';
+    var arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '\u2190 ';
+    back.appendChild(arrow);
+    back.appendChild(document.createTextNode('Back to course site'));
+  }
 })();
 </script>
 
@@ -6332,7 +6410,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-svg.js";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

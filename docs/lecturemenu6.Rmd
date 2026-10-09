@@ -170,7 +170,7 @@ Here are three distributions that have nothing to do with each other: the height
 New York, in each of the `r length(jan)` years from `r min(cp$YEAR)` to `r max(cp$YEAR)`, and the
 average of ten rolls of a fair die.
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Three histograms side by side: heights of 262 female students (about 55 to 77 inches), mean January temperatures in Central Park over 150 years (about 21 to 45 degrees F), and the average of 10 dice rolls (about 2 to 5). Each is single-peaked, roughly symmetric and bell shaped."}
 knitr::include_graphics('assets/l12_bell_examples.png')
 ```
 
@@ -186,7 +186,7 @@ thin out at the same rate on both sides. This shape turns up so often that it ha
 Below, the same three distributions each have a normal curve drawn over them. It is the same
 *shape* each time; only its center and its spread change.
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "The same three histograms, each with a normal curve drawn over it: heights labelled N(65.4, 3.38), January temperatures N(32.0, 4.6), and the average of 10 dice N(3.5, 0.54). The curve fits the temperatures and dice closely; the heights are lumpier, with a few values far out in the tails."}
 knitr::include_graphics('assets/l12_bell_examples_fit.png')
 ```
 
@@ -209,7 +209,7 @@ January temperatures roughly $N(`r fmt(CM, 1)`, `r fmt(CS, 1)`)$.
 * The standard deviation $\sigma$ **sets the spread**. A small $\sigma$ gives a tall, narrow curve; a
   large $\sigma$ gives a short, broad one. The center does not move.
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Left: a normal curve with a dashed vertical line at its peak labelled mu and a horizontal arrow from the center labelled sigma, captioned 'the mean locates the center'. Right: three normal curves with the same center and sigma equal to 0.6, 1 and 2; the smaller sigma, the taller and narrower the curve, captioned 'the standard deviation sets the spread'."}
 knitr::include_graphics('assets/l11_normal_params.png')
 ```
 
@@ -222,7 +222,7 @@ Why would one curve matter so much? Look at what happens when we average dice. O
 every face is equally likely. The average of two dice is already peaked in the middle, and the
 average of five or ten is a bell.
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Four probability histograms of the average roll, each on an axis from 1 to 6: one die is flat with six equal bars; the average of 2 dice is a triangle peaked at 3.5; the averages of 5 and 10 dice are increasingly narrow bell shapes centered at 3.5."}
 knitr::include_graphics('assets/l12_dice_means.png')
 ```
 
@@ -243,7 +243,7 @@ intervals, so in theory its distribution is better drawn as a smooth curve.
 * A **density curve** is a smooth curve that describes a distribution. It never dips below the axis,
   and the total area under it is exactly 1.
 
-```{r, echo=FALSE, out.width='70%', fig.align='center'}
+```{r, echo=FALSE, out.width='70%', fig.align='center', fig.alt = "Density-scaled histogram of 150 mean January temperatures in Central Park, from about 21 to 45 degrees F, with a smooth bell-shaped density curve drawn over the bars, peaking near 32 degrees at a density of just under 0.09."}
 knitr::include_graphics('assets/l12_temps_density.png')
 ```
 
@@ -256,7 +256,7 @@ labelled **density**, and it is worth getting a rough feel for what that means.
 The January temperatures have $\bar{x} = `r fmt(CM, 1)`$°F and $s = `r fmt(CS, 1)`$°F. What fraction of
 Januaries averaged between 28°F and 36°F?
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "A normal curve for mean January temperature centered at 32 degrees F, with the area under the curve between 28 and 36 degrees shaded and labelled 'area = ?'."}
 knitr::include_graphics('assets/l12_temps_area.png')
 ```
 
@@ -292,7 +292,7 @@ value is from $\mu$ **in units of $\sigma$**, any normal curve turns into $N(0, 
 of the `r length(fh)` female students are drawn twice: once in inches, and once as the number of
 standard deviations each height is from the mean.
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Two identical normal curves side by side. Left axis: height in inches from 56 to 76, with a vertical line at the mean 65.4 and a line at 70 inches. Right axis: the same heights as z-scores from -3 to 3, with a line at 0 and a line at z = 1.36."}
 knitr::include_graphics('assets/l12_standardize_axes.png')
 ```
 
@@ -341,7 +341,7 @@ is the natural yardstick, because $\sigma$ is exactly what sets the curve's spre
 Recall the twenty US breakfast cereals from the Week 3 notes, with mean sodium $\bar{x} = 167$ mg and
 standard deviation $s \approx 77$ mg. The cereal furthest above the mean is Raisin Bran, at 340 mg.
 
-```{r, echo=FALSE, out.width='85%', fig.align='center'}
+```{r, echo=FALSE, out.width='85%', fig.align='center', fig.alt = "Dot plot of sodium in twenty US breakfast cereals, from 0 to 340 mg, with a dashed line at the mean x-bar = 167. An arrow from the mean to the highest point, Raisin Bran at 340 mg, is labelled '173 mg = 2.25 standard deviations'."}
 knitr::include_graphics('assets/l11_cereal_sodium.png')
 ```
 
@@ -413,7 +413,7 @@ Every normal curve has the same proportions once distance is measured in standar
   values fall within 1 standard deviation of the mean, about **95%** within 2, and about **99.7%**
   within 3.
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Normal curve with the axis marked at x-bar and at x-bar plus and minus 1, 2 and 3 s. The regions are labelled 34% between the mean and 1 s on each side, 13.5% between 1 and 2 s, and 2.35% between 2 and 3 s. Arrows above show about 68% within 1 s, 95% within 2 s and 99.7% within 3 s."}
 knitr::include_graphics('assets/l12_empirical_rule.png')
 ```
 
@@ -430,7 +430,7 @@ wrong answers.
 
 **Practice:** estimate the standard deviation of each curve.
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Two normal curves with identical shapes, both centered at 0 with a vertical line at the center. Curve A's axis runs from -15 to 15 in steps of 5; curve B's axis runs from -1.5 to 1.5 in steps of 0.5."}
 knitr::include_graphics('assets/l12_sigma_quiz.png')
 ```
 
@@ -444,7 +444,7 @@ the axis.*
 Exam scores in a class are roughly bell shaped with $\bar{x} = 74$ and $s = 8$ points. What percentage
 of scores falls in each shaded region?
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Three normal curves for exam scores centered at 74, on an axis from 50 to 100, each with a vertical line at 74. Shaded regions: (a) 66 to 82 points, (b) 82 points and above, (c) 58 to 90 points."}
 knitr::include_graphics('assets/l12_exam_rule.png')
 ```
 
@@ -465,7 +465,7 @@ The empirical rule gives a natural definition of "unusual" for bell-shaped data.
   $|z| \geq 2$. Only about 5% of the values of a bell-shaped distribution are that far out. A
   stricter version uses 3 standard deviations, about 0.3%.
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Three normal curves with the axis marked at x-bar and x-bar plus and minus 2s. Left: both tails beyond plus and minus 2s shaded, 2.5% + 2.5% = 5%, with 95% in the middle. Center: only the upper tail beyond x-bar + 2s shaded, 2.5%, leaving 97.5%. Right: only the lower tail below x-bar - 2s shaded, 2.5%, leaving 97.5%."}
 knitr::include_graphics('assets/l12_outlier_tails.png')
 ```
 
@@ -477,7 +477,7 @@ beyond 3 standard deviations is only about 0.15% of a bell-shaped distribution i
 
 You already know the $1.5 \times IQR$ rule from Week 3. Do the two rules flag the same students?
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Histogram of the heights of 262 female students, 56 to 92 inches, mostly between 60 and 71. A dashed line marks the 1.5 x IQR fence at 71.5 inches and another marks mean + 2s at 72.1 inches; the bar of seven students at 72 inches sits between the two fences. A lone value sits far out at 92 inches."}
 knitr::include_graphics('assets/l12_iqr_vs_2s.png')
 ```
 
@@ -506,7 +506,7 @@ them. For decades that table was how it was done:
   curve to the **left** of $z$. Find the row for the first two digits of $z$ and the column for the
   third.
 
-```{r, echo=FALSE, out.width='85%', fig.align='center'}
+```{r, echo=FALSE, out.width='85%', fig.align='center', fig.alt = "Excerpt of the standard normal table: rows z = 1.0 to 1.6, columns .00 to .09, each cell the area to the left of z (from 0.8413 at z = 1.00 to 0.9545 at z = 1.69). Row 1.3 and column .06 are highlighted, meeting at 0.9131."}
 knitr::include_graphics('assets/l12_ztable.png')
 ```
 
@@ -573,7 +573,7 @@ A common mistake is to think that standardizing a skewed variable straightens it
 standardizing is a linear transformation, so it moves the center to 0 and sets the spread to 1 and
 leaves the shape exactly as it found it.
 
-```{r, echo=FALSE, out.width='85%', fig.align='center'}
+```{r, echo=FALSE, out.width='85%', fig.align='center', fig.alt = "Two identical right-skewed histograms of the same 1,000 values: on the left in original units from 0 to 20, peaking around 3 to 5 with a long right tail; on the right relabelled as z-scores from about -1.7 to 5. The shape is unchanged."}
 knitr::include_graphics('assets/l12_skew_z.png')
 ```
 
@@ -630,7 +630,7 @@ purely by which units happened to be chosen.
 Now imagine repeating the process over and over: draw a sample of 20, compute $\bar{x}$, write it down,
 and start again. Below are the means of 10,000 such samples.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=10}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=10, fig.alt = "Two histograms on the same axis, 55 to 93 inches, each with a vertical line at the population mean, about 65.4. Left: the 262 individual heights, spread from about 55 to 77 inches plus one value near 92. Right: 10,000 sample means from samples of n = 20, a smooth, narrow, symmetric bell centered on the mean."}
 pop_plot <- ggplot() +
   geom_histogram(aes(x = fh), binwidth = 1, color = 'black', fill = 'lightgrey') +
   geom_vline(xintercept = mu, color = 'red', linewidth = 1) +
@@ -721,7 +721,7 @@ About 95% of sample means land within 2 standard errors of $\mu$. In the simulat
   $\pm 2 \cdot SE$ rule for outliers, it is
   $$\text{margin of error} = 2 \cdot SE$$
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Histogram of simulated sample mean heights for samples of n = 20, a bell shape centered at 65.4 inches on an axis from 62 to 69. Dashed lines mark 2 SE on either side of 65.4, at roughly 63.9 and 66.9; about 95% of sample means fall between them, and the tails beyond are shaded."}
 knitr::include_graphics('assets/l12_moe.png')
 ```
 
@@ -855,7 +855,7 @@ The law of large numbers is what makes that long-run proportion settle down to a
 
 The plot below follows the running proportion of heads over 5,000 simulated tosses of a fair coin.
 
-```{r, echo=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Line plot of the running proportion of heads against the number of tosses, on a log scale from 1 to 5,000, with a horizontal reference line at 0.5. Over the first tosses the proportion swings between 0 and about 0.67; after thousands of tosses it stays close to 0.5."}
 knitr::include_graphics('assets/l13_lln.png')
 ```
 
@@ -885,7 +885,7 @@ gets larger. That is exactly what the heights table did: $P(T) \approx 0.28$ is 
 * $A$ and $B$ are **disjoint** (or **mutually exclusive**) if they have no outcomes in common:
   $A \cap B = \emptyset$.
 
-```{r, echo=FALSE, out.width='45%', fig.align='center'}
+```{r, echo=FALSE, out.width='45%', fig.align='center', fig.alt = "Two Venn diagrams, each a rectangle labelled 'The Sample Space'. Top: circles A and B overlap, and the overlap is labelled A intersect B. Bottom: circles A and B do not touch, labelled disjoint: A intersect B is the empty set."}
 knitr::include_graphics('assets/l14_venn.png')
 ```
 
@@ -944,7 +944,7 @@ far from the actual $P(F \cap T) \approx `r fmt(nFT / N, 2)`$.
 Recall the two ways of drawing a sample from the Weeks 4-5 notes. Here a sample of 3 balls is drawn
 from a bag of 5:
 
-```{r, echo=FALSE, out.width='100%', fig.align='center'}
+```{r, echo=FALSE, out.width='100%', fig.align='center', fig.alt = "Diagram of drawing 3 balls from a bag numbered 1 to 5. Without replacement: draw 3, then 1, then 5; each drawn ball is removed from the bag, giving sample 3, 1, 5. With replacement: draw 3, then 1, then 3; the bag stays full every time, so 3 can be drawn twice, giving sample 3, 1, 3."}
 knitr::include_graphics('assets/l8_replacement.png')
 ```
 
@@ -1030,7 +1030,7 @@ tab(data.frame(x = x3, outs = c('TTT', 'HTT, THT, TTH', 'HHT, HTH, THH', 'HHH'),
 
 Here $1 + 3 + 3 + 1 = 8$ outcomes, so the probabilities add to $8/8 = 1$.
 
-```{r, echo=FALSE, out.width='65%', fig.align='center'}
+```{r, echo=FALSE, out.width='65%', fig.align='center', fig.alt = "Bar chart of the probability distribution of x, the number of heads in three coin tosses: P(0) = 1/8, P(1) = 3/8, P(2) = 3/8, P(3) = 1/8. The distribution is symmetric."}
 knitr::include_graphics('assets/l14_three_tosses.png')
 ```
 
@@ -1137,9 +1137,9 @@ theorem.
 ## Sources
 
 * Illowsky, B. and Dean, S. (2023). *Introductory Statistics 2e*, Sections 3.1–3.3, 4.1–4.2,
-  6.1–6.2 and 7.1. OpenStax. <https://openstax.org/details/books/introductory-statistics-2e>
+  6.1–6.2 and 7.1. OpenStax. [OpenStax: Introductory Statistics 2e](https://openstax.org/details/books/introductory-statistics-2e)
 * World Bank. CO2 emissions (metric tons per capita), indicator EN.ATM.CO2E.PC, for the 28 member
-  states of the European Union. <https://data.worldbank.org/indicator/EN.ATM.CO2E.PC>
+  states of the European Union. [World Bank: CO2 emissions (metric tons per capita)](https://data.worldbank.org/indicator/EN.ATM.CO2E.PC)
 * National Weather Service, New York, NY. Central Park monthly mean temperatures, 1869–2018
   (the January column of `Data/central_park_temps.csv`).
 * Pearson's 24,000 coin tosses are reported in Illowsky and Dean (2023), Section 4.2.

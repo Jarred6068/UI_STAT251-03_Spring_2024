@@ -149,7 +149,7 @@ or
 
 # New Material (Lectures 28 - 32)
 
-### Categorical Data Analysis
+## Categorical Data Analysis
 - Know how to define the null and alternative hypotheses for the $\chi^2$ *goodness-of-fit* and *test of independence*
 
 - Understand when and how you would use each of the following formulas for the $\chi^2$ goodness-of-fit and independence test statistics:
@@ -160,7 +160,7 @@ or
 \[ E_i = np_i \ \ \text{and} \ \  E_{ij} = \frac{\text{Row}_i \text{ Total} \times \text{Column}_j \text{ Total}}{n}\]
 
 
-### Correlation and Linear Regression 
+## Correlation and Linear Regression 
 - Understand how the *correlation coefficient* $r$ corresponds to patterns in a **scatterplot**.
 
 - Know how the value of the correlation coefficient $r$ relates to *linear* relationship between two variables.
@@ -181,7 +181,7 @@ or
 
 - Know how to specify the null and alternative hypotheses for a significance test on the slope coefficient $\beta$ and how it relates to linear dependence between the response and explanatory variables.
 
-### Formulas for Correlation and Linear Regression
+## Formulas for Correlation and Linear Regression
 
 \[y_i = \alpha + \beta x_i +\epsilon_i\]
 \[\hat{\beta} = r\left(\frac{s_y}{s_x}\right) \]

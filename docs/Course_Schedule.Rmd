@@ -191,6 +191,8 @@ outlined below. Any changes will be announced in class and posted here.**
   course project check moved from Sunday Oct 18 to Sunday Oct 25 at 11:59PM so it no
   longer lands on the exam weekend; its instructions are project_check.Rmd. The
   syllabus was deliberately NOT changed and still says 10/18 for the project check.
+  Exam 2 is also OPEN-NOTE, so it includes simple "show how to compute" multiple-choice
+  items; the Exam 2 study guide says so.
 -->
 
 
@@ -360,7 +362,7 @@ outlined below. Any changes will be announced in class and posted here.**
 <tr>
   <th scope="row">Friday</th>
   <td>October 16, 2026</td>
-  <td>Exam 2 (take-home, in Canvas) -- **due Sunday, October 18 at 11:59PM**</td>
+  <td>Exam 2 (take-home, open-note, in Canvas) -- **due Sunday, October 18 at 11:59PM**</td>
 </tr>
 </tbody>
 <tbody>

@@ -61,26 +61,42 @@
 </script>
 
 <!--
-  MathJax: render with SVG rather than the default HTML-CSS output.
+  MathJax 4, SVG output, with speech.
 
-  HTML-CSS builds a square root's overline out of stretched glyph pieces, and
-  headless Chrome prints the result too wide: on the Exam 1 study guide the bar
-  over sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran well past the expression and
-  collided with the line above it. The same overshoot showed up wherever a tall
-  \sqrt was printed, including the Exam 1 review problems.
+  WHY VERSION 4. The pages used to load MathJax 2.7 from mathjax.rstudio.com.
+  Its SVG output is aria-hidden and has no spoken text. The only thing assistive
+  technology got was a hidden MathML copy, which only a screen reader with a math
+  module (NVDA + MathCAT, JAWS, VoiceOver) can voice. Read-aloud tools (Edge and
+  Chrome Read Aloud, Read&Write, Speechify, phone Speak Screen) read nothing, or
+  stray letters, for all ~6,000 expressions on the site. MathJax 4 runs Speech
+  Rule Engine on every expression and attaches a natural-language label, e.g.
+  "P of open paren X is greater than or equal to 2 close paren equals ...",
+  that any text-to-speech tool or screen reader reads.
 
-  Checked by printing the identical formula three ways before changing anything:
-  HTML-CSS overshoots, MathJax 3 (CHTML) overshoots more, and the v2 SVG
-  renderer draws the rule to exactly the right width. It is not a timing
-  problem - reprinting with a 90-second budget produced the same bad bar.
+  WHY SVG. CHTML output (v2 HTML-CSS, and v3 CHTML) prints square-root bars too
+  wide in headless Chrome: on the Exam 1 study guide the bar over
+  sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran past the expression into the line
+  above. SVG draws it the right width; re-checked with v4 SVG before switching.
 
-  This has to live in <head>: rmarkdown injects the MathJax <script> at the end
-  of <body>, and MathJax applies any text/x-mathjax-config block it finds in the
-  document when it starts. SVG output inherits currentColor, so both themes are
-  unaffected (see the MathJax rule in assets/brand/site.css).
+  The script URL itself is set by `mathjax:` in _site.yml and in every
+  per-directory _output.yml (rmarkdown injects it at the end of <body>). This
+  block has to be in <head> so window.MathJax exists before that script runs.
+  Keep the version pinned and the same in all seven places.
+
+  inTabOrder: false. MathJax makes every expression a Tab stop by default (for
+  its keyboard explorer), which put ~300 Tab stops on a single lecture page in
+  front of the links a keyboard user is trying to reach. Screen-reader users
+  still reach every expression in browse mode, and the label is on the
+  expression either way. It is options.a11y, NOT menuOptions.settings - the
+  menu setting is accepted but ignored at startup.
+
+  SVG output inherits currentColor, so both themes are unaffected (see the
+  MathJax rule in assets/brand/site.css).
 -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({ menuSettings: { renderer: "SVG" } });
+<script>
+window.MathJax = {
+  options: { a11y: { inTabOrder: false } }
+};
 </script>
 
 <style type="text/css">
@@ -838,7 +854,7 @@ use only the January column.</p>
 the heights of the 262 female students in our running data set, the mean
 January temperature in Central Park, New York, in each of the 150 years
 from 1869 to 2018, and the average of ten rolls of a fair die.</p>
-<p><img src="assets/l12_bell_examples.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_bell_examples.png" alt="Three histograms side by side: heights of 262 female students (about 55 to 77 inches), mean January temperatures in Central Park over 150 years (about 21 to 45 degrees F), and the average of 10 dice rolls (about 2 to 5). Each is single-peaked, roughly symmetric and bell shaped." width="90%" style="display: block; margin: auto;" /></p>
 <ul>
 <li>What do the three have in common?</li>
 </ul>
@@ -855,7 +871,7 @@ curve with its peak at the mean.</li>
 <p>Below, the same three distributions each have a normal curve drawn
 over them. It is the same <em>shape</em> each time; only its center and
 its spread change.</p>
-<p><img src="assets/l12_bell_examples_fit.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_bell_examples_fit.png" alt="The same three histograms, each with a normal curve drawn over it: heights labelled N(65.4, 3.38), January temperatures N(32.0, 4.6), and the average of 10 dice N(3.5, 0.54). The curve fits the temperatures and dice closely; the heights are lumpier, with a few values far out in the tails." width="90%" style="display: block; margin: auto;" /></p>
 <p>The heights follow the curve least closely: they are lumpier, and a
 few students sit well out in the tails. No real data set is exactly
 normal. The normal curve is a <strong>model</strong>, and the question
@@ -884,7 +900,7 @@ class="math inline">\(\sigma\)</span> gives a tall, narrow curve; a
 large <span class="math inline">\(\sigma\)</span> gives a short, broad
 one. The center does not move.</li>
 </ul>
-<p><img src="assets/l11_normal_params.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l11_normal_params.png" alt="Left: a normal curve with a dashed vertical line at its peak labelled mu and a horizontal arrow from the center labelled sigma, captioned 'the mean locates the center'. Right: three normal curves with the same center and sigma equal to 0.6, 1 and 2; the smaller sigma, the taller and narrower the curve, captioned 'the standard deviation sets the spread'." width="90%" style="display: block; margin: auto;" /></p>
 <p>Greek letters are for the population (<span
 class="math inline">\(\mu\)</span>, <span
 class="math inline">\(\sigma\)</span>) and Roman letters for a sample
@@ -898,7 +914,7 @@ statistics in the Weeks 4-5 notes.</p>
 average dice. One die is flat: every face is equally likely. The average
 of two dice is already peaked in the middle, and the average of five or
 ten is a bell.</p>
-<p><img src="assets/l12_dice_means.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_dice_means.png" alt="Four probability histograms of the average roll, each on an axis from 1 to 6: one die is flat with six equal bars; the average of 2 dice is a triangle peaked at 3.5; the averages of 5 and 10 dice are increasingly narrow bell shapes centered at 3.5." width="90%" style="display: block; margin: auto;" /></p>
 <ul>
 <li><strong>Many measurements are approximately normal</strong>,
 especially physical ones such as heights, and quantities such as a
@@ -926,7 +942,7 @@ smooth curve.</p>
 distribution. It never dips below the axis, and the total area under it
 is exactly 1.</li>
 </ul>
-<p><img src="assets/l12_temps_density.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_temps_density.png" alt="Density-scaled histogram of 150 mean January temperatures in Central Park, from about 21 to 45 degrees F, with a smooth bell-shaped density curve drawn over the bars, peaking near 32 degrees at a density of just under 0.09." width="70%" style="display: block; margin: auto;" /></p>
 <p>The bars are the 150 Januaries we actually recorded. The curve is the
 distribution behind them, a model of what January in Central Park looks
 like in the long run. The vertical axis is labelled
@@ -938,7 +954,7 @@ that means.</p>
 <p>The January temperatures have <span class="math inline">\(\bar{x} =
 32.0\)</span>°F and <span class="math inline">\(s = 4.6\)</span>°F. What
 fraction of Januaries averaged between 28°F and 36°F?</p>
-<p><img src="assets/l12_temps_area.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_temps_area.png" alt="A normal curve for mean January temperature centered at 32 degrees F, with the area under the curve between 28 and 36 degrees shaded and labelled 'area = ?'." width="90%" style="display: block; margin: auto;" /></p>
 <p>On a density curve, <strong>the area under the curve over an interval
 is the proportion of values in that interval</strong>. The shaded area
 works out to 0.62. In the actual data, 92 of the 150 Januaries fall in
@@ -981,7 +997,7 @@ class="math inline">\(\sigma\)</span></strong>, any normal curve turns
 into <span class="math inline">\(N(0, 1)\)</span>. Below, the heights of
 the 262 female students are drawn twice: once in inches, and once as the
 number of standard deviations each height is from the mean.</p>
-<p><img src="assets/l12_standardize_axes.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_standardize_axes.png" alt="Two identical normal curves side by side. Left axis: height in inches from 56 to 76, with a vertical line at the mean 65.4 and a line at 70 inches. Right axis: the same heights as z-scores from -3 to 3, with a line at 0 and a line at z = 1.36." width="90%" style="display: block; margin: auto;" /></p>
 <p>It is the same curve; only the labels on the axis change. That
 “number of standard deviations from the mean” is called a <span
 class="math inline">\(z\)</span>-score, and it is the next topic.</p>
@@ -1142,7 +1158,7 @@ class="section level2">
 mean sodium <span class="math inline">\(\bar{x} = 167\)</span> mg and
 standard deviation <span class="math inline">\(s \approx 77\)</span> mg.
 The cereal furthest above the mean is Raisin Bran, at 340 mg.</p>
-<p><img src="assets/l11_cereal_sodium.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l11_cereal_sodium.png" alt="Dot plot of sodium in twenty US breakfast cereals, from 0 to 340 mg, with a dashed line at the mean x-bar = 167. An arrow from the mean to the highest point, Raisin Bran at 340 mg, is labelled '173 mg = 2.25 standard deviations'." width="85%" style="display: block; margin: auto;" /></p>
 <p>Raisin Bran is <span class="math inline">\(340 - 167 = 173\)</span>
 mg above the mean, which is <span class="math inline">\(173/77 \approx
 2.25\)</span> standard deviations. Dividing a deviation by the standard
@@ -1561,7 +1577,7 @@ bell-shaped distribution, about <strong>68%</strong> of the values fall
 within 1 standard deviation of the mean, about <strong>95%</strong>
 within 2, and about <strong>99.7%</strong> within 3.</li>
 </ul>
-<p><img src="assets/l12_empirical_rule.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_empirical_rule.png" alt="Normal curve with the axis marked at x-bar and at x-bar plus and minus 1, 2 and 3 s. The regions are labelled 34% between the mean and 1 s on each side, 13.5% between 1 and 2 s, and 2.35% between 2 and 3 s. Arrows above show about 68% within 1 s, 95% within 2 s and 99.7% within 3 s." width="90%" style="display: block; margin: auto;" /></p>
 <p>Because the curve is symmetric, the rule splits into pieces: 34%
 between the mean and one standard deviation on each side, 13.5% between
 one and two, and 2.35% between two and three, leaving 0.15% beyond three
@@ -1578,7 +1594,7 @@ Applied to a skewed distribution it gives the wrong answers.</p>
 curve</h3>
 <p><strong>Practice:</strong> estimate the standard deviation of each
 curve.</p>
-<p><img src="assets/l12_sigma_quiz.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_sigma_quiz.png" alt="Two normal curves with identical shapes, both centered at 0 with a vertical line at the center. Curve A's axis runs from -15 to 15 in steps of 5; curve B's axis runs from -1.5 to 1.5 in steps of 0.5." width="90%" style="display: block; margin: auto;" /></p>
 <p><em>A: <span class="math inline">\(\sigma \approx 5\)</span>. B:
 <span class="math inline">\(\sigma \approx 0.5\)</span>. Step out from
 the center until you have captured roughly the middle two thirds of the
@@ -1592,7 +1608,7 @@ always check the axis.</em></p>
 class="math inline">\(\bar{x} = 74\)</span> and <span
 class="math inline">\(s = 8\)</span> points. What percentage of scores
 falls in each shaded region?</p>
-<p><img src="assets/l12_exam_rule.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_exam_rule.png" alt="Three normal curves for exam scores centered at 74, on an axis from 50 to 100, each with a vertical line at 74. Shaded regions: (a) 66 to 82 points, (b) 82 points and above, (c) 58 to 90 points." width="90%" style="display: block; margin: auto;" /></p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>66 to 82 is <span class="math inline">\(\bar{x} \pm 1s\)</span>, so
@@ -1627,7 +1643,7 @@ standard deviations from the mean, <span class="math inline">\(|z| \geq
 are that far out. A stricter version uses 3 standard deviations, about
 0.3%.</li>
 </ul>
-<p><img src="assets/l12_outlier_tails.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_outlier_tails.png" alt="Three normal curves with the axis marked at x-bar and x-bar plus and minus 2s. Left: both tails beyond plus and minus 2s shaded, 2.5% + 2.5% = 5%, with 95% in the middle. Center: only the upper tail beyond x-bar + 2s shaded, 2.5%, leaving 97.5%. Right: only the lower tail below x-bar - 2s shaded, 2.5%, leaving 97.5%." width="90%" style="display: block; margin: auto;" /></p>
 <p>Ask first whether you care about one direction or both: about 2.5% of
 values lie beyond <span class="math inline">\(+2s\)</span> alone, and 5%
 beyond <span class="math inline">\(\pm 2s\)</span> together. By this
@@ -1639,7 +1655,7 @@ outlier, and a large one: beyond 3 standard deviations is only about
 <p>You already know the <span class="math inline">\(1.5 \times
 IQR\)</span> rule from Week 3. Do the two rules flag the same
 students?</p>
-<p><img src="assets/l12_iqr_vs_2s.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_iqr_vs_2s.png" alt="Histogram of the heights of 262 female students, 56 to 92 inches, mostly between 60 and 71. A dashed line marks the 1.5 x IQR fence at 71.5 inches and another marks mean + 2s at 72.1 inches; the bar of seven students at 72 inches sits between the two fences. A lone value sits far out at 92 inches." width="90%" style="display: block; margin: auto;" /></p>
 <p>Not here. The IQR rule’s upper fence is <span
 class="math inline">\(Q_3 + 1.5 \times IQR = 71.5\)</span> inches and it
 flags 13 of the 262 women; the <span class="math inline">\(\pm
@@ -1681,7 +1697,7 @@ class="math inline">\(z\)</span>. Find the row for the first two digits
 of <span class="math inline">\(z\)</span> and the column for the
 third.</li>
 </ul>
-<p><img src="assets/l12_ztable.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_ztable.png" alt="Excerpt of the standard normal table: rows z = 1.0 to 1.6, columns .00 to .09, each cell the area to the left of z (from 0.8413 at z = 1.00 to 0.9545 at z = 1.69). Row 1.3 and column .06 are highlighted, meeting at 0.9131." width="85%" style="display: block; margin: auto;" /></p>
 <p>Row 1.3, column .06 gives <span
 class="math inline">\(0.9131\)</span>, so about 91% of the women are
 shorter than 70 inches. (In the actual data it is 243 of 262, or 92.7%,
@@ -1780,7 +1796,7 @@ normal</h3>
 straightens it out. It does not: standardizing is a linear
 transformation, so it moves the center to 0 and sets the spread to 1 and
 leaves the shape exactly as it found it.</p>
-<p><img src="assets/l12_skew_z.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_skew_z.png" alt="Two identical right-skewed histograms of the same 1,000 values: on the left in original units from 0 to 20, peaking around 3 to 5 with a long right tail; on the right relabelled as z-scores from about -1.7 to 5. The shape is unchanged." width="85%" style="display: block; margin: auto;" /></p>
 <p>Both pictures show the same 1,000 values; the right-hand axis just
 reads in standard deviations. It also means the empirical rule and the
 <span class="math inline">\(\pm 2s\)</span> outlier rule still do not
@@ -1822,7 +1838,7 @@ which units happened to be chosen.</p>
 <p>Now imagine repeating the process over and over: draw a sample of 20,
 compute <span class="math inline">\(\bar{x}\)</span>, write it down, and
 start again. Below are the means of 10,000 such samples.</p>
-<p><img src="lecturemenu6_files/figure-html/unnamed-chunk-21-1.png" width="960" /></p>
+<p><img src="lecturemenu6_files/figure-html/unnamed-chunk-21-1.png" alt="Two histograms on the same axis, 55 to 93 inches, each with a vertical line at the population mean, about 65.4. Left: the 262 individual heights, spread from about 55 to 77 inches plus one value near 92. Right: 10,000 sample means from samples of n = 20, a smooth, narrow, symmetric bell centered on the mean." width="960" /></p>
 <ul>
 <li>The <strong>sampling distribution</strong> of a statistic is the
 distribution of its values over all possible samples of the same size
@@ -1926,7 +1942,7 @@ class="math inline">\(\pm 2 \cdot SE\)</span> rule for outliers, it is
 <span class="math display">\[\text{margin of error} = 2 \cdot
 SE\]</span></li>
 </ul>
-<p><img src="assets/l12_moe.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l12_moe.png" alt="Histogram of simulated sample mean heights for samples of n = 20, a bell shape centered at 65.4 inches on an axis from 62 to 69. Dashed lines mark 2 SE on either side of 65.4, at roughly 63.9 and 66.9; about 95% of sample means fall between them, and the tails beyond are shaded." width="90%" style="display: block; margin: auto;" /></p>
 <p>For samples of 20 heights the margin of error is <span
 class="math inline">\(2(0.755) = 1.51\)</span> inches: about 95% of
 samples give an <span class="math inline">\(\bar{x}\)</span> within
@@ -2150,7 +2166,7 @@ one trial is not affected by the outcome of any other.</li>
 </ul>
 <p>The plot below follows the running proportion of heads over 5,000
 simulated tosses of a fair coin.</p>
-<p><img src="assets/l13_lln.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l13_lln.png" alt="Line plot of the running proportion of heads against the number of tosses, on a log scale from 1 to 5,000, with a horizontal reference line at 0.5. Over the first tosses the proportion swings between 0 and about 0.67; after thousands of tosses it stays close to 0.5." width="90%" style="display: block; margin: auto;" /></p>
 <p>In the first few tosses the proportion jumps all over the place; over
 thousands of tosses it settles down to 0.5. The Swiss mathematician
 Jacob Bernoulli proved the first version of the law; it was published in
@@ -2201,7 +2217,7 @@ class="math inline">\(B\)</span> are <strong>disjoint</strong> (or
 <strong>mutually exclusive</strong>) if they have no outcomes in common:
 <span class="math inline">\(A \cap B = \emptyset\)</span>.</li>
 </ul>
-<p><img src="assets/l14_venn.png" width="45%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l14_venn.png" alt="Two Venn diagrams, each a rectangle labelled 'The Sample Space'. Top: circles A and B overlap, and the overlap is labelled A intersect B. Bottom: circles A and B do not touch, labelled disjoint: A intersect B is the empty set." width="45%" style="display: block; margin: auto;" /></p>
 <p>Two more rules for combining events:</p>
 <ul>
 <li>The <strong>general addition rule</strong>, for events that may
@@ -2278,7 +2294,7 @@ P(T) \approx 0.69 \cdot 0.28 \approx 0.19\)</span>, far from the actual
 <h2>Sampling with and without replacement</h2>
 <p>Recall the two ways of drawing a sample from the Weeks 4-5 notes.
 Here a sample of 3 balls is drawn from a bag of 5:</p>
-<p><img src="assets/l8_replacement.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l8_replacement.png" alt="Diagram of drawing 3 balls from a bag numbered 1 to 5. Without replacement: draw 3, then 1, then 5; each drawn ball is removed from the bag, giving sample 3, 1, 5. With replacement: draw 3, then 1, then 3; the bag stays full every time, so 3 can be drawn twice, giving sample 3, 1, 3." width="100%" style="display: block; margin: auto;" /></p>
 <p>Are the draws independent?</p>
 <ul>
 <li><strong>With replacement</strong>, yes. Each ball goes back before
@@ -2448,7 +2464,7 @@ HHH
 <p>Here <span class="math inline">\(1 + 3 + 3 + 1 = 8\)</span> outcomes,
 so the probabilities add to <span class="math inline">\(8/8 =
 1\)</span>.</p>
-<p><img src="assets/l14_three_tosses.png" width="65%" style="display: block; margin: auto;" /></p>
+<p><img src="assets/l14_three_tosses.png" alt="Bar chart of the probability distribution of x, the number of heads in three coin tosses: P(0) = 1/8, P(1) = 3/8, P(2) = 3/8, P(3) = 1/8. The distribution is symmetric." width="65%" style="display: block; margin: auto;" /></p>
 <p>To find the probability of an event, add the probabilities of the
 values that make it up:</p>
 <ul>
@@ -2742,12 +2758,12 @@ P(x)}\)</span>.</li>
 <ul>
 <li>Illowsky, B. and Dean, S. (2023). <em>Introductory Statistics
 2e</em>, Sections 3.1–3.3, 4.1–4.2, 6.1–6.2 and 7.1. OpenStax. <a
-href="https://openstax.org/details/books/introductory-statistics-2e"
-class="uri">https://openstax.org/details/books/introductory-statistics-2e</a></li>
+href="https://openstax.org/details/books/introductory-statistics-2e">OpenStax:
+Introductory Statistics 2e</a></li>
 <li>World Bank. CO2 emissions (metric tons per capita), indicator
 EN.ATM.CO2E.PC, for the 28 member states of the European Union. <a
-href="https://data.worldbank.org/indicator/EN.ATM.CO2E.PC"
-class="uri">https://data.worldbank.org/indicator/EN.ATM.CO2E.PC</a></li>
+href="https://data.worldbank.org/indicator/EN.ATM.CO2E.PC">World Bank:
+CO2 emissions (metric tons per capita)</a></li>
 <li>National Weather Service, New York, NY. Central Park monthly mean
 temperatures, 1869–2018 (the January column of
 <code>Data/central_park_temps.csv</code>).</li>
@@ -2920,6 +2936,66 @@ temperatures, 1869–2018 (the January column of
     bar.appendChild(link);
     main.insertBefore(bar, main.firstChild);
   }
+
+  /* 6. Author / date are not headings (WCAG 1.3.1, 2.4.6).
+        pandoc's template emits them as <h4 class="author"> and
+        <h4 class="date"> straight after the <h1> title. Screen-reader users
+        navigating by heading hear "heading level 4, STAT 251 Section 01" as if
+        it were a section, and it puts an h1 -> h4 skip at the top of every
+        page. Re-tag them as paragraphs; site.css styles them by class. */
+  var meta = document.querySelectorAll('#header h4.author, #header h4.date');
+  for (var k = 0; k < meta.length; k++) {
+    var h4 = meta[k];
+    var p = document.createElement('p');
+    p.className = h4.className;
+    while (h4.firstChild) p.appendChild(h4.firstChild);
+    h4.parentNode.replaceChild(p, h4);
+  }
+
+  /* 7. Solution answers carry more than colour (WCAG 1.4.1, 1.4.3).
+        Answers are marked three ways across the solution pages: an inline
+        style="color: red", the RA/RZ <div style="color: red;"> helper, and
+        class="soln". Colour was the only cue, so a screen reader, a
+        read-aloud tool, or a colour-blind reader could not tell the answer
+        from the question. Each one gets class .answer (site.css section 20b:
+        AA-contrast red, shaded box) and a screen-reader-only "Answer:" label.
+        The label goes on the outermost answer element only, so an answer
+        that contains another red span is announced once. Matching the inline
+        style here rather than editing the sources keeps the 2024 archive
+        untouched. */
+  /* el.style.color rather than a [style*=...] selector, which would also catch
+     background-color and border-color. Empty placeholder spans are skipped so
+     they do not render as an empty shaded box. */
+  var candidates = document.querySelectorAll('.main-container .soln, .main-container [style*="color"]');
+  var answers = [];
+  for (var a = 0; a < candidates.length; a++) {
+    var c = candidates[a];
+    var isRed = c.style.color === 'red' || c.style.color === 'rgb(255, 0, 0)';
+    if (!isRed && !c.classList.contains('soln')) continue;
+    if (!c.textContent.replace(/\s+/g, '') && !c.querySelector('img, svg')) continue;
+    c.classList.add('answer');
+    answers.push(c);
+  }
+  for (var b = 0; b < answers.length; b++) {
+    var el = answers[b];
+    if (el.parentNode.closest && el.parentNode.closest('.answer')) continue;
+    var label = document.createElement('span');
+    label.className = 'sr-only';
+    label.textContent = 'Answer: ';
+    el.insertBefore(label, el.firstChild);
+  }
+
+  /* 8. The decorative arrow in the back link (item 5) is read aloud as
+        "leftwards arrow". */
+  var back = document.querySelector('.site-backlink');
+  if (back) {
+    back.textContent = '';
+    var arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '\u2190 ';
+    back.appendChild(arrow);
+    back.appendChild(document.createTextNode('Back to course site'));
+  }
 })();
 </script>
 
@@ -2962,7 +3038,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-svg.js";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

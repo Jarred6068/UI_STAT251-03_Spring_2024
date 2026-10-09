@@ -61,26 +61,42 @@
 </script>
 
 <!--
-  MathJax: render with SVG rather than the default HTML-CSS output.
+  MathJax 4, SVG output, with speech.
 
-  HTML-CSS builds a square root's overline out of stretched glyph pieces, and
-  headless Chrome prints the result too wide: on the Exam 1 study guide the bar
-  over sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran well past the expression and
-  collided with the line above it. The same overshoot showed up wherever a tall
-  \sqrt was printed, including the Exam 1 review problems.
+  WHY VERSION 4. The pages used to load MathJax 2.7 from mathjax.rstudio.com.
+  Its SVG output is aria-hidden and has no spoken text. The only thing assistive
+  technology got was a hidden MathML copy, which only a screen reader with a math
+  module (NVDA + MathCAT, JAWS, VoiceOver) can voice. Read-aloud tools (Edge and
+  Chrome Read Aloud, Read&Write, Speechify, phone Speak Screen) read nothing, or
+  stray letters, for all ~6,000 expressions on the site. MathJax 4 runs Speech
+  Rule Engine on every expression and attaches a natural-language label, e.g.
+  "P of open paren X is greater than or equal to 2 close paren equals ...",
+  that any text-to-speech tool or screen reader reads.
 
-  Checked by printing the identical formula three ways before changing anything:
-  HTML-CSS overshoots, MathJax 3 (CHTML) overshoots more, and the v2 SVG
-  renderer draws the rule to exactly the right width. It is not a timing
-  problem - reprinting with a 90-second budget produced the same bad bar.
+  WHY SVG. CHTML output (v2 HTML-CSS, and v3 CHTML) prints square-root bars too
+  wide in headless Chrome: on the Exam 1 study guide the bar over
+  sqrt( (1/(n-1)) sum (x_i - xbar)^2 ) ran past the expression into the line
+  above. SVG draws it the right width; re-checked with v4 SVG before switching.
 
-  This has to live in <head>: rmarkdown injects the MathJax <script> at the end
-  of <body>, and MathJax applies any text/x-mathjax-config block it finds in the
-  document when it starts. SVG output inherits currentColor, so both themes are
-  unaffected (see the MathJax rule in assets/brand/site.css).
+  The script URL itself is set by `mathjax:` in _site.yml and in every
+  per-directory _output.yml (rmarkdown injects it at the end of <body>). This
+  block has to be in <head> so window.MathJax exists before that script runs.
+  Keep the version pinned and the same in all seven places.
+
+  inTabOrder: false. MathJax makes every expression a Tab stop by default (for
+  its keyboard explorer), which put ~300 Tab stops on a single lecture page in
+  front of the links a keyboard user is trying to reach. Screen-reader users
+  still reach every expression in browse mode, and the label is on the
+  expression either way. It is options.a11y, NOT menuOptions.settings - the
+  menu setting is accepted but ignored at startup.
+
+  SVG output inherits currentColor, so both themes are unaffected (see the
+  MathJax rule in assets/brand/site.css).
 -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({ menuSettings: { renderer: "SVG" } });
+<script>
+window.MathJax = {
+  options: { a11y: { inTabOrder: false } }
+};
 </script>
 
 <style type="text/css">
@@ -1187,7 +1203,7 @@ the gardeners test <span class="math inline">\(\alpha = 0.05\)</span>.
 <span class="math inline">\(\alpha\)</span> sets the boundary for how
 big (or small) the test statistic needs to be to conclude that the test
 statistic is <u>statistically significant</u>.</p>
-<p><img src="lecturemenu11_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="lecturemenu11_files/figure-html/unnamed-chunk-3-1.png" alt="Distribution under H0: a bell-shaped t distribution centered at 0, with t on the x-axis and probability density on the y-axis. The upper tail to the right of the critical value t sub 1 minus alpha is shaded as the rejection region, and the observed t sub obs is marked farther right, inside the shaded tail." width="672" /></p>
 <p>In the plot above, <span class="math inline">\(t_{1-\alpha}\)</span>
 denotes the boundary for significance in the gardener’s test. Any <span
 class="math inline">\(t\)</span>-value greater than <span
@@ -1252,8 +1268,8 @@ hypothesis based on what the data show. If you do not have a direction
 firmly in mind before gathering the data you must use a two-sided
 test.</p>
 <div id="significance-level-critical-value-and-decision-making"
-class="section level3">
-<h3>Significance level, critical value, and decision making</h3>
+class="section level2">
+<h2>Significance level, critical value, and decision making</h2>
 <p>The <strong>significance level</strong> of test (denoted <span
 class="math inline">\(\alpha\)</span>) is how we turn the <span
 class="math inline">\(p\)</span>-value of a significance test into a
@@ -1316,7 +1332,7 @@ region</strong> of a test depend on the significance level of the test
 and the direction of the alternative hypothesis. Consider the plots
 below:</p>
 <div class="figure">
-<img src="lecturemenu11_files/figure-html/unnamed-chunk-4-1.png" alt="This plot depicts the decision rule for a given alternative hypothesis at a significance level $\alpha = 0.05$. In each subplot, the rejection region is highlighted in turquoise and the critical value(s) are denoted by the vertical dashed lines." width="960" />
+<img src="lecturemenu11_files/figure-html/unnamed-chunk-4-1.png" alt="Three stacked standard normal curves of Z under the null, each with Reject H0 and Do Not Reject H0 regions labeled. Top, alternative p not equal to c: both tails shaded, with dashed critical lines near z equals -2 and 2. Middle, alternative p greater than p0: only the upper tail shaded. Bottom, alternative p less than p0: only the lower tail shaded." width="960" />
 <p class="caption">
 This plot depicts the decision rule for a given alternative hypothesis
 at a significance level <span class="math inline">\(\alpha =
@@ -1330,7 +1346,7 @@ value, and rejection region for the three types of alternative
 hypotheses at two significance levels. What do you notice about the
 relationship between the significance level and the rejection
 region?</p>
-<p><img src="lecturemenu11_files/figure-html/unnamed-chunk-5-1.png" width="1344" /></p>
+<p><img src="lecturemenu11_files/figure-html/unnamed-chunk-5-1.png" alt="Six standard normal curves in two columns, alpha equals 0.05 on the left and alpha equals 0.01 on the right. Rows show the alternatives p greater than p0 (upper tail shaded), p less than p0 (lower tail shaded) and p not equal to p0 (both tails shaded), with critical values marked. The shaded rejection regions in the alpha equals 0.01 column are smaller and farther out in the tails." width="1344" /></p>
 <p>Notice from the plots above that the alternative hypothesis also
 impacts how significant a result must be in order to reject the null.
 Specifically, a result need not be as extreme under the alternative
@@ -1522,9 +1538,9 @@ class="math inline">\(0.20\)</span>, so there is no evidence that the
 true proportion of EVs is less than <span
 class="math inline">\(20\%\)</span>.</p></li>
 </ul>
-<div id="significance-tests-concerning-mu" class="section level3">
-<h3>Significance tests concerning <span
-class="math inline">\(\mu\)</span></h3>
+<div id="significance-tests-concerning-mu" class="section level2">
+<h2>Significance tests concerning <span
+class="math inline">\(\mu\)</span></h2>
 <p>The following are the steps for conducting a significance test for a
 population mean:</p>
 <ol style="list-style-type: decimal">
@@ -1708,8 +1724,8 @@ suggest it is lower).</p></li>
 </ul>
 </div>
 <div id="relationship-between-two-sided-tests-and-confidence-intervals"
-class="section level3">
-<h3>Relationship between two-sided tests and confidence intervals</h3>
+class="section level2">
+<h2>Relationship between two-sided tests and confidence intervals</h2>
 <p>Recall the basic idea of a confidence interval. We construct an
 interval that includes the true value of the parameter <span
 class="math inline">\(\mu\)</span> or <span
@@ -1758,8 +1774,8 @@ observed <span class="math inline">\(\bar{x}\)</span> lies outside the
 <span class="math inline">\(100(1-\alpha)\%\)</span> acceptance region
 centered at <span class="math inline">\(\mu_0\)</span>.</p>
 </div>
-<div id="types-of-errors" class="section level3">
-<h3>Types of Errors</h3>
+<div id="types-of-errors" class="section level2">
+<h2>Types of Errors</h2>
 <p>Conducting a hypothesis test is a simple-enough procedure in the
 modern age as many software programs effortlessly give out a <span
 class="math inline">\(p\)</span>-value for a chosen test and dataset.
@@ -1856,7 +1872,7 @@ statistic under the null and alternative hypotheses. The plot below
 shows the relationship between power, type I and type II error rates in
 a right-tailed test of a population mean conducted at the <span
 class="math inline">\(\alpha\)</span> significance level.</p>
-<p><img src="lecturemenu11_files/figure-html/unnamed-chunk-11-1.png" width="1152" />
+<p><img src="lecturemenu11_files/figure-html/unnamed-chunk-11-1.png" alt="Two overlapping normal curves: the distribution under H0 (solid line) centered at mu0, and the distribution under HA (dashed line) centered at a larger mu. A dotted vertical line marks the critical value Z sub 1 minus alpha. The area under the H0 curve right of the line is labeled alpha, the area under the HA curve left of the line is labeled beta, and the area under the HA curve right of the line is labeled 1 minus beta, the power." width="1152" />
 * in the plot above, the green region represents the probability of
 committing a type II error, the orange region the probability of
 committing a type I error and the pink/red region is the power of the
@@ -1864,7 +1880,7 @@ test.</p>
 <p><strong>Below</strong> the three panels show the relationship between
 power, the probability of a type I error and the probability of a type
 II error.
-<img src="lecturemenu11_files/figure-html/unnamed-chunk-12-1.png" width="960" /></p>
+<img src="lecturemenu11_files/figure-html/unnamed-chunk-12-1.png" alt="Three line plots. Top left: power rises as the significance level alpha increases from 0 to 0.5, steeply at first and then leveling off. Top right: power falls in a straight line as the type II error rate beta increases. Bottom: alpha decreases as beta increases, a downward curve showing the trade-off between the two error rates." width="960" /></p>
 </div>
 </div>
 
@@ -2031,6 +2047,66 @@ II error.
     bar.appendChild(link);
     main.insertBefore(bar, main.firstChild);
   }
+
+  /* 6. Author / date are not headings (WCAG 1.3.1, 2.4.6).
+        pandoc's template emits them as <h4 class="author"> and
+        <h4 class="date"> straight after the <h1> title. Screen-reader users
+        navigating by heading hear "heading level 4, STAT 251 Section 01" as if
+        it were a section, and it puts an h1 -> h4 skip at the top of every
+        page. Re-tag them as paragraphs; site.css styles them by class. */
+  var meta = document.querySelectorAll('#header h4.author, #header h4.date');
+  for (var k = 0; k < meta.length; k++) {
+    var h4 = meta[k];
+    var p = document.createElement('p');
+    p.className = h4.className;
+    while (h4.firstChild) p.appendChild(h4.firstChild);
+    h4.parentNode.replaceChild(p, h4);
+  }
+
+  /* 7. Solution answers carry more than colour (WCAG 1.4.1, 1.4.3).
+        Answers are marked three ways across the solution pages: an inline
+        style="color: red", the RA/RZ <div style="color: red;"> helper, and
+        class="soln". Colour was the only cue, so a screen reader, a
+        read-aloud tool, or a colour-blind reader could not tell the answer
+        from the question. Each one gets class .answer (site.css section 20b:
+        AA-contrast red, shaded box) and a screen-reader-only "Answer:" label.
+        The label goes on the outermost answer element only, so an answer
+        that contains another red span is announced once. Matching the inline
+        style here rather than editing the sources keeps the 2024 archive
+        untouched. */
+  /* el.style.color rather than a [style*=...] selector, which would also catch
+     background-color and border-color. Empty placeholder spans are skipped so
+     they do not render as an empty shaded box. */
+  var candidates = document.querySelectorAll('.main-container .soln, .main-container [style*="color"]');
+  var answers = [];
+  for (var a = 0; a < candidates.length; a++) {
+    var c = candidates[a];
+    var isRed = c.style.color === 'red' || c.style.color === 'rgb(255, 0, 0)';
+    if (!isRed && !c.classList.contains('soln')) continue;
+    if (!c.textContent.replace(/\s+/g, '') && !c.querySelector('img, svg')) continue;
+    c.classList.add('answer');
+    answers.push(c);
+  }
+  for (var b = 0; b < answers.length; b++) {
+    var el = answers[b];
+    if (el.parentNode.closest && el.parentNode.closest('.answer')) continue;
+    var label = document.createElement('span');
+    label.className = 'sr-only';
+    label.textContent = 'Answer: ';
+    el.insertBefore(label, el.firstChild);
+  }
+
+  /* 8. The decorative arrow in the back link (item 5) is read aloud as
+        "leftwards arrow". */
+  var back = document.querySelector('.site-backlink');
+  if (back) {
+    back.textContent = '';
+    var arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '\u2190 ';
+    back.appendChild(arrow);
+    back.appendChild(document.createTextNode('Back to course site'));
+  }
 })();
 </script>
 
@@ -2073,7 +2149,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-svg.js";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

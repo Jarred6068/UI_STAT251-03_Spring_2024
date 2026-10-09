@@ -125,7 +125,7 @@ To repeat it:
 3. Keep all variables, set **Sample size = 30** and **Seed = 251**, and press *Draw sample*.
    The same seed always draws the same 30 loans.
 
-```{r, fig.cap="**Figure 1.** The Simple Random Sample tool after the draw: 30 of 6,970 loans sampled with seed 251. The first rows of the sample are shown.", out.width="90%", fig.align="center"}
+```{r, fig.alt="Simple Random Sample tool: 6,970 rows in the data set, 30 rows sampled, sampling fraction 0.004, seed 251. A table lists the first 10 sampled loans with loan_id, issue_month, term, grade, loan_amount and interest_rate; the first is a grade A, 20,000 dollar loan at 7.97 percent.", fig.cap="**Figure 1.** The Simple Random Sample tool after the draw: 30 of 6,970 loans sampled with seed 251. The first rows of the sample are shown.", out.width="90%", fig.align="center"}
 include_graphics("example_projects/figs/p2_srs.png")
 ```
 
@@ -162,20 +162,20 @@ kable(desc, align = c("l", "r"),
   kable_styling(full_width = FALSE, bootstrap_options = c("striped", "condensed"))
 ```
 
-```{r, fig.cap="**Figure 2.** Statistic Calculator output and boxplot for the 30 sampled interest rates (%). The red point is the high outlier (26.30%).", out.width="80%", fig.align="center"}
+```{r, fig.alt="Statistic Calculator summary of 30 interest rates: mean 10.4187, median 9.44, standard deviation 4.5963, minimum 5.32, maximum 26.30, Q1 7.35, Q3 11.99, IQR 4.64. The boxplot is right-skewed, with the whisker ending near 17 and one outlier at 26.3.", fig.cap="**Figure 2.** Statistic Calculator output and boxplot for the 30 sampled interest rates (%). The red point is the high outlier (26.30%).", out.width="80%", fig.align="center"}
 include_graphics("example_projects/figs/p2_summary_boxplot.png")
 ```
 
 **(B) Plots.** The boxplot is in Figure 2. The histogram below came from the **Make Graphs** tool, using its
 automatic bins:
 
-```{r, fig.cap="**Figure 3.** Histogram of the interest rate on 30 sampled 36-month LendingClub loans issued January–March 2018. The bins are 5 percentage points wide.", out.width="85%", fig.align="center"}
+```{r, fig.alt="Histogram of 30 interest rates in 5-point bins: 5 to 10 percent, 19 loans; 10 to 15, 5 loans; 15 to 20, 5 loans; 20 to 25, none; 25 to 30, 1 loan.", fig.cap="**Figure 3.** Histogram of the interest rate on 30 sampled 36-month LendingClub loans issued January–March 2018. The bins are 5 percentage points wide.", out.width="85%", fig.align="center"}
 include_graphics("example_projects/figs/p2_histogram.png")
 ```
 
 To understand the shape, I also counted the sampled loans by grade with the **Frequency Tables** tool:
 
-```{r, fig.cap="**Figure 4.** Frequency table of the LendingClub grade for the 30 sampled loans.", out.width="85%", fig.align="center"}
+```{r, fig.alt="Frequency Tables tool output for loan grade, 30 loans: A 14 (0.467), B 9 (0.300), C 5 (0.167), D 1 (0.033), E 1 (0.033).", fig.cap="**Figure 4.** Frequency table of the LendingClub grade for the 30 sampled loans.", out.width="85%", fig.align="center"}
 include_graphics("example_projects/figs/p2_grade_table.png")
 ```
 
@@ -260,7 +260,7 @@ I ran the test in the stat-tools **One Sample Tests** tool with these settings:
 
 It reproduces every value above:
 
-```{r, fig.cap="**Figure 5.** One Sample Tests tool output: SE = 0.8392, df = 29, t = 0.2367, critical value 1.6991, p = 0.4073, and 95% CI (8.7024, 12.1350). The observed t falls far short of the shaded rejection region.", out.width="85%", fig.align="center"}
+```{r, fig.alt="One-sample t test output for H0: mu equals 10.22 against Ha: mu greater than 10.22. x-bar 10.4187, SE 0.8392, df 29, observed t 0.2367, critical t 1.6991, p 0.4073, 95 percent CI 8.7024 to 12.1350. Fail to reject H0. A t curve shows the observed t near the center, well left of the shaded upper-tail rejection region beyond 1.699.", fig.cap="**Figure 5.** One Sample Tests tool output: SE = 0.8392, df = 29, t = 0.2367, critical value 1.6991, p = 0.4073, and 95% CI (8.7024, 12.1350). The observed t falls far short of the shaded rejection region.", out.width="85%", fig.align="center"}
 include_graphics("example_projects/figs/p2_t_test.png")
 ```
 

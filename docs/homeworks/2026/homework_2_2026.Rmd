@@ -135,7 +135,7 @@ Name the experimental design used in each of the following situations. Choose fr
 $\bf (4)$
 Rocket League is a popular online video game and E-sport that emerged in 2015. Players from around the world compete in sports such as soccer (football), basketball, and hockey while controlling RC-like vehicles. The most popular game mode is doubles soccer, in which two teams of two players each try to outscore the other by hitting a soccer ball into the opposing goal. Each car carries a limited supply of **boost**, which is spent to accelerate and to fly and which is replenished by driving over boost pads on the field. A player's **boost used per minute (BPM)** measures how aggressively that player spends boost over the course of a match. The histogram below shows the distribution of BPM for $n = 5{,}714$ player-match records collected from ranked matches.
 
-```{r, echo=F, message=F, warning=F, fig.height=4, fig.width=8}
+```{r, echo=F, message=F, warning=F, fig.height=4, fig.width=8, fig.alt = "Histogram of boost used per minute (BPM) for 5,714 player-match records, with the x-axis labeled at 148, 217, 286, 355, 424, 492 and 561 (the mean and 1, 2 and 3 standard deviations either side). The bars form a single peak near 355 to 375 and fall off toward both ends; almost all values lie between about 150 and 560, with a few near 0."}
 RL = read.table(paste0(datapath, 'RLData.txt'), sep = ',', header = T)
 m = mean(RL$bpm); s = sd(RL$bpm)   # 354.8 and 68.8, i.e. the 355 and 69 quoted below
 k = ceiling(sqrt(dim(RL)[1]))
@@ -160,7 +160,7 @@ ggplot(data = RL, aes(x = bpm))+geom_histogram(color = 'black', fill = 'lightgre
 (d) In a new match, a player records a BPM of 562. Compute the $z$-score for this match and explain what that $z$-score means in relation to the average BPM. How many standard deviations from the mean is this performance?
 
 
-```{r fig1, echo=FALSE, out.width='49%', fig.show='hold', fig.align='center', fig.cap='Pinniped whisker morphology - Ginter et al. 2012 (left), and a juvenile Harp Seal (right).'}
+```{r fig1, echo=FALSE, out.width='49%', fig.show='hold', fig.align='center', fig.cap='Pinniped whisker morphology - Ginter et al. 2012 (left), and a juvenile Harp Seal (right).', fig.alt = c("Line drawings of single whiskers from eight pinnipeds: gray, harp, ringed and spotted seals in the left column and harbor seal, bearded seal, fur seal and sea lion in the right. The gray, harp, ringed, spotted and harbor seal whiskers have wavy, beaded edges; the bearded seal, fur seal and sea lion whiskers are smooth.", "Photograph of a white-furred juvenile harp seal lying on snow, with long dark whiskers around its muzzle.")}
 # NOTE: this used to be a markdown pipe table holding the two images. Pandoc
 # turned that into a LaTeX longtable, which consumed table number 1 -- so the
 # whisker data below printed as "Table 2" while the text referred to it as
@@ -210,7 +210,7 @@ kable(export_tbl(cbind.data.frame(c(1:20), FS[ix,]),
 $\bf (6)$
 The pair of boxplots below was constructed from the Pinniped whisker data in **Table 1**. The boxplots show the distribution of total whisker length (cm) for whiskers with 2 beads and for whiskers with 3 beads. Use them to answer the following questions.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8, fig.alt = "Horizontal box plots of whisker total length (cm): 2-bead whiskers (lower) and 3-bead whiskers (upper). 2 beads: whiskers run from about 4.18 to 4.62, box from about 4.32 to 4.45, median about 4.38, no outliers. 3 beads: lower whisker from about 4.43, box from about 4.47 to 4.59 with median about 4.48 and no upper whisker, plus one outlier point labeled x = 5.08. Printed labels: x-bar 3 beads = 4.609, s 3 beads = 0.27, x-bar 2 beads = 4.392, s 2 beads = 0.121."}
 FS$num.beads = as.factor(FS$num.beads)
 
 bead3 = subset(FS, num.beads == 3)

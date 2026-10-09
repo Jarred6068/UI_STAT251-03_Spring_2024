@@ -40,7 +40,7 @@ library(plyr)
 
 This exam will cover material from Lectures 15 - 26 (Week 8 to beginning of Week 14)
 
-### **Concepts and terminology**
+## **Concepts and terminology**
 
 Know/be able to define the following terms and concepts:
 

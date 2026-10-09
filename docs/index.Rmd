@@ -82,13 +82,13 @@ instructions you will need through the term.
 <div class="comic-grid">
 
 <figure>
-<img src="images/it_was_i.png" alt="xkcd comic 1772, 'Startup Opportunity'">
-<figcaption><a href="https://xkcd.com/1772">xkcd 1772</a></figcaption>
+<img src="images/it_was_i.png" alt="xkcd 1771, It Was I. The Emperor, on his throne beside Darth Vader, says: It was I who allowed the Alliance to know the location of the shield generator. A stick figure corrects him: You mean it was me. You are following an archaic grammar rule. The Emperor starts again, Vader insists the archaic tone is appropriate, and the stick figure argues the accusative case is fine. Last panel, the Emperor: It me. I allowed it. Vader: My master, please never say that again.">
+<figcaption><a href="https://xkcd.com/1771">xkcd 1771: It Was I</a></figcaption>
 </figure>
 
 <figure>
-<img src="images/science_valentine.png" alt="xkcd comic 701, 'Science Valentine'">
-<figcaption><a href="https://xkcd.com/701">xkcd 701</a></figcaption>
+<img src="images/science_valentine.png" alt="xkcd 701, Science Valentine. A stick figure says: I wanted to make you a science valentine with charts and graphs of my feelings for you and the happiness you have brought me, beside a jagged line chart marked first met, dating and engaged. But the more I analyzed, the harder it became to defend my hypothesis; correlation values of 0.20, -0.61 and -0.83 appear. In science you cannot publish results you know are wrong, and you cannot withhold them because they are not the ones you wanted. So I was left with a question: do I make graphs because they are cute and funny, or am I a scientist? Enclosed are my results. I hope you can find somebody else to be your valentine, over a red heart with a downward-trending line across it.">
+<figcaption><a href="https://xkcd.com/701">xkcd 701: Science Valentine</a></figcaption>
 </figure>
 
 </div>

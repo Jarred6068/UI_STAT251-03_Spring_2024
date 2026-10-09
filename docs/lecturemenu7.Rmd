@@ -261,7 +261,7 @@ report it. That is the logic of a hypothesis test, which is coming after Exam 2.
 
 ## The shape of a binomial distribution
 
-```{r, echo=FALSE, out.width='100%', fig.align='center'}
+```{r, echo=FALSE, out.width='100%', fig.align='center', fig.alt = "Three bar charts of Binom(10, p), P(k) against k = 0 to 10. With p = 0.2 the bars peak at k = 2 and trail off to the right (skewed right); with p = 0.5 they are symmetric about k = 5; with p = 0.8 they peak at k = 8 and trail off to the left (skewed left)."}
 knitr::include_graphics('assets/l15_binomial_shapes.png')
 ```
 
@@ -325,7 +325,7 @@ $\lambda = 172/64 \approx 2.69$ goals per match and let $X$ = the number of goal
 The standard deviation is $\sigma = \sqrt{2.69} \approx `r fmt(sqrt(lam), 2)`$ goals. Here is the whole
 distribution:
 
-```{r, echo=FALSE, out.width='80%', fig.align='center'}
+```{r, echo=FALSE, out.width='80%', fig.align='center', fig.alt = "Bar chart of the Poisson(2.69) distribution of goals in a match, k = 0 to 8, with probabilities 0.07, 0.18, 0.25, 0.22, 0.15, 0.08, 0.04, 0.01 and less than 0.01. The peak is at 2 goals and there is a long right tail."}
 knitr::include_graphics('assets/l15_poisson_goals.png')
 ```
 
@@ -408,7 +408,7 @@ probability is the area of a smaller rectangle, base times height:
 * $P(X = 15) = 0 \times \frac{1}{20} = 0$;
 * $P(X > 15) = (20 - 15) \times \frac{1}{20} = 0.25$.
 
-```{r, echo=FALSE, fig.height=3, fig.width=8, fig.align='center'}
+```{r, echo=FALSE, fig.height=3, fig.width=8, fig.align='center', fig.alt = "Uniform density for wait time: a flat line at height 1/20 from 0 to 20 minutes, with the rectangle from 4 to 15 minutes shaded and labelled P(4 < X < 15) = 0.55."}
 ggplot() +
   annotate('rect', xmin = 4, xmax = 15, ymin = 0, ymax = 1/20, fill = 'lightblue', alpha = 0.8) +
   annotate('segment', x = c(0, 0, 20), xend = c(20, 0, 20), y = c(1/20, 0, 0), yend = c(1/20, 1/20, 1/20),
@@ -426,7 +426,7 @@ ggplot() +
 The density of $X$ below is a step function on a grid. Each box is $0.25$ wide and $0.16$ tall, so
 each box has area $0.25 \times 0.16 = 0.04$.
 
-```{r, echo=FALSE, fig.height=4.5, fig.width=9, fig.align='center'}
+```{r, echo=FALSE, fig.height=4.5, fig.width=9, fig.align='center', fig.alt = "Step-function density on a grid of dashed lines, X from -1 to 1 in steps of 0.25, density in steps of 0.16. Bar heights, in boxes, are 2, 3, 7, 5, 4, 2, 1 and 1 from left to right; the four bars left of 0 are shaded."}
 sx <- seq(-1, 0.75, by = box_w)
 sd_df <- data.frame(xmin = sx, xmax = sx + box_w, h = step_boxes * box_h)
 ggplot(sd_df) +
@@ -451,7 +451,7 @@ $$P(X < 0) = `r sum(step_boxes[1:4])` \times 0.04 = `r fmt(sum(step_boxes[1:4]) 
 The density of $W$ below rises in a straight line from 0 at $W = 0$ to a peak of 0.4 at $W = 2$, then
 falls back to 0 at $W = 5$. The whole triangle has area $\frac{1}{2} \times 5 \times 0.4 = 1$.
 
-```{r, echo=FALSE, fig.height=4, fig.width=9, fig.align='center'}
+```{r, echo=FALSE, fig.height=4, fig.width=9, fig.align='center', fig.alt = "Triangular density for W: a line rising from 0 at W = 0 to a peak of 0.4 at W = 2, then falling to 0 at W = 5. The small triangle from W = 0 to 1, reaching height 0.2, is shaded."}
 tri <- data.frame(x = c(0, 2, 5), y = c(0, 0.4, 0))
 ggplot(tri, aes(x, y)) +
   geom_polygon(data = data.frame(x = c(0, 1, 1), y = c(0, 0.2, 0)), fill = 'lightblue') +
@@ -475,7 +475,7 @@ When the curve is not made of straight lines, we can still approximate the area 
 rectangles, just as a histogram does. Take the normal model for the women's heights from Week 6,
 $X \sim N(65.4, 3.38)$, and the probability that a woman is between 62 and 70 inches tall:
 
-```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center'}
+```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center', fig.alt = "Three panels, each the normal curve for women's heights with mean 65.4 and sd 3.38, with rectangles under the curve between 62 and 70 inches. The rectangles are 2, 1 and 0.25 inches wide from left to right, each panel titled with the total rectangle area; the thinner rectangles follow the curve more closely."}
 rect_plot <- function(w) {
   mids <- seq(lo + w / 2, hi - w / 2, by = w)
   r <- data.frame(xmin = mids - w / 2, xmax = mids + w / 2, h = dnorm(mids, HM, HS))
@@ -517,7 +517,7 @@ The quartiles of a continuous random variable are the values that cut the area i
 $$P(X < Q_1) = 0.25 \qquad P(X < Q_2) = 0.50 \qquad P(X < Q_3) = 0.75$$
 so $Q_2$ is the median. To find them, add up area from the left until you reach each target.
 
-```{r, echo=FALSE, fig.height=4, fig.width=10, fig.align='center'}
+```{r, echo=FALSE, fig.height=4, fig.width=10, fig.align='center', fig.alt = "Step density for X from 0 to 11 made of five rectangles: 0 to 1 at height 0.10, 1 to 2 at 0.15, 2 to 3 at 0.25, 3 to 5 at 0.10 and 5 to 11 at 0.05, labelled with areas 0.10, 0.15, 0.25, 0.20 and 0.30. Dashed vertical lines mark Q1 at 2, Q2 at 3 and Q3 at 6."}
 qd_df <- data.frame(xmin = head(q_edges, -1), xmax = q_edges[-1], h = q_dens)
 ggplot(qd_df) +
   geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = h), fill = 'lightblue', color = 'black', linewidth = 0.8) +
@@ -709,7 +709,7 @@ Here is the CLT at work on a strongly skewed population. If goals arrive like a 
 minutes and has a long right tail: most waits are short, a few are very long. Each panel shows 10,000
 simulated sample means $\bar{x}$:
 
-```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center'}
+```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center', fig.alt = "Four histograms of 10,000 simulated sample means of minutes until the next goal, for n = 1, 2, 5 and 30, each with a vertical line at the mean of about 33.5 minutes and its own axis scale. At n = 1 the histogram is strongly skewed right; the skew fades as n grows, and at n = 30 it is a narrow, nearly symmetric bell."}
 ggplot(clt, aes(m)) +
   geom_histogram(aes(y = after_stat(density)), bins = 40, color = 'black', fill = 'lightblue', linewidth = 0.2) +
   geom_vline(xintercept = gap, color = 'red', linewidth = 0.8) +
@@ -727,7 +727,7 @@ By $n = 5$ the skew is fading, and at $n = 30$ the distribution is close to a be
 The same thing happens to $\hat{p}$. Below are the exact sampling distributions of the proportion of
 tiger trout, $p = 0.05$, in catches of $n = 10$, 50 and 450 fish:
 
-```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center'}
+```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center', fig.alt = "Three bar charts of the exact sampling distribution of the sample proportion of tiger trout for n = 10, 50 and 450, each with a vertical line at p = 0.05 and its own axis scale. At n = 10 most probability is at 0 and the distribution is strongly skewed right; at n = 450 it is a symmetric bell centered at 0.05."}
 ggplot(phat[phat$p > 1e-4, ], aes(ph, p)) +
   geom_col(aes(width = w), fill = 'lightblue', color = 'black', linewidth = 0.2) +
   geom_vline(xintercept = trout, color = 'red', linewidth = 0.8) +
@@ -809,8 +809,8 @@ same "within 2 standard errors" reasoning gives a **confidence interval** for th
 ## Sources
 
 * Illowsky, B. and Dean, S. (2023). *Introductory Statistics 2e*, Sections 4.3, 4.6, 5.1 and 7.1–7.3.
-  OpenStax. <https://openstax.org/details/books/introductory-statistics-2e>
+  OpenStax. [OpenStax: Introductory Statistics 2e](https://openstax.org/details/books/introductory-statistics-2e)
 * 2022 FIFA World Cup: 172 goals in 64 matches, seven of them 0–0. Wikipedia, "2022 FIFA World Cup",
   tournament statistics; Eurosport, "What is the record number of 0-0 draws at the World Cup".
 * Stephen Curry's career free throws, 4,236 of 4,645. Basketball-Reference,
-  <https://www.basketball-reference.com/players/c/curryst01.html>, checked October 5, 2026.
+  [Basketball-Reference: Stephen Curry career stats](https://www.basketball-reference.com/players/c/curryst01.html), checked October 5, 2026.

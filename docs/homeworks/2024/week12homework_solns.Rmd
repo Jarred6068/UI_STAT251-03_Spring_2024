@@ -49,7 +49,7 @@ source('../../misc/stat251_tools.R')
 ```
 
 
-### Definitions
+## Definitions
 Define the following terms/concepts
 
 * a.) Describe the central limit theorem and its significance to the sampling distribution for a sample proportion or mean - <span style="color: red;">The Central Limit Theorem (CLT) is a fundamental concept in statistics that states that the sampling distribution of the sample mean or sample proportion approaches a normal distribution as the sample size increases, regardless of the shape of the population distribution, as long as the sample size is sufficiently large.</span>
@@ -78,7 +78,7 @@ Define the following terms/concepts
 
 
 
-### Finding probabilities from the $t$ and $z$ distributions 
+## Finding probabilities from the $t$ and $z$ distributions 
 
 $\bf (1)$ Use the appropriate table to find the probability of each $z$ or $t$ score.
 
@@ -96,7 +96,7 @@ $\bf (1)$ Use the appropriate table to find the probability of each $z$ or $t$ s
   
   
 
-### Finding standard scores and $\alpha$
+## Finding standard scores and $\alpha$
 
 $\bf (2)$ Fill in the table below with the corresponding $\alpha$ level and critical value for each confidence interval for a population proportion.
 
@@ -136,7 +136,7 @@ kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F,
 
 # Confidence intervals
 
-### Confidence intervals for a population proportion $p$
+## Confidence intervals for a population proportion $p$
 
 $\bf (4)$ A survey conducted by the state of Georgia surveyed college students as part of a larger effort to characterize student behavior [@agresti2007art]. One of the questions in the survey asked students to report their political party affiliation. The table below summarizes the proportion of students who reported being Republican, Democrat, or Independent.
 
@@ -210,7 +210,7 @@ CI = one.sample.prop.CI(phat = estimate,
 
 <br>
 
-### Confidence intervals for a population mean $\mu$
+## Confidence intervals for a population mean $\mu$
 
 $\bf (6)$ The following table summarizes variables from a random sample of $25$ observations from a dataset concerning housing in California taken from the 1990 census. The full dataset is featured in Aurélien Géron's book 'Hands-On Machine learning with Scikit-Learn and TensorFlow' [@geron2022hands]. Use the table to answer parts (a) and (b) 
 
@@ -275,7 +275,7 @@ CI = one.sample.t.CI(xbar = sample.mean,
 <br>
 
 
-### Choosing a minimum sample size
+## Choosing a minimum sample size
 
 $\bf (7)$ According to a 2023 study published by the Saudi Heart Association, a survey of college students from Taibah University in Medina, Saudi Arabia, found that $24\%$ of students reported using e-cigarettes [@alzahrani2023prevalence]. Assuming a comparable rate of e-cigarette use in the U.S., what sample size is required to estimate the proportion of college students who use e-cigarettes at the $95\%$ confidence level and within a margin of error of $1.5\%$? 
 
@@ -323,7 +323,7 @@ print(paste0('n = ', n, ' observations'))
 
 <br>
 
-### Assumptions of estimators
+## Assumptions of estimators
 
 $\bf (9)$ Describe the assumptions associated with estimating $p$ with $\hat{p}$
 
@@ -347,7 +347,7 @@ $\bf (10)$ Describe the assumptions associated with estimating $\mu$ with $\bar{
 
 # Significance testing
 
-### Stating hypotheses
+## Stating hypotheses
 
 $\bf (11)$ A pharmaceutical company produces a generic version of the pain reliever ibuprofen, marketing a tablet with a 200 milligram dose. Concerned about the accuracy of the dosing process, the manufacturer suspects that the machine filling the tablets may be malfunctioning leading to a smaller dose in each tablet. The manufacturer wishes to conduct a significance test to determine if the dose is significantly lower than 200 milligrams. State the null and alternative hypotheses for this test 
 
@@ -379,7 +379,7 @@ The alternative hypothesis is that that the proportion of defective semi-conduct
 
 <br>
 
-### The Decision Rule
+## The Decision Rule
 
 $\bf (14)$ For each set of hypotheses, significance level, and $p$-value. State whether the test <i>rejects</i> or <i>fails to reject</i> the null hypothesis.
 
@@ -404,7 +404,7 @@ $\bf (15)$ For each set of hypotheses, significance level, sample size, and test
 <br>
 
 
-### Hypothesis tests for a population proportion $p$ 
+## Hypothesis tests for a population proportion $p$ 
 
 $\bf (16)$ A toy manufacturer claims that $50\%$ of their toy robots are defect-free. However, a quality control inspector suspects that the actual proportion of defect-free robots is different from what the manufacturer claims. To investigate, the inspector randomly selects $100$ toy robots from a production batch and examines them for defects. After the inspection, the inspector finds that $40$ out of the $100$ toy robots are defect-free. To test their suspicion, they set up a two-tailed hypothesis test with a significance level $\alpha = 0.1$ and hypotheses $H_0: p_0 = 0.5$ (manufacturer's claim) $H_A: p \neq p_0$.
 
@@ -474,7 +474,7 @@ one.sample.prop.test(p0 = null.value,
 
 <br>
 
-### Hypothesis tests for a population mean $\mu$
+## Hypothesis tests for a population mean $\mu$
 
 $\bf (18)$ A soft drink company claims that their new "Zero Sugar" soda contains zero grams of added sugar per 12-ounce can. To test this claim, a random sample of $25$ cans of this soda is selected. The sample mean is found to be $1.3$ grams of added sugar per can, with a standard deviation of $0.5$ grams. To determine if there is enough evidence to reject the company's claim and conclude that the soda does not contain zero grams of added sugar per can, a group of researchers is interested in testing the following hypotheses: $H_0: \mu_0 = 0$, $H_A: \mu \neq \mu_0$ at the $\alpha = 0.01$ significance level.
 

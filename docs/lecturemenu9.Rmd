@@ -50,7 +50,7 @@ kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = F)%
 
 * Try it out: give the confidence level and critical value for the $100(1-\alpha)\%$ confidence intervals with $\alpha = 0.25$, $\alpha = 0.08$, and $\alpha = 0.03$.
 
-### An alternative confidence interval for a population mean.
+## An alternative confidence interval for a population mean.
 
 Recall the confidence interval that we introduced for estimating the population mean:
 
@@ -64,7 +64,7 @@ Unfortunately, the confidence level of the confidence interval above will tend t
 
 * Consider the following example: A social scientist is conducting a study to investigate the average time spent daily on social media by college students. Each week the scientist surveys five college students and asks them to report their time spent on social media. For each sample, the scientist computes the $95\%$ confidence interval for the mean time the students spent on social media. They repeat this process 100 times. Suppose the population mean time spent on social media is $\mu = 120$ minutes with a standard deviation of $\sigma = 10$ minutes. The plot below shows 100 confidence intervals computed using $\bar{x} \pm z\frac{s}{\sqrt{n}}$ where each CI is computed from a sample of $5$ observations from $N(120, 10)$:
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10, fig.cap="**Figure**: Each point represents the sample mean from a hypothetical sample of 5 college students. The whiskers extending from each point give the coverage of the confidence interval computed for each sample. The black dotted line gives the value of hypothetical population mean time spent on social media. The CI's highlighted in red represent those that fail to capture the population mean"}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10, fig.cap="**Figure**: Each point represents the sample mean from a hypothetical sample of 5 college students. The whiskers extending from each point give the coverage of the confidence interval computed for each sample. The black dotted line gives the value of hypothetical population mean time spent on social media. The CI's highlighted in red represent those that fail to capture the population mean", fig.alt = "100 confidence intervals, each from a sample of 5 students, drawn as vertical error bars by sample number on the x-axis, with x-bar in minutes on the y-axis and a dashed horizontal line at mu equals 120. A legend marks whether each interval covers the parameter: 12 of the 100 intervals miss the dashed line."}
 
 set.seed(123)
 mu = 120
@@ -111,7 +111,7 @@ Based on the plot and example above, the actual proportion of confidence interva
 
 Like the normal distribution, the $t$ distribution is a bell curve but it has "heavier tails" - that is to say, it has more probability density in the tails of the distribution. 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE, results = 'hide', fig.height=6, fig.width=10}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE, results = 'hide', fig.height=6, fig.width=10, fig.alt = "Line plot comparing density curves from x equals -3 to 3: the standard normal curve and t distributions with 1, 2, 5 and 10 degrees of freedom. All are bell-shaped and centered at 0; the t curves have lower peaks and heavier tails, and with more degrees of freedom they move closer to the standard normal."}
 
 x = seq(-3, 3, length=1000)
 hx = dnorm(x)

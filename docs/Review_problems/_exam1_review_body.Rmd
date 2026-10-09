@@ -470,7 +470,7 @@ show_tbl(data.frame(
 
 **(c)** Draw a bar graph of the distribution on the axes below.
 
-```{r p04-bar, fig.height=3.6, fig.width=5.5}
+```{r p04-bar, fig.height=3.6, fig.width=5.5, fig.alt = if (SOLUTIONS) "Bar graph of drink orders for 20 customers: Drip 6, Espresso 2, Latte 8, Mocha 4." else "Blank axes for a bar graph: drinks Drip, Espresso, Latte and Mocha on the x-axis and frequency from 0 to 9 on the y-axis."}
 bar_df <- data.frame(Drink = names(d_tab), Frequency = d_f)
 p <- ggplot(bar_df, aes(x = Drink, y = Frequency)) +
   scale_y_continuous(limits = c(0, 9), breaks = 0:9) +
@@ -656,7 +656,7 @@ show_tbl(data.frame(
 
 **(b)** Draw the histogram on the axes below.
 
-```{r p06-hist, fig.height=3.8, fig.width=5.5}
+```{r p06-hist, fig.height=3.8, fig.width=5.5, fig.alt = if (SOLUTIONS) "Histogram of time to complete the task (seconds) with bins 12 to 16, 16 to 20, 20 to 24 and 24 to 28.5, with frequencies 3, 5, 5 and 3." else "Blank axes for a histogram: time to complete task (seconds) on the x-axis, marked at 12, 16, 20, 24 and 28.5, and frequency from 0 to 6 on the y-axis."}
 hist_df <- data.frame(mid = c(14, 18, 22, 26.25), f = f6,
                       wid = diff(brk6))
 p <- ggplot(hist_df, aes(x = mid, y = f, width = wid)) +
@@ -731,7 +731,7 @@ if (SOLUTIONS) {
 
 **(b)** Construct a **dot plot** on the number line below.
 
-```{r p07-dot, fig.height=2.6, fig.width=6.5}
+```{r p07-dot, fig.height=2.6, fig.width=6.5, fig.alt = if (SOLUTIONS) "Dot plot of eggs per nest on a number line from 20 to 48: one dot each at 21, 27, 28, 31, 35, 38, 41, 42, 44 and 47, two stacked dots at 24 and three stacked dots at 33." else "Blank number line for a dot plot: eggs per nest from 20 to 48 in steps of 2."}
 dot_df <- data.frame(x = e7)
 dot_df$y <- ave(dot_df$x, dot_df$x, FUN = seq_along)
 p <- ggplot(dot_df, aes(x = x, y = y)) +
@@ -1160,7 +1160,7 @@ workspace(3)
 
 **(d)** Draw the boxplot on the axis below. Be careful about where the right whisker ends.
 
-```{r p11-box, fig.height=2.8, fig.width=6.5}
+```{r p11-box, fig.height=2.8, fig.width=6.5, fig.alt = if (SOLUTIONS) "Horizontal box plot of days from referral to appointment on an axis from 0 to 60: the left whisker starts at 3, the box runs from 7 to 16 with the median at 11.5, the right whisker ends at 19, and a single outlier point sits at 58." else "Blank axis for a box plot: days from referral to appointment, 0 to 60 in steps of 5."}
 if (SOLUTIONS) {
   par(mar = c(4, 1, 1, 1))
   boxplot(d11, horizontal = TRUE, axes = FALSE, staplewex = 1, col = "lightgrey",
@@ -1319,7 +1319,7 @@ show_tbl(data.frame(
 **(b)** Plot the cumulative distribution on the axes below. Remember it is a **step
 function**: flat between observed values, jumping at each one.
 
-```{r p12-cumdist, fig.height=4.6, fig.width=7}
+```{r p12-cumdist, fig.height=4.6, fig.width=7, fig.alt = if (SOLUTIONS) "Step plot of the cumulative relative frequency of books checked out: 0 below 0 books, then jumping to 0.30 at 0, 0.65 at 1, 0.80 at 2, 0.90 at 3, 0.95 at 4 and 1.00 at 5, with a point at each jump and flat steps in between." else "Blank axes for a cumulative distribution: books checked out from 0 to 6 on the x-axis and cumulative relative frequency from 0 to 1 in steps of 0.05 on the y-axis."}
 lead12 <- data.frame(x = -1, crf = 0)
 p <- ggplot() +
   scale_x_continuous(limits = c(-1, 6), breaks = 0:6) +

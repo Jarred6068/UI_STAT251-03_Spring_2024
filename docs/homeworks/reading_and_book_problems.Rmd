@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Reading
 
 All reading is from the course textbook, [Illowsky and Dean, *Introductory Statistics 2e* (OpenStax)](https://openstax.org/details/books/introductory-statistics-2e).
-A copy of the PDF is also [here](../assets/introductory-statistics-2e_-_WEB.pdf). Page numbers are the
+A copy of the PDF is also available: [Introductory Statistics 2e (PDF)](../assets/introductory-statistics-2e_-_WEB.pdf). Page numbers are the
 printed page numbers of the book; in the PDF, add 12 to find the page.
 
 ## Week 1
