@@ -565,30 +565,28 @@ $(document).ready(function () {
                              at its slide 11). The uniform, step, triangle and quartile
                              examples below are reading, not slide material.
                              lecture_slides/Week 7/2026/Week7_Lecture17_Slides_10_9_2026.pptx
-    Mon Oct 12   Lecture 18  (Week 8) sampling distributions and the central limit
-                             theorem, combined with the introduction to confidence
-                             intervals. The CLT section at the end of this page is
-                             that lecture.
+    Mon Oct 12   Lecture 18  (Week 8) sampling distributions, the central limit theorem
+                             and the introduction to confidence intervals: written up on
+                             the Week 8 page, not here.
   The sections below follow that order. The Lecture 15 examples (guessing on a quiz,
   Stephen Curry's free throws, goals at the 2022 World Cup) are the slide examples;
   their numbers and sources are in assets/make_lecture15_figures.R.
 
-  Sources. Terms follow OpenStax Introductory Statistics 2e, Sections 4.3, 4.6, 5.1
-  and 7.1-7.3 (the Week 7 reading). This page rewrites the 2024 Week 7 page and
+  Sources. Terms follow OpenStax Introductory Statistics 2e, Sections 4.3, 4.6 and
+  5.1. This page rewrites the 2024 Week 7 page and
   pulls in 2024 lecture material:
     * kept from the 2024 page: recoding a category as a Bernoulli trial, the
       binomial coefficient and factorials, the Poisson conditions and examples of
       Poisson counts, counting boxes under a step density, the triangle density,
-      and the Coho salmon sampling-distribution derivation;
+      and the Coho salmon derivation (now on the Week 8 page);
     * from the 2024 decks: the tiger trout (2024 Lecture 13 slide 8, Lecture 15
       slide 19), the density-quartiles example (2024 Lecture 13 slide 16), the
       rectangles that approximate an area (2024 Lecture 13 slides 13-15), "height
       is density, not probability" and the cumulative-probability rules (2024
-      Lecture 15 slides 3-6), and the three kinds of distribution (2024 Lecture 15
-      slide 10);
-    * moved here from the 2024 Week 8 page: the central limit theorem and the
-      sampling distribution of p-hat. The Week 8 page still has its 2024 copy and
-      will be revised with the Oct 12 lecture.
+      Lecture 15 slides 3-6);
+    * the sampling-distribution and central limit theorem section drafted here on
+      Oct 5 (Coho salmon, three distributions, the CLT) MOVED to the Week 8 page on
+      Oct 12 2026, since it was taught Mon Oct 12 in Lecture 18.
   Dropped: the Luis Arraez and call-center examples (replaced by the slide examples),
   the Star Wars Poisson example, and the 2024 Texas hold'em table, whose probabilities
   were wrong (P(no ace in two cards) = C(48,2)/C(52,2) = 0.851, not 0.559).
@@ -1250,386 +1248,10 @@ standard deviation. Everything in the Week 6 notes about finding areas
 under it, with <span class="math inline">\(z\)</span>-scores, the <span
 class="math inline">\(z\)</span>-table and <code>pnorm</code>, is the
 cdf rules above applied to a bell-shaped curve.</p>
-</div>
-</div>
-<div id="sampling-distributions-and-the-central-limit-theorem"
-class="section level1">
-<h1>Sampling distributions and the central limit theorem</h1>
-<div id="three-distributions" class="section level2">
-<h2>Three distributions</h2>
-<p>In the Week 6 notes we met the <strong>sampling distribution</strong>
-by simulation: take sample after sample of 20 heights, compute <span
-class="math inline">\(\bar{x}\)</span> each time, and plot the results.
-This week we can say what is going on in the language of probability. A
-statistic computed from a random sample is a <strong>random
-variable</strong>, because its value depends on which units chance put
-in the sample, and so it has a probability distribution of its own. Keep
-three distributions apart:</p>
-<ul>
-<li>The <strong>population distribution</strong> is the probability
-distribution of a single observation <span
-class="math inline">\(X\)</span>. It is described by
-<strong>parameters</strong> such as <span
-class="math inline">\(\mu\)</span>, <span
-class="math inline">\(\sigma\)</span> and <span
-class="math inline">\(p\)</span>, which we usually do not know.</li>
-<li>The <strong>data distribution</strong> is the distribution of the
-<span class="math inline">\(n\)</span> observations we actually have in
-our sample, the histogram of our data. It is described by
-<strong>statistics</strong> such as <span
-class="math inline">\(\bar{x}\)</span>, <span
-class="math inline">\(s\)</span> and <span
-class="math inline">\(\hat{p}\)</span>.</li>
-<li>The <strong>sampling distribution</strong> is the probability
-distribution of a statistic, such as <span
-class="math inline">\(\bar{x}\)</span> or <span
-class="math inline">\(\hat{p}\)</span>, over all possible samples of
-size <span class="math inline">\(n\)</span> from the population. It
-tells us how close an estimate is likely to be to the parameter.</li>
-</ul>
-</div>
-<div id="deriving-a-sampling-distribution-by-hand"
-class="section level2">
-<h2>Deriving a sampling distribution by hand</h2>
-<p>For a discrete population and a small sample we can find a sampling
-distribution exactly, with the rules from Week 6:</p>
-<ol style="list-style-type: decimal">
-<li>List every possible sample of size <span
-class="math inline">\(n\)</span> and compute the statistic for
-each.</li>
-<li>Find the probability of each sample. When the observations are
-independent, multiply.</li>
-<li>Add up the probabilities of the samples that give the same value of
-the statistic.</li>
-</ol>
-<p><strong>Example.</strong> Let <span class="math inline">\(X\)</span>
-be the number of Coho salmon a fly fisherman catches in an afternoon on
-the Clearwater River, with this (hypothetical) population
-distribution:</p>
-<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-<span class="math inline">\(x\)</span>
-</th>
-<th style="text-align:left;">
-<span class="math inline">\(P(x)\)</span>
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-0.589
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-0.232
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0.179
-</td>
-</tr>
-</tbody>
-</table>
-<p>Its mean is <span class="math inline">\(\mu = 0(0.589) + 1(0.232) +
-2(0.179) = 0.59\)</span> fish and its standard deviation is <span
-class="math inline">\(\sigma = 0.775\)</span>. Now find the sampling
-distribution of <span class="math inline">\(\bar{x}\)</span>, the mean
-catch over a random sample of <span class="math inline">\(n = 3\)</span>
-afternoons. There are <span class="math inline">\(3 \times 3 \times 3 =
-27\)</span> possible samples:</p>
-<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-<span class="math inline">\(\bar{x}\)</span>
-</th>
-<th style="text-align:left;">
-Samples giving it
-</th>
-<th style="text-align:left;">
-Probability
-</th>
-<th style="text-align:left;">
-<span class="math inline">\(P(\bar{x})\)</span>
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-(0,0,0) = <span class="math inline">\(\color{red}{1}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(0.589^3\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(\color{red}{0.204}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-1/3
-</td>
-<td style="text-align:left;">
-(1,0,0), (0,1,0), (0,0,1) = <span
-class="math inline">\(\color{red}{3}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(3(0.589^2 \times 0.232)\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(\color{red}{0.241}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2/3
-</td>
-<td style="text-align:left;">
-(1,1,0), (1,0,1), (0,1,1), (2,0,0), (0,2,0), (0,0,2) = <span
-class="math inline">\(\color{red}{6}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(3(0.232^2 \times 0.589) + 3(0.589^2 \times
-0.179)\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(\color{red}{0.281}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-(1,1,1), (2,1,0), (2,0,1), (0,2,1), (1,2,0), (1,0,2), (0,1,2) = <span
-class="math inline">\(\color{red}{7}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(0.232^3 + 6(0.589 \times 0.232 \times
-0.179)\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(\color{red}{0.159}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-4/3
-</td>
-<td style="text-align:left;">
-(2,1,1), (1,2,1), (1,1,2), (2,2,0), (2,0,2), (0,2,2) = <span
-class="math inline">\(\color{red}{6}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(3(0.232^2 \times 0.179) + 3(0.179^2 \times
-0.589)\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(\color{red}{0.086}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-5/3
-</td>
-<td style="text-align:left;">
-(1,2,2), (2,1,2), (2,2,1) = <span
-class="math inline">\(\color{red}{3}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(3(0.179^2 \times 0.232)\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(\color{red}{0.022}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:left;">
-(2,2,2) = <span class="math inline">\(\color{red}{1}\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(0.179^3\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(\color{red}{0.006}\)</span>
-</td>
-</tr>
-</tbody>
-</table>
-<p>The counts in red add to 27 and the probabilities add to 1. Now
-compare this distribution with the population:</p>
-<ul>
-<li>Its mean is <span class="math inline">\(\mu_{\bar{x}} = \sum
-\bar{x}\, P(\bar{x}) = 0.59\)</span>, <strong>the same as</strong> <span
-class="math inline">\(\mu\)</span>.</li>
-<li>Its standard deviation is <span
-class="math inline">\(\sigma_{\bar{x}} = 0.447\)</span>, which is
-exactly <span class="math inline">\(\sigma/\sqrt{n} =
-0.775/\sqrt{3}\)</span>.</li>
-</ul>
-<p>Those are the two facts about the sampling distribution of <span
-class="math inline">\(\bar{x}\)</span> from Week 6, now checked exactly
-rather than by simulation.</p>
-</div>
-<div id="center-and-spread-of-a-sampling-distribution"
-class="section level2">
-<h2>Center and spread of a sampling distribution</h2>
-<p>For a random sample of size <span class="math inline">\(n\)</span>
-from a population with mean <span class="math inline">\(\mu\)</span> and
-standard deviation <span class="math inline">\(\sigma\)</span>:</p>
-<ul>
-<li><strong>The sample mean</strong> <span
-class="math inline">\(\bar{x}\)</span> has mean <span
-class="math inline">\(\mu_{\bar{x}} = \mu\)</span> and standard
-deviation <span class="math display">\[\sigma_{\bar{x}} =
-\frac{\sigma}{\sqrt{n}}\]</span> the <strong>standard error of the
-mean</strong>.</li>
-</ul>
-<p>A <strong>sample proportion</strong> <span
-class="math inline">\(\hat{p}\)</span> is a sample mean too. Code each
-observation as a Bernoulli trial, 1 for a success and 0 for a failure;
-then <span class="math inline">\(\hat{p}\)</span> is the mean of the 0s
-and 1s, the count of successes <span class="math inline">\(X \sim
-\text{Binom}(n, p)\)</span> divided by <span
-class="math inline">\(n\)</span>. A Bernoulli population has mean <span
-class="math inline">\(p\)</span> and standard deviation <span
-class="math inline">\(\sqrt{p(1 - p)}\)</span>, so:</p>
-<ul>
-<li><strong>The sample proportion</strong> <span
-class="math inline">\(\hat{p} = X/n\)</span> has mean <span
-class="math inline">\(p\)</span> and standard deviation <span
-class="math display">\[\sigma_{\hat{p}} = \sqrt{\frac{p(1 -
-p)}{n}}\]</span></li>
-</ul>
-<p>Both statistics are <strong>unbiased</strong> (centered at the
-parameter), and both standard errors shrink like <span
-class="math inline">\(1/\sqrt{n}\)</span>.</p>
-</div>
-<div id="the-central-limit-theorem" class="section level2">
-<h2>The central limit theorem</h2>
-<p>The formulas above give the center and spread of a sampling
-distribution. The <strong>central limit theorem</strong> (CLT) gives its
-shape, and it is one of the most useful results in all of
-statistics.</p>
-<ul>
-<li><strong>Central limit theorem.</strong> Take random samples of size
-<span class="math inline">\(n\)</span> from <strong>any</strong>
-population with mean <span class="math inline">\(\mu\)</span> and
-standard deviation <span class="math inline">\(\sigma\)</span>. If <span
-class="math inline">\(n\)</span> is large enough, the sampling
-distribution of <span class="math inline">\(\bar{x}\)</span> is
-approximately normal: <span class="math display">\[\bar{x} \sim
-N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right)\]</span> The larger <span
-class="math inline">\(n\)</span> is, the better the approximation.</li>
-</ul>
-<p>The remarkable part is “any population”. The population can be
-skewed, lumpy, or discrete; the average of enough independent
-observations is still bell shaped, because the unusually high and
-unusually low values in a sample cancel out. In Week 6 we saw it for
-averages of dice, and the same reason explains why so many measurements
-in nature, which are the sum of many small effects, look normal.</p>
-<p><strong>How large is “large enough”?</strong> The textbook’s guide is
-<span class="math inline">\(n \geq 30\)</span>. If the population is
-itself close to normal, much smaller samples will do; if it is very
-skewed, you may need more.</p>
-<p>Here is the CLT at work on a strongly skewed population. If goals
-arrive like a Poisson process at 2.69 per 90-minute match, the time
-until the next goal averages <span class="math inline">\(90/2.69 \approx
-33.5\)</span> minutes and has a long right tail: most waits are short, a
-few are very long. Each panel shows 10,000 simulated sample means <span
-class="math inline">\(\bar{x}\)</span>:</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-12-1.png" alt="Four histograms of 10,000 simulated sample means of minutes until the next goal, for n = 1, 2, 5 and 30, each with a vertical line at the mean of about 33.5 minutes and its own axis scale. At n = 1 the histogram is strongly skewed right; the skew fades as n grows, and at n = 30 it is a narrow, nearly symmetric bell." width="1056" style="display: block; margin: auto;" /></p>
-<p>With <span class="math inline">\(n = 1\)</span> the “sample mean” is
-a single observation, so the panel is the skewed population itself. By
-<span class="math inline">\(n = 5\)</span> the skew is fading, and at
-<span class="math inline">\(n = 30\)</span> the distribution is close to
-a bell centered at <span class="math inline">\(\mu\)</span> (the red
-line). Notice the axes: the spread shrinks as <span
-class="math inline">\(n\)</span> grows, just as <span
-class="math inline">\(\sigma/\sqrt{n}\)</span> says.</p>
-<p>The same thing happens to <span
-class="math inline">\(\hat{p}\)</span>. Below are the exact sampling
-distributions of the proportion of tiger trout, <span
-class="math inline">\(p = 0.05\)</span>, in catches of <span
-class="math inline">\(n = 10\)</span>, 50 and 450 fish:</p>
-<p><img src="lecturemenu7_files/figure-html/unnamed-chunk-13-1.png" alt="Three bar charts of the exact sampling distribution of the sample proportion of tiger trout for n = 10, 50 and 450, each with a vertical line at p = 0.05 and its own axis scale. At n = 10 most probability is at 0 and the distribution is strongly skewed right; at n = 450 it is a symmetric bell centered at 0.05." width="1056" style="display: block; margin: auto;" /></p>
-<p>With 10 fish, <span class="math inline">\(\hat{p}\)</span> is usually
-0 and the distribution is badly skewed. With 450 fish it is a symmetric
-bell around <span class="math inline">\(p = 0.05\)</span>. For a
-proportion the textbook’s check is that both <span
-class="math inline">\(np\)</span> and <span class="math inline">\(n(1 -
-p)\)</span> are greater than 5: here <span class="math inline">\(450
-\times 0.05 = 22.5\)</span> and <span class="math inline">\(450 \times
-0.95 = 427.5\)</span>. With 10 fish, <span class="math inline">\(np =
-0.5\)</span>, nowhere near.</p>
-</div>
-<div id="using-the-clt" class="section level2">
-<h2>Using the CLT</h2>
-<p>Because the sampling distribution is approximately normal, the
-empirical rule applies to it: there is about a <strong>95%
-probability</strong> that a statistic lands within <strong>2 standard
-errors</strong> of its mean. That is exactly the margin of error from
-Week 6, now with a probability attached.</p>
-<div id="example-a-day-of-tiger-trout" class="section level3">
-<h3>Example: a day of tiger trout</h3>
-<p>A fisherman catches <span class="math inline">\(n = 450\)</span> fish
-and records the proportion that are tiger trout. With <span
-class="math inline">\(p = 0.05\)</span>, <span
-class="math display">\[\sigma_{\hat{p}} = \sqrt{\frac{0.05 \times
-0.95}{450}} \approx 0.0103\]</span> so with probability about 0.95,
-<span class="math display">\[0.05 - 2(0.0103) \;&lt;\; \hat{p} \;&lt;\;
-0.05 + 2(0.0103), \qquad\text{that is}\qquad
-0.029 &lt; \hat{p} &lt; 0.071\]</span> between about 13 and 32 tiger
-trout out of 450. A catch with 40 tiger trout (<span
-class="math inline">\(\hat{p} \approx 0.089\)</span>) would be far
-outside this range: statistically significant evidence that tiger trout
-make up more than 5% of the reservoir.</p>
-</div>
-<div id="example-a-tournaments-average" class="section level3">
-<h3>Example: a tournament’s average</h3>
-<p>Back to the World Cup: if goals per match are <span
-class="math inline">\(\text{Poisson}(2.69)\)</span>, a single match has
-<span class="math inline">\(\sigma = \sqrt{2.69} \approx 1.64\)</span>
-goals. The average over a 64-match tournament is a sample mean with
-<span class="math inline">\(n = 64\)</span>, so by the CLT it is
-approximately normal with mean 2.69 and <span
-class="math display">\[\sigma_{\bar{x}} = \frac{1.64}{\sqrt{64}} \approx
-0.205\]</span> With probability about 0.95 a tournament averages between
-<span class="math inline">\(2.69 \pm 2(0.205)\)</span>, about 2.28 to
-3.10 goals per match, if the scoring rate stays the same. A single match
-can easily have 0 or 6 goals; a tournament’s average is far more
-predictable. That is the law of large numbers and the CLT working
-together: the average settles near <span
-class="math inline">\(\mu\)</span>, and the CLT says how near.</p>
-<p>Next week we turn this around. In practice we know <span
-class="math inline">\(\bar{x}\)</span> or <span
-class="math inline">\(\hat{p}\)</span> but not <span
-class="math inline">\(\mu\)</span> or <span
-class="math inline">\(p\)</span>, and the same “within 2 standard
-errors” reasoning gives a <strong>confidence interval</strong> for the
-parameter.</p>
-</div>
+<p>Next week we put these ideas to work on <strong>statistics</strong>.
+A sample mean or proportion is a random variable too, and its
+distribution, the sampling distribution, is the subject of the Week 8
+notes.</p>
 </div>
 </div>
 <div id="conclusion-what-you-should-take-away" class="section level1">
@@ -1676,33 +1298,11 @@ x)\)</span> and <span class="math inline">\(P(a &lt; X &lt; b) = P(X
 point.</li>
 </ul>
 </div>
-<div id="sampling-distributions" class="section level2">
-<h2>Sampling distributions</h2>
-<ul>
-<li>A statistic is a random variable; its <strong>sampling
-distribution</strong> is its distribution over all samples of size <span
-class="math inline">\(n\)</span>. Do not confuse it with the population
-distribution or the data distribution.</li>
-<li><span class="math inline">\(\bar{x}\)</span> has mean <span
-class="math inline">\(\mu\)</span> and standard error <span
-class="math inline">\(\sigma/\sqrt{n}\)</span>; <span
-class="math inline">\(\hat{p}\)</span> has mean <span
-class="math inline">\(p\)</span> and standard error <span
-class="math inline">\(\sqrt{p(1 - p)/n}\)</span>.</li>
-<li><strong>Central limit theorem:</strong> for large <span
-class="math inline">\(n\)</span> (roughly <span class="math inline">\(n
-\geq 30\)</span>, or <span class="math inline">\(np\)</span> and <span
-class="math inline">\(n(1 - p)\)</span> above 5 for a proportion), the
-sampling distribution is approximately normal, whatever the shape of the
-population, so a statistic falls within 2 standard errors of its mean
-with probability about 0.95.</li>
-</ul>
-</div>
 <div id="sources" class="section level2">
 <h2>Sources</h2>
 <ul>
 <li>Illowsky, B. and Dean, S. (2023). <em>Introductory Statistics
-2e</em>, Sections 4.3, 4.6, 5.1 and 7.1–7.3. OpenStax. <a
+2e</em>, Sections 4.3, 4.6 and 5.1. OpenStax. <a
 href="https://openstax.org/details/books/introductory-statistics-2e">OpenStax:
 Introductory Statistics 2e</a></li>
 <li>2022 FIFA World Cup: 172 goals in 64 matches, seven of them 0–0.

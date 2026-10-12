@@ -67,16 +67,16 @@ Chapter 3: Sections 3.1 - 3.5, p. 167 - 195
 Chapter 4: Sections 4.1 - 4.2, p. 227 - 236
 
 ## Week 7
-*Discrete and continuous probability distributions; the central limit theorem*
+*Discrete and continuous probability distributions*
 
 Chapter 4: Section 4.3 (binomial), p. 237 - 241, and Section 4.6 (Poisson), p. 250 - 254
 
 Chapter 5: Section 5.1, p. 291 - 294
 
-Chapter 7: Sections 7.1 - 7.3, p. 365 - 380
-
 ## Week 8
-*More on sampling distributions; introduction to confidence intervals*
+*Sampling distributions and the central limit theorem; introduction to confidence intervals*
+
+Chapter 7: Sections 7.1 - 7.3, p. 365 - 380
 
 Chapter 8: Section 8.1, p. 405 - 415
 
@@ -162,11 +162,11 @@ odd-numbered problems are in the Solutions section at the end of each chapter.
 * Homework problems chapter 4 (p. 270 - 280): problems 69 - 103, 117 - 129
 * Practice problems chapter 5 (p. 316 - 323): problems 3 - 15
 * Homework problems chapter 5 (p. 324 - 328): problems 72 - 73
-* Practice problems chapter 7 (p. 389 - 391): all problems (1 - 60)
-* Homework problems chapter 7 (p. 392 - 398): all problems (61 - 97)
 
 ## Weeks 8 - 10
 
+* Practice problems chapter 7 (p. 389 - 391): all problems (1 - 60)
+* Homework problems chapter 7 (p. 392 - 398): all problems (61 - 97)
 * Practice problems chapter 8 (p. 434 - 439): all problems
 * Homework problems chapter 8 (p. 440 - 448): all problems
 * Practice problems chapter 9 (p. 488 - 490): all problems

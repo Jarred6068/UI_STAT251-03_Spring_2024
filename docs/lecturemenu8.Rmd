@@ -22,600 +22,613 @@ library(ggplot2)
 library(ggthemes)
 library(ggpubr)
 library(latex2exp)
-library(gganimate)
 
 path = 'Data/'
+
+fmt <- function(x, d = 2) formatC(x, format = 'f', digits = d)
+tab <- function(df, ...) kable(df, format = 'html', row.names = FALSE, escape = FALSE, ...) %>%
+  kable_classic(full_width = FALSE, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped')
+near <- function(a, b, tol = 5e-4) abs(a - b) < tol
+notes_theme <- theme_classic2() +
+  theme(axis.text = element_text(size = 11), axis.title = element_text(size = 13),
+        strip.text = element_text(size = 13, face = 'bold'), strip.background = element_blank())
+
+# every number quoted on this page is computed here. The slide numbers are the same
+# ones asserted in assets/make_lecture18_figures.R.
+
+# spinner: X = 1, 2, 3 each with probability 1/3; x-bar of n = 2 spins
+sp <- expand.grid(a = 1:3, b = 1:3)
+sp$m <- (sp$a + sp$b) / 2
+spd <- aggregate(list(count = rep(1, 9)), list(m = sp$m), sum)
+spd$p <- spd$count / 9
+s_sd <- sqrt(mean(((1:3) - 2)^2)); sb_sd <- sqrt(sum((spd$m - 2)^2 * spd$p))
+stopifnot(identical(spd$count, c(1, 2, 3, 2, 1)), near(sum(spd$m * spd$p), 2, 1e-12),
+          near(s_sd, 0.82, 5e-3), near(sb_sd, 0.58, 5e-3), near(sb_sd, s_sd / sqrt(2), 1e-12))
+
+# Coho salmon (kept from the 2024 notes): the mean of n = 3 afternoons, all 27 outcomes
+cx <- 0:2; cp <- c(0.589, 0.232, 0.179)
+grid <- expand.grid(a = 1:3, b = 1:3, c = 1:3)
+gs <- cx[grid$a] + cx[grid$b] + cx[grid$c]           # total catch; x-bar = total / 3
+gp <- cp[grid$a] * cp[grid$b] * cp[grid$c]
+coho <- aggregate(gp, list(total = gs), sum)
+coho$xbar <- coho$total / 3
+c_mu <- sum(cx * cp); c_sd <- sqrt(sum((cx - c_mu)^2 * cp))
+cb_mu <- sum(coho$xbar * coho$x); cb_sd <- sqrt(sum((coho$xbar - cb_mu)^2 * coho$x))
+stopifnot(abs(sum(cp) - 1) < 1e-12, nrow(coho) == 7,
+          all(abs(coho$x - c(0.204, 0.241, 0.281, 0.159, 0.085, 0.022, 0.006)) < 6e-4),
+          abs(cb_mu - c_mu) < 1e-12, abs(cb_sd - c_sd / sqrt(3)) < 1e-12)
+
+# Spotify songs: the population for the standard-error and confidence-interval examples.
+# A song credited to several artists appears once per artist in the file, so duplicates
+# by Spotify URI are dropped.
+sg <- read.csv(paste0(path, 'Spotify_Youtube.csv'), stringsAsFactors = FALSE)
+stopifnot(nrow(sg) == 20718, length(unique(sg$Artist)) == 2079)
+sg <- sg[!duplicated(sg$Uri) & !is.na(sg$Duration_ms), ]
+x <- sg$Duration_ms / 60000
+MU <- mean(x); SIG <- sd(x)
+stopifnot(length(x) == 18860, round(MU, 2) == 3.71, round(SIG, 2) == 1.51,
+          round(median(x), 2) == 3.55, sum(x > 10) == 41, round(max(x)) == 78,
+          near(1.51 / sqrt(20), 0.34, 5e-3), near(1.51 / sqrt(80), 0.17, 5e-3),
+          identical(round(x[1:5], 2), c(3.71, 3.34, 3.59, 3.90, 5.68)))
+set.seed(10)                                   # the 25 intervals on the Lecture 18 slide
+cm <- replicate(25, mean(sample(x, 20, replace = TRUE)))
+ci <- data.frame(i = 1:25, m = cm, lo = cm - 2 * 0.34, hi = cm + 2 * 0.34)
+ci$hit <- ci$lo <= MU & MU <= ci$hi
+stopifnot(sum(ci$hit) == 24, round(cm[1], 2) == 3.64, ci$hit[1],
+          near(3.64 - 0.68, 2.96, 1e-9), near(3.64 + 0.68, 4.32, 1e-9))
+set.seed(1)                                    # the long-run capture rate
+cover <- mean(replicate(10000, abs(mean(sample(x, 20, replace = TRUE)) - MU) <= 2 * SIG / sqrt(20)))
+set.seed(1)
+cover200 <- mean(replicate(10000, abs(mean(sample(x, 200, replace = TRUE)) - MU) <= 2 * SIG / sqrt(200)))
+stopifnot(cover > 0.975, cover < 0.99, cover200 > 0.94, cover200 < 0.965)
+
+# minutes until the next goal: simulated at the 2022 World Cup rate (same as Lecture 18)
+lam <- 172 / 64
+gap <- 90 / 2.69          # the rounded rate, as in make_lecture18_figures.R, so the waits match the slide
+set.seed(7)
+clt_n <- c(1, 2, 5, 30)
+clt <- do.call(rbind, lapply(clt_n, function(n)
+  data.frame(n = paste0('n = ', n), m = replicate(10000, mean(rexp(n, 1 / gap))))))
+stopifnot(identical(round(clt$m[1:5], 1), c(1.6, 54.3, 57.3, 27.2, 18.3)))
+clt$n <- factor(clt$n, levels = paste0('n = ', clt_n))
+chk <- tapply(clt$m, clt$n, sd) / (gap / sqrt(clt_n))
+stopifnot(near(lam, 2.69, 5e-3), near(gap, 33.5, 0.05),
+          all(abs(tapply(clt$m, clt$n, mean) - gap) < 0.6), all(abs(chk - 1) < 0.03))
+
+# Stephen Curry's free throws: exact sampling distributions of p-hat
+p_ft <- 4236 / 4645
+ph_n <- c(10, 30, 100)
+ph <- do.call(rbind, lapply(ph_n, function(n)
+  data.frame(n = paste0('n = ', n), ph = (0:n) / n, p = dbinom(0:n, n, 0.912), w = 0.7 / n)))
+ph$n <- factor(ph$n, levels = paste0('n = ', ph_n))
+se_ft <- sqrt(0.912 * 0.088 / 100)
+stopifnot(near(p_ft, 0.912), near(se_ft, 0.028, 5e-4),
+          near(c(10, 30, 100) * 0.088, c(0.88, 2.64, 8.8), 1e-9),
+          near(0.912 - 2 * 0.028, 0.856, 1e-9), near(0.912 + 2 * 0.028, 0.968, 1e-9))
+
+# World Cup tournament average over 64 matches
+se_wc <- sqrt(lam) / sqrt(64)
+z3 <- (3 - 2.69) / 0.205
+stopifnot(near(sqrt(lam), 1.64, 5e-3), near(se_wc, 0.205, 5e-4),
+          near(2.69 - 2 * 0.205, 2.28, 1e-9), near(2.69 + 2 * 0.205, 3.10, 1e-9),
+          near(169 / 64, 2.64, 5e-3), round(z3, 2) == 1.51,
+          round(1 - pnorm(1.51), 3) == 0.066, round(1 - ppois(191, 64 * lam), 2) == 0.07)
 ```
-
-
-# The normal distribution revisited
-
-We can also talk about the normal distribution as a family of probability distributions. As before, the normal distribution has two parameters $\mu$ - the location parameter, and $\sigma$ the "spread" parameter. The normal distribution has the following probability density function 
-
-\[ f(x) = \frac{1}{\sigma \sqrt{2\pi}} \cdot e^{\frac{-(x-\mu)^2}{2\sigma^2}} \]
-
-Finding probability from the normal distribution is not as straight forward as the examples we did earlier. <u> We cannot easily extrapolate probabilities</u> from the graph of a normal distribution. While we may use the empirical rule to identify the approximate quantiles of normal distribution, finding exact probabilities would require us to use calculus as we have said before. For example, suppose $X$ is normally distributed with mean $\mu$ and standard deviation $\sigma$. To find the probability $P(a\leq X\leq b)$ we would need to compute:
-
-\[ P(a\leq X\leq b) = \int_{a}^{b} \frac{1}{\sigma \sqrt{2\pi}} \cdot e^{\frac{-(x-\mu)^2}{2\sigma^2}} \, dx \]
-
-However, these skills are outside the purview of this course. Luckily, the normal distribution is used so frequently in statistics that precomputed tables of probabilities are usually available. These tables are often referred to as $Z$ tables because they are based on the **standard normal distribtion**. In addition, because the normal distribution is symmetric, we usually only need to compute the probabilities for either the positive or negative half of the distribution. Here is an example of a $Z$-table
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-
-z = seq(0, 3.9, 0.1)
-
-tab = cbind.data.frame(Z = z, `.00` = pnorm(z), `.01` = pnorm(z+0.01), `.02` = pnorm(z+0.02), `.03` = pnorm(z+0.03),
-                       `.04` = pnorm(z+0.04), `.05` = pnorm(z+0.05), `.06` = pnorm(z+0.06), `.07` = pnorm(z+0.07),
-                       `.08` = pnorm(z+0.08), `.09` = pnorm(z+0.09))
-
-kable(tab, caption = 'STANDARD NORMAL DISTRIBUTION: Table Values Represent AREA to the LEFT of the Z score.',
-      digits = 3, booktabs = T)%>%
-  kable_styling(font_size = 12)
-
-```
-
-The left-most column gives the $Z$-score and the columns to the right of this column are for additional decimal places of the $Z$-score. The values in the table represent $P(Z\leq z)$ and denote the area to the left of the $Z$-score.
-
-* We can compute the $Z$ for **any** normal random variable and use the table above to find its probability.
-
-* Try it out: Suppose $X\sim N(5, 10)$. Compute the probability that $X\geq 25$
-
-The table above gives the area to left of the <u>positive</u> values of the standard normal distribution. Therefore to the find the probability $P(X\geq 25)$ we must do little bit of work. First we need to convert from the distribution of $X$ to the standard normal distribution $Z$. We can do so by computing the $z$-score equivalent for $X = 25$
-
-\[ z = \frac{25 - 5}{10} = 2\]
-
-Thus asking to find $P(X \geq 25)$ is the same as $P(Z \geq 2)$. But we are not quite ready to use the $Z$ table above. As stated previously the $Z$ table gives the probabilities corresponding to the left of each $z$-score i.e $P(Z\leq z)$. If we want to use the table above we need to flip the inequality in $P(Z\geq 2)$ so it's facing in the same direction as $P(Z\leq z)$. Luckily, we can accomplish this by finding the complementary event:
-
-\[P(Z\geq 2) = 1 - P(Z < 2) \]
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Two side-by-side normal curves. Left: the standard normal Z distribution with mean 0 and standard deviation 1, with the area to the right of z equals 2 shaded. Right: the distribution of X, normal with mean 5 and standard deviation 10, with the matching area to the right of X equals 25 shaded."}
-
-std = 10
-avg = 5
-A = ggplot(data.frame(x = c(-4, 4)), aes(x)) +
-  stat_function(fun = dnorm) + 
-  stat_function(fun = dnorm, 
-                xlim = c(2,4),
-                geom = "area",
-                fill = 'red1',
-                alpha = 0.3)+
-  scale_x_continuous(limits = c(-4, 4), breaks = seq(-4, 4, 1))+
-        labs(title = paste0("Standard Normal (Z) Distribution"),
-             subtitle = TeX(paste0("$Z\\sim N(\\mu = ", 0, ', \\sigma = ',1, ')$')),
-             x = "Z",
-            y = "Density(Z)")+
-        theme_classic2()+
-        theme(legend.position = 'none')
-
-
-B = ggplot(data.frame(x = c(avg-4*std, avg+4*std)), aes(x)) +
-  stat_function(fun = dnorm, 
-                args = list(mean = avg, sd = std)) + 
-    stat_function(fun = dnorm,
-                args = list(mean = avg, sd = std),
-                xlim = c(25,45),
-                geom = "area",
-                fill = 'red1',
-                alpha = 0.3)+
-  scale_x_continuous(limits = c(avg-4*std, avg+4*std), breaks = seq(avg-4*std, avg+4*std, std))+
-        labs(title = paste0("Distribution of X"),
-             subtitle = TeX(paste0("$X\\sim N(\\mu = ", avg, ', \\sigma = ',std, ')$')),
-             x = "X",
-            y = "Density(X)")+
-        theme_classic2()+
-        theme(legend.position = 'none')
-
-
-ggarrange(A, B, nrow = 1)
-```
-
-We can easily find $P(Z < 2)$ using the table above which gives $P(Z < 2) = 0.977$. Therefore, the probability we were asked to find in the beginning is computed as
-
-\[P(X\geq 25) = 1 - P(Z\leq 2) = 1 - 0.977 = 0.023 \]
-
-If we think about this, it makes sense intuitively. The value $25$ is two standard deviations above the mean of $X$. Thus we are finding an area in the upper tail region of a normal distribution which we would expect to correspond to a small probability since there is very little area under the curve in this region. 
-
-* Try it out: Suppose $X\sim N(-2, 4)$. Compute the probability that $-3 \leq X \leq 1$
-
-We can take a similar approach to answer this problem. One major difference is that now we are trying to find the area between the points $X = -3$ and $X = 1$. Again, since the table gives the probability corresponding to the <u>total area</u> to the left of each $z$-score, we can find the area between two points by subtracting the larger area from the smaller one: 
-
-\[P(-3 \leq X \leq 1) = P(X\leq 1) - P(X\leq -3) \]
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Two side-by-side normal curves. Left: the standard normal Z distribution with the area between z equals -0.25 and z equals 0.75 shaded. Right: the distribution of X, normal with mean -2 and standard deviation 4, with the matching area between X equals -3 and X equals 1 shaded."}
-
-std = 4
-avg = -2
-A = ggplot(data.frame(x = c(-4, 4)), aes(x)) +
-  stat_function(fun = dnorm) + 
-  stat_function(fun = dnorm, 
-                xlim = c(-0.25,0.75),
-                geom = "area",
-                fill = 'red1',
-                alpha = 0.3)+
-  scale_x_continuous(limits = c(-4, 4), breaks = seq(-4, 4, 1))+
-        labs(title = paste0("Standard Normal (Z) Distribution"),
-             subtitle = TeX(paste0("$Z\\sim N(\\mu = ", 0, ', \\sigma = ',1, ')$')),
-             x = "Z",
-            y = "Density(Z)")+
-        theme_classic2()+
-        theme(legend.position = 'none')
-
-
-B = ggplot(data.frame(x = c(avg-4*std, avg+4*std)), aes(x)) +
-  stat_function(fun = dnorm, 
-                args = list(mean = avg, sd = std)) + 
-    stat_function(fun = dnorm,
-                args = list(mean = avg, sd = std),
-                xlim = c(-3,1),
-                geom = "area",
-                fill = 'red1',
-                alpha = 0.3)+
-  scale_x_continuous(limits = c(avg-4*std, avg+4*std), breaks = seq(avg-4*std, avg+4*std, std))+
-        labs(title = paste0("Distribution of X"),
-             subtitle = TeX(paste0("$X\\sim N(\\mu = ", avg, ', \\sigma = ',std, ')$')),
-             x = "X",
-            y = "Density(X)")+
-        theme_classic2()+
-        theme(legend.position = 'none')
-
-
-ggarrange(A, B, nrow = 1)
-```
-
-However, since we don't have a table for the specific normal distribution of $X$ we must again convert to the standard normal distribution to find each probability:
-
-\[z_1 = \frac{1 - (-2)}{4} = 0.75\]
-
-\[z_2 = \frac{-3 - (-2)}{4} = -0.25\]
-
-\[P(Z\leq 0.75) = 0.773\]
-
-\[P(Z \leq -0.25) = 0.401\]
-
-Therefore, we can compute the original probability as
-
-\[ P(-3 \leq X \leq 1) = P(-0.25 \leq Z \leq 0.75) \]
-\[= P(Z\leq 0.75) - P(Z\leq -0.25)\]
-\[= 0.773 - 0.401 = 0.372\]
-
 
 <!--
-  Oct 5 2026: the central limit theorem, the three kinds of distribution and the
-  sampling distribution of p-hat below are now written up for Fall 2026 on the Week 7
-  page; they are now taught Mon Oct 12, combined with confidence intervals. This 2024 copy stays until the Week 8 page is rewritten
-  for the Oct 12 lecture; drop the overlap then.
+  SCOPE OF THIS PAGE (Fall 2026 rewrite, Oct 12 2026).
+
+  Week 8 is one lecture, a review and the exam (see Course_Schedule.Rmd, the date
+  source of truth):
+    Mon Oct 12   Lecture 18  sampling distributions and the central limit theorem,
+                             combined with the introduction to confidence intervals
+                             lecture_slides/Week 8/2026/Week8_Lecture18_Slides_10_12_2026.pptx
+    Wed Oct 14   Exam 2 review
+    Fri Oct 16   Exam 2 (take-home, open-note, due Sunday Oct 18)
+  The sections below follow the Lecture 18 slides in order. Their examples (the
+  spinner, two polls, Spotify song length, minutes until the next goal, Stephen
+  Curry's free throws, a World Cup tournament's average) are the slide examples;
+  their numbers and sources are in assets/make_lecture18_figures.R. Exam 2 stops at
+  the central limit theorem: confidence intervals are not on it (study guide).
+
+  Sources. Terms follow OpenStax Introductory Statistics 2e, Sections 7.1-7.3 and the
+  start of 8.1 (point estimate, confidence interval, confidence level, "We estimate
+  with 95% confidence that ...").
+
+  History. The sampling-distribution and CLT write-up was drafted on the Week 7 page
+  (Oct 5) when the lecture was planned for Week 7; it moved here on Oct 12 2026, when
+  this page replaced the 2024 Week 8 page. From the 2024 page this keeps the three
+  distributions, the formal CLT statement, the "within 2 standard errors" probability
+  statements and the algebra that flips them into an interval, the confidence-level
+  interpretation ("before the data are collected ... after, it either does or does
+  not"), and the Coho salmon derivation (via the Week 7 draft). Dropped: "the normal
+  distribution revisited" (now the Week 6 section on finding areas), the CLT
+  animations, the alligator example (replaced by the tournament average), and the
+  stormtrooper example with its 99% interval and 100-interval plot. Raising the
+  confidence level is Week 9 material: when the Week 9 page is rewritten, that
+  example is in git history (git show 27a60f5:docs/lecturemenu8.Rmd).
+  The student heights data is deliberately NOT used here; it was overused in Weeks
+  6-7 and Lecture 18 switched to song length.
 -->
 
-# Lecture 16
+# Sampling distributions
 
-Now that we have a strong understanding of the theory of mathematical probability we can use it to connect back to estimation and statistical inference. At this point we have learned about three different probability distributions:
+## Two polls, two answers
 
-* The **population distribution** is the probability distribution of a single observation of a random variable
-  * Its properties are described by unknown parameters such as $p$, $\mu$, $\sigma^2$, $\sigma$
+Two polling firms each survey a random sample of 1,000 voters in the same state, in the same week.
+Poll A finds that $\hat{p} = 0.52$ of voters support a ballot measure; Poll B finds $\hat{p} = 0.49$.
+Is one of the polls wrong?
 
+Not necessarily. Different random samples contain different people, so they give different values of
+$\hat{p}$. This is the sampling variation we met in Week 6. Now imagine 1,000 firms each polling 1,000
+voters: their 1,000 values of $\hat{p}$ would pile up around the true proportion $p$, and the shape
+of that pile tells us how far any one poll is likely to be from the truth. This week is about that
+pile.
 
-* The **data distribution** is the probability distribution of the observations in a sample. 
-  * Its properties are described by statistics such as $\bar{x}$ or $\hat{p}$, $s^2$, $s$. 
+## Three distributions
 
+A statistic computed from a random sample or a randomized experiment is a **random variable**: its
+value depends on which units chance put in the sample, so it has a probability distribution of its
+own. We now have three distributions to keep apart:
 
-* The **sampling distribution** is the probability distribution of a statistic that is computed from the observations in a sample. This distribution arises from repeated sampling from the same population with the same sample size and computing statistics from those samples. It tells us how close a given estimate is to the true population parameter it is estimating (sampling error). 
+* The **population distribution** is the probability distribution of a single observation $X$. Its
+  properties are described by **parameters** such as $\mu$, $\sigma$ and $p$, which we usually do
+  not know.
+* The **data distribution** is the distribution of the $n$ observations in our one sample, the
+  histogram of our data. Its properties are described by **statistics** such as $\bar{x}$, $s$ and
+  $\hat{p}$.
+* The **sampling distribution** is the probability distribution of a statistic, such as $\bar{x}$
+  or $\hat{p}$, over all possible samples of the same size $n$ from the same population. It tells us
+  how close an estimate is likely to be to the parameter it estimates.
 
-## The Central Limit Theorem
+## Building a sampling distribution by hand
 
-A statistic computed from a random sample or randomized experiment is a random variable whose probability distribution is given by the sampling distribution. One of the most famous results from probability theory says that the distribution of the mean $\bar{x}$ of a random variable computed from a sample of size $n$ will be approximately normally distributed if $n$ is large. This result is referred to as the **Central Limit Theorem (CLT)**. Formally, the CLT states that for a set of independent and identically distributed random variables $X_1, X_2, ... X_n$, 
+For a discrete population and a small sample we can find a sampling distribution exactly, with the
+probability rules from Week 6:
 
-\[\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma} \xrightarrow{d} N(0,1)\]
+1. List every possible sample of size $n$ and compute the statistic for each.
+2. Find the probability of each sample. When the observations are independent, multiply.
+3. Add up the probabilities of the samples that give the same value of the statistic.
 
-Where $\xrightarrow{d}$ means "converge in distribution" and $\bar{X} = \frac{1}{n} \sum_i X_i$. 
+### Example: a spinner
 
+A spinner lands on 1, 2 or 3, each with probability 1/3, so the population has $\mu = 2$. Spin it
+twice and record the mean of the two spins, $\bar{x}$. There are $3 \times 3 = 9$ equally likely
+samples, and **order matters**: (1, 2) and (2, 1) are different samples.
 
-* Each random variable $X_i$ can be thought of as an observation in a sample from the population distribution $X$. 
-* Note that the CLT assumes that each $X_i$ comes from the same distribution, and that they all have finite variance. 
-
-Informally, this means that as the sample size increases the shape of a sampling distribution of $\bar{x}$ or $\hat{p}$ will “approach” that of a normal distribution - regardless of the distribution of data distribution of the sample. Therefore the sampling distributions of both $\bar{x}$ and $\hat{p}$ are approximately normal-shaped for moderate to large sample sizes $n$.
-
-To illustrate, consider the animated plot below which shows the sampling distribution of $\hat{p}$. The sample count $X$ is binomial distributed such that $X\sim Binom(n, p)$, and the sample proportion $\hat{p} = X/n$ has mean $p$ and standard deviation $\sqrt\frac{p(1-p)}{n}$. However, for moderate values of $p$ and large $n$, the CLT states that $\hat{p}$ will be approximately normally distributed. From the animation below we can see that as $n$ gets large the distribution for $\hat{p}$ looks more and more continuous and bell-shaped. 
-
-```{r, eval = F, echo=F, warning=F, message=F, fig.height=6, fig.width=10}
-
-n=c(2, 3, 5, 8, 10,20,40, 80, 100, 200)
-resamples = 10000
-p = 0.5
-sample.size = 100
-df.list = list()
-for(j in 1:length(n)){
-  props = NULL
-  for(i in 1:resamples){
-    X=rbinom(n[j], 1, prob = p)
-    
-    props[i]=sum(X/n[j])
-  }
-  df = cbind.data.frame(sample.size = rep(n[j], resamples), props = props)
-  df.list[[j]] = df
-}
-
-options(repr.plot.width = 5, repr.plot.height =6)
-data.final = do.call('rbind.data.frame', df.list)
-#xn = sort(rnorm(10000, n[j]*p, sqrt(n[j]*p*(1-p))))
-#yn = dnorm(xn, mean = n[j]*p, sqrt(n[j]*p*(1-p)))
-
-#df = cbind.data.frame(ix = c(1:length(props)), props = props)
-#jpeg(paste0('C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/CLTpics/',"SS_",i,".jpg"))
-ggplot(data = data.final, aes(x = props))+geom_histogram(aes(y = ..density..), 
-                                                   #bins = ceiling(sqrt(n[j])),
-                                                   #bins = 15,
-                                                   binwidth = function(x) 2 * IQR(x) / (length(x)^(1/3)),
-                                                   color = 'black',
-                                                   fill = 'lightblue')+
-  geom_density()+
-  theme_hc()+
-  xlab(TeX("$\\hat{p}"))+
-  ylab("Probability Density")+
-  theme(axis.text = element_text(size = 12),
-        axis.title = element_text(size = 14))+
-  ggtitle('Sampling Distribution of the Proportion')+
-  labs(subtitle = 'n =  {closest_state}')+
-  transition_states(sample.size, state_length = 3, transition_length = 3)
-anim_save(paste0('misc/CLT.gif'))
+```{r, echo=FALSE}
+tab(data.frame(
+  xbar = c('1', '1.5', '2', '2.5', '3'),
+  samples = c('(1,1)', '(1,2), (2,1)', '(1,3), (2,2), (3,1)', '(2,3), (3,2)', '(3,3)'),
+  p = c('1/9', '2/9', '3/9', '2/9', '1/9')),
+  col.names = c('$\\bar{x}$', 'Samples giving it', '$P(\\bar{x})$'))
 ```
 
-```{r, eval = T, echo=F, warning=F, message=F, fig.height=6, fig.width=10, fig.alt = "Animated histogram with a density curve of the sampling distribution of the sample proportion p-hat, with p equals 0.5, cycling through sample sizes n from 2 up to 200. At small n there are only a few separated bars; as n grows the bars fill in and the shape becomes a smooth, symmetric bell curve centered at 0.5."}
-knitr::include_graphics("misc/CLT.gif")
+```{r, echo=FALSE, fig.height=3.4, fig.width=10, fig.align='center', fig.alt = "Two bar charts side by side. Left, one spin X: three equal bars of height one third at 1, 2 and 3. Right, the mean of two spins x-bar: five bars at 1, 1.5, 2, 2.5 and 3 with heights 1/9, 2/9, 3/9, 2/9 and 1/9, peaked in the middle at 2."}
+spall <- rbind(data.frame(m = 1:3, p = 1 / 3, lab = '1/3', panel = 'One spin:  X', w = 0.5),
+               data.frame(m = spd$m, p = spd$p, lab = paste0(spd$count, '/9'),
+                          panel = 'Mean of two spins:  x̄', w = 0.3))
+spall$panel <- factor(spall$panel, levels = unique(spall$panel))
+ggplot(spall, aes(m, p)) +
+  geom_col(aes(width = w), fill = 'lightblue', color = 'black', linewidth = 0.3) +
+  geom_text(aes(label = lab), vjust = -0.4, size = 4.5) +
+  facet_wrap(~panel, nrow = 1) +
+  scale_x_continuous(breaks = c(1, 1.5, 2, 2.5, 3)) +
+  coord_cartesian(ylim = c(0, 0.42)) +
+  labs(x = NULL, y = 'Probability') + notes_theme
 ```
 
+Compare the population (left) with the sampling distribution of $\bar{x}$ (right):
 
-Consider the sample mean $\bar{x}$ computed from a sample of $n$ observations of a single roll of a fair six-sided die. The animated plot below shows the sampling distribution of $\bar{x}$ as number of observations $n$ is increased. By the CLT, the distribution of $\bar{x}$ looks more and more normal as $n$ is increased.
+* **Same center.** Both have mean 2.
+* **Smaller spread.** One spin has $\sigma = `r fmt(s_sd, 2)`$; the mean of two spins has
+  $\sigma_{\bar{x}} = `r fmt(sb_sd, 2)`$, which is exactly $`r fmt(s_sd, 2)`/\sqrt{2}$.
+* **New shape.** The population is flat; the sampling distribution is already peaked in the
+  middle, because a mean of 1 or 3 needs *both* spins to be extreme.
 
+### Example: Coho salmon
 
-```{r, eval = F, echo=F, warning=F, message=F, fig.height=6, fig.width=10}
-# #Sampling Distribution of the Mean
-# n=c(2, 3, 5, 8, 10,20,40, 80, 100, 200)
-# resamples = 10000
-# p = 0.5
-# #sample.size = 100
-# df.list = list()
-# for(j in 1:length(n)){
-#   props = NULL
-#   for(i in 1:resamples){
-#     X=sample(c(1:6), n[j], replace = TRUE)
-#     
-#     props[i]=mean(X)
-#   }
-#   df = cbind.data.frame(sample.size = rep(n[j], resamples), props = props)
-#   df.list[[j]] = df
-# }
-# 
-# options(repr.plot.width = 5, repr.plot.height =6)
-# data.final = do.call('rbind.data.frame', df.list)
-# #xn = sort(rnorm(10000, n[j]*p, sqrt(n[j]*p*(1-p))))
-# #yn = dnorm(xn, mean = n[j]*p, sqrt(n[j]*p*(1-p)))
-# 
-# #df = cbind.data.frame(ix = c(1:length(props)), props = props)
-# #jpeg(paste0('C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/CLTpics/',"SS_",i,".jpg"))
-# ggplot(data = data.final, aes(x = props))+geom_histogram(aes(y = ..density..), 
-#                                                          #bins = ceiling(sqrt(n[j])),
-#                                                          #bins = 15,
-#                                                          binwidth = function(x) 2 * IQR(x) / (length(x)^(1/3)),
-#                                                          color = 'black',
-#                                                          fill = 'lightblue')+
-#   geom_density()+
-#   theme_hc()+
-#   xlab(TeX("$\\bar{x}"))+
-#   ylab("Probability Density")+
-#   theme(axis.text = element_text(size = 12),
-#         axis.title = element_text(size = 14))+
-#   ggtitle('Sampling Distribution of the Mean')+
-#   labs(subtitle = 'n =  {closest_state}')+
-#   transition_states(sample.size, state_length = 3, transition_length = 3)
-# # jpeg(paste0('C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/CLTpics/',"SS_",n[j],".jpg"))
-# # plot(A)
-# # dev.off()
-# anim_save('Data/CLT_mean.gif')
+Let $X$ be the number of Coho salmon a fly fisherman catches in an afternoon on the Clearwater River,
+with this (hypothetical) population distribution:
 
-# if (knitr:::is_latex_output()) {
-#   knitr::asis_output('\\url{....}')
-# } else {
-#   
-# }
-
-#ggarrange(A, B, nrow = 1, ncol = 2)
-
+```{r, echo=FALSE}
+tab(data.frame(x = cx, p = fmt(cp, 3)), col.names = c('$x$', '$P(x)$'))
 ```
 
-```{r, eval = T, echo=F, warning=F, message=F, fig.height=6, fig.width=10, fig.alt = "Animated histogram with a density curve of the sampling distribution of x-bar, the mean of n rolls of a fair six-sided die, cycling through sample sizes n from 2 up to 200. At small n the shape is lumpy and spread out; as n grows it narrows into a smooth, symmetric bell curve centered at 3.5."}
-knitr::include_graphics("Data/CLT_mean.gif")
+Its mean is $\mu = 0(0.589) + 1(0.232) + 2(0.179) = `r fmt(c_mu, 2)`$ fish and its standard deviation
+is $\sigma = `r fmt(c_sd, 3)`$. Now find the sampling distribution of $\bar{x}$, the mean catch over
+a random sample of $n = 3$ afternoons. This time the outcomes are not equally likely, so each sample's
+probability comes from the multiplication rule. There are $3 \times 3 \times 3 = 27$ possible
+samples:
 
-
+```{r, echo=FALSE}
+tab(data.frame(
+  xbar = c('0', '1/3', '2/3', '1', '4/3', '5/3', '2'),
+  outs = c('(0,0,0) = $\\color{red}{1}$',
+           '(1,0,0), (0,1,0), (0,0,1) = $\\color{red}{3}$',
+           '(1,1,0), (1,0,1), (0,1,1), (2,0,0), (0,2,0), (0,0,2) = $\\color{red}{6}$',
+           '(1,1,1), (2,1,0), (2,0,1), (0,2,1), (1,2,0), (1,0,2), (0,1,2) = $\\color{red}{7}$',
+           '(2,1,1), (1,2,1), (1,1,2), (2,2,0), (2,0,2), (0,2,2) = $\\color{red}{6}$',
+           '(1,2,2), (2,1,2), (2,2,1) = $\\color{red}{3}$',
+           '(2,2,2) = $\\color{red}{1}$'),
+  calc = c('$0.589^3$',
+           '$3(0.589^2 \\times 0.232)$',
+           '$3(0.232^2 \\times 0.589) + 3(0.589^2 \\times 0.179)$',
+           '$0.232^3 + 6(0.589 \\times 0.232 \\times 0.179)$',
+           '$3(0.232^2 \\times 0.179) + 3(0.179^2 \\times 0.589)$',
+           '$3(0.179^2 \\times 0.232)$',
+           '$0.179^3$'),
+  p = paste0('$\\color{red}{', fmt(coho$x, 3), '}$')),
+  col.names = c('$\\bar{x}$', 'Samples giving it', 'Probability', '$P(\\bar{x})$'))
 ```
 
+The counts in red add to 27 and the probabilities add to 1. Once again:
 
-Using the central limit theorem, the distributions for the sample mean and sample proportion are both approximately normal for large samples
+* the mean of the sampling distribution is $\mu_{\bar{x}} = \sum \bar{x}\, P(\bar{x}) = `r fmt(cb_mu, 2)`$,
+  **the same as** $\mu$;
+* its standard deviation is $\sigma_{\bar{x}} = `r fmt(cb_sd, 3)`$, which is exactly
+  $\sigma/\sqrt{n} = `r fmt(c_sd, 3)`/\sqrt{3}$.
 
-The sampling distribution of the sample proportion $\hat{p}$ has mean $p$ and variance $\frac{p(1-p)}{n}$.
+## Center and spread of a sampling distribution
 
-\[\hat{p} \sim N\left(p, \sqrt{\frac{p(1-p)}{n}}\right) \]
+Those two examples are not coincidences. For a random sample of size $n$ from a population with
+mean $\mu$ and standard deviation $\sigma$:
 
-The sampling distribution of the sample mean $\bar{x}$ has mean $\mu$ and variance $\frac{\sigma^2}{n}$
+* **The sample mean** $\bar{x}$ has mean $\mu_{\bar{x}} = \mu$: it is centered at the parameter it
+  estimates. Its standard deviation is
+  $$\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}$$
+  the **standard error of the mean**, the same standard error we met in Week 6.
 
-\[\bar{x} \sim N\left(\mu, \frac{\sigma}{\sqrt{n}}\right) \]
+A **sample proportion** $\hat{p}$ is a sample mean too. Code each observation as a Bernoulli trial,
+1 for a success and 0 for a failure; then $\hat{p}$ is the mean of the 0s and 1s, the count of
+successes $X \sim \text{Binom}(n, p)$ divided by $n$. A Bernoulli population has mean $p$ and standard
+deviation $\sqrt{p(1 - p)}$, so:
 
-We can use the CLT to compute the probability of a given value of a statistic. Consider the following example: A scientist studying alligator morphology, plans to sample 50 female American alligators to estimate their mean length. Suppose that the population mean is 8.3 feet with a standard deviation of  1.1 feet. What is the probability she observes a sample mean less than $5.4 feet$? We can apply the CLT to find this probability by simply finding $P(\bar{X}\leq 5.4)$ where $\bar{X}\sim N(8.3, \frac{1.1}{\sqrt{50}})$. First, we must convert to a $z$-score:
+* **The sample proportion** $\hat{p} = X/n$ has mean $\mu_{\hat{p}} = p$ and standard error
+  $$\sigma_{\hat{p}} = \sqrt{\frac{p(1 - p)}{n}}$$
 
-\[ Z = \frac{\bar{X} - \mu }{\sigma/\sqrt{n} } = \frac{5.4 - 8.3}{1.1/\sqrt{50}} = \frac{-2.9}{0.1556} = -18.64\]
+Both statistics are **unbiased** (centered at the parameter), and both standard errors shrink like
+$1/\sqrt{n}$.
 
-\[ P( Z < -18.64) \approx 0\]
+### The data: Spotify songs
 
-Thus it is highly unlikely that the scientist would observe a mean length this short. 
+Spotify and YouTube statistics for the top 10 Spotify songs of each of 2,079 popular artists were
+collected in February 2023. A song credited to several artists appears once for each of them, so we
+count each song once, which leaves 18,860 different songs. Our variable is
 
-## Applying The Central Limit Theorem  
+* $X$ = the length of a song, in minutes.
 
-The CLT allows us to identify the sampling distribution of $\bar{x}$ or $\hat{p}$. Now that we know the distribution of these two statistics we can make statements about the probability that $\bar{x}$ or $\hat{p}$ will be within a certain distance of the parameters $\mu$ and $p$. 
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "A normal curve with the x-axis labeled mu minus 2 sigma, mu, and mu plus 2 sigma. The area between mu minus 2 sigma and mu plus 2 sigma is shaded and labeled 0.95."}
-set.seed(123)
-#normal quantiles
-A =ggplot(data.frame(x = c(-4, 4)), aes(x))+
-  stat_function(fun = dnorm,
-                size = 1) + 
-    stat_function(fun = dnorm,
-                xlim = c(-2,2),
-                geom = "area",
-                fill = 'red1',
-                alpha = 0.3)+
-  scale_x_continuous(breaks = seq(-4, 4, 1), labels = c("", 
-                                                        "",
-                                                        TeX("$\\mu - 2\\sigma$"), 
-                                                        "",
-                                                        TeX('$\\mu$'),
-                                                        "", 
-                                                        TeX("$\\mu + 2\\sigma$"),
-                                                        "", 
-                                                        ""))+
-  geom_text(aes(x = 0, y = dnorm(0)/2), label = '0.95', size = 10)+
-  theme_classic()+
-  theme(axis.text.x = element_text(size = 14),
-        axis.text.y = element_blank(),
-        axis.title.y = element_blank(),
-        axis.title.x = element_blank())
-plot(A)
+```{r, echo=FALSE}
+tab(rbind(data.frame(Track = sg$Track[1:5], Artist = sg$Artist[1:5], Minutes = fmt(x[1:5], 2)),
+          data.frame(Track = '…', Artist = '…', Minutes = '…')))
 ```
 
-For the sample mean we can say that 
-
-\[P\left(\mu-2\frac{\sigma}{\sqrt{n}} \leq \bar{x} \leq \mu+2\frac{\sigma}{\sqrt{n}} \right) \approx 0.95\]
-
-Alternatively, this can be stated as 
-
-\[P\left(|\bar{x} - \mu|\leq 2\frac{\sigma}{\sqrt{n}}\right) \approx 0.95 \]
-
-
-Similarly, for the sample proportion we can say that
-
-\[P\left(p-2\sqrt{\frac{p(1-p)}{n}} \leq \hat{p} \leq p+2\sqrt{\frac{p(1-p)}{n}} \right) \approx 0.95\]
-
-which can also be stated as 
-\[P\left(|\hat{p} - p|\leq 2\sqrt{\frac{p(1-p)}{n}}\right) \approx 0.95\]
-
-
-In other words, the probability that the sample mean $\bar{x}$ or sample proportion $\hat{p}$ will be within two standard deviations of the population mean $\mu$ or population proportion $p$ is approximately $0.95$. This distance is the **margin of error** that we have defined previously. The **margin of error** characterizes how much an estimate can be expected to deviate from the parameter it's estimating. In estimation, the standard deviation of a statistic is usually referred to as the **standard error** because it relates to the sampling error of a given observation of a statistic.
-
-
-We have extended the definition of the margin of error to include a measure of probability that the sample statistic will be within a certain distance of the parameter it's estimating. The choice of probability being $0.95$ is arbitrary. We have the ability to define the margin of error however we wish. For example: 
-
-\[P\left(|\bar{x}-\mu|\leq \frac{\sigma}{\sqrt{n}} \right) \approx 0.68\]
-
-In other words, the probability that the distance between $\bar{x}$ and $\mu$ does not exceed one standard error is approximately $0.68$.
-
-Consider the following example:
-
-
-
-# Inference and Estimation
-
-Statistical inference is used to draw conclusions about a population or process based on sample data. Inference has two general types: <i>significance test</i> (also referred to as <i>hypothesis testing</i>) and **estimation**. Estimation consists of
-
-* *point estimation* consists of estimating the value of a parameter with the value of a statistic such as using $\bar{x}$, $\hat{p}$, $s^2$, and $s$ to estimate $\mu$, $p$, $\sigma^2$, and $\sigma$ (respectively). 
-* *interval estimation* consists of estimating the value of a parameter with an interval of values. The typical device we use is called a **confidence interval**.
-
-Regardless of the type of inference that is being done, the underlying reasoning remains the same. In statistics, we use probability as a means of substantiating our conclusions about a particular population or result. Probability allows us to determine the "strength" of a conclusion by taking into account the ordinary variation in estimation.
-
-## Confidence Intervals
-
-A **interval estimate** aims to place bounds on the value of a population parameter. We saw previously that we can talk about the probability with which an estimate falls within a particular interval. For example, we said that the interval which has a probability of 0.95 of containing $\bar{x}$ is given by 
-
-\[P\left(\mu-2\frac{\sigma}{\sqrt{n}} \leq \bar{x} \leq \mu+2\frac{\sigma}{\sqrt{n}} \right) \approx 0.95\]
-
-However, to say that $\bar{x}$ lies within two standard errors of $\mu$ is the same as saying that $\mu$ lies within two standard errors of $\bar{x}$. Therefore with a little bit of algebra we can show that 
-
-\[P\left(\bar{x}-2\frac{\sigma}{\sqrt{n}} \leq \mu \leq \bar{x}+2\frac{\sigma}{\sqrt{n}} \right) \approx 0.95\]
-
-Under repeated sampling, we can be confident that $95\%$ of all samples will capture the true value of $\mu$ in the interval $\left[\bar{x}-\frac{2\sigma}{\sqrt{n}}, \bar{x}+\frac{2\sigma}{\sqrt{n}}\right]$. 
-
-This is the rationale behind the famous **confidence interval**. The language of statistics uses the long-run behavior of repeated sampling to describe our confidence in the results of any particular sample. In this case, we constructed the interval to have a long-run frequency $95\%$ of capturing the true parameter - called the confidence level of our interval. Therefore the **confidence level** of a confidence interval is the probability the estimated interval will contain the parameter <u>before the data are collected</u>. It is important to note that after the data are collected the <u>**interval either does or does not contain the parameter**</u>. 
-
-The general formula of a confidence interval consists of three parts: 
-
-  1. the point estimate (e.g the statistic) 
-  2. the standard score - used to control the confidence level of the interval
-  3. the standard error (standard deviation) of the point estimate
-
-```{r, eval = T, echo=F, warning=F, message=F, fig.height=6, fig.width=10, fig.alt = "Formula diagram: point estimate plus or minus standard score times standard error. A brace over the whole expression labels it the confidence interval, and a brace under 'standard score times standard error' labels that part the margin of error."}
-knitr::include_graphics("misc/Screenshot 2024-02-29 230856.png")
+```{r, echo=FALSE, fig.height=3.6, fig.width=10, fig.align='center', fig.alt = "Histogram of the lengths of 18,860 Spotify songs from 0 to 10 minutes, with a vertical line at the mean of 3.71 minutes. Most songs are between 2.5 and 5 minutes, peaking around 3.5; the right tail is longer than the left. 41 songs longer than 10 minutes are off the right edge of the plot."}
+ggplot(data.frame(x = x[x <= 10]), aes(x)) +
+  geom_histogram(binwidth = 0.2, boundary = 0, fill = 'lightgrey', color = 'black', linewidth = 0.2) +
+  geom_vline(xintercept = MU, color = 'red', linewidth = 0.8) +
+  scale_x_continuous(breaks = 0:10) +
+  labs(x = 'Song length (minutes)', y = 'Number of songs') + notes_theme
 ```
 
-Applying this basic formula gives the following formula for a confidence interval for a population mean:
+Most songs run between about 2.5 and 5 minutes, but the right tail is long: `r sum(x > 10)` songs
+(mostly non-stop remix medleys and sleep sounds) are over 10 minutes, the longest
+`r round(max(x))` minutes. Those are left off the plot so the rest is visible. Treating all
+`r format(length(x), big.mark = ',')` songs as the population, $\mu = `r fmt(MU, 2)`$ minutes and
+$\sigma = `r fmt(SIG, 2)`$ minutes.
 
-\[ \bar{x}\pm z\frac{s}{\sqrt{n}} \Leftrightarrow \left[\bar{x}- z\frac{s}{\sqrt{n}}, \ \bar{x}+ z\frac{s}{\sqrt{n}}  \right] \]
+### Example: standard error and $n$
 
-Notice in the equation above that we have substituted $\sigma$ with $s$ the sample standard deviation. This is because we typically do not know the true value of population standard deviation and must estimate it from the sample. 
+Draw a random sample of $n$ songs and average their lengths to get $\bar{x}$. Every new sample gives a
+different $\bar{x}$, and the standard error $\sigma_{\bar{x}}$ measures how much $\bar{x}$ varies from
+sample to sample.
 
-Similarly, the confidence interval for a population proportion is given by
-\[ \hat{p}\pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}} \Leftrightarrow \left[\hat{p}- z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}, \ \hat{p}+ z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}  \right] \]
+* For $n = 20$: $\sigma_{\bar{x}} = 1.51/\sqrt{20} \approx 0.34$ minutes.
+* For $n = 80$: $\sigma_{\bar{x}} = 1.51/\sqrt{80} \approx 0.17$ minutes.
 
-Notice also that we have substituted $\hat{p}$ for $p$ in the standard error of $\hat{p}$. The quantity denoted by $z$ in the formulas above is the *standard score* mentioned previously. It controls how wide and therefore how confident we wish to be in our estimation. We can look up $z$ in a $Z$-table for any desired confidence level:
+A single song is typically about 1.5 minutes from the mean; the average of 20 songs is typically only
+about a third of a minute from it. And because $n$ sits under a square root, making the sample **4
+times larger** only cuts the standard error **in half** ($\sqrt{4} = 2$).
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
-df = cbind.data.frame(`$z$` = c(qnorm(1-0.1/2), qnorm(1-0.05/2), qnorm(1-0.01/2)),
-                      `Confidence Level` = c('$90\\%$', '$95\\%$', '$99\\%$'))
+# The central limit theorem
 
-kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
+The formulas above give the center and spread of a sampling distribution. The **central limit
+theorem** (CLT) gives its shape, and it is one of the most famous results in all of probability.
 
+## Averaging a skewed variable
+
+### The data: waiting for a goal
+
+The 2022 World Cup produced 172 goals in its 64 matches, 2.69 goals per 90-minute match. If goals
+arrive at that rate, independently of one another, then
+
+* $X$ = minutes until the next goal
+
+has mean $\mu = 90/2.69 \approx `r fmt(gap, 1)`$ minutes and, for this kind of waiting time, standard
+deviation $\sigma \approx `r fmt(gap, 1)`$ minutes as well. These waits are **simulated** at the World
+Cup rate, not recorded from matches. Here are the first five:
+
+```{r, echo=FALSE}
+tab(data.frame(Wait = c(1:5, '…'), Minutes = c(fmt(clt$m[1:5], 1), '…')))
 ```
 
-* Try it out: Consider the following hypothetical example: The Imperial Army is evaluating the blaster accuracy of stormtroopers in their training program. A random sample of $n = 100$ stormtroopers is selected, and their blaster accuracy scores are recorded. The mean blaster accuracy for this sample is found to be $\bar{x} = 78.5\%$, and sample standard deviation $s = 4.5\%$. Suppose the officers running the training program wish to estimate the interval which has a confidence level of $95\%$ for containing the population mean blaster accuracy. This interval is given by 
+Most waits are short and a few are very long, so $X$ is strongly skewed right. Now draw $n$ waits,
+average them to get $\bar{x}$, and repeat 10,000 times. Each panel shows the 10,000 values of
+$\bar{x}$ for one sample size:
 
-\[P\left(78.5-2\frac{4.5}{\sqrt{100}} \leq \mu \leq 78.5+2\frac{4.5}{\sqrt{100}} \right) \approx 0.95\]
-
-Thus to compute this interval we would compute the lower and upper bounds of the probability statement above which gives
-
-\[78.5 \pm 2\frac{4.5}{\sqrt{100}} =  [77.6, 79.4]\]
-
-To interpret this result we would say that we are $95\%$ confident that the population mean blaster accuracy is no less than $77.6\%$ and no more than $79.4\%$. 
-
-* Note that in the above calculation we rounded $z = 1.96$ to be $z = 2$. 
-
-Assume that the true population blaster accuracy is $\mu = 77.9\%$ and the population standard deviation is $\sigma = 4.2\%$. The plot below shows how our confidence interval compares to the sampling distribution of $\bar{x}$.
-
-* Does the interval cover the true population mean?
-
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Sampling distribution of x-bar: a normal curve centered at mu equals 77.9 with the middle 0.95 area, within 2 standard errors of mu, shaded. Below the curve a square marks mu and a dot marks x-bar equals 78.5, with a horizontal bar showing the confidence interval from 77.6 to 79.4."}
-set.seed(123)
-mu = 77.9
-sigma = 4.2
-n = 100
-#normal quantiles
-Aconf = ggplot(data.frame(x = c(mu - 4*sigma/sqrt(n), mu + 4*sigma/sqrt(n))), aes(x))+
-  stat_function(fun = dnorm,
-                args = list(mean = mu, sd = sigma/sqrt(n)),
-                size = 1) + 
-    stat_function(fun = dnorm,
-                  args = list(mean = mu, sd = sigma/sqrt(n)),
-                xlim = c(mu-2*sigma/sqrt(n),mu+2*sigma/sqrt(n)),
-                geom = "area",
-                fill = 'red1',
-                alpha = 0.3)+
-  scale_x_continuous(breaks = seq(mu - 4*sigma/sqrt(n), mu + 4*sigma/sqrt(n), sigma/sqrt(n)))+
-  geom_text(aes(x = mu, y = dnorm(mu, mean = mu, sd = sigma/sqrt(n))/2), label = '0.95', size = 10)+
-  geom_point(aes(x = 78.5, y = 0), size = 4)+
-  geom_point(aes(x = mu, y = 0), shape = 22, size = 4, fill = 'black')+
-  geom_errorbarh(aes(x = 78.5, y = 0, xmin = 77.6, xmax = 79.4), height = 0.08, linewidth = 1.5)+
-  geom_text(aes(x = 78.5, y = -0.04), label = TeX('$\\bar{x}$'), size = 5)+
-  geom_text(aes(x = mu, y = -0.04), label = TeX('$\\mu$'), size = 5)+
-  theme_classic()+
-  ggtitle(TeX('Sampling Distribution of $\\bar{x}$'))+
-  theme(axis.text.x = element_text(size = 16),
-        axis.text.y = element_blank(),
-        axis.title.y = element_blank(),
-        axis.title.x = element_blank())
-plot(Aconf)
+```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center', fig.alt = "Four histograms of 10,000 simulated sample means of minutes until the next goal, for n = 1, 2, 5 and 30, each with a vertical line at the mean of about 33.5 minutes and its own axis scale. At n = 1 the histogram is strongly skewed right; the skew fades as n grows, and at n = 30 it is a narrow, nearly symmetric bell."}
+ggplot(clt, aes(m)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 40, color = 'black', fill = 'lightblue', linewidth = 0.2) +
+  geom_vline(xintercept = gap, color = 'red', linewidth = 0.8) +
+  facet_wrap(~n, nrow = 1, scales = 'free') +
+  labs(x = TeX('Sample mean $\\bar{x}$ (minutes until the next goal)'), y = 'Density') +
+  notes_theme + theme(axis.text = element_text(size = 10))
 ```
 
+With $n = 1$ the "sample mean" is a single wait, so the first panel is the skewed population itself.
+As $n$ grows:
 
+* **Shape:** the skew fades into a bell. By $n = 30$ it is close to symmetric.
+* **Center:** stays at $\mu = `r fmt(gap, 1)`$ (the red line).
+* **Spread:** shrinks, just as $\sigma/\sqrt{n}$ says. Notice the axes: the values of $\bar{x}$
+  run out past 400 minutes for $n = 1$ but stay between about 20 and 60 for $n = 30$.
 
-In practice, once we compute the confidence interval we don't know for sure whether our confidence interval captures the true population parameter we are trying to estimate. It may be in the interval, it may not. But the choice in confidence level gives us flexibility in how confident we wish to be. We can increase the confidence level of our interval to give a higher probability that the interval will cover the true parameter. For example, suppose the imperial officers wish to increase the confidence level from $95\%$ to $99\%$. Now only $1$ in every $100$ samples will fail to cover the true population mean blaster accuracy. The downside, however, is that a higher confidence level corresponds to a wider confidence interval:
+## The theorem
 
-\[78.5 \pm 2.58\frac{4.5}{\sqrt{100}} =  [77.3, 79.7]\]
+* **Central limit theorem.** Take random samples of size $n$ from **any** population with mean $\mu$
+  and standard deviation $\sigma$. If $n$ is large enough, the sampling distribution of $\bar{x}$ is
+  approximately normal:
+  $$\bar{x} \sim N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right)$$
+  The larger $n$ is, the better the approximation. Since $\hat{p}$ is a sample mean of 0s and 1s, the
+  same is true of it:
+  $$\hat{p} \sim N\!\left(p,\; \sqrt{\frac{p(1 - p)}{n}}\right)$$
 
-As we can see in the plot below, the interval is now wider 
+The remarkable part is "**any** population". The population can be skewed, lumpy or discrete; the
+average of enough independent observations is still bell shaped, because the unusually high and
+unusually low values in a sample cancel out. In Week 6 we saw the same thing with averages of dice.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12, fig.alt = "Two sampling distributions of x-bar side by side, both normal curves centered at mu equals 77.9. Left: middle 0.95 area shaded, with the 95 percent interval from 77.6 to 79.4 drawn around x-bar equals 78.5. Right: a wider middle 0.99 area shaded, with the wider 99 percent interval from about 77.3 to 79.7 around the same x-bar."}
-set.seed(123)
-mu = 77.9
-sigma = 4.2
-n = 100
-z = 2.58
-xbar = 78.5
-s = 4.5
-#normal quantiles
-Bconf = ggplot(data.frame(x = c(mu - 4*sigma/sqrt(n), mu + 4*sigma/sqrt(n))), aes(x))+
-  stat_function(fun = dnorm,
-                args = list(mean = mu, sd = sigma/sqrt(n)),
-                size = 1) + 
-    stat_function(fun = dnorm,
-                  args = list(mean = mu, sd = sigma/sqrt(n)),
-                xlim = c(mu-z*sigma/sqrt(n),mu+z*sigma/sqrt(n)),
-                geom = "area",
-                fill = 'blue1',
-                alpha = 0.3)+
-  scale_x_continuous(breaks = seq(mu - 4*sigma/sqrt(n), mu + 4*sigma/sqrt(n), sigma/sqrt(n)))+
-  geom_text(aes(x = mu, y = dnorm(mu, mean = mu, sd = sigma/sqrt(n))/2), label = '0.99', size = 10)+
-  geom_point(aes(x = xbar, y = 0), size = 4)+
-  geom_point(aes(x = mu, y = 0), shape = 22, size = 4, fill = 'black')+
-  geom_errorbarh(aes(x = xbar, y = 0, xmin = xbar - z*s/sqrt(n), 
-                     xmax = xbar + z*s/sqrt(n)), height = 0.08, linewidth = 1.5)+
-  geom_text(aes(x = xbar, y = -0.04), label = TeX('$\\bar{x}$'), size = 5)+
-  geom_text(aes(x = mu, y = -0.04), label = TeX('$\\mu$'), size = 5)+
-  theme_classic()+
-  ggtitle(TeX('Sampling Distribution of $\\bar{x}$'))+
-  theme(axis.text.x = element_text(size = 16),
-        axis.text.y = element_blank(),
-        axis.title.y = element_blank(),
-        axis.title.x = element_blank())
+**How large is large enough?** The textbook's guides are:
 
+* $n \geq 30$ for $\bar{x}$. If the population is itself close to normal, much smaller samples will
+  do; if it is very skewed or has extreme outliers, you may need more.
+* $np > 5$ and $n(1 - p) > 5$ for $\hat{p}$: enough expected successes *and* failures.
 
-ggarrange(Aconf, Bconf, nrow = 1)
+> **For the curious: the formal statement.** For independent observations $X_1, X_2, \ldots, X_n$
+> from the same distribution, with mean $\mu$ and a finite standard deviation $\sigma$,
+> $$\frac{\sqrt{n}\,(\bar{X} - \mu)}{\sigma} \xrightarrow{d} N(0, 1)$$
+> where $\xrightarrow{d}$ means "converges in distribution". The left side is just the $z$-score of
+> $\bar{X}$, so the theorem says that $z$-score behaves more and more like a standard normal $Z$ as
+> $n$ grows. Notice the two assumptions: the observations come from the *same* distribution, and its
+> variance is finite.
+
+## The CLT for a proportion
+
+Stephen Curry has made `r format(4236, big.mark = ',')` of his `r format(4645, big.mark = ',')`
+career free throws, so take $p = 0.912$. Let $\hat{p}$ be the proportion he makes over a stretch of
+$n$ free throws. Below are the **exact** sampling distributions of $\hat{p}$ (from the binomial
+distribution) for $n = 10$, 30 and 100:
+
+```{r, echo=FALSE, fig.height=3.6, fig.width=11, fig.align='center', fig.alt = "Three bar charts of the exact sampling distribution of the proportion of free throws made, with p = 0.912 marked by a vertical line, each with its own axis scale. For n = 10 the bars are piled against 1 and strongly skewed left. For n = 30 they are still skewed left. For n = 100 they form a nearly symmetric bell centered at 0.912."}
+ggplot(ph[ph$p > 1e-3, ], aes(ph, p)) +
+  geom_col(aes(width = w), fill = 'lightblue', color = 'black', linewidth = 0.2) +
+  geom_vline(xintercept = 0.912, color = 'red', linewidth = 0.8) +
+  facet_wrap(~n, nrow = 1, scales = 'free') +
+  labs(x = TeX('Sample proportion $\\hat{p}$ of free throws made'), y = 'Probability') +
+  notes_theme + theme(axis.text = element_text(size = 10))
 ```
 
-In this fictional example, the standard error of $\bar{x}$ is quite small at $SE = 0.45$ so the confidence interval is only a little bit wider. In other cases, depending on the sample size and sample standard deviation, increasing the confidence level may result in reduced precision in our estimate. 
+Check the rule: $n(1 - p) = 10(0.088) = 0.88$, $30(0.088) = 2.64$ and $100(0.088) = 8.8$. Only
+$n = 100$ passes, and only $n = 100$ looks like a bell. With a success rate this high, misses are
+the rare outcome, and you need enough of them for the distribution to fill out.
 
-To further illustrate the concept of confidence and its correspondence to the long-run behavior of interval estimates, consider that each month for the next $100$ months, the Imperial army selects a sample of $100$ stormtroopers in the training program, records their blaster accuracy scores, and computes a $95\%$ confidence interval for the population mean blaster accuracy. 
+# Using the central limit theorem
 
-* What proportion of these confidence intervals are expected to contain the true population mean accuracy. What proportion do not? The plot below gives the results of all $100$ confidence intervals 
+Because the sampling distribution is approximately normal, everything we know about the normal
+distribution applies to it. In particular, the empirical rule says about 95% of the area lies within
+2 standard deviations of the mean:
 
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "100 confidence intervals drawn as vertical error bars, one per sample number on the x-axis, with x-bar on the y-axis and a dashed horizontal line at mu equals 77.9. A legend marks whether each interval covers the parameter: 98 intervals cross the dashed line and 2 (samples 38 and 62) miss it."}
-
-set.seed(123)
-mu = 77.9
-sigma = 4.2
-n = 100
-z = 2.58
-xbar = 78.5
-s = 4.5
-ss = 100
-samples = lapply(c(1:ss), function(x) rnorm(n, mean = mu, sd = sigma))
-
-means.vec = unlist(lapply(samples, function(x) mean(x)))
-se.vec = unlist(lapply(samples, function(x) sd(x)/sqrt(n)))
-
-xpos = 1:100
-ymin = means.vec-2*se.vec
-ymax = means.vec+2*se.vec
-
-ix = which(mu < ymin | mu > ymax)
-
-ind = rep('True', 100)
-ind[ix] = 'False'
-
-df = cbind.data.frame(`$\\bar{x}$` = means.vec,
-                      `$SE$` = se.vec,
-                      xpos = xpos,
-                      `Covers Parameter` = ind)
-
-ggplot(data = df, aes(x = xpos, y = `$\\bar{x}$`, color = `Covers Parameter`))+
-  geom_hline(yintercept = mu, linetype = 'dashed', linewidth = 2, color = 'black')+
-  geom_point()+
-  geom_errorbar(aes(ymin = ymin, ymax = ymax), height = 0.01, linewidth = 1)+
-  geom_text(aes(x = 0, y = mu+0.1), label = TeX('$\\mu$'), size = 6, color = 'black')+
-  theme_classic2()+
-  scale_x_continuous(breaks = seq(1, 100, 5))+
-  xlab('Sample number')+
-  ylab(TeX('$\\bar{x}$'))+
-  theme(legend.position = 'top',
-        legend.text = element_text(size = 12),
-        axis.title = element_text(size = 16),
-        axis.text = element_text(size = 12))
-
-
+```{r, echo=FALSE, fig.height=3.6, fig.width=9, fig.align='center', fig.alt = "A normal curve for the sampling distribution of x-bar, with the x-axis labeled mu minus 2 sigma over root n, mu, and mu plus 2 sigma over root n. The area between the two outer labels is shaded and marked 0.95."}
+ggplot(data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, linewidth = 1) +
+  stat_function(fun = dnorm, xlim = c(-2, 2), geom = 'area', fill = 'red1', alpha = 0.3) +
+  annotate('text', x = 0, y = dnorm(0) / 2, label = '0.95', size = 9) +
+  scale_x_continuous(breaks = c(-2, 0, 2),
+                     labels = c(TeX('$\\mu - 2\\sigma/\\sqrt{n}$'), TeX('$\\mu$'),
+                                TeX('$\\mu + 2\\sigma/\\sqrt{n}$'))) +
+  labs(x = TeX('$\\bar{x}$'), y = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), axis.title.x = element_text(size = 14),
+        axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank())
 ```
 
-As we can see from the plot, all but two of the confidence intervals (highlighted in orange) cover the true value of the parameter $\mu$ (denoted by the black dotted line).
+So for the sample mean,
 
+$$P\left(\mu - 2\frac{\sigma}{\sqrt{n}} \;\leq\; \bar{x} \;\leq\; \mu + 2\frac{\sigma}{\sqrt{n}}\right) \approx 0.95$$
 
+and for the sample proportion,
 
+$$P\left(p - 2\sqrt{\frac{p(1-p)}{n}} \;\leq\; \hat{p} \;\leq\; p + 2\sqrt{\frac{p(1-p)}{n}}\right) \approx 0.95$$
 
+In words: there is about a 95% probability that the statistic lands within **2 standard errors** of
+the parameter. That distance is the **margin of error** from Week 6, now with a probability attached
+to it.
 
+### Example: free throws, again
 
+Over a stretch of $n = 100$ free throws, let $\hat{p}$ be the proportion Curry makes. We checked that
+$n(1 - p) = 8.8 > 5$, so the CLT applies.
 
+* The mean of $\hat{p}$ is $p = 0.912$, and its standard error is
+  $\sigma_{\hat{p}} = \sqrt{0.912 \times 0.088/100} \approx `r fmt(se_ft, 3)`$.
+* About 95% of the time, $\hat{p}$ falls within $0.912 \pm 2(0.028)$, between
+  **0.856 and 0.968**: somewhere between about 86 and 97 makes out of 100.
+
+### Example: a tournament's average
+
+Goals per World Cup match follow a Poisson distribution with $\lambda = 2.69$ (Week 7), so a single
+match has $\mu = \lambda = 2.69$ and $\sigma = \sqrt{2.69} \approx `r fmt(sqrt(lam), 2)`$ goals. A
+tournament's average over its 64 matches is a sample mean with $n = 64$, so by the CLT it is
+approximately normal with mean 2.69 and standard error
+
+$$\sigma_{\bar{x}} = \frac{`r fmt(sqrt(lam), 2)`}{\sqrt{64}} \approx `r fmt(se_wc, 3)`$$
+
+* About 95% of tournaments, at this scoring rate, average between $2.69 \pm 2(0.205)$: **2.28 to 3.10**
+  goals per match.
+* The 2018 World Cup averaged $169/64 = 2.64$ goals per match. Surprising? No: 2.64 is well inside
+  2.28 to 3.10.
+
+A single match can easily have 0 goals or 6; a tournament's average is far more predictable. That is
+the law of large numbers and the CLT working together: the average settles near $\mu$, and the CLT
+says how near.
+
+We can also find any other probability about $\bar{x}$, exactly as we did for single observations
+in Week 6, as long as we standardize with the **standard error** instead of $\sigma$. How likely is a
+tournament that averages **3 or more** goals per match?
+
+$$z = \frac{\bar{x} - \mu}{\sigma/\sqrt{n}} = \frac{3 - 2.69}{0.205} \approx `r fmt(z3, 2)`,
+\qquad P(\bar{x} \geq 3) = P(Z \geq `r fmt(z3, 2)`) = 1 - P(Z \leq `r fmt(z3, 2)`) \approx 1 - 0.934 = 0.066$$
+
+About a 7% chance. (The exact answer, from the Poisson distribution of a tournament's total goals,
+is also about 0.07: at $n = 64$ the normal approximation is very good.) The classic mistake is to
+divide by $\sigma = 1.64$ instead of $\sigma/\sqrt{n} = 0.205$. That would describe a single
+match, not a tournament's average.
+
+# From an estimate to an interval
+
+> **Exam 2 stops at the central limit theorem.** Confidence intervals, introduced at the end of
+> Monday's lecture, are not on Exam 2; we pick them up again on Monday, October 19.
+
+## Point estimates and interval estimates
+
+Statistical inference draws conclusions about a population from sample data. It comes in two kinds,
+**significance tests** (later in the course) and **estimation**, and estimation comes in two kinds as
+well:
+
+* A **point estimate** is a single statistic used to estimate a parameter: $\bar{x}$ for $\mu$,
+  $\hat{p}$ for $p$, $s$ for $\sigma$.
+* An **interval estimate** gives a range of plausible values for the parameter. The device we use is
+  the **confidence interval**, which has the form
+  $$\text{point estimate} \;\pm\; \text{margin of error}$$
+
+A point estimate is almost never exactly right; the sampling distribution tells us it is usually
+close. An interval says *how* close, with a stated level of confidence.
+
+## Turning the probability statement around
+
+In the last section we said
+
+$$P\left(\mu - 2\frac{\sigma}{\sqrt{n}} \;\leq\; \bar{x} \;\leq\; \mu + 2\frac{\sigma}{\sqrt{n}}\right) \approx 0.95$$
+
+But to say that $\bar{x}$ lies within two standard errors of $\mu$ is the same as saying that $\mu$
+lies within two standard errors of $\bar{x}$. If you are within 2 miles of me, I am within 2 miles of
+you. So, with a little algebra,
+
+$$P\left(\bar{x} - 2\frac{\sigma}{\sqrt{n}} \;\leq\; \mu \;\leq\; \bar{x} + 2\frac{\sigma}{\sqrt{n}}\right) \approx 0.95$$
+
+The interval $\bar{x} \pm 2\sigma/\sqrt{n}$ is a **95% confidence interval** for $\mu$. It needs only
+things we know: the sample mean, $\sigma$ and $n$. (This week $\sigma$ is known; next week we replace
+it with $s$, and look at confidence levels other than 95%.)
+
+Read that last probability statement carefully. $\mu$ is a fixed number, not a random one. What is
+random is the **interval**, because it is built from $\bar{x}$, and $\bar{x}$ changes from sample to
+sample. The 95% describes the method: over all possible samples, about 95% of the intervals built this
+way capture $\mu$.
+
+## How often does an interval capture $\mu$?
+
+Back to the songs, where we can cheat and check, because we know $\mu = `r fmt(MU, 2)`$. Below are 25
+random samples of $n = 20$ songs. Each line is $\bar{x} \pm 2(0.34)$, the sample mean plus or minus
+the margin of error:
+
+```{r, echo=FALSE, fig.height=4.5, fig.width=9, fig.align='center', fig.alt = "25 horizontal confidence intervals for mean song length, one per row, each a dot at the sample mean with a line 0.68 minutes either side, plus a vertical line at mu = 3.71 minutes. 24 of the intervals cross the vertical line. One interval, centered near 4.7 minutes, lies entirely to the right of it and is marked in red as a miss."}
+ggplot(ci, aes(y = i)) +
+  geom_vline(xintercept = MU, linewidth = 1) +
+  geom_segment(aes(x = lo, xend = hi, yend = i, color = hit), linewidth = 0.9) +
+  geom_point(aes(x = m, color = hit), size = 2) +
+  annotate('text', x = MU + 0.04, y = 26.5, label = 'mu == 3.71', parse = TRUE, hjust = 0, size = 5) +
+  scale_color_manual(values = c(`TRUE` = 'grey35', `FALSE` = 'red'),
+                     labels = c(`TRUE` = 'Captures μ', `FALSE` = 'Misses μ'), name = NULL) +
+  coord_cartesian(ylim = c(0.5, 27)) +
+  labs(x = 'Song length (minutes)', y = 'Sample') +
+  notes_theme + theme(legend.position = 'top', legend.text = element_text(size = 12),
+                      axis.text.y = element_blank(), axis.ticks.y = element_blank())
+```
+
+`r sum(ci$hit)` of the 25 intervals capture $\mu$; one, from a sample whose mean happened to land far
+to the right, misses. That is what "95% confident" means: about 95% of intervals made this way capture
+the parameter.
+
+> **A note on "about".** Repeat this 10,000 times and `r fmt(100 * cover, 0)`% of the intervals
+> capture $\mu$, a little more than 95%. Song length has a handful of extremely long tracks, and with
+> only $n = 20$ songs the sampling distribution of $\bar{x}$ is not yet quite normal (it is more
+> peaked, with a long right tail), so the empirical rule is only approximate. This is the "if the
+> population has extreme outliers, you may need more" caveat at work: for song length it takes
+> samples of a couple of hundred before the rate settles near 95%.
+
+### Example: an interval for mean song length
+
+In practice we see only **one** sample, and we do not know $\mu$. Suppose our sample is the bottom
+interval in the plot: $n = 20$ songs with $\bar{x} = 3.64$ minutes. With $\sigma = 1.51$ minutes,
+$SE = 0.34$ minutes.
+
+* The 95% confidence interval for $\mu$ is
+  $$3.64 \pm 2(0.34) = 3.64 \pm 0.68, \qquad \text{from 2.96 to 4.32 minutes.}$$
+* We would report it in the textbook's form: **"We estimate with 95% confidence that the mean length
+  of all 18,860 songs is between 2.96 and 4.32 minutes."**
+* Does it capture $\mu = 3.71$? Yes. But in real life we could not check.
+
+## What "95% confident" does and does not mean
+
+The **confidence level** is the probability that the interval will capture the parameter **before
+the data are collected**. It is the long-run success rate of the method. Once the data are in and the
+interval is computed, **the interval either does or does not contain the parameter**: there is
+nothing random left, and we simply do not know which.
+
+So for the interval 2.96 to 4.32 minutes:
+
+* **Correct:** "If we took many samples of 20 songs and built an interval from each, about 95% of
+  those intervals would capture the true mean song length."
+* **Not correct:** "There is a 95% probability that $\mu$ is between 2.96 and 4.32." $\mu$ is a fixed
+  number. It is either in this interval or it is not.
+* **Not correct:** "95% of songs are between 2.96 and 4.32 minutes long." The interval is about the
+  **mean** song length, not individual songs. (Individual songs vary by $\sigma = 1.51$ minutes, far
+  more than this interval suggests.)
+
+# Conclusion: what you should take away
+
+## Sampling distributions
+
+* A statistic is a random variable; its **sampling distribution** is its distribution over all
+  possible samples of size $n$. Do not confuse it with the population distribution or the data
+  distribution.
+* For a small discrete population, build it by hand: list every sample (order matters), find each
+  sample's probability, and add up the samples that give the same value.
+* $\bar{x}$ has mean $\mu$ and standard error $\sigma/\sqrt{n}$; $\hat{p}$ has mean $p$ and standard
+  error $\sqrt{p(1 - p)/n}$. Both shrink as $n$ grows; 4 times the sample halves the standard error.
+
+## The central limit theorem
+
+* For large $n$ (roughly $n \geq 30$, or $np$ and $n(1 - p)$ above 5 for a proportion), the sampling
+  distribution of $\bar{x}$ or $\hat{p}$ is approximately normal, **whatever the shape of the
+  population**. The population itself does not change.
+* So a statistic falls within 2 standard errors of its parameter with probability about 0.95, and
+  any other probability about $\bar{x}$ comes from $z = (\bar{x} - \mu)/(\sigma/\sqrt{n})$.
+
+## Confidence intervals
+
+* A **confidence interval** is point estimate $\pm$ margin of error. With the margin of error at
+  2 standard errors, $\bar{x} \pm 2\sigma/\sqrt{n}$ is a 95% confidence interval for $\mu$.
+* "95% confident" describes the method: about 95% of intervals built this way capture the parameter.
+  Any one interval either does or does not.
+
+## Sources
+
+* Illowsky, B. and Dean, S. (2023). *Introductory Statistics 2e*, Sections 7.1–7.3 and 8.1. OpenStax.
+  [OpenStax: Introductory Statistics 2e](https://openstax.org/details/books/introductory-statistics-2e)
+* Spotify and YouTube song statistics (top 10 Spotify tracks of 2,079 artists, collected February
+  2023): the "Spotify and Youtube" dataset on Kaggle, file `Spotify_Youtube.csv`.
+* 2022 FIFA World Cup: 172 goals in 64 matches; 2018 FIFA World Cup: 169 goals in 64 matches.
+  Wikipedia, "2022 FIFA World Cup" and "2018 FIFA World Cup statistics".
+* Stephen Curry's career free throws, 4,236 of 4,645. Basketball-Reference,
+  [Basketball-Reference: Stephen Curry career stats](https://www.basketball-reference.com/players/c/curryst01.html), checked October 5, 2026.
