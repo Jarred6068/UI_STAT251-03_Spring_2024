@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
   * Exam 2 is a **take-home, open-note exam** completed in **Canvas**. You may use your notes, the textbook and the course website. It is due **Sunday, October 18, 2026 at 11:59PM**. An in-class review will be held on **Wednesday, October 14, 2026**
 
-  * The exam is 21 questions plus 1 bonus question. Most are multiple choice or true/false, and three are short written explanations
+  * The exam is 22 questions plus 2 bonus questions. Most are multiple choice or true/false, and three are short written explanations
 
 # How to prepare
 
@@ -130,11 +130,7 @@ Exam 2 will cover material beginning on **Monday of Week 4 (September 14)** thro
 
   1. Know the difference between **probability mass** (a discrete variable: each value carries its own probability) and **probability density** (a continuous variable: probability is the **area under the density curve**, and the height of the curve is not a probability)
 
-  2. Know the properties of a density curve: it is never negative and the total area under it is 1. Know why $P(X = c) = 0$ for a continuous random variable, so $P(X < c) = P(X \leq c)$
-
-  3. Know the definition of the **cumulative distribution**, $P(X \leq x)$ (the area to the left), and how to get the area to the right, $P(X > x) = 1 - P(X \leq x)$, and the area between, $P(a < X < b) = P(X \leq b) - P(X \leq a)$
-
-  4. Know that the quartiles of a continuous distribution cut the area under the curve into quarters, and that the mean is the balance point of the curve
+  2. Know why $P(X = c) = 0$ for a continuous random variable
 
 ## Standard Error and Statistical Significance
 

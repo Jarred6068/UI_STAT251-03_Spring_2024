@@ -1,0 +1,102 @@
+
+Rendering: ./about.Rmd
+
+Rendering: ./Course_Schedule.Rmd
+
+Rendering: ./data.Rmd
+
+Rendering: ./example_project_categorical.Rmd
+
+Rendering: ./example_project_continuous.Rmd
+
+Rendering: ./index.Rmd
+
+Rendering: ./lecslidesindex.Rmd
+
+Rendering: ./lecturemenu1.Rmd
+
+Rendering: ./lecturemenu10.Rmd
+
+Rendering: ./lecturemenu11.Rmd
+
+Rendering: ./lecturemenu12.Rmd
+
+Rendering: ./lecturemenu13.Rmd
+
+Rendering: ./lecturemenu14.Rmd
+
+Rendering: ./lecturemenu15.Rmd
+
+Rendering: ./lecturemenu16.Rmd
+
+Rendering: ./lecturemenu2.Rmd
+
+Rendering: ./lecturemenu3.Rmd
+
+Rendering: ./lecturemenu4.Rmd
+
+Rendering: ./lecturemenu5.Rmd
+
+Rendering: ./lecturemenu6.Rmd
+
+Rendering: ./lecturemenu7.Rmd
+
+Rendering: ./lecturemenu8.Rmd
+
+Rendering: ./lecturemenu9.Rmd
+
+Rendering: ./project.Rmd
+
+Rendering: ./project_check.Rmd
+
+Rendering: ./R_code.Rmd
+
+Rendering: ./resources.Rmd
+
+Rendering: ./sac_schedule.Rmd
+
+Rendering: ./syllabus.Rmd
+
+Rendering: ./university_resources.Rmd
+
+Output created: index.html
+Rendering: homeworks/2026/homework_1_2026.Rmd
+Rendering: homeworks/2026/homework_1_2026_solns.Rmd
+Rendering: homeworks/2026/homework_2_2026.Rmd
+Rendering: homeworks/2026/homework_2_2026_solns.Rmd
+Rendering: homeworks/2026/homework_3_2026.Rmd
+Rendering: homeworks/2026/homework_3_2026_solns.Rmd
+Rendering: homeworks/2024/week12homework.Rmd
+Rendering: homeworks/2024/week12homework_solns.Rmd
+Rendering: homeworks/2024/week14homework.Rmd
+Rendering: homeworks/2024/week14homework_solns.Rmd
+Rendering: homeworks/2024/week7homework.Rmd
+Rendering: homeworks/2024/week7homework_solns.Rmd
+Rendering: homeworks/homework_downloads.Rmd
+Rendering: homeworks/reading_and_book_problems.Rmd
+Rendering: misc/chisq_table.Rmd
+Rendering: misc/hp_r_code.Rmd
+Rendering: misc/Non Parametric Tests For Two Samples.Rmd
+Rendering: misc/R_download_instructions.Rmd
+Rendering: misc/rcode_examples.Rmd
+Rendering: misc/t_table.Rmd
+Rendering: misc/Z_table.Rmd
+Rendering: Review_problems/exam1_review_problems.Rmd
+Rendering: Review_problems/exam1_review_problems_solns.Rmd
+Rendering: Review_problems/exam2_review_problems.Rmd
+Rendering: Review_problems/exam2_review_problems_solns.Rmd
+Rendering: Review_problems/exam3_review_problems.Rmd
+Rendering: Review_problems/final_exam_review_slides.Rmd
+Rendering: study_guides/exam1_study_guide.Rmd
+Rendering: study_guides/exam2_study_guide.Rmd
+Rendering: study_guides/exam3_study_guide.Rmd
+Rendering: study_guides/final_exam_study_guide.Rmd
+
+All 31 subdirectory pages rendered.
+
+Printing PDFs with: C:/Program Files/Google/Chrome/Application/chrome.exe
+  syllabus.pdf (128 KB)
+  Course_Schedule.pdf (154 KB)
+  sac_schedule.pdf (41 KB)
+  university_resources.pdf (131 KB)
+  lecturemenu1.pdf (323 KB)
