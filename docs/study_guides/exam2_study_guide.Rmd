@@ -40,7 +40,9 @@ Exam 2 will cover material beginning on **Monday of Week 4 (September 14)** thro
 
 * The normal distribution, $z$-scores, the empirical rule and identifying outliers - September 25, 28 and 30
 
-* Standard error and margin of error - September 30
+* Normal quantiles ($z$-table, `pnorm` and `qnorm`) and transformations of variables - September 30
+
+* Standard error, margin of error and statistical significance - September 30 and October 2
 
 * Probability theory, random variables and discrete distributions - October 2, 5, 7 and 9
 
@@ -48,9 +50,7 @@ Exam 2 will cover material beginning on **Monday of Week 4 (September 14)** thro
 
 * Sampling distributions and the Central Limit Theorem - October 12
 
-**Not on this exam:** statistical significance (October 2), transformations of variables
-(September 30) and confidence intervals (introduced October 12, covered October 19). These
-come back later in the course, when we reach confidence intervals and hypothesis tests.
+* Introduction to confidence intervals - October 12
 
 ## Sampling Designs
 
@@ -98,7 +98,17 @@ come back later in the course, when we reach confidence intervals and hypothesis
 
   5. Know how to write a normal probability as a standard normal probability: a $Z$-table gives the area to the **left**, $P(Z \leq z)$, so a "greater than" probability needs the complement and a "between" probability is a difference of two left areas
 
-  6. Know how to identify outliers with the **$\pm 2s$ rule** and with the **$1.5\times IQR$ rule**, how to judge from a boxplot whether a distribution looks roughly normal, and why the $\pm 2s$ rule should only be trusted for roughly normal data
+  6. Know how to identify outliers with the **$\pm 2s$ rule** and with the **$1.5\times IQR$ rule**, how to judge from a boxplot whether a distribution looks roughly normal, and why the $\pm 2s$ rule should only be trusted for roughly normal data. Know why the two rules can disagree: one extreme value inflates $s$ but barely moves the quartiles
+
+  7. Know how to find an area for a $z$-score that is not a whole number of standard deviations, from a $z$-table or with `pnorm`, and how to go from an area back to a value with `qnorm`
+
+## Transformations of Variables
+
+  1. Know the difference between a **linear transformation**, $y = ax + b$ (adding, subtracting, multiplying, dividing, such as changing units), and a **nonlinear transformation** (squaring, roots, logarithms)
+
+  2. Know what a linear transformation does to the summaries: the center moves with the whole transformation ($\bar{y} = a\bar{x} + b$, and the same for the median), the spread is multiplied by $|a|$ and ignores the shift ($s_y = |a|\,s_x$, $IQR_y = |a|\,IQR_x$), and the **shape does not change**
+
+  3. Know that a $z$-score is a linear transformation, so standardizing skewed data does **not** make it normal
 
 ## Probability Theory
 
@@ -128,27 +138,55 @@ come back later in the course, when we reach confidence intervals and hypothesis
 
   4. Know the **Bernoulli** distribution (one trial, success with probability $p$), and that its mean is $p$ and its variance is $p(1-p)$
 
-  5. Know when a count follows a **binomial** distribution (a fixed number $n$ of independent trials, each a success with the same probability $p$), how to compute a probability with its probability mass function, what the $\frac{n!}{k!(n-k)!}$ term counts, and that its mean is $np$ and its variance is $np(1-p)$
+  5. Know when a count follows a **binomial** distribution (a fixed number $n$ of independent trials, each a success with the same probability $p$), how to check all three conditions (for example, drawing without replacement from a small population breaks independence), how to compute a probability with its probability mass function, what the $\frac{n!}{k!(n-k)!}$ term counts, and that its mean is $np$ and its variance is $np(1-p)$
 
-  6. Know when a count follows a **Poisson** distribution (events occurring at an average rate $\lambda$ in a fixed interval of time or space), how to compute a probability with its probability mass function, and that its mean and variance are both $\lambda$
+  6. Know when a count follows a **Poisson** distribution (events occurring independently at a constant average rate $\lambda$ in a fixed interval of time or space), how to compute a probability with its probability mass function, that its mean and variance are both $\lambda$, and how to rescale $\lambda$ when the interval changes
 
-  7. Know how to compute "at most" probabilities, such as $P(X \leq 1) = P(X = 0) + P(X = 1)$, by adding probabilities from the probability mass function
+  7. Know how to compute "at most" and "at least" probabilities, such as $P(X \leq 1) = P(X = 0) + P(X = 1)$ and $P(X \geq 2) = 1 - P(X \leq 1)$, from the probability mass function
 
-  8. Know that for a continuous random variable, the probability of falling in an interval is the area under its density curve over that interval, and know the definition of the **cumulative distribution**, $P(X \leq x)$
+## Continuous Distributions
 
-## Sampling Distributions and the Central Limit Theorem
+  1. Know the difference between **probability mass** (a discrete variable: each value carries its own probability) and **probability density** (a continuous variable: probability is the **area under the density curve**, and the height of the curve is not a probability)
 
-  1. Know the difference between a **population distribution** (how single observations vary) and a **sampling distribution** (how a statistic such as $\bar{x}$ varies from sample to sample)
+  2. Know the properties of a density curve: it is never negative and the total area under it is 1. Know why $P(X = c) = 0$ for a continuous random variable, so $P(X < c) = P(X \leq c)$
 
-  2. Know how to build the sampling distribution of $\bar{x}$ for a very small population and sample size, by listing every equally likely sample (order matters) and its mean
+  3. Know the definition of the **cumulative distribution**, $P(X \leq x)$ (the area to the left, which is what the $z$-table and `pnorm` give), and how to get the area to the right, $P(X > x) = 1 - P(X \leq x)$, and the area between, $P(a < X < b) = P(X \leq b) - P(X \leq a)$
 
-  3. Know the **standard error** of the sample mean, $\sigma_{\bar{x}} = \sigma/\sqrt{n}$, why it is smaller than $\sigma$, and how it changes with the sample size (making the sample 4 times larger cuts the standard error in half)
+  4. Know that the quartiles of a continuous distribution cut the area under the curve into quarters, and that the mean is the balance point of the curve
 
-  4. Know the mean and standard error of the sampling distribution of the sample proportion $\hat{p}$
+## Sampling Distributions and Statistical Significance
 
-  5. Know the **margin of error** as $\pm 2$ standard errors, and how it changes as $n$ grows
+  1. Know the three distributions and keep them apart: the **population distribution** (how a single observation varies; described by parameters such as $\mu$, $\sigma$ and $p$), the **data distribution** (the $n$ values in your one sample; described by statistics such as $\bar{x}$, $s$ and $\hat{p}$) and the **sampling distribution** (how a statistic such as $\bar{x}$ varies over all possible samples of the same size $n$)
 
-  6. Understand the **Central Limit Theorem**: as the sample size grows, the sampling distribution of $\bar{x}$ becomes approximately normal and narrower. The population distribution itself does not change
+  2. Know why two random samples from the same population give different statistics (**sampling variability**), and that a statistic is a random variable with its own distribution
+
+  3. Know how to build the sampling distribution of $\bar{x}$ for a very small population and sample size: list every possible sample (order matters) and its mean, find each sample's probability (multiply, for independent observations), and add up the samples that give the same value of $\bar{x}$
+
+  4. Know the center and spread of the sampling distribution of $\bar{x}$: its mean is $\mu$ ($\bar{x}$ is **unbiased**), and its **standard error** is $\sigma_{\bar{x}} = \sigma/\sqrt{n}$. Know why it is smaller than $\sigma$ ($\sigma$ describes single observations, the standard error describes whole-sample averages) and how it changes with the sample size (making the sample 4 times larger cuts the standard error in half)
+
+  5. Know the mean and standard error of the sampling distribution of the sample proportion $\hat{p}$: mean $p$ and standard error $\sqrt{p(1-p)/n}$
+
+  6. Know the **margin of error** as $2 \times SE$, how it changes as $n$ grows, and the difference between the margin of error (a bound we can compute in advance) and the sampling error (how far this particular estimate is from the parameter, which we never know)
+
+  7. Know what makes a result **statistically significant**: it falls more than 2 standard errors from what chance alone would give, that is, outside the margin of error. Know that significant does not mean important, and not significant does not mean no difference
+
+## The Central Limit Theorem
+
+  1. Understand the **Central Limit Theorem**: for large $n$, the sampling distribution of $\bar{x}$ is approximately normal, $N(\mu, \sigma/\sqrt{n})$, **whatever the shape of the population**. As $n$ grows it becomes more bell shaped and narrower; the population distribution itself does not change
+
+  2. Know the rules of thumb for "large enough": $n \geq 30$ for $\bar{x}$, and $np > 5$ and $n(1 - p) > 5$ for $\hat{p}$
+
+  3. Know how to use the CLT: about 95% of samples give a statistic within 2 standard errors of its mean, and any other probability about $\bar{x}$ comes from the $z$-score $z = (\bar{x} - \mu)/(\sigma/\sqrt{n})$
+
+## Introduction to Confidence Intervals
+
+  1. Know the difference between a **point estimate** (a single statistic used to estimate a parameter: $\bar{x}$ for $\mu$, $\hat{p}$ for $p$) and an **interval estimate**
+
+  2. Know that a **confidence interval** has the form point estimate $\pm$ margin of error, and that $\bar{x} \pm 2\sigma/\sqrt{n}$ is a 95% confidence interval for $\mu$ (it comes from turning "$\bar{x}$ is within 2 standard errors of $\mu$" around)
+
+  3. Know how to report an interval: "We estimate with 95% confidence that the population mean is between [lower bound] and [upper bound]"
+
+  4. Know what "95% confident" means: about 95% of the intervals built this way capture the parameter. The parameter is fixed, so any one interval either does or does not contain it. Be able to recognize the two common wrong readings: "there is a 95% probability that $\mu$ is in this interval" and "95% of the individual values fall in this interval"
 
 <br>
 <br>
@@ -171,4 +209,8 @@ situation in front of you.
 
 \[ P(X = k) = \frac{n!}{k!(n-k)!}\cdot p^k \cdot (1-p)^{n-k}, \ \ P(X =k) = \frac{\lambda^k\cdot e^{-\lambda}}{k!}\]
 
+\[ y = ax + b, \ \ \bar{y} = a\bar{x} + b, \ \ s_y = |a|\,s_x \]
+
 \[ \mu_{\bar{x}} = \mu, \ \ \sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}, \ \ \mu_{\hat{p}} = p, \ \ \sigma_{\hat{p}} = \sqrt{\frac{p(1-p)}{n}} \]
+
+\[ z = \frac{\bar{x} - \mu}{\sigma/\sqrt{n}}, \ \ \text{margin of error} = 2\cdot SE, \ \ \bar{x} \pm 2\frac{\sigma}{\sqrt{n}} \]

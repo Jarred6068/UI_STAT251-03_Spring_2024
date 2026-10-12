@@ -129,8 +129,8 @@ stopifnot(near(sqrt(lam), 1.64, 5e-3), near(se_wc, 0.205, 5e-4),
   The sections below follow the Lecture 18 slides in order. Their examples (the
   spinner, two polls, Spotify song length, minutes until the next goal, Stephen
   Curry's free throws, a World Cup tournament's average) are the slide examples;
-  their numbers and sources are in assets/make_lecture18_figures.R. Exam 2 stops at
-  the central limit theorem: confidence intervals are not on it (study guide).
+  their numbers and sources are in assets/make_lecture18_figures.R. Everything on this
+  page, confidence intervals included, is in scope for the Exam 2 study guide (Oct 12 2026).
 
   Sources. Terms follow OpenStax Introductory Statistics 2e, Sections 7.1-7.3 and the
   start of 8.1 (point estimate, confidence interval, confidence level, "We estimate
@@ -495,9 +495,6 @@ divide by $\sigma = 1.64$ instead of $\sigma/\sqrt{n} = 0.205$. That would descr
 match, not a tournament's average.
 
 # From an estimate to an interval
-
-> **Exam 2 stops at the central limit theorem.** Confidence intervals, introduced at the end of
-> Monday's lecture, are not on Exam 2; we pick them up again on Monday, October 19.
 
 ## Point estimates and interval estimates
 
