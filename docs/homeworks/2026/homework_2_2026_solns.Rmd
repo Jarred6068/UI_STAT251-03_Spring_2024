@@ -314,14 +314,16 @@ With $n = 20$ the median is the average of the $10^{th}$ and $11^{th}$ values, a
 The fences are $Q1 - 1.5\times IQR = 4.335 - 0.24 = 4.095$ and $Q3 + 1.5\times IQR = 4.495 + 0.24 = 4.735$. Only observation 20 (5.08 cm) falls outside them, so it is the single outlier.
 `r RZ`
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=5, fig.width=10, fig.alt = "Horizontal box plot of total whisker length (cm) for the 20 harp seals, labeled Min=4.18, Q1=4.34, Median=4.42, Q3=4.49, Max=4.62 and Outlier=5.08, with IQR = 0.15. The single outlier at 5.08 lies well beyond the upper whisker."}
-X = FS[ix,]$total.length
-estims = rep(0, 6)
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=5, fig.width=10, fig.alt = "Horizontal box plot of total whisker length (cm) for the 20 harp seals, labeled Min=4.18, Q1=4.335, Median=4.42, Q3=4.495, Max=4.62 and Outlier=5.08, with IQR = 0.16. The single outlier at 5.08 lies well beyond the upper whisker."}
+X = round(FS[ix,]$total.length, 2)   # the values exactly as printed in Table 1
 boxplot(X, horizontal = TRUE, axes = TRUE, staplewex = 1)
-estims[1:5] = as.numeric(round(summary(X)[c(1:3, 5:6)],2))
-estims[3]= estims[3]
-estims[5]= round(X[length(X)-1],2)
-estims[6]= round(max(X),2)
+# Label with the median-of-halves quartiles used in part (a). (These labels used
+# to come from summary(), whose default quantile method gives 4.34 / 4.49 /
+# IQR 0.15 and disagreed with the worked answer above the plot.) boxplot() draws
+# its box at Tukey's hinges, which for even n are these same medians of halves.
+estims = c(min(X), median(X[1:10]), median(X), median(X[11:20]), X[19], max(X))
+stopifnot(isTRUE(all.equal(estims, c(4.18, 4.335, 4.42, 4.495, 4.62, 5.08))),
+          isTRUE(all.equal(fivenum(X)[2:4], estims[2:4])))
 
 locals = estims
 #locals[3] = locals[3]+0.005
@@ -403,9 +405,9 @@ Note that although Seal 2's whisker is the **longer** of the two in centimetres,
 (c) Suppose the researchers observe a new whisker with 3 beads. Using the $\pm 2s$ rule, how long or how short would that whisker have to be before you would flag it as an outlier? Then look at the 3 bead group in **Table 1** and explain why the $\pm 2s$ rule should be treated with caution here. (hint: your answer to part (a) for the 3 bead group is the reason, and note that the $1.5\times IQR$ rule and the $\pm 2s$ rule do not always flag the same observations)
 
 `r RA`
-Under the $\pm 2s$ rule an observation is flagged when $x < \bar{x}-2s$ **or** $x > \bar{x}+2s$, so the whisker would have to be longer than
+Under the $\pm 2s$ rule an observation is flagged when it is at least two standard deviations from the mean, $x \leq \bar{x}-2s$ **or** $x \geq \bar{x}+2s$, so the whisker would have to be at least
 \[ \bar{x}_3 + 2s_3 = 4.609 + 2\times 0.270 = 5.149 \ \text{(cm)} \]
-or shorter than
+long, or no longer than
 \[ \bar{x}_3 - 2s_3 = 4.609 - 2\times 0.270 = 4.069 \ \text{(cm)}\]
 
 **Why to be cautious:** the $\pm 2s$ rule is built on the empirical rule, which assumes an approximately normal distribution - and in part (a) we decided the 3 bead group is not normal. Worse, $\bar{x}_3$ and $s_3$ are themselves computed from only five observations, one of which (5.08) is the extreme value we might want to detect. That single point inflates $s_3$ and pushes the upper cut-off out to 5.149, so the rule does **not** flag 5.08 at all - even though the $1.5\times IQR$ rule applied to the full sample in Problem 5(b) did flag it. The two rules can disagree, and neither should be applied mechanically to a small, skewed group.
@@ -464,9 +466,9 @@ Approximately **$16\%$** of five-year-old girls are taller than 113.5 cm.
 (e) Would a height of $100$ cm be flagged as an outlier under the $\pm 2s$ rule? Explain.
 
 `r RA`
-It sits exactly **on** the boundary. From part (c) its $z$-score is $-2$, and the $\pm 2s$ rule flags observations **more than** two standard deviations from the mean, so a height of exactly 100 cm is not flagged — anything below 100 cm would be.
+**Yes, just.** From part (c) its $z$-score is $-2$, and the $\pm 2s$ rule from class flags any value **at least** two standard deviations from the mean, $|z| \geq 2$. A height of 100 cm sits exactly on that boundary, so it is flagged as a (low) outlier.
 
-It is worth seeing how unusual that still is: the $95\%$ interval from part (a) leaves $5\%$ outside, split evenly, so only about $2.5\%$ of five-year-old girls are shorter than 100 cm.
+It is worth seeing how unusual that is: the $95\%$ interval from part (a) leaves $5\%$ outside, split evenly, so only about $2.5\%$ of five-year-old girls are 100 cm tall or shorter.
 `r RZ`
 
 
@@ -562,14 +564,16 @@ By the complement rule,
 The Venn diagram has $8 - 5 = 3$ students in band only, 5 in the overlap, $15 - 5 = 10$ in sport only, and $30 - (3+5+10) = 12$ outside both circles.
 `r RZ`
 
-```{r, eval = T, echo=F, message=F, warning=F, fig.height=5, fig.width=10, fig.alt = "Venn diagram of two overlapping circles, Band and Sport: 3 students (16.7%) in Band only, 5 (27.8%) in both, and 10 (55.6%) in Sport only. The percentages are out of the 18 students in either circle."}
+```{r, eval = T, echo=F, message=F, warning=F, fig.height=5, fig.width=10, fig.alt = "Venn diagram of two overlapping circles, Band and Sport: 3 students in Band only, 5 in both, and 10 in Sport only. The 12 students in neither group are outside both circles."}
 class = list(Band = c(1:8),
              Sport = c(1:5, 10:19))
+# counts only: ggvenn's default percentages are out of the 18 students in a
+# circle, not the 30 in the class, so they did not match the probabilities below
 ggvenn(
   class,
   fill_color = c("#0073C2FF", "#EFC000FF", "#868686FF"),
   stroke_size = 0.5, set_name_size = 8,
-  text_size = 6
+  text_size = 6, show_percentage = FALSE
   )
 ```
 

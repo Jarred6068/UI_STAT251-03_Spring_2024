@@ -69,11 +69,13 @@ print_pdf <- function(html, pdf, chrome, label = html,
   }
 }
 
-# The student-facing Exam 1 handouts, as directory/page pairs. Both build_site.R
+# The student-facing exam handouts, as directory/page pairs. Both build_site.R
 # and build_review.R print these, so the list lives in one place: a page added
-# here is picked up by the full site build and the fast path alike.
+# here is picked up by the full site build and the fast path alike. Exam 2 is
+# open-note and has no review problems, so only its study guide is listed.
 REVIEW_PAGES <- list(
   c("study_guides",    "exam1_study_guide"),
   c("Review_problems", "exam1_review_problems"),
-  c("Review_problems", "exam1_review_problems_solns")
+  c("Review_problems", "exam1_review_problems_solns"),
+  c("study_guides",    "exam2_study_guide")
 )

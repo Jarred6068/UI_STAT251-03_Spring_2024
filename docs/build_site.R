@@ -152,11 +152,11 @@ tryCatch({
                 chrome, label = paste0(page, ".pdf"), profile = profile)
     }
 
-    #The Exam 1 handouts. These are student-facing and get uploaded to Canvas
-    #as PDFs, so they need both formats: the .html is what the website links,
-    #the .pdf is what students download. Printed from inside each page's own
-    #directory so the relative asset paths in the HTML still resolve.
-    message("\nPrinting Exam 1 handout PDFs:")
+    #The exam handouts (REVIEW_PAGES in _chrome.R). These are student-facing and
+    #get uploaded to Canvas as PDFs, so they need both formats: the .html is what
+    #the website links, the .pdf is what students download. Printed from inside
+    #each page's own directory so the relative asset paths in the HTML still resolve.
+    message("\nPrinting exam handout PDFs:")
     for (entry in REVIEW_PAGES) {
       here <- setwd(entry[[1]])
       print_pdf(paste0(entry[[2]], ".html"), paste0(entry[[2]], ".pdf"),

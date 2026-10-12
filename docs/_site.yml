@@ -92,8 +92,8 @@ navbar:
           menu:
           - text: 'Hmwk 1 Solutions'
             href: homeworks/2026/homework_1_2026_solns.html
-#         - text: 'Hmwk 2 Solutions'
-#           href: homeworks/2026/homework_2_2026_solns.html
+          - text: 'Hmwk 2 Solutions'
+            href: homeworks/2026/homework_2_2026_solns.html
 #         - text: 'Hmwk 3 Solutions'
 #           href: homeworks/2026/homework_3_2026_solns.html
 #         - text: 'Hmwk 4 Solutions'
@@ -129,9 +129,9 @@ navbar:
               href: Review_problems/exam1_review_problems.html
             - text: 'Solutions'
               href: Review_problems/exam1_review_problems_solns.html
-##      HIDDEN - Exams 2, 3 and the final (study guides + review problems)
-#       - text: 'Exam 2 Study Guide'
-#         href: study_guides/exam2_study_guide.html
+##      HIDDEN - Exam 3 and the final (study guides + review problems)
+        - text: 'Exam 2 Study Guide'
+          href: study_guides/exam2_study_guide.html
 ##      No Exam 2 Review entry: Exam 2 is open-note, so it has no review
 ##      problems (the old Review_problems/exam2_* pages are left unlinked).
 #       - text: 'Exam 3 Study Guide'

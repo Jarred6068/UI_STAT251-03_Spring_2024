@@ -1,5 +1,5 @@
-# Build the student-facing Exam 1 handouts: study guide, review problems, and
-# review solutions. Each is produced in BOTH formats -
+# Build the student-facing exam handouts: the Exam 1 study guide, review problems and
+# review solutions, and the Exam 2 study guide. Each is produced in BOTH formats -
 #
 #   .html  - what the website links from the navbar
 #   .pdf   - what gets uploaded to Canvas for students to download
