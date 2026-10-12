@@ -445,9 +445,8 @@ in <strong>Canvas</strong>. You may use your notes, the textbook and the
 course website. It is due <strong>Sunday, October 18, 2026 at
 11:59PM</strong>. An in-class review will be held on <strong>Wednesday,
 October 14, 2026</strong></p></li>
-<li><p>The exam is 25 questions plus 2 bonus questions. Most are
-multiple choice or true/false, and four are short written
-explanations</p></li>
+<li><p>The exam is 21 questions plus 1 bonus question. Most are multiple
+choice or true/false, and three are short written explanations</p></li>
 </ul>
 </div>
 <div id="how-to-prepare" class="section level1">
@@ -471,8 +470,8 @@ problems.</p>
 <div id="content-to-study" class="section level1">
 <h1>Content To Study</h1>
 <p>Exam 2 will cover material beginning on <strong>Monday of Week 4
-(September 14)</strong> through <strong>Monday of Week 8 (October
-12)</strong>. This includes the following topics:</p>
+(September 14)</strong> through <strong>Friday of Week 7 (October
+9)</strong>. This includes the following topics:</p>
 <ul>
 <li><p>Sampling designs, bias, sampling and nonsampling error -
 September 14 and 21</p></li>
@@ -480,18 +479,12 @@ September 14 and 21</p></li>
 ethics - September 23 and 25</p></li>
 <li><p>The normal distribution, <span class="math inline">\(z\)</span>-scores, the empirical rule and
 identifying outliers - September 25, 28 and 30</p></li>
-<li><p>Normal quantiles (<span class="math inline">\(z\)</span>-table,
-<code>pnorm</code> and <code>qnorm</code>) and transformations of
-variables - September 30</p></li>
 <li><p>Standard error, margin of error and statistical significance -
 September 30 and October 2</p></li>
 <li><p>Probability theory, random variables and discrete distributions -
 October 2, 5, 7 and 9</p></li>
 <li><p>Continuous distributions (through the normal distribution) -
 October 9</p></li>
-<li><p>Sampling distributions and the Central Limit Theorem - October
-12</p></li>
-<li><p>Introduction to confidence intervals - October 12</p></li>
 </ul>
 <div id="sampling-designs" class="section level2">
 <h2>Sampling Designs</h2>
@@ -581,38 +574,12 @@ for the top <span class="math inline">\(2.5\%\)</span></p></li>
 deviations</strong> above or below the mean, and how it relates to the
 <strong>standard normal distribution</strong>. Know how to use <span class="math inline">\(z\)</span>-scores to compare observations from two
 different distributions</p></li>
-<li><p>Know how to write a normal probability as a standard normal
-probability: a <span class="math inline">\(Z\)</span>-table gives the
-area to the <strong>left</strong>, <span class="math inline">\(P(Z \leq
-z)\)</span>, so a “greater than” probability needs the complement and a
-“between” probability is a difference of two left areas</p></li>
 <li><p>Know how to identify outliers with the <strong><span class="math inline">\(\pm 2s\)</span> rule</strong> and with the
 <strong><span class="math inline">\(1.5\times IQR\)</span>
 rule</strong>, how to judge from a boxplot whether a distribution looks
 roughly normal, and why the <span class="math inline">\(\pm 2s\)</span>
 rule should only be trusted for roughly normal data. Know why the two
 rules can disagree: one extreme value inflates <span class="math inline">\(s\)</span> but barely moves the quartiles</p></li>
-<li><p>Know how to find an area for a <span class="math inline">\(z\)</span>-score that is not a whole number of
-standard deviations, from a <span class="math inline">\(z\)</span>-table
-or with <code>pnorm</code>, and how to go from an area back to a value
-with <code>qnorm</code></p></li>
-</ol>
-</div>
-<div id="transformations-of-variables" class="section level2">
-<h2>Transformations of Variables</h2>
-<ol style="list-style-type: decimal">
-<li><p>Know the difference between a <strong>linear
-transformation</strong>, <span class="math inline">\(y = ax + b\)</span>
-(adding, subtracting, multiplying, dividing, such as changing units),
-and a <strong>nonlinear transformation</strong> (squaring, roots,
-logarithms)</p></li>
-<li><p>Know what a linear transformation does to the summaries: the
-center moves with the whole transformation (<span class="math inline">\(\bar{y} = a\bar{x} + b\)</span>, and the same for
-the median), the spread is multiplied by <span class="math inline">\(|a|\)</span> and ignores the shift (<span class="math inline">\(s_y = |a|\,s_x\)</span>, <span class="math inline">\(IQR_y = |a|\,IQR_x\)</span>), and the
-<strong>shape does not change</strong></p></li>
-<li><p>Know that a <span class="math inline">\(z\)</span>-score is a
-linear transformation, so standardizing skewed data does
-<strong>not</strong> make it normal</p></li>
 </ol>
 </div>
 <div id="probability-theory" class="section level2">
@@ -698,32 +665,20 @@ the total area under it is 1. Know why <span class="math inline">\(P(X =
 c) = 0\)</span> for a continuous random variable, so <span class="math inline">\(P(X &lt; c) = P(X \leq c)\)</span></p></li>
 <li><p>Know the definition of the <strong>cumulative
 distribution</strong>, <span class="math inline">\(P(X \leq x)\)</span>
-(the area to the left, which is what the <span class="math inline">\(z\)</span>-table and <code>pnorm</code> give), and
-how to get the area to the right, <span class="math inline">\(P(X &gt;
-x) = 1 - P(X \leq x)\)</span>, and the area between, <span class="math inline">\(P(a &lt; X &lt; b) = P(X \leq b) - P(X \leq
-a)\)</span></p></li>
+(the area to the left), and how to get the area to the right, <span class="math inline">\(P(X &gt; x) = 1 - P(X \leq x)\)</span>, and the
+area between, <span class="math inline">\(P(a &lt; X &lt; b) = P(X \leq
+b) - P(X \leq a)\)</span></p></li>
 <li><p>Know that the quartiles of a continuous distribution cut the area
 under the curve into quarters, and that the mean is the balance point of
 the curve</p></li>
 </ol>
 </div>
-<div id="sampling-distributions-and-statistical-significance" class="section level2">
-<h2>Sampling Distributions and Statistical Significance</h2>
+<div id="standard-error-and-statistical-significance" class="section level2">
+<h2>Standard Error and Statistical Significance</h2>
 <ol style="list-style-type: decimal">
-<li><p>Know the three distributions and keep them apart: the
-<strong>population distribution</strong> (how a single observation
-varies; described by parameters such as <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(p\)</span>), the <strong>data
-distribution</strong> (the <span class="math inline">\(n\)</span> values
-in your one sample; described by statistics such as <span class="math inline">\(\bar{x}\)</span>, <span class="math inline">\(s\)</span> and <span class="math inline">\(\hat{p}\)</span>) and the <strong>sampling
-distribution</strong> (how a statistic such as <span class="math inline">\(\bar{x}\)</span> varies over all possible samples
-of the same size <span class="math inline">\(n\)</span>)</p></li>
 <li><p>Know why two random samples from the same population give
 different statistics (<strong>sampling variability</strong>), and that a
 statistic is a random variable with its own distribution</p></li>
-<li><p>Know how to build the sampling distribution of <span class="math inline">\(\bar{x}\)</span> for a very small population and
-sample size: list every possible sample (order matters) and its mean,
-find each sample’s probability (multiply, for independent observations),
-and add up the samples that give the same value of <span class="math inline">\(\bar{x}\)</span></p></li>
 <li><p>Know the center and spread of the sampling distribution of <span class="math inline">\(\bar{x}\)</span>: its mean is <span class="math inline">\(\mu\)</span> (<span class="math inline">\(\bar{x}\)</span> is <strong>unbiased</strong>),
 and its <strong>standard error</strong> is <span class="math inline">\(\sigma_{\bar{x}} = \sigma/\sqrt{n}\)</span>. Know
 why it is smaller than <span class="math inline">\(\sigma\)</span>
@@ -731,9 +686,6 @@ why it is smaller than <span class="math inline">\(\sigma\)</span>
 observations, the standard error describes whole-sample averages) and
 how it changes with the sample size (making the sample 4 times larger
 cuts the standard error in half)</p></li>
-<li><p>Know the mean and standard error of the sampling distribution of
-the sample proportion <span class="math inline">\(\hat{p}\)</span>: mean
-<span class="math inline">\(p\)</span> and standard error <span class="math inline">\(\sqrt{p(1-p)/n}\)</span></p></li>
 <li><p>Know the <strong>margin of error</strong> as <span class="math inline">\(2 \times SE\)</span>, how it changes as <span class="math inline">\(n\)</span> grows, and the difference between the
 margin of error (a bound we can compute in advance) and the sampling
 error (how far this particular estimate is from the parameter, which we
@@ -744,43 +696,6 @@ chance alone would give, that is, outside the margin of error. Know that
 significant does not mean important, and not significant does not mean
 no difference</p></li>
 </ol>
-</div>
-<div id="the-central-limit-theorem" class="section level2">
-<h2>The Central Limit Theorem</h2>
-<ol style="list-style-type: decimal">
-<li><p>Understand the <strong>Central Limit Theorem</strong>: for large
-<span class="math inline">\(n\)</span>, the sampling distribution of
-<span class="math inline">\(\bar{x}\)</span> is approximately normal,
-<span class="math inline">\(N(\mu, \sigma/\sqrt{n})\)</span>,
-<strong>whatever the shape of the population</strong>. As <span class="math inline">\(n\)</span> grows it becomes more bell shaped and
-narrower; the population distribution itself does not change</p></li>
-<li><p>Know the rules of thumb for “large enough”: <span class="math inline">\(n \geq 30\)</span> for <span class="math inline">\(\bar{x}\)</span>, and <span class="math inline">\(np &gt; 5\)</span> and <span class="math inline">\(n(1 - p) &gt; 5\)</span> for <span class="math inline">\(\hat{p}\)</span></p></li>
-<li><p>Know how to use the CLT: about 95% of samples give a statistic
-within 2 standard errors of its mean, and any other probability about
-<span class="math inline">\(\bar{x}\)</span> comes from the <span class="math inline">\(z\)</span>-score <span class="math inline">\(z =
-(\bar{x} - \mu)/(\sigma/\sqrt{n})\)</span></p></li>
-</ol>
-</div>
-<div id="introduction-to-confidence-intervals" class="section level2">
-<h2>Introduction to Confidence Intervals</h2>
-<ol style="list-style-type: decimal">
-<li><p>Know the difference between a <strong>point estimate</strong> (a
-single statistic used to estimate a parameter: <span class="math inline">\(\bar{x}\)</span> for <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\hat{p}\)</span> for <span class="math inline">\(p\)</span>) and an <strong>interval
-estimate</strong></p></li>
-<li><p>Know that a <strong>confidence interval</strong> has the form
-point estimate <span class="math inline">\(\pm\)</span> margin of error,
-and that <span class="math inline">\(\bar{x} \pm
-2\sigma/\sqrt{n}\)</span> is a 95% confidence interval for <span class="math inline">\(\mu\)</span> (it comes from turning “<span class="math inline">\(\bar{x}\)</span> is within 2 standard errors of
-<span class="math inline">\(\mu\)</span>” around)</p></li>
-<li><p>Know how to report an interval: “We estimate with 95% confidence
-that the population mean is between [lower bound] and [upper
-bound]”</p></li>
-<li><p>Know what “95% confident” means: about 95% of the intervals built
-this way capture the parameter. The parameter is fixed, so any one
-interval either does or does not contain it. Be able to recognize the
-two common wrong readings: “there is a 95% probability that <span class="math inline">\(\mu\)</span> is in this interval” and “95% of the
-individual values fall in this interval”</p></li>
-</ol>
 <p><br> <br></p>
 </div>
 </div>
@@ -789,7 +704,7 @@ individual values fall in this interval”</p></li>
 <ul>
 <li>Be sure you understand the notation (i.e., symbols) we have used so
 far (e.g., <span class="math inline">\(n,N,s,s^2,\bar{x},
-\mu,\sigma,\sigma^2, \hat{p}, p, \lambda\)</span>)</li>
+\mu,\sigma,\sigma^2, p, \lambda\)</span>)</li>
 </ul>
 <p>The following formulas will be provided on the exam,
 <strong>unlabeled</strong> – the equations only, with no names or
@@ -809,14 +724,9 @@ P(A)+P(B)-P(A\cap B), \ \ P(A\cap B) = P(A)\cdot P(B) \]</span></p>
 <p><span class="math display">\[ P(X = k) = \frac{n!}{k!(n-k)!}\cdot p^k
 \cdot (1-p)^{n-k}, \ \ P(X =k) = \frac{\lambda^k\cdot
 e^{-\lambda}}{k!}\]</span></p>
-<p><span class="math display">\[ y = ax + b, \ \ \bar{y} = a\bar{x} + b,
-\ \ s_y = |a|\,s_x \]</span></p>
 <p><span class="math display">\[ \mu_{\bar{x}} = \mu, \ \
-\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}, \ \ \mu_{\hat{p}} = p, \ \
-\sigma_{\hat{p}} = \sqrt{\frac{p(1-p)}{n}} \]</span></p>
-<p><span class="math display">\[ z = \frac{\bar{x} -
-\mu}{\sigma/\sqrt{n}}, \ \ \text{margin of error} = 2\cdot SE, \ \
-\bar{x} \pm 2\frac{\sigma}{\sqrt{n}} \]</span></p>
+\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}, \ \ \text{margin of error} =
+2\cdot SE \]</span></p>
 </div>
 
 <!--
