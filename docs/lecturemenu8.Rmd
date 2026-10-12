@@ -428,7 +428,7 @@ Because the sampling distribution is approximately normal, everything we know ab
 distribution applies to it. In particular, the empirical rule says about 95% of the area lies within
 2 standard deviations of the mean:
 
-```{r, echo=FALSE, fig.height=3.6, fig.width=9, fig.align='center', fig.alt = "A normal curve for the sampling distribution of x-bar, with the x-axis labeled mu minus 2 sigma over root n, mu, and mu plus 2 sigma over root n. The area between the two outer labels is shaded and marked 0.95."}
+```{r, echo=FALSE, fig.height=2.8, fig.width=9, fig.align='center', fig.alt = "A normal curve for the sampling distribution of x-bar, with the x-axis labeled mu minus 2 sigma over root n, mu, and mu plus 2 sigma over root n. The area between the two outer labels is shaded and marked 0.95."}
 ggplot(data.frame(x = c(-4, 4)), aes(x)) +
   stat_function(fun = dnorm, linewidth = 1) +
   stat_function(fun = dnorm, xlim = c(-2, 2), geom = 'area', fill = 'red1', alpha = 0.3) +
@@ -436,7 +436,7 @@ ggplot(data.frame(x = c(-4, 4)), aes(x)) +
   scale_x_continuous(breaks = c(-2, 0, 2),
                      labels = c(TeX('$\\mu - 2\\sigma/\\sqrt{n}$'), TeX('$\\mu$'),
                                 TeX('$\\mu + 2\\sigma/\\sqrt{n}$'))) +
-  labs(x = TeX('$\\bar{x}$'), y = NULL) +
+  labs(x = NULL, y = NULL) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), axis.title.x = element_text(size = 14),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank())

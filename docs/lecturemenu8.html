@@ -547,1970 +547,1018 @@ $(document).ready(function () {
 </div>
 
 
-<div id="the-normal-distribution-revisited" class="section level1">
-<h1>The normal distribution revisited</h1>
-<p>We can also talk about the normal distribution as a family of
-probability distributions. As before, the normal distribution has two
-parameters <span class="math inline">\(\mu\)</span> - the location
-parameter, and <span class="math inline">\(\sigma\)</span> the “spread”
-parameter. The normal distribution has the following probability density
-function</p>
-<p><span class="math display">\[ f(x) = \frac{1}{\sigma \sqrt{2\pi}}
-\cdot e^{\frac{-(x-\mu)^2}{2\sigma^2}} \]</span></p>
-<p>Finding probability from the normal distribution is not as straight
-forward as the examples we did earlier. <u> We cannot easily extrapolate
-probabilities</u> from the graph of a normal distribution. While we may
-use the empirical rule to identify the approximate quantiles of normal
-distribution, finding exact probabilities would require us to use
-calculus as we have said before. For example, suppose <span
-class="math inline">\(X\)</span> is normally distributed with mean <span
-class="math inline">\(\mu\)</span> and standard deviation <span
-class="math inline">\(\sigma\)</span>. To find the probability <span
-class="math inline">\(P(a\leq X\leq b)\)</span> we would need to
-compute:</p>
-<p><span class="math display">\[ P(a\leq X\leq b) = \int_{a}^{b}
-\frac{1}{\sigma \sqrt{2\pi}} \cdot e^{\frac{-(x-\mu)^2}{2\sigma^2}} \,
-dx \]</span></p>
-<p>However, these skills are outside the purview of this course.
-Luckily, the normal distribution is used so frequently in statistics
-that precomputed tables of probabilities are usually available. These
-tables are often referred to as <span class="math inline">\(Z\)</span>
-tables because they are based on the <strong>standard normal
-distribtion</strong>. In addition, because the normal distribution is
-symmetric, we usually only need to compute the probabilities for either
-the positive or negative half of the distribution. Here is an example of
-a <span class="math inline">\(Z\)</span>-table</p>
-<table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
-<caption style="font-size: initial !important;">
-STANDARD NORMAL DISTRIBUTION: Table Values Represent AREA to the LEFT of
-the Z score.
-</caption>
+<!--
+  SCOPE OF THIS PAGE (Fall 2026 rewrite, Oct 12 2026).
+
+  Week 8 is one lecture, a review and the exam (see Course_Schedule.Rmd, the date
+  source of truth):
+    Mon Oct 12   Lecture 18  sampling distributions and the central limit theorem,
+                             combined with the introduction to confidence intervals
+                             lecture_slides/Week 8/2026/Week8_Lecture18_Slides_10_12_2026.pptx
+    Wed Oct 14   Exam 2 review
+    Fri Oct 16   Exam 2 (take-home, open-note, due Sunday Oct 18)
+  The sections below follow the Lecture 18 slides in order. Their examples (the
+  spinner, two polls, Spotify song length, minutes until the next goal, Stephen
+  Curry's free throws, a World Cup tournament's average) are the slide examples;
+  their numbers and sources are in assets/make_lecture18_figures.R. Exam 2 stops at
+  the central limit theorem: confidence intervals are not on it (study guide).
+
+  Sources. Terms follow OpenStax Introductory Statistics 2e, Sections 7.1-7.3 and the
+  start of 8.1 (point estimate, confidence interval, confidence level, "We estimate
+  with 95% confidence that ...").
+
+  History. The sampling-distribution and CLT write-up was drafted on the Week 7 page
+  (Oct 5) when the lecture was planned for Week 7; it moved here on Oct 12 2026, when
+  this page replaced the 2024 Week 8 page. From the 2024 page this keeps the three
+  distributions, the formal CLT statement, the "within 2 standard errors" probability
+  statements and the algebra that flips them into an interval, the confidence-level
+  interpretation ("before the data are collected ... after, it either does or does
+  not"), and the Coho salmon derivation (via the Week 7 draft). Dropped: "the normal
+  distribution revisited" (now the Week 6 section on finding areas), the CLT
+  animations, the alligator example (replaced by the tournament average), and the
+  stormtrooper example with its 99% interval and 100-interval plot. Raising the
+  confidence level is Week 9 material: when the Week 9 page is rewritten, that
+  example is in git history (git show 27a60f5:docs/lecturemenu8.Rmd).
+  The student heights data is deliberately NOT used here; it was overused in Weeks
+  6-7 and Lecture 18 switched to song length.
+-->
+<div id="sampling-distributions" class="section level1">
+<h1>Sampling distributions</h1>
+<div id="two-polls-two-answers" class="section level2">
+<h2>Two polls, two answers</h2>
+<p>Two polling firms each survey a random sample of 1,000 voters in the
+same state, in the same week. Poll A finds that <span
+class="math inline">\(\hat{p} = 0.52\)</span> of voters support a ballot
+measure; Poll B finds <span class="math inline">\(\hat{p} =
+0.49\)</span>. Is one of the polls wrong?</p>
+<p>Not necessarily. Different random samples contain different people,
+so they give different values of <span
+class="math inline">\(\hat{p}\)</span>. This is the sampling variation
+we met in Week 6. Now imagine 1,000 firms each polling 1,000 voters:
+their 1,000 values of <span class="math inline">\(\hat{p}\)</span> would
+pile up around the true proportion <span
+class="math inline">\(p\)</span>, and the shape of that pile tells us
+how far any one poll is likely to be from the truth. This week is about
+that pile.</p>
+</div>
+<div id="three-distributions" class="section level2">
+<h2>Three distributions</h2>
+<p>A statistic computed from a random sample or a randomized experiment
+is a <strong>random variable</strong>: its value depends on which units
+chance put in the sample, so it has a probability distribution of its
+own. We now have three distributions to keep apart:</p>
+<ul>
+<li>The <strong>population distribution</strong> is the probability
+distribution of a single observation <span
+class="math inline">\(X\)</span>. Its properties are described by
+<strong>parameters</strong> such as <span
+class="math inline">\(\mu\)</span>, <span
+class="math inline">\(\sigma\)</span> and <span
+class="math inline">\(p\)</span>, which we usually do not know.</li>
+<li>The <strong>data distribution</strong> is the distribution of the
+<span class="math inline">\(n\)</span> observations in our one sample,
+the histogram of our data. Its properties are described by
+<strong>statistics</strong> such as <span
+class="math inline">\(\bar{x}\)</span>, <span
+class="math inline">\(s\)</span> and <span
+class="math inline">\(\hat{p}\)</span>.</li>
+<li>The <strong>sampling distribution</strong> is the probability
+distribution of a statistic, such as <span
+class="math inline">\(\bar{x}\)</span> or <span
+class="math inline">\(\hat{p}\)</span>, over all possible samples of the
+same size <span class="math inline">\(n\)</span> from the same
+population. It tells us how close an estimate is likely to be to the
+parameter it estimates.</li>
+</ul>
+</div>
+<div id="building-a-sampling-distribution-by-hand"
+class="section level2">
+<h2>Building a sampling distribution by hand</h2>
+<p>For a discrete population and a small sample we can find a sampling
+distribution exactly, with the probability rules from Week 6:</p>
+<ol style="list-style-type: decimal">
+<li>List every possible sample of size <span
+class="math inline">\(n\)</span> and compute the statistic for
+each.</li>
+<li>Find the probability of each sample. When the observations are
+independent, multiply.</li>
+<li>Add up the probabilities of the samples that give the same value of
+the statistic.</li>
+</ol>
+<div id="example-a-spinner" class="section level3">
+<h3>Example: a spinner</h3>
+<p>A spinner lands on 1, 2 or 3, each with probability 1/3, so the
+population has <span class="math inline">\(\mu = 2\)</span>. Spin it
+twice and record the mean of the two spins, <span
+class="math inline">\(\bar{x}\)</span>. There are <span
+class="math inline">\(3 \times 3 = 9\)</span> equally likely samples,
+and <strong>order matters</strong>: (1, 2) and (2, 1) are different
+samples.</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
-<th style="text-align:right;">
-Z
+<th style="text-align:left;">
+<span class="math inline">\(\bar{x}\)</span>
 </th>
-<th style="text-align:right;">
-.00
+<th style="text-align:left;">
+Samples giving it
 </th>
-<th style="text-align:right;">
-.01
-</th>
-<th style="text-align:right;">
-.02
-</th>
-<th style="text-align:right;">
-.03
-</th>
-<th style="text-align:right;">
-.04
-</th>
-<th style="text-align:right;">
-.05
-</th>
-<th style="text-align:right;">
-.06
-</th>
-<th style="text-align:right;">
-.07
-</th>
-<th style="text-align:right;">
-.08
-</th>
-<th style="text-align:right;">
-.09
+<th style="text-align:left;">
+<span class="math inline">\(P(\bar{x})\)</span>
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:right;">
-0.0
+<td style="text-align:left;">
+1
 </td>
-<td style="text-align:right;">
-0.500
+<td style="text-align:left;">
+(1,1)
 </td>
-<td style="text-align:right;">
-0.504
-</td>
-<td style="text-align:right;">
-0.508
-</td>
-<td style="text-align:right;">
-0.512
-</td>
-<td style="text-align:right;">
-0.516
-</td>
-<td style="text-align:right;">
-0.520
-</td>
-<td style="text-align:right;">
-0.524
-</td>
-<td style="text-align:right;">
-0.528
-</td>
-<td style="text-align:right;">
-0.532
-</td>
-<td style="text-align:right;">
-0.536
+<td style="text-align:left;">
+1/9
 </td>
 </tr>
 <tr>
-<td style="text-align:right;">
-0.1
-</td>
-<td style="text-align:right;">
-0.540
-</td>
-<td style="text-align:right;">
-0.544
-</td>
-<td style="text-align:right;">
-0.548
-</td>
-<td style="text-align:right;">
-0.552
-</td>
-<td style="text-align:right;">
-0.556
-</td>
-<td style="text-align:right;">
-0.560
-</td>
-<td style="text-align:right;">
-0.564
-</td>
-<td style="text-align:right;">
-0.567
-</td>
-<td style="text-align:right;">
-0.571
-</td>
-<td style="text-align:right;">
-0.575
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.2
-</td>
-<td style="text-align:right;">
-0.579
-</td>
-<td style="text-align:right;">
-0.583
-</td>
-<td style="text-align:right;">
-0.587
-</td>
-<td style="text-align:right;">
-0.591
-</td>
-<td style="text-align:right;">
-0.595
-</td>
-<td style="text-align:right;">
-0.599
-</td>
-<td style="text-align:right;">
-0.603
-</td>
-<td style="text-align:right;">
-0.606
-</td>
-<td style="text-align:right;">
-0.610
-</td>
-<td style="text-align:right;">
-0.614
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.3
-</td>
-<td style="text-align:right;">
-0.618
-</td>
-<td style="text-align:right;">
-0.622
-</td>
-<td style="text-align:right;">
-0.626
-</td>
-<td style="text-align:right;">
-0.629
-</td>
-<td style="text-align:right;">
-0.633
-</td>
-<td style="text-align:right;">
-0.637
-</td>
-<td style="text-align:right;">
-0.641
-</td>
-<td style="text-align:right;">
-0.644
-</td>
-<td style="text-align:right;">
-0.648
-</td>
-<td style="text-align:right;">
-0.652
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.4
-</td>
-<td style="text-align:right;">
-0.655
-</td>
-<td style="text-align:right;">
-0.659
-</td>
-<td style="text-align:right;">
-0.663
-</td>
-<td style="text-align:right;">
-0.666
-</td>
-<td style="text-align:right;">
-0.670
-</td>
-<td style="text-align:right;">
-0.674
-</td>
-<td style="text-align:right;">
-0.677
-</td>
-<td style="text-align:right;">
-0.681
-</td>
-<td style="text-align:right;">
-0.684
-</td>
-<td style="text-align:right;">
-0.688
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-0.691
-</td>
-<td style="text-align:right;">
-0.695
-</td>
-<td style="text-align:right;">
-0.698
-</td>
-<td style="text-align:right;">
-0.702
-</td>
-<td style="text-align:right;">
-0.705
-</td>
-<td style="text-align:right;">
-0.709
-</td>
-<td style="text-align:right;">
-0.712
-</td>
-<td style="text-align:right;">
-0.716
-</td>
-<td style="text-align:right;">
-0.719
-</td>
-<td style="text-align:right;">
-0.722
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.6
-</td>
-<td style="text-align:right;">
-0.726
-</td>
-<td style="text-align:right;">
-0.729
-</td>
-<td style="text-align:right;">
-0.732
-</td>
-<td style="text-align:right;">
-0.736
-</td>
-<td style="text-align:right;">
-0.739
-</td>
-<td style="text-align:right;">
-0.742
-</td>
-<td style="text-align:right;">
-0.745
-</td>
-<td style="text-align:right;">
-0.749
-</td>
-<td style="text-align:right;">
-0.752
-</td>
-<td style="text-align:right;">
-0.755
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.7
-</td>
-<td style="text-align:right;">
-0.758
-</td>
-<td style="text-align:right;">
-0.761
-</td>
-<td style="text-align:right;">
-0.764
-</td>
-<td style="text-align:right;">
-0.767
-</td>
-<td style="text-align:right;">
-0.770
-</td>
-<td style="text-align:right;">
-0.773
-</td>
-<td style="text-align:right;">
-0.776
-</td>
-<td style="text-align:right;">
-0.779
-</td>
-<td style="text-align:right;">
-0.782
-</td>
-<td style="text-align:right;">
-0.785
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.8
-</td>
-<td style="text-align:right;">
-0.788
-</td>
-<td style="text-align:right;">
-0.791
-</td>
-<td style="text-align:right;">
-0.794
-</td>
-<td style="text-align:right;">
-0.797
-</td>
-<td style="text-align:right;">
-0.800
-</td>
-<td style="text-align:right;">
-0.802
-</td>
-<td style="text-align:right;">
-0.805
-</td>
-<td style="text-align:right;">
-0.808
-</td>
-<td style="text-align:right;">
-0.811
-</td>
-<td style="text-align:right;">
-0.813
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.9
-</td>
-<td style="text-align:right;">
-0.816
-</td>
-<td style="text-align:right;">
-0.819
-</td>
-<td style="text-align:right;">
-0.821
-</td>
-<td style="text-align:right;">
-0.824
-</td>
-<td style="text-align:right;">
-0.826
-</td>
-<td style="text-align:right;">
-0.829
-</td>
-<td style="text-align:right;">
-0.831
-</td>
-<td style="text-align:right;">
-0.834
-</td>
-<td style="text-align:right;">
-0.836
-</td>
-<td style="text-align:right;">
-0.839
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.0
-</td>
-<td style="text-align:right;">
-0.841
-</td>
-<td style="text-align:right;">
-0.844
-</td>
-<td style="text-align:right;">
-0.846
-</td>
-<td style="text-align:right;">
-0.848
-</td>
-<td style="text-align:right;">
-0.851
-</td>
-<td style="text-align:right;">
-0.853
-</td>
-<td style="text-align:right;">
-0.855
-</td>
-<td style="text-align:right;">
-0.858
-</td>
-<td style="text-align:right;">
-0.860
-</td>
-<td style="text-align:right;">
-0.862
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-0.864
-</td>
-<td style="text-align:right;">
-0.867
-</td>
-<td style="text-align:right;">
-0.869
-</td>
-<td style="text-align:right;">
-0.871
-</td>
-<td style="text-align:right;">
-0.873
-</td>
-<td style="text-align:right;">
-0.875
-</td>
-<td style="text-align:right;">
-0.877
-</td>
-<td style="text-align:right;">
-0.879
-</td>
-<td style="text-align:right;">
-0.881
-</td>
-<td style="text-align:right;">
-0.883
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.2
-</td>
-<td style="text-align:right;">
-0.885
-</td>
-<td style="text-align:right;">
-0.887
-</td>
-<td style="text-align:right;">
-0.889
-</td>
-<td style="text-align:right;">
-0.891
-</td>
-<td style="text-align:right;">
-0.893
-</td>
-<td style="text-align:right;">
-0.894
-</td>
-<td style="text-align:right;">
-0.896
-</td>
-<td style="text-align:right;">
-0.898
-</td>
-<td style="text-align:right;">
-0.900
-</td>
-<td style="text-align:right;">
-0.901
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.3
-</td>
-<td style="text-align:right;">
-0.903
-</td>
-<td style="text-align:right;">
-0.905
-</td>
-<td style="text-align:right;">
-0.907
-</td>
-<td style="text-align:right;">
-0.908
-</td>
-<td style="text-align:right;">
-0.910
-</td>
-<td style="text-align:right;">
-0.911
-</td>
-<td style="text-align:right;">
-0.913
-</td>
-<td style="text-align:right;">
-0.915
-</td>
-<td style="text-align:right;">
-0.916
-</td>
-<td style="text-align:right;">
-0.918
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.4
-</td>
-<td style="text-align:right;">
-0.919
-</td>
-<td style="text-align:right;">
-0.921
-</td>
-<td style="text-align:right;">
-0.922
-</td>
-<td style="text-align:right;">
-0.924
-</td>
-<td style="text-align:right;">
-0.925
-</td>
-<td style="text-align:right;">
-0.926
-</td>
-<td style="text-align:right;">
-0.928
-</td>
-<td style="text-align:right;">
-0.929
-</td>
-<td style="text-align:right;">
-0.931
-</td>
-<td style="text-align:right;">
-0.932
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
+<td style="text-align:left;">
 1.5
 </td>
-<td style="text-align:right;">
-0.933
+<td style="text-align:left;">
+(1,2), (2,1)
 </td>
-<td style="text-align:right;">
-0.934
-</td>
-<td style="text-align:right;">
-0.936
-</td>
-<td style="text-align:right;">
-0.937
-</td>
-<td style="text-align:right;">
-0.938
-</td>
-<td style="text-align:right;">
-0.939
-</td>
-<td style="text-align:right;">
-0.941
-</td>
-<td style="text-align:right;">
-0.942
-</td>
-<td style="text-align:right;">
-0.943
-</td>
-<td style="text-align:right;">
-0.944
+<td style="text-align:left;">
+2/9
 </td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1.6
+<td style="text-align:left;">
+2
 </td>
-<td style="text-align:right;">
-0.945
+<td style="text-align:left;">
+(1,3), (2,2), (3,1)
 </td>
-<td style="text-align:right;">
-0.946
-</td>
-<td style="text-align:right;">
-0.947
-</td>
-<td style="text-align:right;">
-0.948
-</td>
-<td style="text-align:right;">
-0.949
-</td>
-<td style="text-align:right;">
-0.951
-</td>
-<td style="text-align:right;">
-0.952
-</td>
-<td style="text-align:right;">
-0.953
-</td>
-<td style="text-align:right;">
-0.954
-</td>
-<td style="text-align:right;">
-0.954
+<td style="text-align:left;">
+3/9
 </td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1.7
-</td>
-<td style="text-align:right;">
-0.955
-</td>
-<td style="text-align:right;">
-0.956
-</td>
-<td style="text-align:right;">
-0.957
-</td>
-<td style="text-align:right;">
-0.958
-</td>
-<td style="text-align:right;">
-0.959
-</td>
-<td style="text-align:right;">
-0.960
-</td>
-<td style="text-align:right;">
-0.961
-</td>
-<td style="text-align:right;">
-0.962
-</td>
-<td style="text-align:right;">
-0.962
-</td>
-<td style="text-align:right;">
-0.963
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.8
-</td>
-<td style="text-align:right;">
-0.964
-</td>
-<td style="text-align:right;">
-0.965
-</td>
-<td style="text-align:right;">
-0.966
-</td>
-<td style="text-align:right;">
-0.966
-</td>
-<td style="text-align:right;">
-0.967
-</td>
-<td style="text-align:right;">
-0.968
-</td>
-<td style="text-align:right;">
-0.969
-</td>
-<td style="text-align:right;">
-0.969
-</td>
-<td style="text-align:right;">
-0.970
-</td>
-<td style="text-align:right;">
-0.971
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.9
-</td>
-<td style="text-align:right;">
-0.971
-</td>
-<td style="text-align:right;">
-0.972
-</td>
-<td style="text-align:right;">
-0.973
-</td>
-<td style="text-align:right;">
-0.973
-</td>
-<td style="text-align:right;">
-0.974
-</td>
-<td style="text-align:right;">
-0.974
-</td>
-<td style="text-align:right;">
-0.975
-</td>
-<td style="text-align:right;">
-0.976
-</td>
-<td style="text-align:right;">
-0.976
-</td>
-<td style="text-align:right;">
-0.977
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.0
-</td>
-<td style="text-align:right;">
-0.977
-</td>
-<td style="text-align:right;">
-0.978
-</td>
-<td style="text-align:right;">
-0.978
-</td>
-<td style="text-align:right;">
-0.979
-</td>
-<td style="text-align:right;">
-0.979
-</td>
-<td style="text-align:right;">
-0.980
-</td>
-<td style="text-align:right;">
-0.980
-</td>
-<td style="text-align:right;">
-0.981
-</td>
-<td style="text-align:right;">
-0.981
-</td>
-<td style="text-align:right;">
-0.982
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.1
-</td>
-<td style="text-align:right;">
-0.982
-</td>
-<td style="text-align:right;">
-0.983
-</td>
-<td style="text-align:right;">
-0.983
-</td>
-<td style="text-align:right;">
-0.983
-</td>
-<td style="text-align:right;">
-0.984
-</td>
-<td style="text-align:right;">
-0.984
-</td>
-<td style="text-align:right;">
-0.985
-</td>
-<td style="text-align:right;">
-0.985
-</td>
-<td style="text-align:right;">
-0.985
-</td>
-<td style="text-align:right;">
-0.986
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.2
-</td>
-<td style="text-align:right;">
-0.986
-</td>
-<td style="text-align:right;">
-0.986
-</td>
-<td style="text-align:right;">
-0.987
-</td>
-<td style="text-align:right;">
-0.987
-</td>
-<td style="text-align:right;">
-0.987
-</td>
-<td style="text-align:right;">
-0.988
-</td>
-<td style="text-align:right;">
-0.988
-</td>
-<td style="text-align:right;">
-0.988
-</td>
-<td style="text-align:right;">
-0.989
-</td>
-<td style="text-align:right;">
-0.989
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.3
-</td>
-<td style="text-align:right;">
-0.989
-</td>
-<td style="text-align:right;">
-0.990
-</td>
-<td style="text-align:right;">
-0.990
-</td>
-<td style="text-align:right;">
-0.990
-</td>
-<td style="text-align:right;">
-0.990
-</td>
-<td style="text-align:right;">
-0.991
-</td>
-<td style="text-align:right;">
-0.991
-</td>
-<td style="text-align:right;">
-0.991
-</td>
-<td style="text-align:right;">
-0.991
-</td>
-<td style="text-align:right;">
-0.992
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.4
-</td>
-<td style="text-align:right;">
-0.992
-</td>
-<td style="text-align:right;">
-0.992
-</td>
-<td style="text-align:right;">
-0.992
-</td>
-<td style="text-align:right;">
-0.992
-</td>
-<td style="text-align:right;">
-0.993
-</td>
-<td style="text-align:right;">
-0.993
-</td>
-<td style="text-align:right;">
-0.993
-</td>
-<td style="text-align:right;">
-0.993
-</td>
-<td style="text-align:right;">
-0.993
-</td>
-<td style="text-align:right;">
-0.994
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
+<td style="text-align:left;">
 2.5
 </td>
-<td style="text-align:right;">
-0.994
+<td style="text-align:left;">
+(2,3), (3,2)
 </td>
-<td style="text-align:right;">
-0.994
-</td>
-<td style="text-align:right;">
-0.994
-</td>
-<td style="text-align:right;">
-0.994
-</td>
-<td style="text-align:right;">
-0.994
-</td>
-<td style="text-align:right;">
-0.995
-</td>
-<td style="text-align:right;">
-0.995
-</td>
-<td style="text-align:right;">
-0.995
-</td>
-<td style="text-align:right;">
-0.995
-</td>
-<td style="text-align:right;">
-0.995
+<td style="text-align:left;">
+2/9
 </td>
 </tr>
 <tr>
-<td style="text-align:right;">
-2.6
+<td style="text-align:left;">
+3
 </td>
-<td style="text-align:right;">
-0.995
+<td style="text-align:left;">
+(3,3)
 </td>
-<td style="text-align:right;">
-0.995
-</td>
-<td style="text-align:right;">
-0.996
-</td>
-<td style="text-align:right;">
-0.996
-</td>
-<td style="text-align:right;">
-0.996
-</td>
-<td style="text-align:right;">
-0.996
-</td>
-<td style="text-align:right;">
-0.996
-</td>
-<td style="text-align:right;">
-0.996
-</td>
-<td style="text-align:right;">
-0.996
-</td>
-<td style="text-align:right;">
-0.996
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.7
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.8
-</td>
-<td style="text-align:right;">
-0.997
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2.9
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.998
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.0
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.1
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.2
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-<td style="text-align:right;">
-0.999
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.3
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.4
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.5
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.6
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.7
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.8
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3.9
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-1.000
+<td style="text-align:left;">
+1/9
 </td>
 </tr>
 </tbody>
 </table>
-<p>The left-most column gives the <span
-class="math inline">\(Z\)</span>-score and the columns to the right of
-this column are for additional decimal places of the <span
-class="math inline">\(Z\)</span>-score. The values in the table
-represent <span class="math inline">\(P(Z\leq z)\)</span> and denote the
-area to the left of the <span
-class="math inline">\(Z\)</span>-score.</p>
+<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-2-1.png" alt="Two bar charts side by side. Left, one spin X: three equal bars of height one third at 1, 2 and 3. Right, the mean of two spins x-bar: five bars at 1, 1.5, 2, 2.5 and 3 with heights 1/9, 2/9, 3/9, 2/9 and 1/9, peaked in the middle at 2." width="960" style="display: block; margin: auto;" /></p>
+<p>Compare the population (left) with the sampling distribution of <span
+class="math inline">\(\bar{x}\)</span> (right):</p>
 <ul>
-<li><p>We can compute the <span class="math inline">\(Z\)</span> for
-<strong>any</strong> normal random variable and use the table above to
-find its probability.</p></li>
-<li><p>Try it out: Suppose <span class="math inline">\(X\sim N(5,
-10)\)</span>. Compute the probability that <span
-class="math inline">\(X\geq 25\)</span></p></li>
+<li><strong>Same center.</strong> Both have mean 2.</li>
+<li><strong>Smaller spread.</strong> One spin has <span
+class="math inline">\(\sigma = 0.82\)</span>; the mean of two spins has
+<span class="math inline">\(\sigma_{\bar{x}} = 0.58\)</span>, which is
+exactly <span class="math inline">\(0.82/\sqrt{2}\)</span>.</li>
+<li><strong>New shape.</strong> The population is flat; the sampling
+distribution is already peaked in the middle, because a mean of 1 or 3
+needs <em>both</em> spins to be extreme.</li>
 </ul>
-<p>The table above gives the area to left of the <u>positive</u> values
-of the standard normal distribution. Therefore to the find the
-probability <span class="math inline">\(P(X\geq 25)\)</span> we must do
-little bit of work. First we need to convert from the distribution of
-<span class="math inline">\(X\)</span> to the standard normal
-distribution <span class="math inline">\(Z\)</span>. We can do so by
-computing the <span class="math inline">\(z\)</span>-score equivalent
-for <span class="math inline">\(X = 25\)</span></p>
-<p><span class="math display">\[ z = \frac{25 - 5}{10} = 2\]</span></p>
-<p>Thus asking to find <span class="math inline">\(P(X \geq 25)\)</span>
-is the same as <span class="math inline">\(P(Z \geq 2)\)</span>. But we
-are not quite ready to use the <span class="math inline">\(Z\)</span>
-table above. As stated previously the <span
-class="math inline">\(Z\)</span> table gives the probabilities
-corresponding to the left of each <span
-class="math inline">\(z\)</span>-score i.e <span
-class="math inline">\(P(Z\leq z)\)</span>. If we want to use the table
-above we need to flip the inequality in <span
-class="math inline">\(P(Z\geq 2)\)</span> so it’s facing in the same
-direction as <span class="math inline">\(P(Z\leq z)\)</span>. Luckily,
-we can accomplish this by finding the complementary event:</p>
-<p><span class="math display">\[P(Z\geq 2) = 1 - P(Z &lt; 2)
-\]</span></p>
-<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-2-1.png" alt="Two side-by-side normal curves. Left: the standard normal Z distribution with mean 0 and standard deviation 1, with the area to the right of z equals 2 shaded. Right: the distribution of X, normal with mean 5 and standard deviation 10, with the matching area to the right of X equals 25 shaded." width="960" /></p>
-<p>We can easily find <span class="math inline">\(P(Z &lt; 2)\)</span>
-using the table above which gives <span class="math inline">\(P(Z &lt;
-2) = 0.977\)</span>. Therefore, the probability we were asked to find in
-the beginning is computed as</p>
-<p><span class="math display">\[P(X\geq 25) = 1 - P(Z\leq 2) = 1 - 0.977
-= 0.023 \]</span></p>
-<p>If we think about this, it makes sense intuitively. The value <span
-class="math inline">\(25\)</span> is two standard deviations above the
-mean of <span class="math inline">\(X\)</span>. Thus we are finding an
-area in the upper tail region of a normal distribution which we would
-expect to correspond to a small probability since there is very little
-area under the curve in this region.</p>
-<ul>
-<li>Try it out: Suppose <span class="math inline">\(X\sim N(-2,
-4)\)</span>. Compute the probability that <span class="math inline">\(-3
-\leq X \leq 1\)</span></li>
-</ul>
-<p>We can take a similar approach to answer this problem. One major
-difference is that now we are trying to find the area between the points
-<span class="math inline">\(X = -3\)</span> and <span
-class="math inline">\(X = 1\)</span>. Again, since the table gives the
-probability corresponding to the <u>total area</u> to the left of each
-<span class="math inline">\(z\)</span>-score, we can find the area
-between two points by subtracting the larger area from the smaller
-one:</p>
-<p><span class="math display">\[P(-3 \leq X \leq 1) = P(X\leq 1) -
-P(X\leq -3) \]</span></p>
-<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-3-1.png" alt="Two side-by-side normal curves. Left: the standard normal Z distribution with the area between z equals -0.25 and z equals 0.75 shaded. Right: the distribution of X, normal with mean -2 and standard deviation 4, with the matching area between X equals -3 and X equals 1 shaded." width="960" /></p>
-<p>However, since we don’t have a table for the specific normal
-distribution of <span class="math inline">\(X\)</span> we must again
-convert to the standard normal distribution to find each
-probability:</p>
-<p><span class="math display">\[z_1 = \frac{1 - (-2)}{4} =
-0.75\]</span></p>
-<p><span class="math display">\[z_2 = \frac{-3 - (-2)}{4} =
--0.25\]</span></p>
-<p><span class="math display">\[P(Z\leq 0.75) = 0.773\]</span></p>
-<p><span class="math display">\[P(Z \leq -0.25) = 0.401\]</span></p>
-<p>Therefore, we can compute the original probability as</p>
-<p><span class="math display">\[ P(-3 \leq X \leq 1) = P(-0.25 \leq Z
-\leq 0.75) \]</span> <span class="math display">\[= P(Z\leq 0.75) -
-P(Z\leq -0.25)\]</span> <span class="math display">\[= 0.773 - 0.401 =
-0.372\]</span></p>
-<!--
-  Oct 5 2026: the central limit theorem, the three kinds of distribution and the
-  sampling distribution of p-hat below are now written up for Fall 2026 on the Week 7
-  page; they are now taught Mon Oct 12, combined with confidence intervals. This 2024 copy stays until the Week 8 page is rewritten
-  for the Oct 12 lecture; drop the overlap then.
--->
 </div>
-<div id="lecture-16" class="section level1">
-<h1>Lecture 16</h1>
-<p>Now that we have a strong understanding of the theory of mathematical
-probability we can use it to connect back to estimation and statistical
-inference. At this point we have learned about three different
-probability distributions:</p>
-<ul>
-<li>The <strong>population distribution</strong> is the probability
-distribution of a single observation of a random variable
-<ul>
-<li>Its properties are described by unknown parameters such as <span
-class="math inline">\(p\)</span>, <span
-class="math inline">\(\mu\)</span>, <span
-class="math inline">\(\sigma^2\)</span>, <span
-class="math inline">\(\sigma\)</span></li>
-</ul></li>
-<li>The <strong>data distribution</strong> is the probability
-distribution of the observations in a sample.
-<ul>
-<li>Its properties are described by statistics such as <span
-class="math inline">\(\bar{x}\)</span> or <span
-class="math inline">\(\hat{p}\)</span>, <span
-class="math inline">\(s^2\)</span>, <span
-class="math inline">\(s\)</span>.</li>
-</ul></li>
-<li>The <strong>sampling distribution</strong> is the probability
-distribution of a statistic that is computed from the observations in a
-sample. This distribution arises from repeated sampling from the same
-population with the same sample size and computing statistics from those
-samples. It tells us how close a given estimate is to the true
-population parameter it is estimating (sampling error).</li>
-</ul>
-<div id="the-central-limit-theorem" class="section level2">
-<h2>The Central Limit Theorem</h2>
-<p>A statistic computed from a random sample or randomized experiment is
-a random variable whose probability distribution is given by the
-sampling distribution. One of the most famous results from probability
-theory says that the distribution of the mean <span
-class="math inline">\(\bar{x}\)</span> of a random variable computed
-from a sample of size <span class="math inline">\(n\)</span> will be
-approximately normally distributed if <span
-class="math inline">\(n\)</span> is large. This result is referred to as
-the <strong>Central Limit Theorem (CLT)</strong>. Formally, the CLT
-states that for a set of independent and identically distributed random
-variables <span class="math inline">\(X_1, X_2, ... X_n\)</span>,</p>
-<p><span class="math display">\[\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}
-\xrightarrow{d} N(0,1)\]</span></p>
-<p>Where <span class="math inline">\(\xrightarrow{d}\)</span> means
-“converge in distribution” and <span class="math inline">\(\bar{X} =
-\frac{1}{n} \sum_i X_i\)</span>.</p>
-<ul>
-<li>Each random variable <span class="math inline">\(X_i\)</span> can be
-thought of as an observation in a sample from the population
-distribution <span class="math inline">\(X\)</span>.</li>
-<li>Note that the CLT assumes that each <span
-class="math inline">\(X_i\)</span> comes from the same distribution, and
-that they all have finite variance.</li>
-</ul>
-<p>Informally, this means that as the sample size increases the shape of
-a sampling distribution of <span class="math inline">\(\bar{x}\)</span>
-or <span class="math inline">\(\hat{p}\)</span> will “approach” that of
-a normal distribution - regardless of the distribution of data
-distribution of the sample. Therefore the sampling distributions of both
-<span class="math inline">\(\bar{x}\)</span> and <span
-class="math inline">\(\hat{p}\)</span> are approximately normal-shaped
-for moderate to large sample sizes <span
-class="math inline">\(n\)</span>.</p>
-<p>To illustrate, consider the animated plot below which shows the
-sampling distribution of <span class="math inline">\(\hat{p}\)</span>.
-The sample count <span class="math inline">\(X\)</span> is binomial
-distributed such that <span class="math inline">\(X\sim Binom(n,
-p)\)</span>, and the sample proportion <span
-class="math inline">\(\hat{p} = X/n\)</span> has mean <span
-class="math inline">\(p\)</span> and standard deviation <span
-class="math inline">\(\sqrt\frac{p(1-p)}{n}\)</span>. However, for
-moderate values of <span class="math inline">\(p\)</span> and large
-<span class="math inline">\(n\)</span>, the CLT states that <span
-class="math inline">\(\hat{p}\)</span> will be approximately normally
-distributed. From the animation below we can see that as <span
-class="math inline">\(n\)</span> gets large the distribution for <span
-class="math inline">\(\hat{p}\)</span> looks more and more continuous
-and bell-shaped.</p>
-<p><img src="misc/CLT.gif" alt="Animated histogram with a density curve of the sampling distribution of the sample proportion p-hat, with p equals 0.5, cycling through sample sizes n from 2 up to 200. At small n there are only a few separated bars; as n grows the bars fill in and the shape becomes a smooth, symmetric bell curve centered at 0.5."  /></p>
-<p>Consider the sample mean <span class="math inline">\(\bar{x}\)</span>
-computed from a sample of <span class="math inline">\(n\)</span>
-observations of a single roll of a fair six-sided die. The animated plot
-below shows the sampling distribution of <span
-class="math inline">\(\bar{x}\)</span> as number of observations <span
-class="math inline">\(n\)</span> is increased. By the CLT, the
-distribution of <span class="math inline">\(\bar{x}\)</span> looks more
-and more normal as <span class="math inline">\(n\)</span> is
-increased.</p>
-<p><img src="Data/CLT_mean.gif" alt="Animated histogram with a density curve of the sampling distribution of x-bar, the mean of n rolls of a fair six-sided die, cycling through sample sizes n from 2 up to 200. At small n the shape is lumpy and spread out; as n grows it narrows into a smooth, symmetric bell curve centered at 3.5."  /></p>
-<p>Using the central limit theorem, the distributions for the sample
-mean and sample proportion are both approximately normal for large
-samples</p>
-<p>The sampling distribution of the sample proportion <span
-class="math inline">\(\hat{p}\)</span> has mean <span
-class="math inline">\(p\)</span> and variance <span
-class="math inline">\(\frac{p(1-p)}{n}\)</span>.</p>
-<p><span class="math display">\[\hat{p} \sim N\left(p,
-\sqrt{\frac{p(1-p)}{n}}\right) \]</span></p>
-<p>The sampling distribution of the sample mean <span
-class="math inline">\(\bar{x}\)</span> has mean <span
-class="math inline">\(\mu\)</span> and variance <span
-class="math inline">\(\frac{\sigma^2}{n}\)</span></p>
-<p><span class="math display">\[\bar{x} \sim N\left(\mu,
-\frac{\sigma}{\sqrt{n}}\right) \]</span></p>
-<p>We can use the CLT to compute the probability of a given value of a
-statistic. Consider the following example: A scientist studying
-alligator morphology, plans to sample 50 female American alligators to
-estimate their mean length. Suppose that the population mean is 8.3 feet
-with a standard deviation of 1.1 feet. What is the probability she
-observes a sample mean less than <span class="math inline">\(5.4
-feet\)</span>? We can apply the CLT to find this probability by simply
-finding <span class="math inline">\(P(\bar{X}\leq 5.4)\)</span> where
-<span class="math inline">\(\bar{X}\sim N(8.3,
-\frac{1.1}{\sqrt{50}})\)</span>. First, we must convert to a <span
-class="math inline">\(z\)</span>-score:</p>
-<p><span class="math display">\[ Z = \frac{\bar{X} - \mu
-}{\sigma/\sqrt{n} } = \frac{5.4 - 8.3}{1.1/\sqrt{50}} =
-\frac{-2.9}{0.1556} = -18.64\]</span></p>
-<p><span class="math display">\[ P( Z &lt; -18.64) \approx
-0\]</span></p>
-<p>Thus it is highly unlikely that the scientist would observe a mean
-length this short.</p>
-</div>
-<div id="applying-the-central-limit-theorem" class="section level2">
-<h2>Applying The Central Limit Theorem</h2>
-<p>The CLT allows us to identify the sampling distribution of <span
-class="math inline">\(\bar{x}\)</span> or <span
-class="math inline">\(\hat{p}\)</span>. Now that we know the
-distribution of these two statistics we can make statements about the
-probability that <span class="math inline">\(\bar{x}\)</span> or <span
-class="math inline">\(\hat{p}\)</span> will be within a certain distance
-of the parameters <span class="math inline">\(\mu\)</span> and <span
-class="math inline">\(p\)</span>.</p>
-<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-8-1.png" alt="A normal curve with the x-axis labeled mu minus 2 sigma, mu, and mu plus 2 sigma. The area between mu minus 2 sigma and mu plus 2 sigma is shaded and labeled 0.95." width="960" /></p>
-<p>For the sample mean we can say that</p>
-<p><span class="math display">\[P\left(\mu-2\frac{\sigma}{\sqrt{n}} \leq
-\bar{x} \leq \mu+2\frac{\sigma}{\sqrt{n}} \right) \approx
-0.95\]</span></p>
-<p>Alternatively, this can be stated as</p>
-<p><span class="math display">\[P\left(|\bar{x} - \mu|\leq
-2\frac{\sigma}{\sqrt{n}}\right) \approx 0.95 \]</span></p>
-<p>Similarly, for the sample proportion we can say that</p>
-<p><span class="math display">\[P\left(p-2\sqrt{\frac{p(1-p)}{n}} \leq
-\hat{p} \leq p+2\sqrt{\frac{p(1-p)}{n}} \right) \approx
-0.95\]</span></p>
-<p>which can also be stated as <span
-class="math display">\[P\left(|\hat{p} - p|\leq
-2\sqrt{\frac{p(1-p)}{n}}\right) \approx 0.95\]</span></p>
-<p>In other words, the probability that the sample mean <span
-class="math inline">\(\bar{x}\)</span> or sample proportion <span
-class="math inline">\(\hat{p}\)</span> will be within two standard
-deviations of the population mean <span
-class="math inline">\(\mu\)</span> or population proportion <span
-class="math inline">\(p\)</span> is approximately <span
-class="math inline">\(0.95\)</span>. This distance is the <strong>margin
-of error</strong> that we have defined previously. The <strong>margin of
-error</strong> characterizes how much an estimate can be expected to
-deviate from the parameter it’s estimating. In estimation, the standard
-deviation of a statistic is usually referred to as the <strong>standard
-error</strong> because it relates to the sampling error of a given
-observation of a statistic.</p>
-<p>We have extended the definition of the margin of error to include a
-measure of probability that the sample statistic will be within a
-certain distance of the parameter it’s estimating. The choice of
-probability being <span class="math inline">\(0.95\)</span> is
-arbitrary. We have the ability to define the margin of error however we
-wish. For example:</p>
-<p><span class="math display">\[P\left(|\bar{x}-\mu|\leq
-\frac{\sigma}{\sqrt{n}} \right) \approx 0.68\]</span></p>
-<p>In other words, the probability that the distance between <span
-class="math inline">\(\bar{x}\)</span> and <span
-class="math inline">\(\mu\)</span> does not exceed one standard error is
-approximately <span class="math inline">\(0.68\)</span>.</p>
-<p>Consider the following example:</p>
-</div>
-</div>
-<div id="inference-and-estimation" class="section level1">
-<h1>Inference and Estimation</h1>
-<p>Statistical inference is used to draw conclusions about a population
-or process based on sample data. Inference has two general types:
-<i>significance test</i> (also referred to as <i>hypothesis testing</i>)
-and <strong>estimation</strong>. Estimation consists of</p>
-<ul>
-<li><em>point estimation</em> consists of estimating the value of a
-parameter with the value of a statistic such as using <span
-class="math inline">\(\bar{x}\)</span>, <span
-class="math inline">\(\hat{p}\)</span>, <span
-class="math inline">\(s^2\)</span>, and <span
-class="math inline">\(s\)</span> to estimate <span
-class="math inline">\(\mu\)</span>, <span
-class="math inline">\(p\)</span>, <span
-class="math inline">\(\sigma^2\)</span>, and <span
-class="math inline">\(\sigma\)</span> (respectively).</li>
-<li><em>interval estimation</em> consists of estimating the value of a
-parameter with an interval of values. The typical device we use is
-called a <strong>confidence interval</strong>.</li>
-</ul>
-<p>Regardless of the type of inference that is being done, the
-underlying reasoning remains the same. In statistics, we use probability
-as a means of substantiating our conclusions about a particular
-population or result. Probability allows us to determine the “strength”
-of a conclusion by taking into account the ordinary variation in
-estimation.</p>
-<div id="confidence-intervals" class="section level2">
-<h2>Confidence Intervals</h2>
-<p>A <strong>interval estimate</strong> aims to place bounds on the
-value of a population parameter. We saw previously that we can talk
-about the probability with which an estimate falls within a particular
-interval. For example, we said that the interval which has a probability
-of 0.95 of containing <span class="math inline">\(\bar{x}\)</span> is
-given by</p>
-<p><span class="math display">\[P\left(\mu-2\frac{\sigma}{\sqrt{n}} \leq
-\bar{x} \leq \mu+2\frac{\sigma}{\sqrt{n}} \right) \approx
-0.95\]</span></p>
-<p>However, to say that <span class="math inline">\(\bar{x}\)</span>
-lies within two standard errors of <span
-class="math inline">\(\mu\)</span> is the same as saying that <span
-class="math inline">\(\mu\)</span> lies within two standard errors of
-<span class="math inline">\(\bar{x}\)</span>. Therefore with a little
-bit of algebra we can show that</p>
-<p><span class="math display">\[P\left(\bar{x}-2\frac{\sigma}{\sqrt{n}}
-\leq \mu \leq \bar{x}+2\frac{\sigma}{\sqrt{n}} \right) \approx
-0.95\]</span></p>
-<p>Under repeated sampling, we can be confident that <span
-class="math inline">\(95\%\)</span> of all samples will capture the true
-value of <span class="math inline">\(\mu\)</span> in the interval <span
-class="math inline">\(\left[\bar{x}-\frac{2\sigma}{\sqrt{n}},
-\bar{x}+\frac{2\sigma}{\sqrt{n}}\right]\)</span>.</p>
-<p>This is the rationale behind the famous <strong>confidence
-interval</strong>. The language of statistics uses the long-run behavior
-of repeated sampling to describe our confidence in the results of any
-particular sample. In this case, we constructed the interval to have a
-long-run frequency <span class="math inline">\(95\%\)</span> of
-capturing the true parameter - called the confidence level of our
-interval. Therefore the <strong>confidence level</strong> of a
-confidence interval is the probability the estimated interval will
-contain the parameter <u>before the data are collected</u>. It is
-important to note that after the data are collected the
-<u><strong>interval either does or does not contain the
-parameter</strong></u>.</p>
-<p>The general formula of a confidence interval consists of three
-parts:</p>
-<ol style="list-style-type: decimal">
-<li>the point estimate (e.g the statistic)</li>
-<li>the standard score - used to control the confidence level of the
-interval</li>
-<li>the standard error (standard deviation) of the point estimate</li>
-</ol>
-<p><img src="misc/Screenshot%202024-02-29%20230856.png" alt="Formula diagram: point estimate plus or minus standard score times standard error. A brace over the whole expression labels it the confidence interval, and a brace under 'standard score times standard error' labels that part the margin of error." width="486" /></p>
-<p>Applying this basic formula gives the following formula for a
-confidence interval for a population mean:</p>
-<p><span class="math display">\[ \bar{x}\pm z\frac{s}{\sqrt{n}}
-\Leftrightarrow \left[\bar{x}- z\frac{s}{\sqrt{n}}, \ \bar{x}+
-z\frac{s}{\sqrt{n}}  \right] \]</span></p>
-<p>Notice in the equation above that we have substituted <span
-class="math inline">\(\sigma\)</span> with <span
-class="math inline">\(s\)</span> the sample standard deviation. This is
-because we typically do not know the true value of population standard
-deviation and must estimate it from the sample.</p>
-<p>Similarly, the confidence interval for a population proportion is
-given by <span class="math display">\[ \hat{p}\pm
-z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}} \Leftrightarrow \left[\hat{p}-
-z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}, \ \hat{p}+
-z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}  \right] \]</span></p>
-<p>Notice also that we have substituted <span
-class="math inline">\(\hat{p}\)</span> for <span
-class="math inline">\(p\)</span> in the standard error of <span
-class="math inline">\(\hat{p}\)</span>. The quantity denoted by <span
-class="math inline">\(z\)</span> in the formulas above is the
-<em>standard score</em> mentioned previously. It controls how wide and
-therefore how confident we wish to be in our estimation. We can look up
-<span class="math inline">\(z\)</span> in a <span
-class="math inline">\(Z\)</span>-table for any desired confidence
-level:</p>
+<div id="example-coho-salmon" class="section level3">
+<h3>Example: Coho salmon</h3>
+<p>Let <span class="math inline">\(X\)</span> be the number of Coho
+salmon a fly fisherman catches in an afternoon on the Clearwater River,
+with this (hypothetical) population distribution:</p>
 <table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:right;">
-<span class="math inline">\(z\)</span>
+<span class="math inline">\(x\)</span>
 </th>
 <th style="text-align:left;">
-Confidence Level
+<span class="math inline">\(P(x)\)</span>
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:right;">
-1.64
+0
 </td>
 <td style="text-align:left;">
-<span class="math inline">\(90\%\)</span>
+0.589
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-1.96
+1
 </td>
 <td style="text-align:left;">
-<span class="math inline">\(95\%\)</span>
+0.232
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-2.58
+2
 </td>
 <td style="text-align:left;">
-<span class="math inline">\(99\%\)</span>
+0.179
 </td>
 </tr>
 </tbody>
 </table>
+<p>Its mean is <span class="math inline">\(\mu = 0(0.589) + 1(0.232) +
+2(0.179) = 0.59\)</span> fish and its standard deviation is <span
+class="math inline">\(\sigma = 0.775\)</span>. Now find the sampling
+distribution of <span class="math inline">\(\bar{x}\)</span>, the mean
+catch over a random sample of <span class="math inline">\(n = 3\)</span>
+afternoons. This time the outcomes are not equally likely, so each
+sample’s probability comes from the multiplication rule. There are <span
+class="math inline">\(3 \times 3 \times 3 = 27\)</span> possible
+samples:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+<span class="math inline">\(\bar{x}\)</span>
+</th>
+<th style="text-align:left;">
+Samples giving it
+</th>
+<th style="text-align:left;">
+Probability
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(P(\bar{x})\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+(0,0,0) = <span class="math inline">\(\color{red}{1}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(0.589^3\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.204}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1/3
+</td>
+<td style="text-align:left;">
+(1,0,0), (0,1,0), (0,0,1) = <span
+class="math inline">\(\color{red}{3}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(3(0.589^2 \times 0.232)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.241}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2/3
+</td>
+<td style="text-align:left;">
+(1,1,0), (1,0,1), (0,1,1), (2,0,0), (0,2,0), (0,0,2) = <span
+class="math inline">\(\color{red}{6}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(3(0.232^2 \times 0.589) + 3(0.589^2 \times
+0.179)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.281}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+(1,1,1), (2,1,0), (2,0,1), (0,2,1), (1,2,0), (1,0,2), (0,1,2) = <span
+class="math inline">\(\color{red}{7}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(0.232^3 + 6(0.589 \times 0.232 \times
+0.179)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.159}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4/3
+</td>
+<td style="text-align:left;">
+(2,1,1), (1,2,1), (1,1,2), (2,2,0), (2,0,2), (0,2,2) = <span
+class="math inline">\(\color{red}{6}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(3(0.232^2 \times 0.179) + 3(0.179^2 \times
+0.589)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.086}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5/3
+</td>
+<td style="text-align:left;">
+(1,2,2), (2,1,2), (2,2,1) = <span
+class="math inline">\(\color{red}{3}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(3(0.179^2 \times 0.232)\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.022}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+(2,2,2) = <span class="math inline">\(\color{red}{1}\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(0.179^3\)</span>
+</td>
+<td style="text-align:left;">
+<span class="math inline">\(\color{red}{0.006}\)</span>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The counts in red add to 27 and the probabilities add to 1. Once
+again:</p>
 <ul>
-<li>Try it out: Consider the following hypothetical example: The
-Imperial Army is evaluating the blaster accuracy of stormtroopers in
-their training program. A random sample of <span class="math inline">\(n
-= 100\)</span> stormtroopers is selected, and their blaster accuracy
-scores are recorded. The mean blaster accuracy for this sample is found
-to be <span class="math inline">\(\bar{x} = 78.5\%\)</span>, and sample
-standard deviation <span class="math inline">\(s = 4.5\%\)</span>.
-Suppose the officers running the training program wish to estimate the
-interval which has a confidence level of <span
-class="math inline">\(95\%\)</span> for containing the population mean
-blaster accuracy. This interval is given by</li>
+<li>the mean of the sampling distribution is <span
+class="math inline">\(\mu_{\bar{x}} = \sum \bar{x}\, P(\bar{x}) =
+0.59\)</span>, <strong>the same as</strong> <span
+class="math inline">\(\mu\)</span>;</li>
+<li>its standard deviation is <span
+class="math inline">\(\sigma_{\bar{x}} = 0.447\)</span>, which is
+exactly <span class="math inline">\(\sigma/\sqrt{n} =
+0.775/\sqrt{3}\)</span>.</li>
 </ul>
-<p><span class="math display">\[P\left(78.5-2\frac{4.5}{\sqrt{100}} \leq
-\mu \leq 78.5+2\frac{4.5}{\sqrt{100}} \right) \approx 0.95\]</span></p>
-<p>Thus to compute this interval we would compute the lower and upper
-bounds of the probability statement above which gives</p>
-<p><span class="math display">\[78.5 \pm 2\frac{4.5}{\sqrt{100}}
-=  [77.6, 79.4]\]</span></p>
-<p>To interpret this result we would say that we are <span
-class="math inline">\(95\%\)</span> confident that the population mean
-blaster accuracy is no less than <span
-class="math inline">\(77.6\%\)</span> and no more than <span
-class="math inline">\(79.4\%\)</span>.</p>
+</div>
+</div>
+<div id="center-and-spread-of-a-sampling-distribution"
+class="section level2">
+<h2>Center and spread of a sampling distribution</h2>
+<p>Those two examples are not coincidences. For a random sample of size
+<span class="math inline">\(n\)</span> from a population with mean <span
+class="math inline">\(\mu\)</span> and standard deviation <span
+class="math inline">\(\sigma\)</span>:</p>
 <ul>
-<li>Note that in the above calculation we rounded <span
-class="math inline">\(z = 1.96\)</span> to be <span
-class="math inline">\(z = 2\)</span>.</li>
+<li><strong>The sample mean</strong> <span
+class="math inline">\(\bar{x}\)</span> has mean <span
+class="math inline">\(\mu_{\bar{x}} = \mu\)</span>: it is centered at
+the parameter it estimates. Its standard deviation is <span
+class="math display">\[\sigma_{\bar{x}} =
+\frac{\sigma}{\sqrt{n}}\]</span> the <strong>standard error of the
+mean</strong>, the same standard error we met in Week 6.</li>
 </ul>
-<p>Assume that the true population blaster accuracy is <span
-class="math inline">\(\mu = 77.9\%\)</span> and the population standard
-deviation is <span class="math inline">\(\sigma = 4.2\%\)</span>. The
-plot below shows how our confidence interval compares to the sampling
-distribution of <span class="math inline">\(\bar{x}\)</span>.</p>
+<p>A <strong>sample proportion</strong> <span
+class="math inline">\(\hat{p}\)</span> is a sample mean too. Code each
+observation as a Bernoulli trial, 1 for a success and 0 for a failure;
+then <span class="math inline">\(\hat{p}\)</span> is the mean of the 0s
+and 1s, the count of successes <span class="math inline">\(X \sim
+\text{Binom}(n, p)\)</span> divided by <span
+class="math inline">\(n\)</span>. A Bernoulli population has mean <span
+class="math inline">\(p\)</span> and standard deviation <span
+class="math inline">\(\sqrt{p(1 - p)}\)</span>, so:</p>
 <ul>
-<li>Does the interval cover the true population mean?</li>
+<li><strong>The sample proportion</strong> <span
+class="math inline">\(\hat{p} = X/n\)</span> has mean <span
+class="math inline">\(\mu_{\hat{p}} = p\)</span> and standard error
+<span class="math display">\[\sigma_{\hat{p}} = \sqrt{\frac{p(1 -
+p)}{n}}\]</span></li>
 </ul>
-<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-11-1.png" alt="Sampling distribution of x-bar: a normal curve centered at mu equals 77.9 with the middle 0.95 area, within 2 standard errors of mu, shaded. Below the curve a square marks mu and a dot marks x-bar equals 78.5, with a horizontal bar showing the confidence interval from 77.6 to 79.4." width="960" /></p>
-<p>In practice, once we compute the confidence interval we don’t know
-for sure whether our confidence interval captures the true population
-parameter we are trying to estimate. It may be in the interval, it may
-not. But the choice in confidence level gives us flexibility in how
-confident we wish to be. We can increase the confidence level of our
-interval to give a higher probability that the interval will cover the
-true parameter. For example, suppose the imperial officers wish to
-increase the confidence level from <span
-class="math inline">\(95\%\)</span> to <span
-class="math inline">\(99\%\)</span>. Now only <span
-class="math inline">\(1\)</span> in every <span
-class="math inline">\(100\)</span> samples will fail to cover the true
-population mean blaster accuracy. The downside, however, is that a
-higher confidence level corresponds to a wider confidence interval:</p>
-<p><span class="math display">\[78.5 \pm 2.58\frac{4.5}{\sqrt{100}}
-=  [77.3, 79.7]\]</span></p>
-<p>As we can see in the plot below, the interval is now wider</p>
-<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-12-1.png" alt="Two sampling distributions of x-bar side by side, both normal curves centered at mu equals 77.9. Left: middle 0.95 area shaded, with the 95 percent interval from 77.6 to 79.4 drawn around x-bar equals 78.5. Right: a wider middle 0.99 area shaded, with the wider 99 percent interval from about 77.3 to 79.7 around the same x-bar." width="1152" /></p>
-<p>In this fictional example, the standard error of <span
-class="math inline">\(\bar{x}\)</span> is quite small at <span
-class="math inline">\(SE = 0.45\)</span> so the confidence interval is
-only a little bit wider. In other cases, depending on the sample size
-and sample standard deviation, increasing the confidence level may
-result in reduced precision in our estimate.</p>
-<p>To further illustrate the concept of confidence and its
-correspondence to the long-run behavior of interval estimates, consider
-that each month for the next <span class="math inline">\(100\)</span>
-months, the Imperial army selects a sample of <span
-class="math inline">\(100\)</span> stormtroopers in the training
-program, records their blaster accuracy scores, and computes a <span
-class="math inline">\(95\%\)</span> confidence interval for the
-population mean blaster accuracy.</p>
+<p>Both statistics are <strong>unbiased</strong> (centered at the
+parameter), and both standard errors shrink like <span
+class="math inline">\(1/\sqrt{n}\)</span>.</p>
+<div id="the-data-spotify-songs" class="section level3">
+<h3>The data: Spotify songs</h3>
+<p>Spotify and YouTube statistics for the top 10 Spotify songs of each
+of 2,079 popular artists were collected in February 2023. A song
+credited to several artists appears once for each of them, so we count
+each song once, which leaves 18,860 different songs. Our variable is</p>
 <ul>
-<li>What proportion of these confidence intervals are expected to
-contain the true population mean accuracy. What proportion do not? The
-plot below gives the results of all <span
-class="math inline">\(100\)</span> confidence intervals</li>
+<li><span class="math inline">\(X\)</span> = the length of a song, in
+minutes.</li>
 </ul>
-<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-13-1.png" alt="100 confidence intervals drawn as vertical error bars, one per sample number on the x-axis, with x-bar on the y-axis and a dashed horizontal line at mu equals 77.9. A legend marks whether each interval covers the parameter: 98 intervals cross the dashed line and 2 (samples 38 and 62) miss it." width="960" /></p>
-<p>As we can see from the plot, all but two of the confidence intervals
-(highlighted in orange) cover the true value of the parameter <span
-class="math inline">\(\mu\)</span> (denoted by the black dotted
-line).</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Track
+</th>
+<th style="text-align:left;">
+Artist
+</th>
+<th style="text-align:left;">
+Minutes
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Feel Good Inc. 
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+3.71
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rhinestone Eyes
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+3.34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New Gold (feat. Tame Impala and Bootie Brown)
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+3.59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+On Melancholy Hill
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+3.90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clint Eastwood
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+5.68
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-6-1.png" alt="Histogram of the lengths of 18,860 Spotify songs from 0 to 10 minutes, with a vertical line at the mean of 3.71 minutes. Most songs are between 2.5 and 5 minutes, peaking around 3.5; the right tail is longer than the left. 41 songs longer than 10 minutes are off the right edge of the plot." width="960" style="display: block; margin: auto;" /></p>
+<p>Most songs run between about 2.5 and 5 minutes, but the right tail is
+long: 41 songs (mostly non-stop remix medleys and sleep sounds) are over
+10 minutes, the longest 78 minutes. Those are left off the plot so the
+rest is visible. Treating all 18,860 songs as the population, <span
+class="math inline">\(\mu = 3.71\)</span> minutes and <span
+class="math inline">\(\sigma = 1.51\)</span> minutes.</p>
+</div>
+<div id="example-standard-error-and-n" class="section level3">
+<h3>Example: standard error and <span
+class="math inline">\(n\)</span></h3>
+<p>Draw a random sample of <span class="math inline">\(n\)</span> songs
+and average their lengths to get <span
+class="math inline">\(\bar{x}\)</span>. Every new sample gives a
+different <span class="math inline">\(\bar{x}\)</span>, and the standard
+error <span class="math inline">\(\sigma_{\bar{x}}\)</span> measures how
+much <span class="math inline">\(\bar{x}\)</span> varies from sample to
+sample.</p>
+<ul>
+<li>For <span class="math inline">\(n = 20\)</span>: <span
+class="math inline">\(\sigma_{\bar{x}} = 1.51/\sqrt{20} \approx
+0.34\)</span> minutes.</li>
+<li>For <span class="math inline">\(n = 80\)</span>: <span
+class="math inline">\(\sigma_{\bar{x}} = 1.51/\sqrt{80} \approx
+0.17\)</span> minutes.</li>
+</ul>
+<p>A single song is typically about 1.5 minutes from the mean; the
+average of 20 songs is typically only about a third of a minute from it.
+And because <span class="math inline">\(n\)</span> sits under a square
+root, making the sample <strong>4 times larger</strong> only cuts the
+standard error <strong>in half</strong> (<span
+class="math inline">\(\sqrt{4} = 2\)</span>).</p>
+</div>
+</div>
+</div>
+<div id="the-central-limit-theorem" class="section level1">
+<h1>The central limit theorem</h1>
+<p>The formulas above give the center and spread of a sampling
+distribution. The <strong>central limit theorem</strong> (CLT) gives its
+shape, and it is one of the most famous results in all of
+probability.</p>
+<div id="averaging-a-skewed-variable" class="section level2">
+<h2>Averaging a skewed variable</h2>
+<div id="the-data-waiting-for-a-goal" class="section level3">
+<h3>The data: waiting for a goal</h3>
+<p>The 2022 World Cup produced 172 goals in its 64 matches, 2.69 goals
+per 90-minute match. If goals arrive at that rate, independently of one
+another, then</p>
+<ul>
+<li><span class="math inline">\(X\)</span> = minutes until the next
+goal</li>
+</ul>
+<p>has mean <span class="math inline">\(\mu = 90/2.69 \approx
+33.5\)</span> minutes and, for this kind of waiting time, standard
+deviation <span class="math inline">\(\sigma \approx 33.5\)</span>
+minutes as well. These waits are <strong>simulated</strong> at the World
+Cup rate, not recorded from matches. Here are the first five:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Wait
+</th>
+<th style="text-align:left;">
+Minutes
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+1.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+54.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+57.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+27.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+18.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+</tbody>
+</table>
+<p>Most waits are short and a few are very long, so <span
+class="math inline">\(X\)</span> is strongly skewed right. Now draw
+<span class="math inline">\(n\)</span> waits, average them to get <span
+class="math inline">\(\bar{x}\)</span>, and repeat 10,000 times. Each
+panel shows the 10,000 values of <span
+class="math inline">\(\bar{x}\)</span> for one sample size:</p>
+<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-8-1.png" alt="Four histograms of 10,000 simulated sample means of minutes until the next goal, for n = 1, 2, 5 and 30, each with a vertical line at the mean of about 33.5 minutes and its own axis scale. At n = 1 the histogram is strongly skewed right; the skew fades as n grows, and at n = 30 it is a narrow, nearly symmetric bell." width="1056" style="display: block; margin: auto;" /></p>
+<p>With <span class="math inline">\(n = 1\)</span> the “sample mean” is
+a single wait, so the first panel is the skewed population itself. As
+<span class="math inline">\(n\)</span> grows:</p>
+<ul>
+<li><strong>Shape:</strong> the skew fades into a bell. By <span
+class="math inline">\(n = 30\)</span> it is close to symmetric.</li>
+<li><strong>Center:</strong> stays at <span class="math inline">\(\mu =
+33.5\)</span> (the red line).</li>
+<li><strong>Spread:</strong> shrinks, just as <span
+class="math inline">\(\sigma/\sqrt{n}\)</span> says. Notice the axes:
+the values of <span class="math inline">\(\bar{x}\)</span> run out past
+400 minutes for <span class="math inline">\(n = 1\)</span> but stay
+between about 20 and 60 for <span class="math inline">\(n =
+30\)</span>.</li>
+</ul>
+</div>
+</div>
+<div id="the-theorem" class="section level2">
+<h2>The theorem</h2>
+<ul>
+<li><strong>Central limit theorem.</strong> Take random samples of size
+<span class="math inline">\(n\)</span> from <strong>any</strong>
+population with mean <span class="math inline">\(\mu\)</span> and
+standard deviation <span class="math inline">\(\sigma\)</span>. If <span
+class="math inline">\(n\)</span> is large enough, the sampling
+distribution of <span class="math inline">\(\bar{x}\)</span> is
+approximately normal: <span class="math display">\[\bar{x} \sim
+N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right)\]</span> The larger <span
+class="math inline">\(n\)</span> is, the better the approximation. Since
+<span class="math inline">\(\hat{p}\)</span> is a sample mean of 0s and
+1s, the same is true of it: <span class="math display">\[\hat{p} \sim
+N\!\left(p,\; \sqrt{\frac{p(1 - p)}{n}}\right)\]</span></li>
+</ul>
+<p>The remarkable part is “<strong>any</strong> population”. The
+population can be skewed, lumpy or discrete; the average of enough
+independent observations is still bell shaped, because the unusually
+high and unusually low values in a sample cancel out. In Week 6 we saw
+the same thing with averages of dice.</p>
+<p><strong>How large is large enough?</strong> The textbook’s guides
+are:</p>
+<ul>
+<li><span class="math inline">\(n \geq 30\)</span> for <span
+class="math inline">\(\bar{x}\)</span>. If the population is itself
+close to normal, much smaller samples will do; if it is very skewed or
+has extreme outliers, you may need more.</li>
+<li><span class="math inline">\(np &gt; 5\)</span> and <span
+class="math inline">\(n(1 - p) &gt; 5\)</span> for <span
+class="math inline">\(\hat{p}\)</span>: enough expected successes
+<em>and</em> failures.</li>
+</ul>
+<blockquote>
+<p><strong>For the curious: the formal statement.</strong> For
+independent observations <span class="math inline">\(X_1, X_2, \ldots,
+X_n\)</span> from the same distribution, with mean <span
+class="math inline">\(\mu\)</span> and a finite standard deviation <span
+class="math inline">\(\sigma\)</span>, <span
+class="math display">\[\frac{\sqrt{n}\,(\bar{X} - \mu)}{\sigma}
+\xrightarrow{d} N(0, 1)\]</span> where <span
+class="math inline">\(\xrightarrow{d}\)</span> means “converges in
+distribution”. The left side is just the <span
+class="math inline">\(z\)</span>-score of <span
+class="math inline">\(\bar{X}\)</span>, so the theorem says that <span
+class="math inline">\(z\)</span>-score behaves more and more like a
+standard normal <span class="math inline">\(Z\)</span> as <span
+class="math inline">\(n\)</span> grows. Notice the two assumptions: the
+observations come from the <em>same</em> distribution, and its variance
+is finite.</p>
+</blockquote>
+</div>
+<div id="the-clt-for-a-proportion" class="section level2">
+<h2>The CLT for a proportion</h2>
+<p>Stephen Curry has made 4,236 of his 4,645 career free throws, so take
+<span class="math inline">\(p = 0.912\)</span>. Let <span
+class="math inline">\(\hat{p}\)</span> be the proportion he makes over a
+stretch of <span class="math inline">\(n\)</span> free throws. Below are
+the <strong>exact</strong> sampling distributions of <span
+class="math inline">\(\hat{p}\)</span> (from the binomial distribution)
+for <span class="math inline">\(n = 10\)</span>, 30 and 100:</p>
+<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-9-1.png" alt="Three bar charts of the exact sampling distribution of the proportion of free throws made, with p = 0.912 marked by a vertical line, each with its own axis scale. For n = 10 the bars are piled against 1 and strongly skewed left. For n = 30 they are still skewed left. For n = 100 they form a nearly symmetric bell centered at 0.912." width="1056" style="display: block; margin: auto;" /></p>
+<p>Check the rule: <span class="math inline">\(n(1 - p) = 10(0.088) =
+0.88\)</span>, <span class="math inline">\(30(0.088) = 2.64\)</span> and
+<span class="math inline">\(100(0.088) = 8.8\)</span>. Only <span
+class="math inline">\(n = 100\)</span> passes, and only <span
+class="math inline">\(n = 100\)</span> looks like a bell. With a success
+rate this high, misses are the rare outcome, and you need enough of them
+for the distribution to fill out.</p>
+</div>
+</div>
+<div id="using-the-central-limit-theorem" class="section level1">
+<h1>Using the central limit theorem</h1>
+<p>Because the sampling distribution is approximately normal, everything
+we know about the normal distribution applies to it. In particular, the
+empirical rule says about 95% of the area lies within 2 standard
+deviations of the mean:</p>
+<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-10-1.png" alt="A normal curve for the sampling distribution of x-bar, with the x-axis labeled mu minus 2 sigma over root n, mu, and mu plus 2 sigma over root n. The area between the two outer labels is shaded and marked 0.95." width="864" style="display: block; margin: auto;" /></p>
+<p>So for the sample mean,</p>
+<p><span class="math display">\[P\left(\mu - 2\frac{\sigma}{\sqrt{n}}
+\;\leq\; \bar{x} \;\leq\; \mu + 2\frac{\sigma}{\sqrt{n}}\right) \approx
+0.95\]</span></p>
+<p>and for the sample proportion,</p>
+<p><span class="math display">\[P\left(p - 2\sqrt{\frac{p(1-p)}{n}}
+\;\leq\; \hat{p} \;\leq\; p + 2\sqrt{\frac{p(1-p)}{n}}\right) \approx
+0.95\]</span></p>
+<p>In words: there is about a 95% probability that the statistic lands
+within <strong>2 standard errors</strong> of the parameter. That
+distance is the <strong>margin of error</strong> from Week 6, now with a
+probability attached to it.</p>
+<div id="example-free-throws-again" class="section level3">
+<h3>Example: free throws, again</h3>
+<p>Over a stretch of <span class="math inline">\(n = 100\)</span> free
+throws, let <span class="math inline">\(\hat{p}\)</span> be the
+proportion Curry makes. We checked that <span class="math inline">\(n(1
+- p) = 8.8 &gt; 5\)</span>, so the CLT applies.</p>
+<ul>
+<li>The mean of <span class="math inline">\(\hat{p}\)</span> is <span
+class="math inline">\(p = 0.912\)</span>, and its standard error is
+<span class="math inline">\(\sigma_{\hat{p}} = \sqrt{0.912 \times
+0.088/100} \approx 0.028\)</span>.</li>
+<li>About 95% of the time, <span class="math inline">\(\hat{p}\)</span>
+falls within <span class="math inline">\(0.912 \pm 2(0.028)\)</span>,
+between <strong>0.856 and 0.968</strong>: somewhere between about 86 and
+97 makes out of 100.</li>
+</ul>
+</div>
+<div id="example-a-tournaments-average" class="section level3">
+<h3>Example: a tournament’s average</h3>
+<p>Goals per World Cup match follow a Poisson distribution with <span
+class="math inline">\(\lambda = 2.69\)</span> (Week 7), so a single
+match has <span class="math inline">\(\mu = \lambda = 2.69\)</span> and
+<span class="math inline">\(\sigma = \sqrt{2.69} \approx 1.64\)</span>
+goals. A tournament’s average over its 64 matches is a sample mean with
+<span class="math inline">\(n = 64\)</span>, so by the CLT it is
+approximately normal with mean 2.69 and standard error</p>
+<p><span class="math display">\[\sigma_{\bar{x}} =
+\frac{1.64}{\sqrt{64}} \approx 0.205\]</span></p>
+<ul>
+<li>About 95% of tournaments, at this scoring rate, average between
+<span class="math inline">\(2.69 \pm 2(0.205)\)</span>: <strong>2.28 to
+3.10</strong> goals per match.</li>
+<li>The 2018 World Cup averaged <span class="math inline">\(169/64 =
+2.64\)</span> goals per match. Surprising? No: 2.64 is well inside 2.28
+to 3.10.</li>
+</ul>
+<p>A single match can easily have 0 goals or 6; a tournament’s average
+is far more predictable. That is the law of large numbers and the CLT
+working together: the average settles near <span
+class="math inline">\(\mu\)</span>, and the CLT says how near.</p>
+<p>We can also find any other probability about <span
+class="math inline">\(\bar{x}\)</span>, exactly as we did for single
+observations in Week 6, as long as we standardize with the
+<strong>standard error</strong> instead of <span
+class="math inline">\(\sigma\)</span>. How likely is a tournament that
+averages <strong>3 or more</strong> goals per match?</p>
+<p><span class="math display">\[z = \frac{\bar{x} -
+\mu}{\sigma/\sqrt{n}} = \frac{3 - 2.69}{0.205} \approx 1.51,
+\qquad P(\bar{x} \geq 3) = P(Z \geq 1.51) = 1 - P(Z \leq 1.51) \approx 1
+- 0.934 = 0.066\]</span></p>
+<p>About a 7% chance. (The exact answer, from the Poisson distribution
+of a tournament’s total goals, is also about 0.07: at <span
+class="math inline">\(n = 64\)</span> the normal approximation is very
+good.) The classic mistake is to divide by <span
+class="math inline">\(\sigma = 1.64\)</span> instead of <span
+class="math inline">\(\sigma/\sqrt{n} = 0.205\)</span>. That would
+describe a single match, not a tournament’s average.</p>
+</div>
+</div>
+<div id="from-an-estimate-to-an-interval" class="section level1">
+<h1>From an estimate to an interval</h1>
+<blockquote>
+<p><strong>Exam 2 stops at the central limit theorem.</strong>
+Confidence intervals, introduced at the end of Monday’s lecture, are not
+on Exam 2; we pick them up again on Monday, October 19.</p>
+</blockquote>
+<div id="point-estimates-and-interval-estimates" class="section level2">
+<h2>Point estimates and interval estimates</h2>
+<p>Statistical inference draws conclusions about a population from
+sample data. It comes in two kinds, <strong>significance tests</strong>
+(later in the course) and <strong>estimation</strong>, and estimation
+comes in two kinds as well:</p>
+<ul>
+<li>A <strong>point estimate</strong> is a single statistic used to
+estimate a parameter: <span class="math inline">\(\bar{x}\)</span> for
+<span class="math inline">\(\mu\)</span>, <span
+class="math inline">\(\hat{p}\)</span> for <span
+class="math inline">\(p\)</span>, <span class="math inline">\(s\)</span>
+for <span class="math inline">\(\sigma\)</span>.</li>
+<li>An <strong>interval estimate</strong> gives a range of plausible
+values for the parameter. The device we use is the <strong>confidence
+interval</strong>, which has the form <span
+class="math display">\[\text{point estimate} \;\pm\; \text{margin of
+error}\]</span></li>
+</ul>
+<p>A point estimate is almost never exactly right; the sampling
+distribution tells us it is usually close. An interval says <em>how</em>
+close, with a stated level of confidence.</p>
+</div>
+<div id="turning-the-probability-statement-around"
+class="section level2">
+<h2>Turning the probability statement around</h2>
+<p>In the last section we said</p>
+<p><span class="math display">\[P\left(\mu - 2\frac{\sigma}{\sqrt{n}}
+\;\leq\; \bar{x} \;\leq\; \mu + 2\frac{\sigma}{\sqrt{n}}\right) \approx
+0.95\]</span></p>
+<p>But to say that <span class="math inline">\(\bar{x}\)</span> lies
+within two standard errors of <span class="math inline">\(\mu\)</span>
+is the same as saying that <span class="math inline">\(\mu\)</span> lies
+within two standard errors of <span
+class="math inline">\(\bar{x}\)</span>. If you are within 2 miles of me,
+I am within 2 miles of you. So, with a little algebra,</p>
+<p><span class="math display">\[P\left(\bar{x} -
+2\frac{\sigma}{\sqrt{n}} \;\leq\; \mu \;\leq\; \bar{x} +
+2\frac{\sigma}{\sqrt{n}}\right) \approx 0.95\]</span></p>
+<p>The interval <span class="math inline">\(\bar{x} \pm
+2\sigma/\sqrt{n}\)</span> is a <strong>95% confidence interval</strong>
+for <span class="math inline">\(\mu\)</span>. It needs only things we
+know: the sample mean, <span class="math inline">\(\sigma\)</span> and
+<span class="math inline">\(n\)</span>. (This week <span
+class="math inline">\(\sigma\)</span> is known; next week we replace it
+with <span class="math inline">\(s\)</span>, and look at confidence
+levels other than 95%.)</p>
+<p>Read that last probability statement carefully. <span
+class="math inline">\(\mu\)</span> is a fixed number, not a random one.
+What is random is the <strong>interval</strong>, because it is built
+from <span class="math inline">\(\bar{x}\)</span>, and <span
+class="math inline">\(\bar{x}\)</span> changes from sample to sample.
+The 95% describes the method: over all possible samples, about 95% of
+the intervals built this way capture <span
+class="math inline">\(\mu\)</span>.</p>
+</div>
+<div id="how-often-does-an-interval-capture-mu" class="section level2">
+<h2>How often does an interval capture <span
+class="math inline">\(\mu\)</span>?</h2>
+<p>Back to the songs, where we can cheat and check, because we know
+<span class="math inline">\(\mu = 3.71\)</span>. Below are 25 random
+samples of <span class="math inline">\(n = 20\)</span> songs. Each line
+is <span class="math inline">\(\bar{x} \pm 2(0.34)\)</span>, the sample
+mean plus or minus the margin of error:</p>
+<p><img src="lecturemenu8_files/figure-html/unnamed-chunk-11-1.png" alt="25 horizontal confidence intervals for mean song length, one per row, each a dot at the sample mean with a line 0.68 minutes either side, plus a vertical line at mu = 3.71 minutes. 24 of the intervals cross the vertical line. One interval, centered near 4.7 minutes, lies entirely to the right of it and is marked in red as a miss." width="864" style="display: block; margin: auto;" /></p>
+<p>24 of the 25 intervals capture <span
+class="math inline">\(\mu\)</span>; one, from a sample whose mean
+happened to land far to the right, misses. That is what “95% confident”
+means: about 95% of intervals made this way capture the parameter.</p>
+<blockquote>
+<p><strong>A note on “about”.</strong> Repeat this 10,000 times and 98%
+of the intervals capture <span class="math inline">\(\mu\)</span>, a
+little more than 95%. Song length has a handful of extremely long
+tracks, and with only <span class="math inline">\(n = 20\)</span> songs
+the sampling distribution of <span
+class="math inline">\(\bar{x}\)</span> is not yet quite normal (it is
+more peaked, with a long right tail), so the empirical rule is only
+approximate. This is the “if the population has extreme outliers, you
+may need more” caveat at work: for song length it takes samples of a
+couple of hundred before the rate settles near 95%.</p>
+</blockquote>
+<div id="example-an-interval-for-mean-song-length"
+class="section level3">
+<h3>Example: an interval for mean song length</h3>
+<p>In practice we see only <strong>one</strong> sample, and we do not
+know <span class="math inline">\(\mu\)</span>. Suppose our sample is the
+bottom interval in the plot: <span class="math inline">\(n = 20\)</span>
+songs with <span class="math inline">\(\bar{x} = 3.64\)</span> minutes.
+With <span class="math inline">\(\sigma = 1.51\)</span> minutes, <span
+class="math inline">\(SE = 0.34\)</span> minutes.</p>
+<ul>
+<li>The 95% confidence interval for <span
+class="math inline">\(\mu\)</span> is <span class="math display">\[3.64
+\pm 2(0.34) = 3.64 \pm 0.68, \qquad \text{from 2.96 to 4.32
+minutes.}\]</span></li>
+<li>We would report it in the textbook’s form: <strong>“We estimate with
+95% confidence that the mean length of all 18,860 songs is between 2.96
+and 4.32 minutes.”</strong></li>
+<li>Does it capture <span class="math inline">\(\mu = 3.71\)</span>?
+Yes. But in real life we could not check.</li>
+</ul>
+</div>
+</div>
+<div id="what-95-confident-does-and-does-not-mean"
+class="section level2">
+<h2>What “95% confident” does and does not mean</h2>
+<p>The <strong>confidence level</strong> is the probability that the
+interval will capture the parameter <strong>before the data are
+collected</strong>. It is the long-run success rate of the method. Once
+the data are in and the interval is computed, <strong>the interval
+either does or does not contain the parameter</strong>: there is nothing
+random left, and we simply do not know which.</p>
+<p>So for the interval 2.96 to 4.32 minutes:</p>
+<ul>
+<li><strong>Correct:</strong> “If we took many samples of 20 songs and
+built an interval from each, about 95% of those intervals would capture
+the true mean song length.”</li>
+<li><strong>Not correct:</strong> “There is a 95% probability that <span
+class="math inline">\(\mu\)</span> is between 2.96 and 4.32.” <span
+class="math inline">\(\mu\)</span> is a fixed number. It is either in
+this interval or it is not.</li>
+<li><strong>Not correct:</strong> “95% of songs are between 2.96 and
+4.32 minutes long.” The interval is about the <strong>mean</strong> song
+length, not individual songs. (Individual songs vary by <span
+class="math inline">\(\sigma = 1.51\)</span> minutes, far more than this
+interval suggests.)</li>
+</ul>
+</div>
+</div>
+<div id="conclusion-what-you-should-take-away" class="section level1">
+<h1>Conclusion: what you should take away</h1>
+<div id="sampling-distributions-1" class="section level2">
+<h2>Sampling distributions</h2>
+<ul>
+<li>A statistic is a random variable; its <strong>sampling
+distribution</strong> is its distribution over all possible samples of
+size <span class="math inline">\(n\)</span>. Do not confuse it with the
+population distribution or the data distribution.</li>
+<li>For a small discrete population, build it by hand: list every sample
+(order matters), find each sample’s probability, and add up the samples
+that give the same value.</li>
+<li><span class="math inline">\(\bar{x}\)</span> has mean <span
+class="math inline">\(\mu\)</span> and standard error <span
+class="math inline">\(\sigma/\sqrt{n}\)</span>; <span
+class="math inline">\(\hat{p}\)</span> has mean <span
+class="math inline">\(p\)</span> and standard error <span
+class="math inline">\(\sqrt{p(1 - p)/n}\)</span>. Both shrink as <span
+class="math inline">\(n\)</span> grows; 4 times the sample halves the
+standard error.</li>
+</ul>
+</div>
+<div id="the-central-limit-theorem-1" class="section level2">
+<h2>The central limit theorem</h2>
+<ul>
+<li>For large <span class="math inline">\(n\)</span> (roughly <span
+class="math inline">\(n \geq 30\)</span>, or <span
+class="math inline">\(np\)</span> and <span class="math inline">\(n(1 -
+p)\)</span> above 5 for a proportion), the sampling distribution of
+<span class="math inline">\(\bar{x}\)</span> or <span
+class="math inline">\(\hat{p}\)</span> is approximately normal,
+<strong>whatever the shape of the population</strong>. The population
+itself does not change.</li>
+<li>So a statistic falls within 2 standard errors of its parameter with
+probability about 0.95, and any other probability about <span
+class="math inline">\(\bar{x}\)</span> comes from <span
+class="math inline">\(z = (\bar{x} -
+\mu)/(\sigma/\sqrt{n})\)</span>.</li>
+</ul>
+</div>
+<div id="confidence-intervals" class="section level2">
+<h2>Confidence intervals</h2>
+<ul>
+<li>A <strong>confidence interval</strong> is point estimate <span
+class="math inline">\(\pm\)</span> margin of error. With the margin of
+error at 2 standard errors, <span class="math inline">\(\bar{x} \pm
+2\sigma/\sqrt{n}\)</span> is a 95% confidence interval for <span
+class="math inline">\(\mu\)</span>.</li>
+<li>“95% confident” describes the method: about 95% of intervals built
+this way capture the parameter. Any one interval either does or does
+not.</li>
+</ul>
+</div>
+<div id="sources" class="section level2">
+<h2>Sources</h2>
+<ul>
+<li>Illowsky, B. and Dean, S. (2023). <em>Introductory Statistics
+2e</em>, Sections 7.1–7.3 and 8.1. OpenStax. <a
+href="https://openstax.org/details/books/introductory-statistics-2e">OpenStax:
+Introductory Statistics 2e</a></li>
+<li>Spotify and YouTube song statistics (top 10 Spotify tracks of 2,079
+artists, collected February 2023): the “Spotify and Youtube” dataset on
+Kaggle, file <code>Spotify_Youtube.csv</code>.</li>
+<li>2022 FIFA World Cup: 172 goals in 64 matches; 2018 FIFA World Cup:
+169 goals in 64 matches. Wikipedia, “2022 FIFA World Cup” and “2018 FIFA
+World Cup statistics”.</li>
+<li>Stephen Curry’s career free throws, 4,236 of 4,645.
+Basketball-Reference, <a
+href="https://www.basketball-reference.com/players/c/curryst01.html">Basketball-Reference:
+Stephen Curry career stats</a>, checked October 5, 2026.</li>
+</ul>
 </div>
 </div>
 
