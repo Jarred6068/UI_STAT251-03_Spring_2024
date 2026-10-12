@@ -7,19 +7,12 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.width=12, fig.height=10, fig.pos = "H")
-library(kableExtra)
-library(knitr)
-library(latex2exp)
-library(gridExtra)
-library(ggpubr)
-library(ggthemes)
-library(plyr)
 ```
 
 # Exam Logistics:
 
   * Exam 2 is a **take-home, open-note exam** completed in **Canvas**. You may use your notes, the textbook and the course website. It is due **Sunday, October 18, 2026 at 11:59PM**. An in-class review will be held on **Wednesday, October 14, 2026**
+
   * The exam is 22 questions plus 2 bonus questions. Most are multiple choice or true/false, and four are short written explanations
 
 # How to prepare
@@ -32,246 +25,150 @@ values in a table, but you do need to recognise which formula fits, which number
 and the common mistakes (for example, using $\sigma$ where $\sigma/\sqrt{n}$ belongs, or
 forgetting to take the complement for a "greater than" probability).
 
-Study by computing anyway. Work the
-[Exam 2 Review Problems](../Review_problems/exam2_review_problems.html) through, then check
-the [solutions](../Review_problems/exam2_review_problems_solns.html). They are more
-computational than the exam by design. [Homework 2](../homeworks/2026/homework_2_2026.html) covers
-much of this material as well, and some exam problems are based on homework problems.
+Because the exam is open-note, there are no review problems for Exam 2. Use the list below
+to check that your notes cover everything, and make sure you can explain each item in your
+own words. [Homework 2](../homeworks/2026/homework_2_2026.html) covers most of this
+material, and some exam problems are based on homework problems.
 
 # Content To Study
 
 Exam 2 will cover material beginning on **Monday of Week 4 (September 14)** through **Monday of Week 8 (October 12)**. This includes the following topics:
 
-* Sampling designs - September 14 and 21
+* Sampling designs, bias, sampling and nonsampling error - September 14 and 21
 
-* Experimental design and causation - September 23 and 25
+* Experimental design, association vs. causation and research ethics - September 23 and 25
 
-* The normal distribution - September 25 and 28
+* The normal distribution, $z$-scores, the empirical rule and identifying outliers - September 25, 28 and 30
 
-* Identifying outliers, margin of error, statistical significance - September 30
+* Standard error and margin of error - September 30
 
 * Probability theory, random variables and discrete distributions - October 2, 5, 7 and 9
 
-* Continuous distributions - October 9 (the normal distribution)
+* Continuous distributions (through the normal distribution) - October 9
 
 * Sampling distributions and the Central Limit Theorem - October 12
 
-**Confidence intervals are not on this exam.** Confidence intervals for a
-proportion are introduced on October 12 and covered on October 19, after the
-exam, so you are responsible only for what a confidence interval *is*, not for
-computing one.
+**Not on this exam:** statistical significance (October 2), transformations of variables
+(September 30) and confidence intervals (introduced October 12, covered October 19). These
+come back later in the course, when we reach confidence intervals and hypothesis tests.
 
-## Experimental and Sampling Designs
+## Sampling Designs
 
-  1. Know how to define and identify the three experimental designs we discussed: **Completely randomized design**, **matched pairs design** and **randomized block design**.
+  1. Know the terminology for sampling designs: **population**, **sample**, **sampling frame**, **census** and **sample survey**
 
-  2. Know the terminology for sampling designs (e.g Sampling Frame, Census, sample survey, etc.)
+  2. Know how to define and identify the sampling designs we talked about in class: **simple random sampling**, **systematic sampling**, **stratified random sampling**, **cluster sampling** (including **two-stage cluster sampling**), **convenience sampling** and **voluntary response sampling**
 
-  3. Know how to define and identify the sampling designs we talked about in class: **Convenience Sampling, Systematic Sampling, Simple Random Sampling, Cluster Sampling, Stratified Random Sampling**
+  3. Know the difference between a **stratum** (members alike within, and a sample is taken from *every* stratum) and a **cluster** (a mini-population, where only *some* clusters are selected and everyone inside them is measured)
 
-  4. Know the difference between **Sampling Error** and **Margin of Error**.
+  4. Know the difference between a convenience sample and a voluntary response sample (who does the choosing), and why neither one is a good way to sample a population
 
-  5. Know the difference between **Sampling With Replacement** vs **Sampling Without Replacement**
+  5. Know the difference between **sampling with replacement** and **sampling without replacement**
 
-  6. Know the difference between **statistical association** and **causation**
+  6. Know the difference between **sampling error** and **nonsampling error**, and what makes a sample **biased** or **representative** (textbook Sections 1.2 and 1.4)
 
-  7. Know the sources of bias in a sample survey: **undercoverage**, **nonresponse** and **response bias**, and why a larger sample does not remove bias
+  7. Know the sources of bias in a sample survey: **undercoverage**, **nonresponse** and **response bias**
 
-  8. Know how **two-stage cluster sampling** works, and the difference between a **stratum** (alike within) and a **cluster** (a mini-population)
+  8. Know why a **larger sample reduces sampling error but does not remove bias**: a bigger biased sample gives a more precise wrong answer
 
-  9. Know the language of experiments: **experimental units / subjects**, **factors**, **levels**, **treatments**, **control group**, **placebo**, **blinding** and **double blinding**
+## Experimental Design and Ethics
 
-  10. Know what a **lurking** or **confounding** variable is, and what **random sampling** (generalizing to a population) and **random assignment** (concluding cause) each allow you to conclude
+  1. Know the definitions of an **explanatory variable**, a **response variable**, an **experimental study**, an **observational study** and a **survey**, and be able to explain the difference between an experiment and an observational study
 
-  11. Know the basic ethical requirements for research on human subjects: **informed consent**, **confidentiality** and **IRB** review
+  2. Know the language of experiments: **experimental units / subjects**, **factors**, **levels**, **treatments**, **control group**, **placebo**, **blinding** and **double blinding**
 
-  12. Know the difference between **sampling error**, **nonsampling error** and **sampling bias**, and what makes a **representative sample** (textbook Sections 1.2 and 1.4)
+  3. Know how to define and identify the three experimental designs we discussed: **completely randomized design**, **randomized block design** (and what a **blocking variable** is) and **matched pairs design**
 
-  13. Recognize unethical data practices, such as fabricating data or quietly leaving out people who were hard to reach (textbook Section 1.4)
+  4. Know the difference between **statistical association** and **causation**, and what a **lurking** (confounding) variable is. Be able to explain why an observational study on its own cannot show that one variable causes another
+
+  5. Know what **random sampling** (generalizing to a population) and **random assignment** (concluding cause) each allow you to conclude
+
+  6. Know the basic ethical requirements for research on human subjects: **informed consent**, **confidentiality** and **IRB** review
+
+  7. Recognize unethical data practices, such as fabricating data or quietly leaving out people who were hard to reach (textbook Section 1.4)
 
 ## The Normal Distribution
 
-  1. Know how the mean and standard deviation affect the shape and location of a normal distribution
+  1. Know what a normal distribution looks like (a continuous, symmetric, bell-shaped curve), and that the total area under the curve is 1
 
-  2. Know the empirical rule and how it relates to the standard deviation of the normal distribution
+  2. Know how the mean $\mu$ (location) and the standard deviation $\sigma$ (spread) affect a normal curve, and how two normal curves compare when they share a mean or share a standard deviation
 
-  3. Know how to compute and interpret a $z$-score and how it relates to the **standard normal distribution**
+  3. Know the **empirical rule** (approximately $68\%$, $95\%$ and $99.7\%$ of observations within 1, 2 and 3 standard deviations of the mean), and how to use it together with symmetry to find the percentage above or below a value, or the cutoff for the top $2.5\%$
 
-  \[ z = \frac{x-\mu}{\sigma} \]
+  4. Know how to compute and interpret a $z$-score, read in **standard deviations** above or below the mean, and how it relates to the **standard normal distribution**. Know how to use $z$-scores to compare observations from two different distributions
 
+  5. Know how to write a normal probability as a standard normal probability: a $Z$-table gives the area to the **left**, $P(Z \leq z)$, so a "greater than" probability needs the complement and a "between" probability is a difference of two left areas
+
+  6. Know how to identify outliers with the **$\pm 2s$ rule** and with the **$1.5\times IQR$ rule**, how to judge from a boxplot whether a distribution looks roughly normal, and why the $\pm 2s$ rule should only be trusted for roughly normal data
 
 ## Probability Theory
 
-  1. Be comfortable with the language of probability theory: e.g know how to define **Probability**, **Sample Space**, **Event**, **Random Trial**
+  1. Be comfortable with the language of probability theory: know how to define **probability**, **sample space**, **event**, **random trial**, and the **union** and **intersection** of two events
 
-  2. Know the rules we discussed for probability: **Complement Rule**, **Addition Rule**, **Multiplication Rule** 
+  2. Know the rules we discussed for probability: the **complement rule**, the **addition rule** and the **multiplication rule**, and when each one applies ("not", "or", "and")
 
-  3. Know how to compute the probability of a **Complement** of an event, **Union** of two events, and **Intersection** of two independent events.
+  3. Know how to compute the probability of a **complement** of an event, the **union** of two events (subtracting the overlap so it is not counted twice), and the **intersection** of two independent events
 
-  4. Know how to compute probabilities when sampling with vs without replacement. 
+  4. Know how to find an "at least one" probability through its complement, "none"
 
-  5. Know how to use a Venn Diagram to show the relationships between events
+  5. Know how to compute probabilities when sampling with vs. without replacement: without replacement, the second probability is computed from what is left after the first draw
 
-  6. Know what is meant when two events are said to be **Disjoint (mutually exclusive)**
+  6. Know how to use a Venn diagram to show the relationships between events and fill in the count for each region
 
-  7. Know what is implied by the **Law of Large Numbers** (e.g the relative
-frequency of an event will approach the true probability of an event as the number of observations of the event increases)
+  7. Know what is meant when two events are **disjoint (mutually exclusive)** or **independent**, and why disjoint events are not independent
 
-  8. Know the definitions of **Random variable**, and the difference between **Discrete Random Variables** versus **Continuous Random Variables**.
+  8. Know what is implied by the **Law of Large Numbers** (the relative frequency of an event approaches its true probability as the number of observations increases), and why it does not mean a result is "due" to happen (the gambler's fallacy)
 
-  9. Understand what is meant by the **Probability distribution** <u>of a discrete random variable</u>.
+## Random Variables and Discrete Distributions
 
-  10. Be able to compute the **mean**, **variance**, and **standard deviation** of a <u>discrete random variable</u> from its <u>probability distribution</u> (when given as a table of values and probabilities).
+  1. Know the definitions of a **random variable**, and the difference between **discrete** and **continuous** random variables
 
-### Rules and equations from of probability theory
+  2. Understand what is meant by the **probability distribution** of a discrete random variable, and how to check that a table of probabilities is a valid distribution (each probability between 0 and 1, and the probabilities add to 1)
 
-**The Complement Rule**:
-The probability of the complement of an event is one minus the probability of the event
-\[ P(A') = 1-P(A) \]
+  3. Be able to compute the **mean**, **variance** and **standard deviation** of a discrete random variable from its probability distribution. The mean is a **probability-weighted** average, $\mu = \sum_x x\cdot P(x)$, not the plain average of the possible values
 
-**The Addition Rule**:
-The probability of the union of two events is the sum of their individual probabilities minus the probability of their intersection
-\[P(A\cup B) = P(A)+P(B)-P(A\cap B)\]
+  4. Know the **Bernoulli** distribution (one trial, success with probability $p$), and that its mean is $p$ and its variance is $p(1-p)$
 
-**The Multiplication Rule For Two Independent Events**: 
-The probability of the intersection of two independent events is equal to the product of their individual probabilities
-\[ P(A\cap B) = P(A)\cdot P(B)\]
+  5. Know when a count follows a **binomial** distribution (a fixed number $n$ of independent trials, each a success with the same probability $p$), how to compute a probability with its probability mass function, what the $\frac{n!}{k!(n-k)!}$ term counts, and that its mean is $np$ and its variance is $np(1-p)$
 
-**The Multiplication Rule For Dependent Events**:
-The probability of the intersection of two dependent events is equal to their conditional probability multiplied by the individual probability of the event being conditioned on
-\[ P(A\cap B) = P(A|B)\cdot P(B) \]
+  6. Know when a count follows a **Poisson** distribution (events occurring at an average rate $\lambda$ in a fixed interval of time or space), how to compute a probability with its probability mass function, and that its mean and variance are both $\lambda$
 
-**Mean of Discrete Random Variable** 
-\[ \mu =\sum_x x\cdot P(x) \]
+  7. Know how to compute "at most" probabilities, such as $P(X \leq 1) = P(X = 0) + P(X = 1)$, by adding probabilities from the probability mass function
 
-**Variance of Discrete Random Variable** 
-\[ \sigma^2 =\sum_x (x-\mu)^2\cdot P(x) \]
+  8. Know that for a continuous random variable, the probability of falling in an interval is the area under its density curve over that interval, and know the definition of the **cumulative distribution**, $P(X \leq x)$
 
-**Standard Deviation of Discrete Random Variable**
-\[ \sigma =\sqrt{\sum_x (x-\mu)^2\cdot P(x)} \]
+## Sampling Distributions and the Central Limit Theorem
 
+  1. Know the difference between a **population distribution** (how single observations vary) and a **sampling distribution** (how a statistic such as $\bar{x}$ varies from sample to sample)
 
+  2. Know how to build the sampling distribution of $\bar{x}$ for a very small population and sample size, by listing every equally likely sample (order matters) and its mean
 
-### Finding Probabilities, Sampling Distributions, and The CLT
+  3. Know the **standard error** of the sample mean, $\sigma_{\bar{x}} = \sigma/\sqrt{n}$, why it is smaller than $\sigma$, and how it changes with the sample size (making the sample 4 times larger cuts the standard error in half)
 
-  1. Understand what is meant by a population distribution and a sampling distribution.
+  4. Know the mean and standard error of the sampling distribution of the sample proportion $\hat{p}$
 
-  2. Know how to compute probabilities for the **Bernoulli**, **Binomial**, and **Poisson** distributions using their **probability mass functions** (PMF)
-  
-  3. Know the mean and standard deviation for the **Bernoulli**, **Binomial**, and **Poisson** random variables
+  5. Know the **margin of error** as $\pm 2$ standard errors, and how it changes as $n$ grows
 
-  4. Know how to compute probabilities using the probability distribution of a discrete random variable.
+  6. Understand the **Central Limit Theorem**: as the sample size grows, the sampling distribution of $\bar{x}$ becomes approximately normal and narrower. The population distribution itself does not change
 
-  5. Know that the probability that a continuous random variable falls in an interval corresponds to the area under the curve of its probability density function over that interval
-
-  6. Know the definition of the **cumulative distribution** of a random variable (e.g $P(X\leq z)$)
-
-  7. Know how to compute probabilities from a normal probability distribution using a $Z$-table (standard normal probability table).
-
-  8. Know how to derive the sampling distribution of the sample mean $\bar{x}$
-
-  9. Know how to derive the sampling distribution of the sample proportion $\hat{p}$
-  
-  10. Understand the central limit theorem and how it relates to the sampling distribution of $\bar{x}$ and $\hat{p}$
-
-
-### Special Discrete Distributions
-
-* Be sure you are comfortable with finding probabilities from the following probability distributions:
-
-**Bernoulli Distribution** - It models a random experiment with two possible outcomes, often referred to as success and failure. The distribution is characterized by a single parameter, usually denoted as $p$, which represents the probability of success.
-
-\[PMF: \ \ P(X = k) = \begin{cases} p & \text{if} \  k = 1 \\
-                               (1-p) & \text{if} \ k = 0 \end{cases} \]
-                               
-* $p$ the probability of success 
-
-* the mean is given by $E[X] = p$
-
-* the variance is given by $Var[X] = p(1-p)$
-
-**The Binomial Distribution** - The binomial distribution is a discrete probability distribution that describes the number of successes in a fixed number of independent Bernoulli trials, where each trial has only two possible outcomes: success or failure.
-
-\[PMF: \ \ P(X = k) = \frac{n!}{k!(n-k)!}\cdot p^k \cdot (1-p)^{n-k} \]
-
-* $p$ - probability of success 
-
-* $k$ - number of successes
-
-* $n$ - number of independent trials (e.g sample size)
-
-* $\frac{n!}{k!(n-k)!}$ - the number of ways to have $k$ successes arranged among $n$ trials
-
-* the mean is given by $E[X] = np$
-
-* the variance is given by $Var[X] = np(1-p)$
-
-\[ P(X \leq a) = \sum_{k = 0}^a \frac{n!}{k!(n-k)!}\cdot p^k \cdot (1-p)^{n-k} \]
-
-**The Poisson Distribution** - a discrete probability distribution that models the number of events that occur within a fixed interval of time or space and with fixed rate $\lambda$
-
-\[PMF: \ \ P(X =k) = \frac{\lambda^k\cdot e^{-\lambda}}{k!} \]
-
-* $\lambda$ - the average rate at which events occur
-
-* $k$ - a non-negative integer representing the number of events that occurred
-
-* the mean and variance are given by $E[X] = Var[X] = \lambda$
-
-\[ P(X \leq a) = \sum_{k = 0}^a \frac{\lambda^k\cdot e^{-\lambda}}{k!} \]
-
-### Confidence intervals: what is and is not on this exam
-
-The October 12 lecture introduces the idea of a confidence interval. You should
-know **what a confidence interval is** and what the **confidence level** (e.g.
-$95\%$) does and does not mean, and recognize the form **point estimate $\pm$
-margin of error**.
-
-Everything beyond that -- computing an interval for a proportion or a mean,
-choosing a sample size, the $z$ multipliers -- is covered on October 19 and
-later, **after** this exam, and is **not** on Exam 2.
-
-<br>
-<br>
 <br>
 <br>
 
 
 # Formulas:
-*  Be sure you understand the notation (i.e., symbols) we have used so far (e.g., $n,N,s,s^2,\bar{x}, \mu,\sigma,\sigma^2$)
+*  Be sure you understand the notation (i.e., symbols) we have used so far (e.g., $n,N,s,s^2,\bar{x}, \mu,\sigma,\sigma^2, \hat{p}, p, \lambda$)
 
-The following formulas will be provided on the exam
+The following formulas will be provided on the exam, **unlabeled** -- the equations only,
+with no names or descriptions. Part of what the exam asks is which formula fits the
+situation in front of you.
 
-\[\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i, \ \ \bar{x} = \frac{1}{n}\sum_{x} xF(x), \ \  \bar{x} = \sum_{x} xRF(x)\]
+\[\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i, \ \ s^2 = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})^2, \ \ s = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})^2}\]
 
-\[s^2 = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})^2, \ \ s = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})^2}\]
+\[ z = \frac{x - \mu}{\sigma}, \ \ P(X > x) = 1 - P(X\leq x), \ \ P(a\leq X \leq b) = P(X\leq b) - P(X\leq a) \]
 
-\[ z = \frac{x - \mu}{\sigma} \]
+\[\mu = \sum_x x\cdot P(x), \ \ \sigma^2 = \sum_x (x-\mu)^2\cdot P(x), \ \ \sigma = \sqrt{\sum_x (x-\mu)^2\cdot P(x)} \]
 
-\[\mu = \sum_x x\cdot P(x) \]
+\[P(A') = 1-P(A), \ \ P(A\cup B) = P(A)+P(B)-P(A\cap B), \ \ P(A\cap B) = P(A)\cdot P(B) \]
 
-\[ \sigma^2 = \sum_x (x-\mu)^2\cdot P(x) \]
+\[ P(X = k) = \frac{n!}{k!(n-k)!}\cdot p^k \cdot (1-p)^{n-k}, \ \ P(X =k) = \frac{\lambda^k\cdot e^{-\lambda}}{k!}\]
 
-\[\sigma = \sqrt{\sum_x (x-\mu)^2\cdot P(x)} \]
-
-\[P(A') = 1-P(A) \]
-
-\[P(A\cup B) = P(A)+P(B)-P(A\cap B) \]
-
-\[P(A\cap B) = P(A)\cdot P(B) \]
-
-\[ P(X > x) = 1 - P(X\leq x)  \]
-
-for a **continuous** random variable $X$ (e.g. the normal distribution):
-
-\[ P(a\leq X \leq b) = P(X\leq b) - P(X\leq a)\]
-
-\[ P(X = k) = \frac{n!}{k!(n-k)!}\cdot p^k \cdot (1-p)^{n-k}\]
-
-\[ P(X =k) = \frac{\lambda^k\cdot e^{-\lambda}}{k!}\]
-
-standard errors of the sampling distributions of $\bar{x}$ and $\hat{p}$:
-
-\[ \mu_{\bar{x}} = \mu, \ \ \sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}} \]
-
-\[ \mu_{\hat{p}} = p, \ \ \sigma_{\hat{p}} = \sqrt{\frac{p(1-p)}{n}} \]
+\[ \mu_{\bar{x}} = \mu, \ \ \sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}, \ \ \mu_{\hat{p}} = p, \ \ \sigma_{\hat{p}} = \sqrt{\frac{p(1-p)}{n}} \]

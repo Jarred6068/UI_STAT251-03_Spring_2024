@@ -129,8 +129,9 @@ outlined below. Any changes will be announced in class and posted here.**
     * Exam 3 (Nov 20) now stops after goodness-of-fit and tests of independence
       (Nov 16). Cramer's V / McNemar / Fisher move to Nov 30, after the exam,
       and measures of association to Dec 2.
-  The Exam 3 study guide and the Exam 2 and Exam 3 review problems were NOT
-  re-scoped - check them before those exams.
+  The Exam 3 study guide and the Exam 3 review problems were NOT re-scoped -
+  check them before that exam. Exam 2 is open-note and has no review problems;
+  its study guide was checked against Homework 2 and the exam on Oct 12 2026.
 
   TOPIC MOVE, Sept 27 2026. No dates changed. Identifying outliers moved from
   Wednesday Sept 30 back to Monday Sept 28, because the outlier rule is the
