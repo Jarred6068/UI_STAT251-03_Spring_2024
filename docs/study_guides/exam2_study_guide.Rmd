@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
   * Exam 2 is a **take-home, open-note exam** completed in **Canvas**. You may use your notes, the textbook and the course website. It is due **Sunday, October 18, 2026 at 11:59PM**. An in-class review will be held on **Wednesday, October 14, 2026**
 
-  * The exam is 22 questions plus 2 bonus questions. Most are multiple choice or true/false, and four are short written explanations
+  * The exam is 25 questions plus 2 bonus questions. Most are multiple choice or true/false, and four are short written explanations
 
 # How to prepare
 
