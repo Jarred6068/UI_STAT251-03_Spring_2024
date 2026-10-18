@@ -159,7 +159,15 @@ Binomial examples and the Poisson distribution; the normal as a continuous distr
 # Week 8
 
 ## Lecture 18 &middot; Monday, October 12
-Sampling distributions and the central limit theorem; introduction to confidence intervals
+Sampling distributions and the standard error (the central limit theorem and confidence intervals moved to Lecture 19)
 
 <a href="./lecture_slides/Week%208/2026/Week8_Lecture18_Slides_10_12_2026.pdf">Slides (PDF)</a> &middot;
 <a href="./lecture_slides/Week%208/2026/Week8_Lecture18_Slides_10_12_2026.pptx">Slides (PowerPoint)</a>
+
+# Week 9
+
+## Lecture 19 &middot; Monday, October 19
+Finding normal probabilities (lower tail, upper tail, area between); the central limit theorem; confidence intervals for a mean and a proportion
+
+<a href="./lecture_slides/Week%209/2026/Week9_Lecture19_Slides_10_19_2026.pdf">Slides (PDF)</a> &middot;
+<a href="./lecture_slides/Week%209/2026/Week9_Lecture19_Slides_10_19_2026.pptx">Slides (PowerPoint)</a>

@@ -194,7 +194,20 @@ outlined below. Any changes will be announced in class and posted here.**
   syllabus was deliberately NOT changed and still says 10/18 for the project check.
   Exam 2 is also OPEN-NOTE, so it includes simple "show how to compute" multiple-choice
   items; the Exam 2 study guide says so.
+
+  CARRY-OVER, Oct 18 2026. No dates changed. Lecture 18 (Mon Oct 12) stopped after the
+  standard-error example (its slide 9), before the central limit theorem. Lecture 19
+  (Mon Oct 19) opens with finding areas under the standard normal curve (lower tail,
+  upper tail, area between), then carries Lecture 18 slides 10-18 (the CLT, the CLT for
+  a proportion, the 2-SE probability statements and the introduction to confidence
+  intervals for a mean), and ends with a first 95% interval for a proportion
+  (lecture_slides/Week 9/2026/Week9_Lecture19_Slides_10_19_2026.pptx). That covers the
+  Oct 19 topic it replaces, so nothing later shifts: Wed Oct 21 picks up confidence
+  levels other than 95% and the interval for a mean when sigma is unknown. If Lecture
+  19 runs short, the teen cell-phone proportion example moves to the front of Oct 21.
+  Exam 2 was already given, so no study guide changes scope.
 -->
+
 
 
 <table class="schedule-table">
@@ -353,7 +366,7 @@ outlined below. Any changes will be announced in class and posted here.**
 <tr>
   <th scope="row">Monday</th>
   <td>October 12, 2026</td>
-  <td>Sampling distributions and the central limit theorem; introduction to confidence intervals</td>
+  <td>Sampling distributions and the standard error</td>
 </tr>
 <tr>
   <th scope="row">Wednesday</th>
@@ -373,12 +386,12 @@ outlined below. Any changes will be announced in class and posted here.**
 <tr>
   <th scope="row">Monday</th>
   <td>October 19, 2026</td>
-  <td>Confidence Intervals for a population proportion</td>
+  <td>Finding normal probabilities; the central limit theorem; confidence intervals for a population mean and a population proportion</td>
 </tr>
 <tr>
   <th scope="row">Wednesday</th>
   <td>October 21, 2026</td>
-  <td>Confidence Intervals for a population mean</td>
+  <td>Confidence intervals continued: confidence levels other than 95%, intervals for a mean when &sigma; is unknown</td>
 </tr>
 <tr>
   <th scope="row">Friday</th>

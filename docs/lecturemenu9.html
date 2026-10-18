@@ -556,9 +556,277 @@ $(document).ready(function () {
 </div>
 
 
-<!-- TODO: this Week 9 file contains only Lecture 18; confirm the second lecture is intentionally absent. -->
-<div id="lecture-18" class="section level1">
-<h1>Lecture 18</h1>
+<!--
+  SCOPE OF THIS PAGE (Oct 18 2026). Week 9 per Course_Schedule.Rmd (the date source of truth):
+    Mon Oct 19   Lecture 19  finding normal probabilities; the central limit theorem;
+                             confidence intervals for a mean and a proportion
+                             lecture_slides/Week 9/2026/Week9_Lecture19_Slides_10_19_2026.pptx
+    Wed Oct 21   confidence levels other than 95%; the interval for a mean when sigma is unknown
+    Fri Oct 23   choosing a minimum sample size, assumptions of estimators
+  Lecture 18 (Oct 12) stopped before the central limit theorem, so Lecture 19 re-taught the
+  Week 8 page from "The central limit theorem" on. That write-up stays on the Week 8 page;
+  this page links to it rather than copying it. The first two sections below are new for
+  Lecture 19. Their teaching follows the 2024 notes ("The normal distribution revisited",
+  git show 27a60f5:docs/lecturemenu8.Rmd) and the 2024 Lecture 15 slides: shade the area,
+  use the table's area-to-the-left, complement for an upper tail, subtract for an area
+  between. Figures are the slide figures (assets/make_lecture19_figures.R).
+
+  Everything from "Confidence levels and critical values" down is still the 2024 Week 9
+  page (2024 Lecture 18), kept for Wed Oct 21 until it is rewritten.
+-->
+<div id="finding-normal-probabilities" class="section level1">
+<h1>Finding normal probabilities</h1>
+<p>In Week 7 we said that for a continuous random variable, probability
+is <strong>area under the density curve</strong>, and that a single
+value has probability zero, <span class="math inline">\(P(X = c) =
+0\)</span>. So the questions we ask about a continuous variable are
+always about an <em>interval</em>: below some value, above it, or
+between two values. For the normal distribution those areas come from
+the <strong>standard normal table</strong> (the <span
+class="math inline">\(z\)</span>-table), which we first used in Week
+6.</p>
+<p>The catch is that the table gives only <strong>one</strong> kind of
+area: the area to the <strong>left</strong> of <span
+class="math inline">\(z\)</span>, <span class="math inline">\(P(Z \leq
+z)\)</span>, where <span class="math inline">\(Z \sim N(0, 1)\)</span>
+is the standard normal. Every other area has to be built out of that
+one.</p>
+<p><img src="assets/l19_three_areas.png" alt="Three standard normal curves side by side, each with the z axis from -3 to 3. Left, lower tail: the area to the left of z = -1.30 is shaded. Middle, upper tail: the area to the right of z = 1.80 is shaded. Right, area between: the area between z = -1.30 and z = 1.80 is shaded." width="95%" style="display: block; margin: auto;" /></p>
+<ul>
+<li><strong>Lower tail.</strong> <span class="math inline">\(P(Z &lt;
+z)\)</span> is the table value itself.</li>
+<li><strong>Upper tail.</strong> The whole area under the curve is 1, so
+the area to the right is what is left over: <span
+class="math display">\[P(Z &gt; z) = 1 - P(Z \leq z)\]</span></li>
+<li><strong>Area between.</strong> Take everything to the left of the
+larger value, and remove everything to the left of the smaller one:
+<span class="math display">\[P(a &lt; Z &lt; b) = P(Z \leq b) - P(Z \leq
+a)\]</span></li>
+</ul>
+<p>Because <span class="math inline">\(P(Z = z) = 0\)</span>, it does
+not matter whether the inequality is <span
+class="math inline">\(&lt;\)</span> or <span
+class="math inline">\(\leq\)</span>. Always <strong>sketch the curve and
+shade the area first</strong>: the picture tells you which rule to use,
+and whether your answer should be big or small.</p>
+<div id="the-lower-tail" class="section level2">
+<h2>The lower tail</h2>
+<p><img src="assets/l19_lower.png" alt="Two standard normal curves. Left, titled P(Z &lt; 1.25): the area to the left of 1.25 is shaded, most of the curve. Right, titled P(Z &lt; -0.84): the area to the left of -0.84 is shaded, a small part of the left side." width="80%" style="display: block; margin: auto;" /></p>
+<ul>
+<li><span class="math inline">\(P(Z &lt; 1.25)\)</span>: row 1.2, column
+.05 of the table gives <strong>0.8944</strong>.</li>
+<li><span class="math inline">\(P(Z &lt; -0.84)\)</span>: row <span
+class="math inline">\(-0.8\)</span>, column .04 gives
+<strong>0.2005</strong>. A negative <span
+class="math inline">\(z\)</span> is below the mean, so the area to its
+left is less than one half.</li>
+</ul>
+</div>
+<div id="the-upper-tail" class="section level2">
+<h2>The upper tail</h2>
+<p><img src="assets/l19_upper.png" alt="Two standard normal curves. Left, titled P(Z &gt; 1.80): only the small area to the right of 1.80 is shaded. Right, titled P(Z &gt; -1.30): the area to the right of -1.30 is shaded, most of the curve." width="80%" style="display: block; margin: auto;" /></p>
+<ul>
+<li><span class="math inline">\(P(Z &gt; 1.80) = 1 - P(Z \leq 1.80) = 1
+- 0.9641 = 0.0359\)</span>.</li>
+<li><span class="math inline">\(P(Z &gt; -1.30) = 1 - P(Z \leq -1.30) =
+1 - 0.0968 = 0.9032\)</span>.</li>
+</ul>
+<p>The normal curve is symmetric, so the area to the right of <span
+class="math inline">\(-1.30\)</span> is the same as the area to the left
+of <span class="math inline">\(+1.30\)</span>: the table gives <span
+class="math inline">\(P(Z \leq 1.30) = 0.9032\)</span>, the same
+answer.</p>
+</div>
+<div id="the-area-between" class="section level2">
+<h2>The area between</h2>
+<p><img src="assets/l19_between.png" alt="Two standard normal curves. Left, titled P(-1.30 &lt; Z &lt; 1.80): the area between -1.30 and 1.80 is shaded. Right, titled P(-1.96 &lt; Z &lt; 1.96): the area between -1.96 and 1.96 is shaded, all but the two thin tails." width="80%" style="display: block; margin: auto;" /></p>
+<ul>
+<li><span class="math inline">\(P(-1.30 &lt; Z &lt; 1.80) = 0.9641 -
+0.0968 = 0.8673\)</span>.</li>
+<li><span class="math inline">\(P(-1.96 &lt; Z &lt; 1.96) = 0.9750 -
+0.0250 = 0.9500\)</span>.</li>
+</ul>
+<p>Remember that second one. Exactly 95% of a normal distribution lies
+within <strong>1.96</strong> standard deviations of the mean; the
+empirical rule’s “2” is that number rounded. It is where the 2 in a 95%
+confidence interval comes from.</p>
+</div>
+<div id="practice" class="section level2">
+<h2>Practice</h2>
+<p>For <span class="math inline">\(Z \sim N(0, 1)\)</span>, sketch and
+shade each area, then use the table:</p>
+<ol style="list-style-type: lower-alpha">
+<li><span class="math inline">\(P(Z \leq 2.00)\)</span>   (b) <span
+class="math inline">\(P(Z &gt; 0.50)\)</span>   (c) <span
+class="math inline">\(P(-1 &lt; Z &lt; 1)\)</span>   (d) <span
+class="math inline">\(P(-2 &lt; Z &lt; 2)\)</span></li>
+</ol>
+<p>Answers:</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>0.9772</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li><span class="math inline">\(1 - 0.6915 = 0.3085\)</span></li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li><span class="math inline">\(0.8413 - 0.1587 = 0.6826\)</span>, about
+68%</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li><span class="math inline">\(0.9772 - 0.0228 = 0.9544\)</span>, about
+95%</li>
+</ol></li>
+</ul>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>and (d) are the empirical rule from Week 6: about 68% of a normal
+distribution lies within one standard deviation of the mean and about
+95% within two.</li>
+</ol>
+</div>
+<div id="any-normal-distribution" class="section level2">
+<h2>Any normal distribution</h2>
+<p>The same three rules work for any normal variable <span
+class="math inline">\(X \sim N(\mu, \sigma)\)</span>: first convert each
+value to a <span class="math inline">\(z\)</span>-score, <span
+class="math inline">\(z = (x - \mu)/\sigma\)</span>, then find the area
+for <span class="math inline">\(Z\)</span>. For example, if <span
+class="math inline">\(X \sim N(5, 10)\)</span>, then <span
+class="math inline">\(P(X \geq 25) = P(Z \geq 2) = 1 - 0.9772 =
+0.0228\)</span>. The central limit theorem uses exactly this, with the
+standard error in place of <span class="math inline">\(\sigma\)</span>:
+see “A tournament’s average” on the Week 8 page, where <span
+class="math inline">\(P(\bar{x} \geq 3) = P(Z \geq 1.51) = 1 - 0.9345 =
+0.0655\)</span>.</p>
+</div>
+</div>
+<div id="the-central-limit-theorem-and-an-interval-for-a-mean"
+class="section level1">
+<h1>The central limit theorem and an interval for a mean</h1>
+<p>The rest of Lecture 19 finished the Week 8 material: the central
+limit theorem, the CLT for a proportion, the “within 2 standard errors”
+probability statements, and the 95% confidence interval for a mean,
+<span class="math inline">\(\bar{x} \pm 2\sigma/\sqrt{n}\)</span>. Read
+it on the <a href="lecturemenu8.html#the-central-limit-theorem">Week 8
+notes page</a>, from “The central limit theorem” to the end.</p>
+</div>
+<div id="a-confidence-interval-for-a-proportion" class="section level1">
+<h1>A confidence interval for a proportion</h1>
+<p>The interval for a mean was point estimate <span
+class="math inline">\(\pm\)</span> 2 standard errors. The same idea
+works for a proportion. By the CLT, for large <span
+class="math inline">\(n\)</span> the sample proportion <span
+class="math inline">\(\hat{p}\)</span> is approximately normal with mean
+<span class="math inline">\(p\)</span> and standard error <span
+class="math inline">\(\sqrt{p(1 - p)/n}\)</span>, so about 95% of
+samples give a <span class="math inline">\(\hat{p}\)</span> within 2
+standard errors of <span class="math inline">\(p\)</span>. Turning that
+around, as we did for the mean:</p>
+<p><span class="math display">\[\hat{p} \;\pm\; 2\sqrt{\frac{\hat{p}(1 -
+\hat{p})}{n}}\]</span></p>
+<p>is a 95% confidence interval for <span
+class="math inline">\(p\)</span>. There is one change from the formula
+for the standard error: we do not know <span
+class="math inline">\(p\)</span> (that is what we are estimating), so
+the standard error uses <span class="math inline">\(\hat{p}\)</span> in
+its place.</p>
+<p><strong>When it works.</strong> The interval leans on the CLT, so
+check that there are enough successes <strong>and</strong> failures in
+the sample: <span class="math inline">\(n\hat{p} &gt; 5\)</span> and
+<span class="math inline">\(n(1 - \hat{p}) &gt; 5\)</span>.</p>
+<div id="the-data-teens-and-cell-phones" class="section level3">
+<h3>The data: teens and cell phones</h3>
+<p>In Week 1 we met a Pew Research Center survey that asked 743 U.S.
+teens aged 13 to 17, “Are you losing focus in class by checking your
+cell phone?” The published counts are:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Response
+</th>
+<th style="text-align:right;">
+Teens
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Never
+</td>
+<td style="text-align:right;">
+289
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rarely
+</td>
+<td style="text-align:right;">
+216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sometimes
+</td>
+<td style="text-align:right;">
+178
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Often
+</td>
+<td style="text-align:right;">
+60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Total
+</td>
+<td style="text-align:right;">
+743
+</td>
+</tr>
+</tbody>
+</table>
+<p>Call a teen a “success” if they answered “sometimes” or “often”:</p>
+<ul>
+<li><span class="math inline">\(X\)</span> = 1 if a teen loses focus in
+class sometimes or often, and 0 otherwise.</li>
+</ul>
+</div>
+<div id="example-losing-focus-in-class" class="section level3">
+<h3>Example: losing focus in class</h3>
+<p>Estimate <span class="math inline">\(p\)</span>, the proportion of
+<strong>all</strong> U.S. teens who lose focus in class sometimes or
+often.</p>
+<ul>
+<li><strong>Point estimate.</strong> <span class="math inline">\(178 +
+60 = 238\)</span> of the <span class="math inline">\(n = 743\)</span>
+teens, so <span class="math inline">\(\hat{p} = 238/743 \approx
+0.320\)</span>.</li>
+<li><strong>Check.</strong> There are 238 successes and 505 failures,
+both far more than 5.</li>
+<li><strong>Standard error.</strong> <span
+class="math inline">\(\sqrt{0.320 \times 0.680 / 743} \approx
+0.017\)</span>.</li>
+<li><strong>Interval.</strong> <span class="math inline">\(0.320 \pm
+2(0.017) = 0.320 \pm 0.034\)</span>, from <strong>0.286 to
+0.354</strong>.</li>
+</ul>
+<p>We would report it as: <strong>“We estimate with 95% confidence that
+between 28.6% and 35.4% of U.S. teens lose focus in class sometimes or
+often by checking their phones.”</strong> As with the mean, the 95%
+describes the method: about 95% of samples of 743 teens would give an
+interval that captures <span class="math inline">\(p\)</span>.</p>
+</div>
+</div>
+<div id="confidence-levels-and-critical-values" class="section level1">
+<h1>Confidence levels and critical values</h1>
 <p>Last week we introduced the <strong>confidence interval</strong>
 which is used to estimate a parameter with an interval of values. We can
 choose how wide to make the confidence interval by selecting the
@@ -713,7 +981,7 @@ class="math inline">\(5\)</span> observations from <span
 class="math inline">\(N(120, 10)\)</span>:</li>
 </ul>
 <div class="figure">
-<img src="lecturemenu9_files/figure-html/unnamed-chunk-2-1.png" alt="100 confidence intervals, each from a sample of 5 students, drawn as vertical error bars by sample number on the x-axis, with x-bar in minutes on the y-axis and a dashed horizontal line at mu equals 120. A legend marks whether each interval covers the parameter: 12 of the 100 intervals miss the dashed line." width="960" />
+<img src="lecturemenu9_files/figure-html/unnamed-chunk-7-1.png" alt="100 confidence intervals, each from a sample of 5 students, drawn as vertical error bars by sample number on the x-axis, with x-bar in minutes on the y-axis and a dashed horizontal line at mu equals 120. A legend marks whether each interval covers the parameter: 12 of the 100 intervals miss the dashed line." width="960" />
 <p class="caption">
 <strong>Figure</strong>: Each point represents the sample mean from a
 hypothetical sample of 5 college students. The whiskers extending from
@@ -739,7 +1007,7 @@ class="math inline">\(t\)</span>-distribution</strong>.</p>
 class="math inline">\(t\)</span> distribution is a bell curve but it has
 “heavier tails” - that is to say, it has more probability density in the
 tails of the distribution.</p>
-<p><img src="lecturemenu9_files/figure-html/unnamed-chunk-3-1.png" alt="Line plot comparing density curves from x equals -3 to 3: the standard normal curve and t distributions with 1, 2, 5 and 10 degrees of freedom. All are bell-shaped and centered at 0; the t curves have lower peaks and heavier tails, and with more degrees of freedom they move closer to the standard normal." width="960" /></p>
+<p><img src="lecturemenu9_files/figure-html/unnamed-chunk-8-1.png" alt="Line plot comparing density curves from x equals -3 to 3: the standard normal curve and t distributions with 1, 2, 5 and 10 degrees of freedom. All are bell-shaped and centered at 0; the t curves have lower peaks and heavier tails, and with more degrees of freedom they move closer to the standard normal." width="960" /></p>
 <p>The amount of probability density in the tails of a <span
 class="math inline">\(t\)</span> distribution is controlled by the
 <strong>degrees of freedom</strong> of the distribution. The confidence

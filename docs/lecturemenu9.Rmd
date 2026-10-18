@@ -25,10 +25,184 @@ library(latex2exp)
 library(gganimate)
 
 path = 'Data/'
+
+fmt <- function(x, d = 2) formatC(x, format = 'f', digits = d)
+tab <- function(df, ...) kable(df, format = 'html', row.names = FALSE, escape = FALSE, ...) %>%
+  kable_classic(full_width = FALSE, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped')
+near <- function(a, b, tol = 5e-4) abs(a - b) < tol
+zt <- function(z) round(pnorm(z), 4)     # a z-table lookup, four decimals
+
+# every number in the Lecture 19 sections is checked here; the slides' numbers are the
+# same ones asserted in assets/make_lecture19_figures.R
+stopifnot(zt(1.25) == 0.8944, zt(-0.84) == 0.2005, zt(1.80) == 0.9641, zt(-1.30) == 0.0968,
+          zt(1.30) == 0.9032, zt(1.96) == 0.9750, zt(-1.96) == 0.0250,
+          zt(2) == 0.9772, zt(0.5) == 0.6915, zt(1) == 0.8413, zt(-1) == 0.1587, zt(-2) == 0.0228)
+
+# teens losing focus in class by checking their phones (Pew; the published counts)
+teens <- c(Never = 289, Rarely = 216, Sometimes = 178, Often = 60)
+x_t <- sum(teens[c('Sometimes', 'Often')]); n_t <- sum(teens)
+ph_t <- round(x_t / n_t, 3); se_t <- round(sqrt(ph_t * (1 - ph_t) / n_t), 3)
+stopifnot(x_t == 238, n_t == 743, ph_t == 0.320, se_t == 0.017,
+          near(ph_t - 2 * se_t, 0.286, 1e-9), near(ph_t + 2 * se_t, 0.354, 1e-9))
 ```
 
-<!-- TODO: this Week 9 file contains only Lecture 18; confirm the second lecture is intentionally absent. -->
-# Lecture 18
+<!--
+  SCOPE OF THIS PAGE (Oct 18 2026). Week 9 per Course_Schedule.Rmd (the date source of truth):
+    Mon Oct 19   Lecture 19  finding normal probabilities; the central limit theorem;
+                             confidence intervals for a mean and a proportion
+                             lecture_slides/Week 9/2026/Week9_Lecture19_Slides_10_19_2026.pptx
+    Wed Oct 21   confidence levels other than 95%; the interval for a mean when sigma is unknown
+    Fri Oct 23   choosing a minimum sample size, assumptions of estimators
+  Lecture 18 (Oct 12) stopped before the central limit theorem, so Lecture 19 re-taught the
+  Week 8 page from "The central limit theorem" on. That write-up stays on the Week 8 page;
+  this page links to it rather than copying it. The first two sections below are new for
+  Lecture 19. Their teaching follows the 2024 notes ("The normal distribution revisited",
+  git show 27a60f5:docs/lecturemenu8.Rmd) and the 2024 Lecture 15 slides: shade the area,
+  use the table's area-to-the-left, complement for an upper tail, subtract for an area
+  between. Figures are the slide figures (assets/make_lecture19_figures.R).
+
+  Everything from "Confidence levels and critical values" down is still the 2024 Week 9
+  page (2024 Lecture 18), kept for Wed Oct 21 until it is rewritten.
+-->
+
+# Finding normal probabilities
+
+In Week 7 we said that for a continuous random variable, probability is **area under the density
+curve**, and that a single value has probability zero, $P(X = c) = 0$. So the questions we ask about a
+continuous variable are always about an *interval*: below some value, above it, or between two values.
+For the normal distribution those areas come from the **standard normal table** (the $z$-table), which
+we first used in Week 6.
+
+The catch is that the table gives only **one** kind of area: the area to the **left** of $z$,
+$P(Z \leq z)$, where $Z \sim N(0, 1)$ is the standard normal. Every other area has to be built out of
+that one.
+
+```{r, echo=FALSE, out.width='95%', fig.align='center', fig.alt = "Three standard normal curves side by side, each with the z axis from -3 to 3. Left, lower tail: the area to the left of z = -1.30 is shaded. Middle, upper tail: the area to the right of z = 1.80 is shaded. Right, area between: the area between z = -1.30 and z = 1.80 is shaded."}
+knitr::include_graphics('assets/l19_three_areas.png')
+```
+
+* **Lower tail.** $P(Z < z)$ is the table value itself.
+* **Upper tail.** The whole area under the curve is 1, so the area to the right is what is left over:
+  $$P(Z > z) = 1 - P(Z \leq z)$$
+* **Area between.** Take everything to the left of the larger value, and remove everything to the left
+  of the smaller one:
+  $$P(a < Z < b) = P(Z \leq b) - P(Z \leq a)$$
+
+Because $P(Z = z) = 0$, it does not matter whether the inequality is $<$ or $\leq$. Always **sketch the
+curve and shade the area first**: the picture tells you which rule to use, and whether your answer
+should be big or small.
+
+## The lower tail
+
+```{r, echo=FALSE, out.width='80%', fig.align='center', fig.alt = "Two standard normal curves. Left, titled P(Z < 1.25): the area to the left of 1.25 is shaded, most of the curve. Right, titled P(Z < -0.84): the area to the left of -0.84 is shaded, a small part of the left side."}
+knitr::include_graphics('assets/l19_lower.png')
+```
+
+* $P(Z < 1.25)$: row 1.2, column .05 of the table gives **`r fmt(zt(1.25), 4)`**.
+* $P(Z < -0.84)$: row $-0.8$, column .04 gives **`r fmt(zt(-0.84), 4)`**. A negative $z$ is below the
+  mean, so the area to its left is less than one half.
+
+## The upper tail
+
+```{r, echo=FALSE, out.width='80%', fig.align='center', fig.alt = "Two standard normal curves. Left, titled P(Z > 1.80): only the small area to the right of 1.80 is shaded. Right, titled P(Z > -1.30): the area to the right of -1.30 is shaded, most of the curve."}
+knitr::include_graphics('assets/l19_upper.png')
+```
+
+* $P(Z > 1.80) = 1 - P(Z \leq 1.80) = 1 - `r fmt(zt(1.80), 4)` = `r fmt(1 - zt(1.80), 4)`$.
+* $P(Z > -1.30) = 1 - P(Z \leq -1.30) = 1 - `r fmt(zt(-1.30), 4)` = `r fmt(1 - zt(-1.30), 4)`$.
+
+The normal curve is symmetric, so the area to the right of $-1.30$ is the same as the area to the left
+of $+1.30$: the table gives $P(Z \leq 1.30) = `r fmt(zt(1.30), 4)`$, the same answer.
+
+## The area between
+
+```{r, echo=FALSE, out.width='80%', fig.align='center', fig.alt = "Two standard normal curves. Left, titled P(-1.30 < Z < 1.80): the area between -1.30 and 1.80 is shaded. Right, titled P(-1.96 < Z < 1.96): the area between -1.96 and 1.96 is shaded, all but the two thin tails."}
+knitr::include_graphics('assets/l19_between.png')
+```
+
+* $P(-1.30 < Z < 1.80) = `r fmt(zt(1.80), 4)` - `r fmt(zt(-1.30), 4)` = `r fmt(zt(1.80) - zt(-1.30), 4)`$.
+* $P(-1.96 < Z < 1.96) = `r fmt(zt(1.96), 4)` - `r fmt(zt(-1.96), 4)` = `r fmt(zt(1.96) - zt(-1.96), 4)`$.
+
+Remember that second one. Exactly 95% of a normal distribution lies within **1.96** standard deviations
+of the mean; the empirical rule's "2" is that number rounded. It is where the 2 in a 95% confidence
+interval comes from.
+
+## Practice
+
+For $Z \sim N(0, 1)$, sketch and shade each area, then use the table:
+
+(a) $P(Z \leq 2.00)$ &emsp; (b) $P(Z > 0.50)$ &emsp; (c) $P(-1 < Z < 1)$ &emsp; (d) $P(-2 < Z < 2)$
+
+Answers:
+
+* (a) `r fmt(zt(2), 4)`
+* (b) $1 - `r fmt(zt(0.5), 4)` = `r fmt(1 - zt(0.5), 4)`$
+* (c) $`r fmt(zt(1), 4)` - `r fmt(zt(-1), 4)` = `r fmt(zt(1) - zt(-1), 4)`$, about 68%
+* (d) $`r fmt(zt(2), 4)` - `r fmt(zt(-2), 4)` = `r fmt(zt(2) - zt(-2), 4)`$, about 95%
+
+(c) and (d) are the empirical rule from Week 6: about 68% of a normal distribution lies within one
+standard deviation of the mean and about 95% within two.
+
+## Any normal distribution
+
+The same three rules work for any normal variable $X \sim N(\mu, \sigma)$: first convert each value to a
+$z$-score, $z = (x - \mu)/\sigma$, then find the area for $Z$. For example, if $X \sim N(5, 10)$, then
+$P(X \geq 25) = P(Z \geq 2) = 1 - `r fmt(zt(2), 4)` = `r fmt(1 - zt(2), 4)`$. The central limit theorem
+uses exactly this, with the standard error in place of $\sigma$: see "A tournament's average" on the
+Week 8 page, where $P(\bar{x} \geq 3) = P(Z \geq 1.51) = 1 - `r fmt(zt(1.51), 4)` = `r fmt(1 - zt(1.51), 4)`$.
+
+# The central limit theorem and an interval for a mean
+
+The rest of Lecture 19 finished the Week 8 material: the central limit theorem, the CLT for a
+proportion, the "within 2 standard errors" probability statements, and the 95% confidence interval for a
+mean, $\bar{x} \pm 2\sigma/\sqrt{n}$. Read it on the [Week 8 notes page](lecturemenu8.html#the-central-limit-theorem),
+from "The central limit theorem" to the end.
+
+# A confidence interval for a proportion
+
+The interval for a mean was point estimate $\pm$ 2 standard errors. The same idea works for a
+proportion. By the CLT, for large $n$ the sample proportion $\hat{p}$ is approximately normal with mean
+$p$ and standard error $\sqrt{p(1 - p)/n}$, so about 95% of samples give a $\hat{p}$ within 2 standard
+errors of $p$. Turning that around, as we did for the mean:
+
+$$\hat{p} \;\pm\; 2\sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}$$
+
+is a 95% confidence interval for $p$. There is one change from the formula for the standard error: we do
+not know $p$ (that is what we are estimating), so the standard error uses $\hat{p}$ in its place.
+
+**When it works.** The interval leans on the CLT, so check that there are enough successes **and**
+failures in the sample: $n\hat{p} > 5$ and $n(1 - \hat{p}) > 5$.
+
+### The data: teens and cell phones
+
+In Week 1 we met a Pew Research Center survey that asked 743 U.S. teens aged 13 to 17, "Are you losing
+focus in class by checking your cell phone?" The published counts are:
+
+```{r, echo=FALSE}
+tab(data.frame(Response = c(names(teens), 'Total'), Teens = c(teens, n_t)))
+```
+
+Call a teen a "success" if they answered "sometimes" or "often":
+
+* $X$ = 1 if a teen loses focus in class sometimes or often, and 0 otherwise.
+
+### Example: losing focus in class
+
+Estimate $p$, the proportion of **all** U.S. teens who lose focus in class sometimes or often.
+
+* **Point estimate.** $178 + 60 = `r x_t`$ of the $n = `r n_t`$ teens, so
+  $\hat{p} = `r x_t`/`r n_t` \approx `r fmt(ph_t, 3)`$.
+* **Check.** There are `r x_t` successes and `r n_t - x_t` failures, both far more than 5.
+* **Standard error.** $\sqrt{`r fmt(ph_t, 3)` \times `r fmt(1 - ph_t, 3)` / `r n_t`} \approx `r fmt(se_t, 3)`$.
+* **Interval.** $`r fmt(ph_t, 3)` \pm 2(`r fmt(se_t, 3)`) = `r fmt(ph_t, 3)` \pm `r fmt(2 * se_t, 3)`$, from
+  **`r fmt(ph_t - 2 * se_t, 3)` to `r fmt(ph_t + 2 * se_t, 3)`**.
+
+We would report it as: **"We estimate with 95% confidence that between 28.6% and 35.4% of U.S. teens
+lose focus in class sometimes or often by checking their phones."** As with the mean, the 95% describes
+the method: about 95% of samples of 743 teens would give an interval that captures $p$.
+
+# Confidence levels and critical values
 
 Last week we introduced the **confidence interval** which is used to estimate a parameter with an interval of values. We can choose how wide to make the confidence interval by selecting the **confidence level** - which is the probability that the interval will contain the true parameter value **<u>before</u>** the data are gathered. The confidence level is controlled via the standard score $z$. The standard score gives the number of standard errors to add and subtract from our estimate. Therefore, we must look up the appropriate standard score $z$ from the standard normal table.
 

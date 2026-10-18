@@ -132,6 +132,14 @@ stopifnot(near(sqrt(lam), 1.64, 5e-3), near(se_wc, 0.205, 5e-4),
   their numbers and sources are in assets/make_lecture18_figures.R. Everything on this
   page, confidence intervals included, is in scope for the Exam 2 study guide (Oct 12 2026).
 
+  CARRY-OVER, Oct 18 2026. Lecture 18 stopped after "Example: standard error and n"
+  (slide 9). Everything from "The central limit theorem" on was taught in Lecture 19
+  (Mon Oct 19, lecture_slides/Week 9/2026/Week9_Lecture19_Slides_10_19_2026.pptx),
+  after Exam 2. It stays written up here, where it belongs in the sequence; the Week 9
+  page adds finding normal probabilities and the interval for a proportion and links
+  back. The Lecture 19 slide on a tournament's average asks for P(x-bar >= 3), the
+  z-score calculation already at the end of that example below.
+
   Sources. Terms follow OpenStax Introductory Statistics 2e, Sections 7.1-7.3 and the
   start of 8.1 (point estimate, confidence interval, confidence level, "We estimate
   with 95% confidence that ...").
