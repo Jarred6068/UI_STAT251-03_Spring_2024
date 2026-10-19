@@ -566,10 +566,10 @@ $(document).ready(function () {
                              lecture_slides/Week 9/2026/Week9_Lecture19_Slides_10_19_2026.pptx
     Wed Oct 21   confidence levels other than 95%; the interval for a mean when sigma is unknown
     Fri Oct 23   choosing a minimum sample size, assumptions of estimators
-  Lecture 18 (Oct 12) stopped before the central limit theorem, so Lecture 19 re-taught the
-  Week 8 page from "The central limit theorem" on. That write-up stays on the Week 8 page;
-  this page links to it rather than copying it. The first two sections below are new for
-  Lecture 19. Their teaching follows the 2024 notes ("The normal distribution revisited",
+  Lecture 18 (Oct 12) stopped before the central limit theorem, so Lecture 19 picks up the
+  Week 8 page from "The central limit theorem" on. The full write-up stays on the Week 8
+  page; the CLT section here is a condensed summary that links back to it (numbers match
+  the Week 8 page and the Lecture 19 slides). The other sections are new for Lecture 19. Their teaching follows the 2024 notes ("The normal distribution revisited",
   git show 27a60f5:docs/lecturemenu8.Rmd) and the 2024 Lecture 15 slides: shade the area,
   use the table's area-to-the-left, complement for an upper tail, subtract for an area
   between. Figures are the slide figures (assets/make_lecture19_figures.R).
@@ -696,22 +696,100 @@ class="math inline">\(z = (x - \mu)/\sigma\)</span>, then find the area
 for <span class="math inline">\(Z\)</span>. For example, if <span
 class="math inline">\(X \sim N(5, 10)\)</span>, then <span
 class="math inline">\(P(X \geq 25) = P(Z \geq 2) = 1 - 0.9772 =
-0.0228\)</span>. The central limit theorem uses exactly this, with the
-standard error in place of <span class="math inline">\(\sigma\)</span>:
-see “A tournament’s average” on the Week 8 page, where <span
-class="math inline">\(P(\bar{x} \geq 3) = P(Z \geq 1.51) = 1 - 0.9345 =
-0.0655\)</span>.</p>
+0.0228\)</span>. The central limit theorem, next, uses exactly this,
+with the standard error in place of <span
+class="math inline">\(\sigma\)</span>.</p>
 </div>
 </div>
 <div id="the-central-limit-theorem-and-an-interval-for-a-mean"
 class="section level1">
 <h1>The central limit theorem and an interval for a mean</h1>
-<p>The rest of Lecture 19 finished the Week 8 material: the central
-limit theorem, the CLT for a proportion, the “within 2 standard errors”
-probability statements, and the 95% confidence interval for a mean,
-<span class="math inline">\(\bar{x} \pm 2\sigma/\sqrt{n}\)</span>. Read
-it on the <a href="lecturemenu8.html#the-central-limit-theorem">Week 8
-notes page</a>, from “The central limit theorem” to the end.</p>
+<p>This section is a summary. The full version, with the simulations,
+pictures and worked examples, is on the <a
+href="lecturemenu8.html#the-central-limit-theorem">Week 8 notes page,
+starting at “The central limit theorem”</a>.</p>
+<div id="the-theorem" class="section level2">
+<h2>The theorem</h2>
+<p>In Week 8 we found the <strong>center</strong> and
+<strong>spread</strong> of the sampling distribution of <span
+class="math inline">\(\bar{x}\)</span>: mean <span
+class="math inline">\(\mu\)</span> and standard error <span
+class="math inline">\(\sigma/\sqrt{n}\)</span>. The <strong>central
+limit theorem</strong> (CLT) gives its <strong>shape</strong>:</p>
+<ul>
+<li><strong>Central limit theorem.</strong> Take random samples of size
+<span class="math inline">\(n\)</span> from <strong>any</strong>
+population with mean <span class="math inline">\(\mu\)</span> and
+standard deviation <span class="math inline">\(\sigma\)</span>. If <span
+class="math inline">\(n\)</span> is large enough, the sampling
+distribution of <span class="math inline">\(\bar{x}\)</span> is
+approximately normal: <span class="math display">\[\bar{x} \sim
+N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right)\]</span> A sample
+proportion is a sample mean of 0s and 1s, so the same is true of <span
+class="math inline">\(\hat{p}\)</span>: <span
+class="math display">\[\hat{p} \sim N\!\left(p,\; \sqrt{\frac{p(1 -
+p)}{n}}\right)\]</span></li>
+</ul>
+<p>The surprising part is “<strong>any</strong> population”. Even when
+the population is skewed, like the minutes until the next goal at the
+World Cup, averages of enough observations are bell shaped. The larger
+<span class="math inline">\(n\)</span> is, the better the approximation.
+The textbook’s guides for “large enough” are:</p>
+<ul>
+<li><span class="math inline">\(n \geq 30\)</span> for <span
+class="math inline">\(\bar{x}\)</span>. A population that is close to
+normal needs less; one that is very skewed or has extreme outliers may
+need more.</li>
+<li><span class="math inline">\(np &gt; 5\)</span> and <span
+class="math inline">\(n(1 - p) &gt; 5\)</span> for <span
+class="math inline">\(\hat{p}\)</span>, so there are enough successes
+<em>and</em> failures.</li>
+</ul>
+</div>
+<div id="using-it" class="section level2">
+<h2>Using it</h2>
+<p>Because <span class="math inline">\(\bar{x}\)</span> is approximately
+normal, we can find probabilities about it with the <span
+class="math inline">\(z\)</span>-table, exactly as in the first part of
+these notes. The one change is that we standardize with the
+<strong>standard error</strong>, not <span
+class="math inline">\(\sigma\)</span>: <span class="math display">\[z =
+\frac{\bar{x} - \mu}{\sigma/\sqrt{n}}\]</span> For example, a World
+Cup’s average over <span class="math inline">\(n = 64\)</span> matches
+has <span class="math inline">\(\mu = 2.69\)</span> goals and standard
+error 0.205, so <span class="math inline">\(P(\bar{x} \geq 3) = P(Z \geq
+1.51) = 1 - 0.9345 = 0.0655\)</span>.</p>
+<p>In particular, about 95% of the time a statistic lands within
+<strong>2 standard errors</strong> of its parameter: <span
+class="math display">\[P\left(\mu - 2\frac{\sigma}{\sqrt{n}} \;\leq\;
+\bar{x} \;\leq\; \mu + 2\frac{\sigma}{\sqrt{n}}\right) \approx
+0.95\]</span></p>
+</div>
+<div id="a-95-confidence-interval-for-a-mean" class="section level2">
+<h2>A 95% confidence interval for a mean</h2>
+<p>If <span class="math inline">\(\bar{x}\)</span> is within 2 standard
+errors of <span class="math inline">\(\mu\)</span>, then <span
+class="math inline">\(\mu\)</span> is within 2 standard errors of <span
+class="math inline">\(\bar{x}\)</span>. Turning the statement around
+gives the <strong>95% confidence interval</strong> for <span
+class="math inline">\(\mu\)</span>: <span class="math display">\[\bar{x}
+\;\pm\; 2\frac{\sigma}{\sqrt{n}}\]</span> which has the form
+<strong>point estimate <span class="math inline">\(\pm\)</span> margin
+of error</strong>. For example, a sample of <span
+class="math inline">\(n = 20\)</span> songs with <span
+class="math inline">\(\bar{x} = 3.64\)</span> minutes and <span
+class="math inline">\(\sigma = 1.51\)</span> gives <span
+class="math inline">\(3.64 \pm 2(0.34)\)</span>, from <strong>2.96 to
+4.32 minutes</strong>: “We estimate with 95% confidence that the mean
+length of all 18,860 songs is between 2.96 and 4.32 minutes.”</p>
+<p>The 95% describes the <strong>method</strong>, not this one interval.
+About 95% of samples give an interval that captures <span
+class="math inline">\(\mu\)</span>. Once an interval is computed, it
+either contains <span class="math inline">\(\mu\)</span> or it does not.
+It is <strong>not</strong> correct to say there is a 95% probability
+that <span class="math inline">\(\mu\)</span> is between 2.96 and
+4.32.</p>
+</div>
 </div>
 <div id="a-confidence-interval-for-a-proportion" class="section level1">
 <h1>A confidence interval for a proportion</h1>
@@ -830,9 +908,9 @@ interval that captures <span class="math inline">\(p\)</span>.</p>
 </div>
 <div id="confidence-levels-and-critical-values" class="section level1">
 <h1>Confidence levels and critical values</h1>
-<p>Last week we introduced the <strong>confidence interval</strong>
-which is used to estimate a parameter with an interval of values. We can
-choose how wide to make the confidence interval by selecting the
+<p>Above we introduced the <strong>confidence interval</strong> which is
+used to estimate a parameter with an interval of values. We can choose
+how wide to make the confidence interval by selecting the
 <strong>confidence level</strong> - which is the probability that the
 interval will contain the true parameter value
 <strong><u>before</u></strong> the data are gathered. The confidence
@@ -841,11 +919,11 @@ class="math inline">\(z\)</span>. The standard score gives the number of
 standard errors to add and subtract from our estimate. Therefore, we
 must look up the appropriate standard score <span
 class="math inline">\(z\)</span> from the standard normal table.</p>
-<p>From last week we saw that for a <span
-class="math inline">\(95\%\)</span> confidence interval, we must add and
-subtract approximately <span class="math inline">\(z=2\)</span> standard
-errors from our estimate <span class="math inline">\(\bar{x}\)</span> or
-<span class="math inline">\(\hat{p}\)</span>. <span
+<p>We saw that for a <span class="math inline">\(95\%\)</span>
+confidence interval, we must add and subtract approximately <span
+class="math inline">\(z=2\)</span> standard errors from our estimate
+<span class="math inline">\(\bar{x}\)</span> or <span
+class="math inline">\(\hat{p}\)</span>. <span
 class="math inline">\(z\)</span> is sometimes referred to as the
 <strong>critical value</strong>. The critical value denotes the upper
 and lower bounds of the confidence interval. In general, if we wish to

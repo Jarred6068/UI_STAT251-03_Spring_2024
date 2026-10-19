@@ -37,7 +37,8 @@ zt <- function(z) round(pnorm(z), 4)     # a z-table lookup, four decimals
 # same ones asserted in assets/make_lecture19_figures.R
 stopifnot(zt(1.25) == 0.8944, zt(-0.84) == 0.2005, zt(1.80) == 0.9641, zt(-1.30) == 0.0968,
           zt(1.30) == 0.9032, zt(1.96) == 0.9750, zt(-1.96) == 0.0250,
-          zt(2) == 0.9772, zt(0.5) == 0.6915, zt(1) == 0.8413, zt(-1) == 0.1587, zt(-2) == 0.0228)
+          zt(2) == 0.9772, zt(0.5) == 0.6915, zt(1) == 0.8413, zt(-1) == 0.1587, zt(-2) == 0.0228,
+          zt(1.51) == 0.9345, round((3 - 2.69) / (sqrt(2.69) / 8), 2) == 1.51)
 
 # teens losing focus in class by checking their phones (Pew; the published counts)
 teens <- c(Never = 289, Rarely = 216, Sometimes = 178, Often = 60)
@@ -54,10 +55,10 @@ stopifnot(x_t == 238, n_t == 743, ph_t == 0.320, se_t == 0.017,
                              lecture_slides/Week 9/2026/Week9_Lecture19_Slides_10_19_2026.pptx
     Wed Oct 21   confidence levels other than 95%; the interval for a mean when sigma is unknown
     Fri Oct 23   choosing a minimum sample size, assumptions of estimators
-  Lecture 18 (Oct 12) stopped before the central limit theorem, so Lecture 19 re-taught the
-  Week 8 page from "The central limit theorem" on. That write-up stays on the Week 8 page;
-  this page links to it rather than copying it. The first two sections below are new for
-  Lecture 19. Their teaching follows the 2024 notes ("The normal distribution revisited",
+  Lecture 18 (Oct 12) stopped before the central limit theorem, so Lecture 19 picks up the
+  Week 8 page from "The central limit theorem" on. The full write-up stays on the Week 8
+  page; the CLT section here is a condensed summary that links back to it (numbers match
+  the Week 8 page and the Lecture 19 slides). The other sections are new for Lecture 19. Their teaching follows the 2024 notes ("The normal distribution revisited",
   git show 27a60f5:docs/lecturemenu8.Rmd) and the 2024 Lecture 15 slides: shade the area,
   use the table's area-to-the-left, complement for an upper tail, subtract for an area
   between. Figures are the slide figures (assets/make_lecture19_figures.R).
@@ -148,16 +149,59 @@ standard deviation of the mean and about 95% within two.
 
 The same three rules work for any normal variable $X \sim N(\mu, \sigma)$: first convert each value to a
 $z$-score, $z = (x - \mu)/\sigma$, then find the area for $Z$. For example, if $X \sim N(5, 10)$, then
-$P(X \geq 25) = P(Z \geq 2) = 1 - `r fmt(zt(2), 4)` = `r fmt(1 - zt(2), 4)`$. The central limit theorem
-uses exactly this, with the standard error in place of $\sigma$: see "A tournament's average" on the
-Week 8 page, where $P(\bar{x} \geq 3) = P(Z \geq 1.51) = 1 - `r fmt(zt(1.51), 4)` = `r fmt(1 - zt(1.51), 4)`$.
+$P(X \geq 25) = P(Z \geq 2) = 1 - `r fmt(zt(2), 4)` = `r fmt(1 - zt(2), 4)`$. The central limit theorem,
+next, uses exactly this, with the standard error in place of $\sigma$.
 
 # The central limit theorem and an interval for a mean
 
-The rest of Lecture 19 finished the Week 8 material: the central limit theorem, the CLT for a
-proportion, the "within 2 standard errors" probability statements, and the 95% confidence interval for a
-mean, $\bar{x} \pm 2\sigma/\sqrt{n}$. Read it on the [Week 8 notes page](lecturemenu8.html#the-central-limit-theorem),
-from "The central limit theorem" to the end.
+This section is a summary. The full version, with the simulations, pictures and worked examples, is on
+the [Week 8 notes page, starting at "The central limit theorem"](lecturemenu8.html#the-central-limit-theorem).
+
+## The theorem
+
+In Week 8 we found the **center** and **spread** of the sampling distribution of $\bar{x}$: mean $\mu$
+and standard error $\sigma/\sqrt{n}$. The **central limit theorem** (CLT) gives its **shape**:
+
+* **Central limit theorem.** Take random samples of size $n$ from **any** population with mean $\mu$
+  and standard deviation $\sigma$. If $n$ is large enough, the sampling distribution of $\bar{x}$ is
+  approximately normal:
+  $$\bar{x} \sim N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right)$$
+  A sample proportion is a sample mean of 0s and 1s, so the same is true of $\hat{p}$:
+  $$\hat{p} \sim N\!\left(p,\; \sqrt{\frac{p(1 - p)}{n}}\right)$$
+
+The surprising part is "**any** population". Even when the population is skewed, like the minutes
+until the next goal at the World Cup, averages of enough observations are bell shaped. The larger $n$
+is, the better the approximation. The textbook's guides for "large enough" are:
+
+* $n \geq 30$ for $\bar{x}$. A population that is close to normal needs less; one that is very skewed or
+  has extreme outliers may need more.
+* $np > 5$ and $n(1 - p) > 5$ for $\hat{p}$, so there are enough successes *and* failures.
+
+## Using it
+
+Because $\bar{x}$ is approximately normal, we can find probabilities about it with the $z$-table,
+exactly as in the first part of these notes. The one change is that we standardize with the
+**standard error**, not $\sigma$:
+$$z = \frac{\bar{x} - \mu}{\sigma/\sqrt{n}}$$
+For example, a World Cup's average over $n = 64$ matches has $\mu = 2.69$ goals and standard error
+0.205, so $P(\bar{x} \geq 3) = P(Z \geq 1.51) = 1 - `r fmt(zt(1.51), 4)` = `r fmt(1 - zt(1.51), 4)`$.
+
+In particular, about 95% of the time a statistic lands within **2 standard errors** of its parameter:
+$$P\left(\mu - 2\frac{\sigma}{\sqrt{n}} \;\leq\; \bar{x} \;\leq\; \mu + 2\frac{\sigma}{\sqrt{n}}\right) \approx 0.95$$
+
+## A 95% confidence interval for a mean
+
+If $\bar{x}$ is within 2 standard errors of $\mu$, then $\mu$ is within 2 standard errors of
+$\bar{x}$. Turning the statement around gives the **95% confidence interval** for $\mu$:
+$$\bar{x} \;\pm\; 2\frac{\sigma}{\sqrt{n}}$$
+which has the form **point estimate $\pm$ margin of error**. For example, a sample of $n = 20$ songs with
+$\bar{x} = 3.64$ minutes and $\sigma = 1.51$ gives $3.64 \pm 2(0.34)$, from **2.96 to 4.32 minutes**:
+"We estimate with 95% confidence that the mean length of all 18,860 songs is between 2.96 and 4.32
+minutes."
+
+The 95% describes the **method**, not this one interval. About 95% of samples give an interval that
+captures $\mu$. Once an interval is computed, it either contains $\mu$ or it does not. It is **not**
+correct to say there is a 95% probability that $\mu$ is between 2.96 and 4.32.
 
 # A confidence interval for a proportion
 
@@ -204,9 +248,9 @@ the method: about 95% of samples of 743 teens would give an interval that captur
 
 # Confidence levels and critical values
 
-Last week we introduced the **confidence interval** which is used to estimate a parameter with an interval of values. We can choose how wide to make the confidence interval by selecting the **confidence level** - which is the probability that the interval will contain the true parameter value **<u>before</u>** the data are gathered. The confidence level is controlled via the standard score $z$. The standard score gives the number of standard errors to add and subtract from our estimate. Therefore, we must look up the appropriate standard score $z$ from the standard normal table.
+Above we introduced the **confidence interval** which is used to estimate a parameter with an interval of values. We can choose how wide to make the confidence interval by selecting the **confidence level** - which is the probability that the interval will contain the true parameter value **<u>before</u>** the data are gathered. The confidence level is controlled via the standard score $z$. The standard score gives the number of standard errors to add and subtract from our estimate. Therefore, we must look up the appropriate standard score $z$ from the standard normal table.
 
-From last week we saw that for a $95\%$ confidence interval, we must add and subtract approximately $z=2$ standard errors from our estimate $\bar{x}$ or $\hat{p}$. $z$ is sometimes referred to as the **critical value**. The critical value denotes the upper and lower bounds of the confidence interval. In general, if we wish to compute the $100(1-\alpha)\%$ confidence interval for the statistics $\bar{x}$ or $\hat{p}$, then we must add and subtract $z_{1-\alpha/2}$ standard errors. The quantity $\alpha/2$ denotes the area that is divided among the two tails of the standard normal distribution. For example, for a $95\%$ confidence interval $\alpha = 0.05$ and $\alpha/2 = 0.025$. 
+We saw that for a $95\%$ confidence interval, we must add and subtract approximately $z=2$ standard errors from our estimate $\bar{x}$ or $\hat{p}$. $z$ is sometimes referred to as the **critical value**. The critical value denotes the upper and lower bounds of the confidence interval. In general, if we wish to compute the $100(1-\alpha)\%$ confidence interval for the statistics $\bar{x}$ or $\hat{p}$, then we must add and subtract $z_{1-\alpha/2}$ standard errors. The quantity $\alpha/2$ denotes the area that is divided among the two tails of the standard normal distribution. For example, for a $95\%$ confidence interval $\alpha = 0.05$ and $\alpha/2 = 0.025$. 
 
 For example, for a $90\%$ confidence $\alpha = 0.1$, and the corresponding critical value is $z_{1-0.1/2} = z_{0.95}$ which is the 95th percentile from the standard normal distribution. The table below gives several confidence levels, the corresponding values of $\alpha$ and critical values. 
 
