@@ -74,14 +74,19 @@ downloads(rbind(
 
 <br>
 
+<!-- HIDDEN until Homework 3 is reviewed and released (Oct 18 2026): to release,
+     restore the heading below and drop `include=FALSE` from the chunk.
 ## Homework 3 {#hw3}
+-->
 
-```{r}
+```{r, include=FALSE}
 downloads(rbind(
   c("2026/homework_3_2026.pdf",                                      "Assignment (printable PDF)"),
-  c("../Data/homework_tables/hw3_2026_prob_dist_X.csv",            "Problem 1 — probability distribution of X"),
-  c("../Data/homework_tables/hw3_2026_tree_volume_dist.csv",       "Problem 3 — probability distribution of tree volume"),
-  c("../Data/homework_tables/hw3_2026_punt_distance_dist.csv",     "Problem 4 — sampling distribution of mean punt distance")
+  c("../Data/homework_tables/hw3_2026_confidence_levels_proportion.csv", "Problem 6 — confidence levels to fill in (proportion)"),
+  c("../Data/homework_tables/hw3_2026_confidence_levels_mean.csv",       "Problem 7 — confidence levels and sample sizes to fill in (mean)"),
+  c("../Data/homework_tables/hw3_2026_political_party.csv",              "Problem 8 — political party affiliation of Georgia college students"),
+  c("../Data/homework_tables/hw3_2026_membership_satisfaction.csv",      "Problem 9 — health club membership satisfaction survey"),
+  c("../Data/homework_tables/hw3_2026_housing_summary.csv",              "Problem 11 — summary statistics for 1990 California census housing")
 ))
 ```
 

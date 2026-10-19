@@ -18,526 +18,817 @@ header-includes:
   - \usepackage{threeparttablex}
   - \usepackage[normalem]{ulem}
   - \usepackage{makecell}
-bibliography: ../../misc/home2bibs.bib
 ---
 
-
-
+<!--
+  Key for homework_3_2026.Rmd (see the comment there for where each problem comes
+  from). Answers to the problems kept from the 2024 Homework 4 follow the 2024 key
+  (homeworks/2024/week12homework_solns.Rmd). Every number written into the text is
+  checked against R in the `checks` chunk below, so a change to a problem that
+  is not carried into the key stops the render.
+-->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.width=12, fig.height=10, fig.pos = "H")
-#knitr::opts_chunk$set(list(echo = FALSE, eval = FALSE))
 library(kableExtra)
 # emit tables in the native format of whichever output is being rendered
 # (hardcoding 'html' made kable dump raw HTML into the PDF, which LaTeX
 #  flattened into a vertical list of cell values instead of a table)
 tbl_fmt <- if (knitr::is_latex_output()) "latex" else "html"
+
+# Answers are printed in red so they cannot be mistaken for part of the
+# question. Write `r RA` on its own line before an answer and `r RZ` after it.
+# (See homework_2_2026_solns.Rmd for why this has to be format-aware.)
+latex_out <- knitr::is_latex_output()
+RA <- if (latex_out) knitr::raw_latex("\\begingroup\\color{red}") else knitr::raw_html('<div style="color: red;">')
+RZ <- if (latex_out) knitr::raw_latex("\\endgroup") else knitr::raw_html('</div>')
+
 library(knitr)
 library(latex2exp)
-library(gridExtra)
+library(ggplot2)
 library(ggpubr)
-library(ggthemes)
-library(plyr)
 mainpath = '../../Data/'
-whiskpath = '../../assets/whiskerMaster.csv'
+source('../../misc/stat251_tools.R')
 
-datapath = '../../Data/'
-#<span style="color: red;"></span>
-library(plyr)
-# the Venn diagram moved to Homework 2 along with the simple-probability problems
+zt <- function(z) round(pnorm(z), 4)     # a Z-table lookup, four decimals
+f4 <- function(x) formatC(x, format = 'f', digits = 4)
+```
+
+```{r checks, include=FALSE}
+near <- function(a, b, tol = 5e-4) abs(a - b) < tol
+# (2)
+stopifnot(zt(1.47) == 0.9292, zt(-0.62) == 0.2676, zt(2.15) == 0.9842,
+          zt(0.85) == 0.8023, zt(-1.20) == 0.1151, zt(-1.96) == 0.0250)
+# (3) X ~ N(25, 4)
+stopifnot(zt(-2.5) == 0.0062, zt(0.75) == 0.7734, zt(-1.25) == 0.1056, zt(-3.25) == 0.0006,
+          zt(1.25) == 0.8944, zt(2) == 0.9772, zt(0) == 0.5)
+# (4) X ~ N(-5, 1.8)
+stopifnot(round((-2 + 5)/1.8, 2) == 1.67, round((0.5 + 5)/1.8, 2) == 3.06)
+# (5) songs
+stopifnot(round(1.51/6, 3) == 0.252, round((4 - 3.71)/0.252, 2) == 1.15, zt(1.15) == 0.8749,
+          round((3.5 - 3.71)/0.252, 2) == -0.83, zt(-0.83) == 0.2033)
+# (10) camp letters
+stopifnot(round(2.5/sqrt(20), 3) == 0.559, round(1.645 * 0.559, 2) == 0.92,
+          round(1.645 * 2.5/sqrt(500), 2) == 0.18)
+# (12) tranquilizer
+tr <- c(2.7, 2.8, 3.0, 2.3, 2.3, 2.2, 2.8, 2.1, 2.4)
+stopifnot(round(mean(tr), 2) == 2.51, round(sd(tr), 2) == 0.32, round(qt(0.975, 8), 3) == 2.306,
+          near(2.51 - 2.306 * 0.32/3, 2.264, 1e-3), near(2.51 + 2.306 * 0.32/3, 2.756, 1e-3))
+# (13)
+stopifnot(ceiling(1.96^2 * 0.24 * 0.76/0.015^2) == 3115, ceiling(2.576^2 * 0.15 * 0.85/0.04^2) == 529,
+          ceiling((1.96 * 20/3)^2) == 171)
+# (18)-(22)
+stopifnot(round((70/300 - 0.2)/sqrt(0.2 * 0.8/300), 2) == 1.44,
+          round(8000/sqrt(28), 1) == 1511.9, round((46500 - 50000)/1511.9, 2) == -2.31,
+          zt(-2.31) == 0.0104, round((105 - 100)/(12/sqrt(40)), 2) == 2.64,
+          round(qt(0.95, 39), 3) == 1.685, round(qt(0.95, 30), 3) == 1.697)
+```
+
+*Answers are shown in red beneath each question.*
+
+
+# Part I: Definitions
+
+
+$\bf (1)$
+Define the following terms/concepts.
+
+(a) Describe the central limit theorem and its significance to the sampling distribution for a sample proportion or mean
+
+`r RA`
+The central limit theorem (CLT) states that the sampling distribution of the sample mean $\bar{x}$ (or the sample proportion $\hat{p}$) is approximately normal when the sample size is large enough, regardless of the shape of the population distribution. Its significance: it lets us use the normal distribution (the $Z$-table) to find probabilities about $\bar{x}$ and $\hat{p}$, and to build confidence intervals and significance tests for $\mu$ and $p$.
+`r RZ`
+
+(b) Standard error
+
+`r RA`
+The standard deviation of the sampling distribution of a statistic. It measures how much the statistic varies from sample to sample: $\sigma/\sqrt{n}$ for $\bar{x}$ and $\sqrt{p(1-p)/n}$ for $\hat{p}$.
+`r RZ`
+
+(c) Margin of error
+
+`r RA`
+The amount added to and subtracted from the point estimate in a confidence interval: the critical value times the standard error. It measures the precision of the estimate, how far the estimate might reasonably be from the true parameter.
+`r RZ`
+
+(d) Describe the "basic form" of a confidence interval
+
+`r RA`
+Point estimate $\pm$ critical value $\times$ standard error, which can also be written as point estimate $\pm$ margin of error.
+`r RZ`
+
+(e) Confidence level
+
+`r RA`
+The probability that the interval will contain the true parameter value **before** the data are gathered: the long-run proportion of intervals made this way that capture the parameter.
+`r RZ`
+
+(f) Critical value
+
+`r RA`
+The standard score ($z$ or $t$) that sets the number of standard errors in a confidence interval. In a significance test, it is the point on the distribution of the test statistic that marks the edge of the rejection region.
+`r RZ`
+
+(g) When are the $t$-distribution and the standard normal distribution approximately the same shape?
+
+`r RA`
+When the sample size is large (and so the degrees of freedom are large), typically $n$ greater than about 30.
+`r RZ`
+
+(h) How are the degrees of freedom of a $t$-distribution related to its shape?
+
+`r RA`
+As the degrees of freedom increase, the $t$-distribution becomes more like the standard normal distribution, with lighter tails. With few degrees of freedom it has heavier tails than the standard normal.
+`r RZ`
+
+(i) Null and alternative hypotheses
+
+`r RA`
+The null hypothesis $H_0$ is the claim being tested, usually "no effect" or "no change": the parameter equals a specific value. The alternative hypothesis $H_A$ is what we suspect is true instead, that the parameter is less than, greater than, or not equal to that value.
+`r RZ`
+
+(j) Significance level
+
+`r RA`
+A threshold $\alpha$ chosen before the test that sets how much evidence is needed to reject the null hypothesis. We reject $H_0$ when the $p$-value is less than $\alpha$.
+`r RZ`
+
+(k) $p$-value
+
+`r RA`
+The probability, assuming the null hypothesis is true, of getting a test statistic at least as extreme as the one observed. A small $p$-value means the data would be unusual if $H_0$ were true.
+`r RZ`
+
+(l) Rejection region
+
+`r RA`
+The area in the tail (or tails) of the distribution of the test statistic for which a result is deemed statistically significant. If the test statistic falls in it, we reject $H_0$.
+`r RZ`
+
+
+
+# Part II: Finding Normal Probabilities
+
+
+$\bf (2)$
+Let $Z$ be a standard normal random variable, $Z \sim N(0, 1)$. For each probability, sketch the curve, shade the area, and use the $Z$-table to find it.
+
+(a) $P(Z < 1.47)$
+
+`r RA`
+A lower tail is the table value itself: $P(Z < 1.47) = `r f4(zt(1.47))`$.
+`r RZ`
+
+(b) $P(Z > -0.62)$
+
+`r RA`
+An upper tail is one minus the table value: $P(Z > -0.62) = 1 - P(Z \leq -0.62) = 1 - `r f4(zt(-0.62))` = `r f4(1 - zt(-0.62))`$.
+`r RZ`
+
+(c) $P(Z > 2.15)$
+
+`r RA`
+$P(Z > 2.15) = 1 - P(Z \leq 2.15) = 1 - `r f4(zt(2.15))` = `r f4(1 - zt(2.15))`$.
+`r RZ`
+
+(d) $P(-1.20 < Z < 0.85)$
+
+`r RA`
+An area between is the larger table value minus the smaller one: $P(-1.20 < Z < 0.85) = `r f4(zt(0.85))` - `r f4(zt(-1.20))` = `r f4(zt(0.85) - zt(-1.20))`$.
+`r RZ`
+
+(e) $P(Z < -1.96 \text{ or } Z > 1.96)$
+
+`r RA`
+The two tails are the same size, so $P(Z < -1.96) + P(Z > 1.96) = 2(`r f4(zt(-1.96))`) = `r f4(2 * zt(-1.96))`$. This is the $5\%$ left outside a $95\%$ confidence interval.
+`r RZ`
+
+
+$\bf (3)$
+Assume the continuous random variable $X$ follows a normal distribution with mean $\mu = 25$ and variance $\sigma^2 = 16$.
+
+`r RA`
+The standard deviation is $\sigma = \sqrt{16} = 4$. Convert each value to a $z$-score with $z = (x - 25)/4$.
+`r RZ`
+
+(a) $P(X < 15)$
+
+`r RA`
+$z = (15 - 25)/4 = -2.5$, so $P(X < 15) = P(Z < -2.5) = `r f4(zt(-2.5))`$.
+`r RZ`
+
+(b) $P(X > 28)$
+
+`r RA`
+$z = (28 - 25)/4 = 0.75$, so $P(X > 28) = 1 - P(Z \leq 0.75) = 1 - `r f4(zt(0.75))` = `r f4(1 - zt(0.75))`$.
+`r RZ`
+
+(c) $P(12 < X < 20)$
+
+`r RA`
+$z = (12 - 25)/4 = -3.25$ and $z = (20 - 25)/4 = -1.25$, so $P(12 < X < 20) = P(-3.25 < Z < -1.25) = `r f4(zt(-1.25))` - `r f4(zt(-3.25))` = `r f4(zt(-1.25) - zt(-3.25))`$.
+`r RZ`
+
+(d) $P(X > 30)$
+
+`r RA`
+$z = (30 - 25)/4 = 1.25$, so $P(X > 30) = 1 - `r f4(zt(1.25))` = `r f4(1 - zt(1.25))`$.
+`r RZ`
+
+(e) $P(25 < X < 33)$
+
+`r RA`
+$z = 0$ and $z = (33 - 25)/4 = 2$, so $P(25 < X < 33) = P(0 < Z < 2) = `r f4(zt(2))` - `r f4(zt(0))` = `r f4(zt(2) - zt(0))`$.
+`r RZ`
+
+(f) What is the value of $X$ that marks the $95th$ percentile of the distribution?
+
+`r RA`
+The $z$-score with $0.95$ to its left is about $z = 1.645$. Converting back, $x = \mu + z\sigma = 25 + 1.645(4) = `r 25 + 1.645 * 4`$.
+`r RZ`
+
+
+$\bf (4)$
+Suppose that a random variable $X$ follows a normal distribution with mean $\mu = -5$ and standard deviation $\sigma = 1.8$. Using the plot of the $Z$-distribution below, shade in the area corresponding to the probability $P(-2 < X < 0.5)$.
+
+`r RA`
+Convert both ends: $z = (-2 - (-5))/1.8 = 1.67$ and $z = (0.5 - (-5))/1.8 = 3.06$. Shade the area under the standard normal curve between $Z = 1.67$ and $Z = 3.06$, a thin sliver in the right tail. (Its area is $`r f4(zt(3.06))` - `r f4(zt(1.67))` = `r f4(zt(3.06) - zt(1.67))`$.)
+`r RZ`
+
+```{r, echo=F, message=F, warning=FALSE, fig.height=4, fig.width=8, fig.alt = "Standard normal density curve with the Z-axis from -4 to 4. The area under the curve between Z = 1.67 and Z = 3.06 is shaded red, a thin sliver in the right tail."}
+ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dnorm, linewidth = 1) +
+  stat_function(fun = dnorm, xlim = c(1.67, 3.06), geom = 'area', fill = 'red', alpha = 0.5) +
+  scale_x_continuous(limits = c(-4, 4), breaks = seq(-4, 4, 0.5)) +
+  labs(title = "Standard Normal (Z) Distribution",
+       subtitle = "Z ~ N(0, 1)",
+       x = "Z", y = "Density(Z)") +
+  theme_classic2()
 ```
 
 
-## Definitions
+$\bf (5)$
+Spotify song length: $\mu = 3.71$ minutes, $\sigma = 1.51$ minutes, skewed right.
 
-Define the following terms/concepts. (The language of probability - sample space, event,
-random trial, union, intersection, random variable, probability distribution and the Law of
-Large Numbers - was covered on **Homework 2**; review those definitions before starting.)
+(a) Explain why you **cannot** use the $Z$-table to find the probability that one randomly chosen song is longer than 4 minutes.
 
-* a.) Population distribution - <span style="color: red;">is the probability distribution for a single observation of a random variable</span>
+`r RA`
+The $Z$-table gives areas under a **normal** curve. A single song's length follows the population distribution, which is skewed right, not normal, so a $z$-score and the $Z$-table would give the wrong probability.
+`r RZ`
 
-* b.) Sampling distribution - <span style="color: red;">the probability distribution of a statistic (such as $\bar{x}$ or $\hat{p}$) computed from a sample of size $n$, describing how that statistic varies from sample to sample</span>
+(b) A playlist is made of $n = 36$ songs chosen at random. Describe the sampling distribution of the playlist's mean song length $\bar{x}$.
 
-* c.) Probability Mass Function - <span style="color: red;">A function which assigns a probability to each outcome of a discrete random variable</span>
+`r RA`
+By the **central limit theorem**, $n = 36 \geq 30$ is large enough that $\bar{x}$ is approximately **normal**, even though song length is skewed. Its mean is $\mu = 3.71$ minutes and its standard error is $\sigma/\sqrt{n} = 1.51/\sqrt{36} = 1.51/6 \approx 0.252$ minutes.
+`r RZ`
 
-* d.) Probability Density Function - <span style="color: red;">A function which assigns probability density to different outcomes of a continuous random variable</span>
+(c) Show how to compute $P(\bar{x} > 4)$.
+
+`r RA`
+Standardize with the standard error: $z = (4 - 3.71)/0.252 \approx 1.15$, so $P(\bar{x} > 4) = 1 - P(Z \leq 1.15) = 1 - `r f4(zt(1.15))` = `r f4(1 - zt(1.15))`$.
+`r RZ`
+
+(d) Show how to compute $P(\bar{x} < 3.5)$.
+
+`r RA`
+$z = (3.5 - 3.71)/0.252 \approx -0.83$, so $P(\bar{x} < 3.5) = P(Z < -0.83) = `r f4(zt(-0.83))`$.
+`r RZ`
 
 
-## Sampling Distributions, Means, and Variances
 
-$\bf (1)$ A random variable $X$ has the following probability distribution
+# Part III: Confidence Intervals
 
-```{r, echo=FALSE, warning=F, message=F}
 
-df = cbind.data.frame(X = c(1,2,3,4),
-                      `P(X)` = c(0.25, 0.25, 0.25, 0.25))
+$\bf (6)$
+Fill in the table below with the corresponding $\alpha$ level and critical value for each confidence interval for a population proportion.
 
-kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
-
-```
-
-* Derive the sampling distribution for the mean of $n=2$ observations of $X$
-
-<span style="color: red;">The sample space for a mean of two observations of $X$ is given below.</span>
 ```{r, echo=F, message=F, warning=F}
-x = expand.grid(`Observation 1` = c(1:4), `Observation 2` = c(1:4))
-df = cbind.data.frame(x, rowMeans(x))
+alpha = c(0.1, 0.12, 0.03, 0.04, 0.22, 0.01)
+df = cbind.data.frame(`Confidence Level` = paste0('$', 100*(1-alpha), '\\%$'),
+                      `$\\alpha$` = paste0('$\\color{red}{', alpha, '}$'),
+                      `critical value: $z_{1-\\alpha/2}$` = paste0('$\\color{red}{', formatC(qnorm(1-alpha/2), format = 'f', digits = 3), '}$'))
 
-kable(df, format = tbl_fmt, col.names = c('Observation 1', 'Observation 2', '$\\bar{X}$'), digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
-
-
+kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F, align = rep('c', 3)) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
 ```
 
-<span style="color: red;">The sampling distribution of $\bar{X}$ is given by:</span>
-```{r, echo=F, message=F, warning=F}
-x = expand.grid(`Observation 1` = c(1:4), `Observation 2` = c(1:4))
+`r RA`
+For each row, $\alpha = 1 - \text{confidence level}$, and the critical value is the $z$-score with area $1 - \alpha/2$ to its left. For example, at $88\%$ confidence, $\alpha = 0.12$, so look up the area $0.94$ in the $Z$-table: $z \approx 1.555$.
+`r RZ`
 
-unq.means = unique(rowMeans(x))
 
-xlabs = apply(x, 1, function(x) paste0("(", paste(x, collapse = ","), ")",collapse = ''))
+$\bf (7)$
+The $t$-distribution.
 
-df = cbind.data.frame(unq.means, paste0('$\\color{red}{',summary(as.factor(rowMeans(x))), '(0.25^2)', '=', 0.25^2*summary(as.factor(rowMeans(x))), '}$'))
-
-kable(df, format = tbl_fmt, digits = 2, col.names = c('$\\bar{X}$', '$P(\\bar{X})$'), row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
-
-px = 0.25^2*summary(as.factor(rowMeans(x)))
-avg = sum(unq.means*px)
-sigma.sq = sum((unq.means-avg)^2*px)
-sigma = sqrt(sigma.sq)
-```
-
-* Compute the mean $\mu_{\bar{X}}$ and standard deviation $\sigma_{\bar{X}}$ of the sampling distribution of $\bar{X}$
-
-<span style="color: red;">Using the sampling distribution of $\bar{X}$ derived above:
-\[\mu_{\bar{X}} =\sum_{\bar{x}} \bar{x}P(\bar{x}) \]
-\[= 1(0.0625)+1.5(0.125)+\cdots +3.5(0.125)+4(0.0625)\]
-\[= 2.5 \]</span>
-
-<span style="color: red;">\[\sigma_{\bar{X}} =\sqrt{\sum_{\bar{x}} (\bar{x}-\mu_{\bar{X}})^2P(\bar{x})} \]
-\[= \sqrt{(1-2.5)^2(0.0625)+(1.5-2.5)^2(0.125)+\cdots +(3.5-2.5)^2(0.125)+(4-2.5)^2(0.0625)} \]
-\[= \sqrt{0.625} \]
-\[= 0.791\]</span>
-
-<span style="color: red;">Note that this agrees with the population values for $X$ itself: $\mu = 2.5$ and $\sigma = \sqrt{1.25} = 1.118$, and the standard deviation of the sampling distribution is $\sigma/\sqrt{n} = 1.118/\sqrt{2} = 0.791$.</span>
-
-$\bf (2)$ A random variable $Y$ has two possible outcomes. The outcome $Y = 1$ occurs with probability $p = 0.23$. Derive the sampling distribution for the proportion of outcomes with $Y = 1$ in a sample of $n = 3$ observations of $Y$.
-
-<span style="color: red;">The population distribution of $Y$ is given by:</span>
-```{r, echo=F, message=F, warning=F}
-df = cbind(`$Y$` = c(0,1), `$P(Y)$` = c(0.77, 0.23))
-kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
-```
-
-<span style="color: red;">The sample space for the sample proportion of 3 observations of $Y$ is given below.</span>
+(a) Fill in the table below with the corresponding $\alpha$ level and critical value for each confidence interval for a population mean when $\sigma$ is unknown.
 
 ```{r, echo=F, message=F, warning=F}
-gr = expand.grid(`Observation 1`=c(0,1), `Observation 2`=c(0,1), `Observation 3`=c(0,1))
-df = cbind.data.frame(gr, `$\\hat{p}$`=rowMeans(gr)) 
+alpha = c(0.10, 0.15, 0.01, 0.001, 0.20, 0.05)
+n = c(5, 8, 11, 14, 41, 13)
+df = cbind.data.frame(`Confidence Level` = paste0('$', 100*(1-alpha), '\\%$'),
+                      `Sample size` = paste0('$n = ', n, '$'),
+                      `$\\alpha$` = paste0('$\\color{red}{', alpha, '}$'),
+                      `critical value: $t_{n-1, 1-\\alpha/2}$` = paste0('$\\color{red}{', formatC(qt(1-alpha/2, n-1), format = 'f', digits = 3), '}$'))
 
-kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F, align = rep('c', 4)) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
 ```
 
-<span style="color: red;">The sampling distribution of $\hat{p}$ is given by:</span>
+`r RA`
+Use the $t$-table row for $n - 1$ degrees of freedom and the column for the confidence level. For example, at $90\%$ confidence with $n = 5$, read the row for 4 degrees of freedom: $t = 2.132$.
+`r RZ`
+
+(b) For each probability, use the $t$-table to give the two upper-tail areas it falls between, then use the course calculator to find its exact value.
+
+`r RA`
+
+* $P(t > 1.97)$ with 5 degrees of freedom: on the 5 df row, 1.97 falls between 1.699 (upper tail 0.075) and 2.015 (upper tail 0.05), so the probability is between 0.05 and 0.075. Exactly, $P(t > 1.97) = `r formatC(1 - pt(1.97, 5), format = 'f', digits = 3)`$.
+* $P(t \leq 2.9)$ with 2 degrees of freedom: on the 2 df row, 2.9 falls between 2.920 (upper tail 0.05) and 2.282 (upper tail 0.075), so the upper tail is just over 0.05 and $P(t \leq 2.9)$ is just under 0.95. Exactly, $P(t \leq 2.9) = `r formatC(pt(2.9, 2), format = 'f', digits = 3)`$.
+* $P(t \geq -0.98)$ with 8 degrees of freedom: by symmetry this is $1 - P(t > 0.98)$. On the 8 df row, 0.98 falls between 0.889 (upper tail 0.2) and 1.108 (upper tail 0.15), so $P(t > 0.98)$ is between 0.15 and 0.2, and $P(t \geq -0.98)$ is between 0.8 and 0.85. Exactly, $P(t \geq -0.98) = `r formatC(1 - pt(-0.98, 8), format = 'f', digits = 3)`$.
+
+`r RZ`
+
+(c) Look at the $t$-table row for 4 degrees of freedom and the $Z$-score row at the bottom. For a $95\%$ confidence interval, which critical value is larger? Explain why using $s$ in place of $\sigma$ calls for a larger critical value.
+
+`r RA`
+The $t$ critical value is larger: $t_{4, 0.975} = `r formatC(qt(0.975, 4), format = 'f', digits = 3)`$ compared with $z = 1.960$. The sample standard deviation $s$ is itself an estimate that varies from sample to sample, which adds uncertainty. The heavier tails of the $t$-distribution make the interval wider to account for it, so that the interval still captures $\mu$ about $95\%$ of the time.
+`r RZ`
+
+
+$\bf (8)$
+Using the Georgia survey table, construct a $90\%$ confidence interval for the proportion of Independent college student voters in the state of Georgia.
+
+```{r, echo=T, message=F, warning=F}
+sample.size = (8+36+15)
+estimate = 15/sample.size
+confidence.lvl = 0.9
+
+CI = one.sample.prop.CI(phat = estimate,
+                        n = sample.size,
+                        alpha = 1-confidence.lvl,
+                        verbose = T)
+```
+
+`r RA`
+$\hat{p} = 15/59 \approx `r round(15/59, 3)`$, and there are 15 successes and 44 failures, enough for the normal approximation. The interval is
+\[ `r round(15/59, 3)` \pm 1.645\sqrt{\frac{`r round(15/59, 3)`(1 - `r round(15/59, 3)`)}{59}}, \quad \text{from about } `r round(CI[1], 3)` \text{ to } `r round(CI[2], 3)`. \]
+We estimate with $90\%$ confidence that between `r round(100*CI[1], 1)`% and `r round(100*CI[2], 1)`% of Georgia college students are Independents.
+`r RZ`
+
+
+$\bf (9)$
+Using the health club survey table, construct a $95\%$ confidence interval for the proportion of customers that are "very satisfied" or more.
+
+```{r, echo=T, message=F, warning=F}
+sample.size = (3+20+64+109+19)
+very.satisfied = 109
+completely.satisfied = 19
+estimate = (very.satisfied+completely.satisfied)/sample.size
+confidence.lvl = 0.95
+
+CI = one.sample.prop.CI(phat = estimate,
+                        n = sample.size,
+                        alpha = 1-confidence.lvl,
+                        verbose = T)
+```
+
+`r RA`
+$\hat{p} = (109 + 19)/215 = 128/215 \approx `r round(128/215, 3)`$. The interval is $`r round(128/215, 3)` \pm 1.96\sqrt{`r round(128/215, 3)`(1 - `r round(128/215, 3)`)/215}$, from about **`r formatC(CI[1], format = 'f', digits = 3)` to `r formatC(CI[2], format = 'f', digits = 3)`**. We estimate with $95\%$ confidence that between `r formatC(100*CI[1], format = 'f', digits = 1)`% and `r round(100*CI[2], 1)`% of club members are very or completely satisfied with their membership.
+`r RZ`
+
+
+$\bf (10)$
+Camp letters: $\sigma = 2.5$, $n = 20$, $\bar{x} = 7.9$, $s = 2.8$.
+
+(a) Both $\sigma$ and $s$ are given. Which one should you use, and should you use a $z$ or a $t$ critical value?
+
+`r RA`
+Use $\sigma = 2.5$ with a $z$ critical value. When the population standard deviation is **known**, the sampling distribution of $\bar{x}$ is $N(\mu, \sigma/\sqrt{n})$, and there is no need to estimate it with $s$. The $t$-distribution is for when $\sigma$ is unknown and $s$ takes its place. (Because $n = 20$ is less than 30, we rely on the population being approximately normal.)
+`r RZ`
+
+(b) Construct a $90\%$ confidence interval for the population mean number of letters campers send home.
+
+`r RA`
+The standard error is $\sigma/\sqrt{n} = 2.5/\sqrt{20} \approx 0.559$, and $z_{0.95} = 1.645$, so the margin of error is $1.645(0.559) \approx 0.92$. The interval is
+\[ 7.9 \pm 0.92, \quad \text{from } 6.98 \text{ to } 8.82 \text{ letters.} \]
+`r RZ`
+
+(c) Interpret the interval from part (b) in a complete sentence.
+
+`r RA`
+We estimate with $90\%$ confidence that the mean number of letters all campers send home during their session is between 6.98 and 8.82.
+`r RZ`
+
+(d) What would happen to the margin of error if $500$ campers were surveyed instead of $20$? Why?
+
+`r RA`
+It would shrink, to $1.645(2.5/\sqrt{500}) \approx 0.18$ letters. The standard error divides by $\sqrt{n}$, so a larger sample gives a smaller standard error and a narrower interval.
+`r RZ`
+
+(e) Which of the following statements describes what "$90\%$ confident" means?
+
+`r RA`
+The third: approximately $90\%$ of the intervals calculated from repeated samples would contain the true population mean. The first is wrong because each sample gives a different interval. The second is wrong because every interval contains its own sample mean (it is centered there). The fourth is wrong because the confidence level is about intervals capturing $\mu$, not about $\bar{x}$ equaling $\mu$, which almost never happens exactly.
+`r RZ`
+
+
+$\bf (11)$
+California housing, $n = 25$.
+
+(a) Construct and interpret a $95\%$ confidence interval for the average median family income for households in California in 1990.
 
 ```{r, echo=F, message=F, warning=F}
-gr = expand.grid(`Observation 1`=c(0,1), `Observation 2`=c(0,1), `Observation 3`=c(0,1))
-df = cbind.data.frame(gr, `$\\hat{p}$`=rowMeans(gr)) 
-
-
-unq.props = unique(rowMeans(gr))
-cases = c(0.77^3, 0.23*0.77^2, 0.23^2*0.77, 0.23^3)
-case.labs = c('(0.77^3)', '(0.23 \\times 0.77^2)', '(0.23^2\\times 0.77)', '(0.23^3)')
-
-xlabs = apply(gr, 1, function(x) paste0("(", paste(x, collapse = ","), ")",collapse = ''))
-probs = paste0('$\\color{red}{',summary(as.factor(rowMeans(gr))), case.labs, '=', round(cases*summary(as.factor(rowMeans(gr))),3), '}$')
-
-
-df2 = cbind.data.frame(unq.props, probs)
-
-kable(df2, format = tbl_fmt, col.names = c('$\\hat{p}$','$P(\\hat{p})$'), digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+set.seed(555)
+hs = read.csv(file = paste0(mainpath, 'housing.csv'))
+hss = hs[sample(1:dim(hs)[1], 25), ]
 ```
 
+```{r, echo=T, message=F, warning=F}
+sample.size = 25
+sample.mean = round(mean(hss$median_income), 2)*10000 #converting estimate to USD
+sample.sd =  round(sd(hss$median_income), 2)*10000 #converting standard deviation to USD
+confidence.lvl = 0.95
 
-$\bf (3)$ Consider a survey of tree volume. Suppose that in the population of trees $10\%$ have a volume of 10 cubic feet, $20\%$ have a volume of 20 cubic feet, $30\%$ have a volume of 30 cubic feet, and $40\%$ have a volume of 40 cubic feet. Let $X$ denote the volume of a randomly selected tree, assuming that every tree has an equal chance of being selected. The probability distribution of $X$ is given in the table below.
-
-
-```{r, echo=FALSE, warning=F, message=F}
-
-df = cbind.data.frame(X = c(10,20,30,40),
-                      `P(X)` = c(0.1, 0.2, 0.3, 0.4))
-
-kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
-
+CI = one.sample.t.CI(xbar = sample.mean,
+                     s = sample.sd,
+                     n = sample.size,
+                     alpha = 1 - confidence.lvl,
+                     verbose = T)
 ```
 
-* On **Homework 2** you confirmed that $X$ has a mean of $\mu = 30$ cubic feet and a standard
-deviation of $\sigma = 10$ cubic feet. Derive the sampling distribution for the mean tree
-volume in a sample of $n = 2$ trees.
+`r RA`
+$\sigma$ is unknown, so the interval uses $s$ and a $t$ critical value with $25 - 1 = 24$ degrees of freedom, $t_{24, 0.975} = 2.064$. At the $95\%$ confidence level, we estimate the average median family income in California in 1990 to be no less than \$`r formatC(round(CI[1]), format = 'd', big.mark = ',')` USD and no more than \$`r formatC(round(CI[2]), format = 'd', big.mark = ',')` USD. If we repeated this sampling procedure many times, $95\%$ of the intervals constructed this way would contain the true average.
+`r RZ`
 
-<span style="color: red;">The sample space for the sample mean of 2 observations of tree volume is given below.</span>
-```{r, echo=F, message=F, warning=F}
+(b) Construct and interpret a $99\%$ confidence interval for the average number of bedrooms per block in California in 1990.
 
-x = expand.grid(`Observation 1` = seq(10, 40, 10), `Observation 2` = seq(10, 40, 10))
-df = cbind.data.frame(x, rowMeans(x))
+```{r, echo=T, message=F, warning=F}
+sample.size = 25
+sample.mean = round(mean(hss$total_bedrooms), 2)
+sample.sd =  round(sd(hss$total_bedrooms), 2)
+confidence.lvl = 0.99
 
-kable(df, format = tbl_fmt, col.names = c('Observation 1', 'Observation 2', '$\\bar{X}$'), digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+CI = one.sample.t.CI(xbar = sample.mean,
+                     s = sample.sd,
+                     n = sample.size,
+                     alpha = 1 - confidence.lvl,
+                     verbose = T)
 ```
 
+`r RA`
+With 24 degrees of freedom, $t_{24, 0.995} = 2.797$. At the $99\%$ confidence level, we estimate the average number of bedrooms per block in California in 1990 to be no less than `r round(CI[1], 1)` and no more than `r round(CI[2], 1)`. If we repeated this sampling procedure many times, $99\%$ of the intervals constructed this way would contain the true average.
+`r RZ`
 
-<span style="color: red;">The sampling distribution of $\bar{X}$ is given by:</span>
 
-```{r, echo=F, message=F, warning=F}
+$\bf (12)$
+Tranquilizer effective periods (hours): 2.7, 2.8, 3.0, 2.3, 2.3, 2.2, 2.8, 2.1, 2.4.
 
-x = expand.grid(`Observation 1` = seq(10, 40, 10), `Observation 2` = seq(10, 40, 10))
+(a) Show how to compute the sample mean $\bar{x}$ and sample standard deviation $s$.
 
-unq.means = unique(rowMeans(x))
+`r RA`
+$\bar{x} = \frac{2.7 + 2.8 + 3.0 + 2.3 + 2.3 + 2.2 + 2.8 + 2.1 + 2.4}{9} = \frac{22.6}{9} \approx 2.51$ hours, and
+\[ s = \sqrt{\frac{\sum (x_i - \bar{x})^2}{n - 1}} = \sqrt{\frac{`r round(sum((tr - mean(tr))^2), 3)`}{8}} \approx 0.32 \text{ hours.} \]
+`r RZ`
 
-xlabs = apply(x, 1, function(x) paste0("(", paste(x, collapse = ","), ")",collapse = ''))
-cases = c(0.1^2, 
-          2*0.1*0.2, 
-          2*0.1*0.3+0.2^2, 
-          2*0.4*0.1+2*0.2*0.3, 
-          2*0.2*0.4+0.3^2,
-          2*0.3*0.4,
-          0.4^2
-          )
-case.labs = c('(0.1)^2', 
-              '2(0.1 \\times 0.2)', 
-              '2(0.1\\times 0.3)+0.2^2', 
-              '2(0.4\\times 0.1)+2(0.2\\times 0.3)',
-              '2(0.2\\times 0.4)+0.3^2',
-              '2(0.3\\times 0.4)',
-              '(0.4)^2'
-              )
+(b) Should you use a $z$ or a $t$ critical value for this interval?
 
-xlabs = apply(gr, 1, function(x) paste0("(", paste(x, collapse = ","), ")",collapse = ''))
-probs = paste0('$\\color{red}{', case.labs, '=', round(cases,4), '}$')
-df2 = cbind.data.frame(unq.means, probs)
+`r RA`
+A $t$ critical value with $n - 1 = 8$ degrees of freedom: $\sigma$ is unknown, so we estimate it with $s$. The sample is small, so we also rely on the stated assumption that the population is approximately normal.
+`r RZ`
 
-kable(df2, format = tbl_fmt, digits = 2, col.names = c('$\\bar{X}$', '$P(\\bar{X})$'), row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+(c) Construct a $95\%$ confidence interval for the population mean length of time the tranquilizer lasts.
 
-px = 0.25^2*summary(as.factor(rowMeans(x)))
-avg = sum(unq.means*px)
-sigma.sq = sum((unq.means-avg)^2*px)
-sigma = sqrt(sigma.sq)
+`r RA`
+$t_{8, 0.975} = 2.306$ and the standard error is $s/\sqrt{n} = 0.32/\sqrt{9} \approx 0.107$, so
+\[ 2.51 \pm 2.306(0.107) = 2.51 \pm 0.25, \quad \text{from about } 2.26 \text{ to } 2.76 \text{ hours.} \]
+`r RZ`
+
+(d) What does it mean to be "$95\%$ confident" in this problem?
+
+`r RA`
+If the researchers repeated the study many times with nine new patients each time and built an interval from each sample, about $95\%$ of those intervals would contain the true mean length of time the tranquilizer lasts. It does **not** mean there is a $95\%$ probability that the true mean is between 2.26 and 2.76 hours.
+`r RZ`
+
+
+
+# Part IV: Choosing a Minimum Sample Size and Assumptions of Estimators
+
+
+$\bf (13)$
+Choosing a minimum sample size.
+
+(a) E-cigarette use, $p \approx 0.24$, $95\%$ confidence, margin of error $1.5\%$.
+
+```{r, echo=T, message=F, warning=F}
+m = 0.015 #desired margin of error
+p = 0.24 #expected proportion of e-cigarette use based on Saudi Study
+confidence.lvl = 0.95
+alpha = 1 - confidence.lvl
+
+z = qnorm(1 - alpha/2) #standard score for confidence level of 95%
+
+n = ceiling((z^2*p*(1-p))/m^2) # compute sample size - always round UP
+print(paste0('n = ', n, ' observations'))
 ```
 
-## Deriving Probabilities From Discrete Distributions
+`r RA`
+\[ n = \frac{(1.96)^2(0.24)(0.76)}{(0.015)^2} \approx 3114.1, \quad \text{so } n = 3{,}115 \text{ students.} \]
+`r RZ`
 
-$\bf (4)$ Michael Dickson, who plays for the Seattle Seahawks, is a punter in the NFL. The following sampling distribution gives the mean punting distance (in yards) for a sample of $n=4$ punts. Use this distribution to answer the following questions:
+(b) Infertility, $p \approx 0.15$, $99\%$ confidence, margin of error $4\%$.
 
-```{r, echo=FALSE, warning=F, message=F}
+```{r, echo=T, message=F, warning=F}
+m = 0.04 #desired margin of error
+p = 0.15 #expected proportion of infertile couples based on previous studies
+confidence.lvl = 0.99
+alpha = 1 - confidence.lvl
 
-df = cbind.data.frame(`$\\bar{X} =$ Mean Punt Distance` = c(35.33, 45.67, 55.00, 60.33, 65.67),
-                      `$P(\\bar{X})$` = c(0.4, 0.5, 0.08, 0.01, 0.01))
-kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = T)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+z = qnorm(1 - alpha/2) #standard score for confidence level of 99%
 
+n = ceiling((z^2*p*(1-p))/m^2) # compute sample size - always round UP
+print(paste0('n = ', n, ' observations'))
 ```
 
-* What is the probability the mean distance is 55 or more yards?
+`r RA`
+\[ n = \frac{(2.576)^2(0.15)(0.85)}{(0.04)^2} \approx 528.8, \quad \text{so } n = 529 \text{ couples.} \]
+`r RZ`
 
-<span style="color: red;">\[ P(\bar{X} \geq 55) = 1- P(\bar{X} < 55)\]
-\[ = 1-(0.4+0.5) = 0.1 \]</span>
+(c) Commute time, margin of error 3 minutes, $95\%$ confidence, range 5 to 85 minutes.
 
-* What is the probability the mean distance is at least 35.33 yards?
-
-<span style="color: red;">\[ P(\bar{X} \geq 35.33) = 1\]</span>
-
-* What is the probability the mean distance is between 35.33 and 45.67 yards?
-
-<span style="color: red;">
-\[P(35.33\leq \bar{X} \leq 45.67) = P(X = 35.33)+P(X = 45.67) = 0.9\]
-</span>
-
-* What is the probability the mean distance is 35.33 yards or 55 yards?
-
-<span style="color: red;">Let $A$ be the event $\bar{X} = 35.33$ and $B$ be the event $\bar{X} = 55$. These outcomes are disjoint, so
-\[P(A\cup B) = P(\bar{X} = 35.33)+P(\bar{X} = 55) = 0.4+0.08 = 0.48 \]</span>
+`r RA`
+Estimate $\sigma \approx \text{range}/4 = (85 - 5)/4 = 20$ minutes. Then
+\[ n = \frac{(z_{1-\alpha/2})^2\sigma^2}{m^2} = \frac{(1.96)^2(20)^2}{3^2} \approx 170.7, \quad \text{so } n = 171 \text{ workers.} \]
+`r RZ`
 
 
+$\bf (14)$
+Assumptions of estimators.
+
+(a) Describe the assumptions associated with estimating $p$ with $\hat{p}$.
+
+`r RA`
+
+1. **Random sampling:** the sample is a random sample from the population of interest, so that $\hat{p}$ is unbiased.
+2. **Independence:** the observations are independent of each other; one response does not influence another.
+3. **Large enough sample:** there are enough successes and failures for the sampling distribution of $\hat{p}$ to be approximately normal (the CLT). The textbook's guide is $n\hat{p} > 5$ and $n(1 - \hat{p}) > 5$; a stricter, safer rule is at least 15 of each.
+
+`r RZ`
+
+(b) Describe the assumptions associated with estimating $\mu$ with $\bar{x}$.
+
+`r RA`
+
+1. **Random sampling:** the sample is a random sample from the population of interest.
+2. **Independence:** the observations are independent of each other.
+3. **Normal sampling distribution:** either the population is approximately normal, or the sample is large enough (typically $n \geq 30$) for the central limit theorem to make the sampling distribution of $\bar{x}$ approximately normal. A very skewed population or extreme outliers may call for a larger sample.
+
+`r RZ`
+
+(c) Which of the assumptions from part (a) does the coffee-shop study break?
+
+`r RA`
+**Random sampling:** people in line at a coffee shop are far more likely to drink coffee every day than students in general, so the sample is biased and $\hat{p} = 36/40 = 0.9$ likely overstates $p$. It also fails the **large-sample** condition: there are only $40 - 36 = 4$ failures, fewer than 5, so the normal approximation is not reliable either.
+`r RZ`
 
 
-$\bf (5)$ A random variable $X$ follows a binomial distribution with probability of success $p = 0.43$ and number of trials $n = 8$. What is the probability of observing fewer than 3 successes, that is what is $P(X < 3)$?
 
-<span style="color: red;">Let $X \sim Binomial(p = 0.43, n = 8)$ then</span>
-
-\[ \color{red}{P(X < 3) =  P(X = 0)+P(X = 1)+P(X = 2)}\]
-
-\[ \color{red}{= \sum_{k = 0}^2 \frac{8!}{k!(8 - k)!} \times 0.43^{k} \times (1-0.43)^{8-k} \approx 0.256}\]
+# Part V: Significance Tests
 
 
+$\bf (15)$
+State the null and alternative hypotheses for each test.
+
+(a) Ibuprofen dose.
+
+`r RA`
+The null hypothesis is that the mean dose of a tablet is 200 mg, $H_0: \mu_0 = 200$. The alternative hypothesis is that the mean dose is less than 200 mg, $H_A: \mu < \mu_0$.
+`r RZ`
+
+(b) Stock value.
+
+`r RA`
+The null hypothesis is that the mean share value is \$100, $H_0: \mu_0 = 100$. The alternative hypothesis is that the mean share value is greater than \$100, $H_A: \mu > \mu_0$.
+`r RZ`
+
+(c) Microchip defect rate.
+
+`r RA`
+The null hypothesis is that the proportion of defective chips is $0.001$, $H_0: p_0 = 0.001$. The alternative hypothesis is that it is not equal to $0.001$, $H_A: p \neq p_0$.
+`r RZ`
 
 
+$\bf (16)$
+For each set of hypotheses, significance level, and $p$-value, state whether the test rejects or fails to reject the null hypothesis.
 
-$\bf (6)$ Tom Brady is a famous quarterback who recently retired from playing in the National Football League. During his career, the probability that Brady would complete a pass in a given play was $64.3\%$.  If a typical NFL team runs about $35$ offensive pass plays, what is the probability that Brady would complete exactly $28$ pass plays in a game?
+`r RA`
 
-<span style="color: red;"> Let $X \sim Binomial(p = 0.643, n = 35)$ then
+(a) Reject $H_0$, because the $p$-value $0.0098 < \alpha = 0.01$.
 
-\[\color{red}{P(X = 28) = \frac{35!}{28!(35 - 28)!} \times 0.643^{28}\times (1-0.643)^{35-28} \approx 0.021}\] 
+(b) Fail to reject $H_0$, because the $p$-value $0.086 > \alpha = 0.05$.
 
-</span>
+(c) Fail to reject $H_0$, because the $p$-value $0.0015 > \alpha = 0.001$.
+
+(d) Reject $H_0$, because the $p$-value $0.053 < \alpha = 0.1$.
+
+`r RZ`
 
 
-$\bf (7)$ A random variable $W$ follows a Poisson distribution with rate parameter $\lambda = 1.8$ events per hour. What is the probability of observing exactly four events in a given hour, that is what is $P(W = 4)$?
+$\bf (17)$
+For each set of hypotheses, significance level, sample size, and test statistic, give the critical value and state whether the test rejects or fails to reject the null hypothesis.
 
-<span style="color: red;">Let $W\sim Poisson(\lambda = 1.8)$
-\[P(W = 4) = \frac{1.8^4\cdot e^{-1.8}}{4!} \approx 0.072 \]</span>
+`r RA`
 
-<br>
+(a) Upper-tailed $t$-test with $31 - 1 = 30$ degrees of freedom: **critical value** $t_{30, 0.95} = 1.697$. **Decision:** reject $H_0$, because $t_{obs} = 2.13 > 1.697$.
 
-$\bf (8)$ A factory experiences on average 3 equipment malfunctions per day, following a Poisson distribution with a rate parameter of 3. Calculate the probability that on a randomly selected day, the factory will <u>observe 3 or more</u> equipment malfunctions.
+(b) Two-tailed $t$-test with 13 degrees of freedom: **critical value** $t_{13, 0.995} = 3.012$. **Decision:** reject $H_0$, because $|t_{obs}| = 4.1 > 3.012$.
 
-<span style="color: red;">let $X$ represent the number of equipment failures in a given day for the factory, then \[X\sim Poisson(\lambda = 3)\]
-\[P(X\geq 3) = 1 - P(X< 3)\]
-where
-\[P(X < 3) =  P(X = 0)+P(X = 1)+P(X = 2) = \sum_{k=0}^2 \frac{3^k\cdot e^{-3}}{k!} \approx 0.423\]
-so
-\[P(X\geq 3) = 1 - 0.423 \approx 0.577\]
-</span>
+(c) Lower-tailed $Z$-test: **critical value** $z_{0.1} = -1.28$. **Decision:** reject $H_0$, because $Z_{obs} = -1.5 < -1.28$.
 
-## Deriving Probabilities From Continuous Distributions
+(d) Two-tailed $Z$-test with $\alpha/2 = 0.015$ in each tail: **critical value** $z_{0.985} = 2.17$. **Decision:** fail to reject $H_0$, because $|Z_{obs}| = 1.95$ is not greater than 2.17.
 
-${\bf (9)}$ Use the plot below of the probability distribution of a continuous random variable $X$ to answer the following questions
+`r RZ`
 
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Step-shaped probability density for X from 0 to 2.1, with x-axis ticks every 0.3 and y-axis (probability density) ticks at 0, 0.167, 0.334, 0.501, 0.668 and 0.835. The density height on each interval is: 0 to 0.3: 0.334; 0.3 to 0.6: 0.668; 0.6 to 0.9: 0.668; 0.9 to 1.2: 0.835; 1.2 to 1.5: 0.167; 1.5 to 1.8: 0.167; 1.8 to 2.1: 0.501; zero outside 0 to 2.1."}
-#C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/PMFplot1.pdf}
-h1 = round(1/6, 3)
-#homework 4 plots
-dist = cbind.data.frame(val = c(0,0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1,2.1), 
-                        dens = c(0,2*h1,4*h1,4*h1,5*h1,1*h1,1*h1,3*h1,1*h1,0))
-#pdf(paste0(savepath, "PMFplot1.pdf"), height = 5, width = 6.5)
-ggplot(data = dist, aes(x = val, y = dens))+geom_step(size = 1)+theme_pander()+
-  scale_x_continuous(limits=c(0, 2.1), breaks = seq(0, 2.1, 0.3))+
-  scale_y_continuous(limits=c(0,5*h1), 
-                     breaks = seq(0, 5*h1, h1))+
-  geom_segment(aes(xend = -1, x = 1, yend = 0, y = 0), size = 1, color = 'black')+
-  theme(panel.grid.minor = element_blank(), axis.text = element_text(size = 12),
-        axis.title = element_text(size = 14))+
-  xlab('X')+
-  ylab("Probability Density")
-#dev.off()
+
+$\bf (18)$
+Toy robots: $H_0: p_0 = 0.5$, $H_A: p \neq p_0$, $\alpha = 0.1$, 40 of 100 defect-free.
+
+```{r, echo=T, message=F, warning=F}
+test.type = 'two.tail'
+null.value = 0.5
+sample.size = 100
+estimated.proportion = 40/100
+significance.lvl = 0.1
+
+one.sample.prop.test(p0 = null.value,
+                     phat = estimated.proportion,
+                     n = sample.size,
+                     alpha = significance.lvl,
+                     test = test.type,
+                     verbose = T)
 ```
 
-Use the plot to find the following probabilities:
-
-* What is $P(X<0.6)$?
-
-<span style="color: red;">
-In this plot the area comprising a single grid square is 
-\[ \text{Area of a rectangle} = \text{Base}\times\text{Height} = 0.167\times 0.3 \approx 0.05\]
-there are six grid squares between $0$ and $0.6$, therefore
-\[P(X<0.6)= 6\times 0.05 = 0.3\]</span>
-
-* What is $P(X>0.3)$?
-
-<span style="color: red;">$P(X>0.3)= 1-P(X\leq 0.3) = 1-(2*0.05) = 0.9$</span>
-
-* What is $P(1.5<X<1.8)$?
-
-<span style="color: red;">$P(1.5<X<1.8)=0.05$</span>
+`r RA`
+The test statistic is $Z_{obs} = \frac{0.40 - 0.50}{\sqrt{0.5(1-0.5)/100}} = -2.00$ with a two-tailed $p$-value of $2P(Z \leq -2.00) = 2(`r f4(zt(-2))`) = `r f4(2 * zt(-2))`$. Since $`r f4(2 * zt(-2))` < \alpha = 0.1$ (equivalently, $|Z_{obs}| = 2.00 > 1.645$), at the $10\%$ significance level we reject the null hypothesis and conclude that the proportion of defect-free toy robots is significantly different from the manufacturer's claim of $0.5$.
+`r RZ`
 
 
+$\bf (19)$
+New drug: $H_0: p_0 = 0.2$, $H_A: p < p_0$, $\alpha = 0.05$, 70 of 300 cured.
 
+```{r, echo=T, message=F, warning=F}
+test.type = 'lower.tail'
+null.value = 0.2
+sample.size = 300
+estimated.proportion = 70/300
+significance.lvl = 0.05
 
-${\bf (10)}$ Use the plot below of the probability distribution of a continuous random variable $Y$ to answer the following questions
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Step-shaped probability density for Y from -1 to 1, with x-axis ticks every 0.25 and y-axis (probability density) ticks every 0.16 from 0 to 1.12. The density height on each interval is: -1 to -0.75: 0.48; -0.75 to -0.5: 0.32; -0.5 to -0.25: 0.96; -0.25 to 0: 0.80; 0 to 0.25: 0.80; 0.25 to 0.5: 0.32; 0.5 to 0.75: 0.16; 0.75 to 1: 0.16; zero outside -1 to 1."}
-#C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/PMFplot2.pdf
-
-h2 = round(1/(25*0.25), 2)
-dist2 = cbind.data.frame(val = c(-1, -1, -0.75, -0.5, -0.25, 0 , 0.25, 0.5, 0.75, 1, 1), 
-                        dens = c(0,  3*h2,2*h2, 6*h2,  5*h2, 5*h2,2*h2,1*h2,1*h2,0,0))
-#pdf(paste0(savepath, "PMFplot2.pdf"), height = 5, width = 6.5)
-ggplot(data = dist2, aes(x = val, y = dens))+geom_step(size = 1)+theme_bw()+
-  scale_x_continuous(limits=c(-1, 1), breaks = seq(-1, 1, 0.25))+
-  scale_y_continuous(limits=c(0,7*h2), breaks = seq(0, 7*h2, h2))+
-  geom_segment(aes(xend = -1, x = 1, yend = 0, y = 0), size = 1, color = 'black')+
-  theme(panel.grid.minor = element_blank(), axis.text = element_text(size = 12),
-        axis.title = element_text(size = 14))+
-  xlab('Y')+
-  ylab("Probability Density")
-#dev.off()
+one.sample.prop.test(p0 = null.value,
+                     phat = estimated.proportion,
+                     n = sample.size,
+                     alpha = significance.lvl,
+                     test = test.type,
+                     verbose = T)
 ```
 
+(a) Compute the critical value for this test
 
-Use the plot to find the following probabilities (recall that the area of a triangle is $\frac{1}{2} \times \text{base} \times \text{height}$)
+`r RA`
+The critical value is $z_{0.05} = -1.645$.
+`r RZ`
+
+(b) Compute the test statistic $Z_{obs}$
+
+`r RA`
+\[ Z_{obs} = \frac{0.233 - 0.2}{\sqrt{\frac{0.2(1-0.2)}{300}}} \approx 1.44 \]
+`r RZ`
+
+(c) Compute the $p$-value
+
+`r RA`
+\[ P(Z \leq Z_{obs} \mid H_0 \ \text{true}) = P(Z \leq 1.44) = `r f4(zt(1.44))` \]
+`r RZ`
+
+(d) Is there enough evidence to conclude that the cure rate of the new drug is less than the rate claimed by the pharmaceutical company?
+
+`r RA`
+No. At the $5\%$ significance level we fail to reject the null hypothesis: the sample cure rate, $23.3\%$, is actually **above** $20\%$, so it gives no evidence that the cure rate is less than the company claims.
+`r RZ`
 
 
-* What is $P(Y>-0.25)$?
+$\bf (20)$
+Tires: claim $\mu \geq 50{,}000$ miles, $\sigma = 8{,}000$, $n = 28$, $\bar{x} = 46{,}500$, $s = 9{,}800$, $\alpha = 0.05$.
 
-<span style="color: red;">In this plot the area comprising a single grid square is \[ \text{Area of a rectangle} = \text{Base}\times\text{Height} = 0.25\times 0.16 \approx 0.04\] There are $14$ grid squares in the area between $-0.25$ and $1.0$ $P(Y>-0.25)=14\times 0.04 = 0.56$</span>
+(a) Both $\sigma$ and $s$ are given. Which one should you use, and is the test statistic a $Z$ or a $t$?
 
-* What is $P(-0.5<Y<0.25)$?
+`r RA`
+Use $\sigma = 8{,}000$ and a $Z$ test statistic. The population standard deviation is known from past studies, so the standard error is $\sigma/\sqrt{n}$ and the test statistic follows the standard normal distribution when $H_0$ is true. A $t$ test is for when $\sigma$ is unknown. ($n = 28$ is less than 30, so we rely on the lifespans being approximately normal.)
+`r RZ`
 
-<span style="color: red;">There are $16$ grid squares in the area between $-0.5$ and $0.25$ therefore $P(-0.5<Y<0.25)=16\times 0.04 = 0.64$</span>
+(b) State the null and alternative hypotheses.
+
+`r RA`
+$H_0: \mu_0 = 50{,}000$ (the company's claim) and $H_A: \mu < \mu_0$.
+`r RZ`
+
+(c) Compute the critical value for this test.
+
+`r RA`
+A lower-tailed $Z$-test at $\alpha = 0.05$: $z_{0.05} = -1.645$.
+`r RZ`
+
+(d) Compute the test statistic.
+
+`r RA`
+\[ Z_{obs} = \frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}} = \frac{46{,}500 - 50{,}000}{8{,}000/\sqrt{28}} = \frac{-3{,}500}{1{,}511.9} \approx -2.31 \]
+`r RZ`
+
+(e) Compute the $p$-value.
+
+`r RA`
+\[ P(Z \leq -2.31 \mid H_0 \ \text{true}) = `r f4(zt(-2.31))` \]
+`r RZ`
+
+(f) Is there enough evidence to conclude that the deluxe tire averages fewer than $50{,}000$ miles?
+
+`r RA`
+Yes. The $p$-value $`r f4(zt(-2.31))` < \alpha = 0.05$ (equivalently, $Z_{obs} = -2.31 < -1.645$), so at the $5\%$ significance level we reject the null hypothesis and conclude that the deluxe tire's mean lifespan is significantly less than $50{,}000$ miles.
+`r RZ`
 
 
+$\bf (21)$
+Zero Sugar soda: $H_0: \mu_0 = 0$, $H_A: \mu > \mu_0$, $n = 25$, $\bar{x} = 1.3$, $s = 0.5$, $\alpha = 0.01$.
 
+```{r, echo=T, message=F, warning=F}
+test.type = 'upper.tail'
+null.value = 0
+sample.mean = 1.3
+sample.sd = 0.5
+sample.size = 25
+significance.lvl = 0.01
 
-
-${\bf (11)}$ Use the plot below of the probability distribution of a continuous random variable $Z$ to answer the following questions
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Probability density for Z drawn as straight line segments, with x-axis ticks every 1 from 0 to 6 and y-axis (probability density) ticks every 0.05 from 0 to 0.35. The density rises in a straight line from 0 at Z = 0 to 0.3 at Z = 2, falls to 0.1 at Z = 3, rises to 0.3 at Z = 4, and falls back to 0 at Z = 6."}
-#C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/PMF_triangular_plot1.pdf
-dist3 = cbind.data.frame(val = c(0, 2, 3, 4, 6), 
-                         dens = c(0,0.3, 0.1, 0.3, 0))
-#pdf(paste0(savepath, "PMF_triangular_plot1.pdf"), height = 5, width = 6.5)
-ggplot(data = dist3, aes(x = val, y = dens))+geom_line(size = 1)+theme_bw()+
-  scale_x_continuous(limits=c(0, 6), breaks = seq(0, 6, 1))+
-  scale_y_continuous(limits=c(0,0.35), breaks = seq(0, 0.35, 0.05))+
-  geom_segment(aes(xend = 0, x = 6, yend = 0, y = 0), size = 1, color = 'black')+
-  theme(panel.grid.minor = element_blank(), axis.text = element_text(size = 12),
-        axis.title = element_text(size = 14))+
-  xlab('Z')+
-  ylab("Probability Density")
-#dev.off()
-
+one.sample.t.test(m0 = null.value,
+                  xbar = sample.mean,
+                  s = sample.sd,
+                  n = sample.size,
+                  alpha = significance.lvl,
+                  test = test.type,
+                  verbose = T)
 ```
 
-Use the plot to find the following probabilities (recall that the area of a triangle is $\frac{1}{2} \times \text{base} \times \text{height}$)
+`r RA`
+$\sigma$ is unknown, so this is a $t$-test with $24$ degrees of freedom. The test statistic is $t_{obs} = \frac{1.3 - 0}{0.5/\sqrt{25}} = \frac{1.3}{0.1} = 13$, far beyond the critical value $t_{24, 0.99} = 2.492$, and the $p$-value is essentially $0$. At the $1\%$ significance level, we reject the null hypothesis and conclude that the soda produced by the company contains added sugar.
+`r RZ`
 
 
-* What is $P(Z<2)$?
+$\bf (22)$
+Venus fly traps: $n = 40$, $\bar{x} = 105$, $s = 12$, $\alpha = 0.05$.
 
-<span style="color: red;">$P(Z<2)=0.5(2)(0.3) = 0.3$</span>
+```{r, echo=T, message=F, warning=F}
+test.type = 'upper.tail'
+null.value = 100
+sample.mean = 105
+sample.sd = 12
+sample.size = 40
+significance.lvl = 0.05
 
-* What is $P(2<Z<3)$?
-
-<span style="color: red;">In this plot a single grid square has an area of $0.05$
-thus the area between $Z = 2$ and $Z = 3$ is given by
-$P(2<Z<3)=2(0.05)+(0.5)(1)(0.2) = 0.2$</span>
-
-* What is $P(Z>4)$?
-
-<span style="color: red;">$P(Z>4) = P(Z<2) =0.3$</span>
-
-* Give the approximate value of the $25th$ percentile of distribution of $Z$
-
-<span style="color: red;">Reading from the plot, the area to the left of $Z=2$ is $0.3$, so the $25th$ percentile lies just below $2$. Working it out exactly: on $[0,2]$ the density is the line $f(z) = 0.15z$, so the area to the left of $z$ is $0.075z^2$. Setting $0.075z^2 = 0.25$ gives
-\[Q1 = \sqrt{0.25/0.075} \approx 1.83\]</span>
-
-
-
-${\bf 12.)}$ Assume the continuous random variable $X$ follows a normal distribution with mean $\mu = 25$ and variance $\sigma^2 = 16$. 
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Normal density curve for X with mean 25 and standard deviation 4, drawn on an x-axis from 0 to 50 with ticks every 10 and a y-axis labeled Density. The curve peaks at X = 25 (density about 0.10) and is close to zero below about 13 and above about 37."}
-ggplot()+xlim(c(-40, 90))+
-  stat_function(fun = dnorm, 
-                args = list(mean = 25, sd = 4),
-                size = 1)+
-  scale_x_continuous(limits = c(0, 50), breaks = seq(0, 50, 10))+
-  theme_classic2()+
-  xlab('X')+
-  ylab('Density')
-
+one.sample.t.test(m0 = null.value,
+                  xbar = sample.mean,
+                  s = sample.sd,
+                  n = sample.size,
+                  alpha = significance.lvl,
+                  test = test.type,
+                  verbose = T)
 ```
 
+(a) State the null and alternative hypotheses
 
-Using a $Z$-table, find the following (approximate) probabilities for $X$. You can also use the app in the course website or [StatDistributions.com](http://www.statdistributions.com/normal/) to check your result
+`r RA`
+The null hypothesis is that the mean growth rate of Venus fly traps is 100 mm per year, $H_0: \mu_0 = 100$. The alternative hypothesis is that the growth rate is higher than 100 mm per year, $H_A: \mu > 100$.
+`r RZ`
 
-* What is $P(X<15)$?
+(b) Compute the critical value for this test
 
-<span style="color: red;">\[ z = \frac{15-25}{4} = -2.5\]
-\[ P(Z<-2.5) = 0.006\]</span>
+`r RA`
+The critical value is $t_{39, 0.95} = 1.685$ (from the course calculator; the $t$-table has no 39 df row, and its 30 and 40 df rows give 1.697 and 1.684).
+`r RZ`
 
-* What is $P(X>28)$?
+(c) Compute the test statistic $t_{obs}$
 
-<span style="color: red;">\[ z = \frac{28-25}{4} = 0.75\]
-\[ P(Z>0.75) = 1-P(Z\leq 0.75) = 1-0.773 = 0.227\]</span>
+`r RA`
+\[ t_{obs} = \frac{105 - 100}{12/\sqrt{40}} \approx 2.64 \]
+`r RZ`
 
-* What is $P(12<X<20)$?
+(d) Compute the $p$-value
 
-<span style="color: red;">\[ z_{\text{lower}} = \frac{12-25}{4} = -3.25\]
-\[ z_{\text{upper}} = \frac{20-25}{4} = -1.25\]
-\[ P(-3.25 < Z < -1.25) =   P(Z<-1.25) - P(Z<-3.25) = 0.106 - 0.001 = 0.105\]</span>
+`r RA`
+\[ P(t > t_{obs} \mid H_0 \ \text{true}) = 1 - P(t \leq 2.64) \approx 0.006 \]
+`r RZ`
 
-* What is $P(X>30)$?
+(e) Is there enough evidence to conclude that the current growth rate of Venus fly traps in the greenhouse is higher than the historical value of $100$ millimeters per year?
 
-<span style="color: red;">\[ z = \frac{30-25}{4} = 1.25\]
-\[ P(Z>1.25) = 1-P(Z\leq 1.25) = 1-0.894 = 0.106 \]</span>
-
-* What is $P(25<X<33)$?
-
-<span style="color: red;">\[ z_{\text{lower}} = \frac{25-25}{4} = 0\]
-\[ z_{\text{upper}} = \frac{33-25}{4} = 2\]
-\[ P(0<Z<2) = P(Z<2) - P(Z<0) = 0.977 - 0.5 = 0.477\]</span>
-
-* What is the value of $X$ that marks the $95th$ percentile of the distribution?
-
-<span style="color: red;">the $95th$ percentile of a standard normal distribution is $z=1.645$ plugging this into the $z$-score equation and solving for $X$ gives
-\[ (z\times \sigma) + \mu = (1.645\times 4) + 25 = 31.58 \]</span>
-
-* What is the value of $X$ that marks the $40th$ percentile of the distribution?
-
-<span style="color: red;">the $40th$ percentile of a standard normal distribution is $z=-0.253$
-\[  (z\times \sigma) + \mu = (-0.253\times 4)+25 = 23.99 \approx 24.0 \]</span>
-
-
-${\bf 13.)}$ Suppose that a random variable $X$ follows a normal distribution with mean $\mu = -5$ and standard deviation $\sigma = 1.8$. Using the plot of the $Z$-distribution below, shade in the area corresponding to the probability $P(-2< X <0.5)$
-
-
-<span style="color: red;">start by finding the $z$-scores\[ P(-2<X<0.5) = P(X<0.5) - P(X<-2)  \]
-\[ z_{\text{lower}} = \frac{-2 - (-5)}{1.8} = 1.67\]
-\[ z_{\text{upper}} = \frac{0.5 - (-5)}{1.8} = 3.06\]
-\[P(-2<X<0.5) = P(1.67< Z < 3.06)  \]</span>
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Two normal density curves side by side. Left: standard normal Z distribution, Z ~ N(mu = 0, sigma = 1), Z-axis from -4 to 4, with the area between Z = 1.67 and Z = 3.06 shaded. Right: distribution of X ~ N(mu = -5, sigma = 1.8), X-axis from -12.2 to 2.2 in steps of 1.8, with the area between X = -2 and X = 0.5 shaded. The shaded regions are the same small upper-tail area."}
-
-A = ggplot(data.frame(x = c(-4, 4)), aes(x)) +
-  stat_function(fun = dnorm) + 
-  stat_function(fun = dnorm, 
-                xlim = c(1.67,3.06),
-                geom = "area",
-                fill = 'red1',
-                alpha = 0.3)+
-  scale_x_continuous(limits = c(-4, 4), breaks = seq(-4, 4, 1))+
-        labs(title = paste0("Standard Normal (Z) Distribution"),
-             subtitle = TeX(paste0("$Z\\sim N(\\mu = ", 0, ', \\sigma = ',1, ')$')),
-             x = "Z",
-            y = "Density(Z)")+
-        theme_classic2()+
-        theme(legend.position = 'none')
-
-
-B = ggplot(data.frame(x = c(-5-4*1.8, -5+4*1.8)), aes(x)) +
-  stat_function(fun = dnorm, 
-                args = list(mean = -5, sd = 1.8)) + 
-    stat_function(fun = dnorm,
-                args = list(mean = -5, sd = 1.8),
-                xlim = c(-2,0.5),
-                geom = "area",
-                fill = 'red1',
-                alpha = 0.3)+
-  scale_x_continuous(limits = c(-5-4*1.8, -5+4*1.8), breaks = seq(-5-4*1.8, -5+4*1.8, 1.8))+
-        labs(title = paste0("Distribution of X"),
-             subtitle = TeX(paste0("$X\\sim N(\\mu = ", -5, ', \\sigma = ',1.8, ')$')),
-             x = "X",
-            y = "Density(X)")+
-        theme_classic2()+
-        theme(legend.position = 'none')
-
-
-ggarrange(A, B, nrow = 1)
-```
-
-
-<br>
-<br>
-<br>
-<br>
-
-
-
-\newpage
-\section{References}
+`r RA`
+Yes. At the $5\%$ significance level, we reject the null hypothesis and conclude that the current growth rate is significantly higher than 100 mm per year.
+`r RZ`

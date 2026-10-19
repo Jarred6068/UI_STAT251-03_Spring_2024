@@ -18,16 +18,35 @@ header-includes:
   - \usepackage{threeparttablex}
   - \usepackage[normalem]{ulem}
   - \usepackage{makecell}
-bibliography: ../../misc/home2bibs.bib
+bibliography: ../../misc/hw3_2026bibs.bib
 ---
 
+<!--
+  FALL 2026 HOMEWORK 3 (rewritten Oct 18 2026), due Sunday Nov 1 at 11:59PM per
+  Course_Schedule.Rmd. Covers Weeks 9-10: finding normal probabilities and the CLT,
+  confidence intervals for p and mu (sigma known and unknown), choosing a minimum
+  sample size, assumptions of estimators, and one-sample tests for p and mu
+  (sigma known and unknown).
 
-
+  Source of truth is the Spring 2024 Homework 4 (homeworks/2024/week12homework.Rmd):
+  its problems are kept, in its wording, as problems 1, 6-9, 11, 13(a)-(b), 14(a)-(b)
+  and 15-19, 21-22. Changes from 2024:
+    - 7: t confidence levels and sample sizes changed so every critical value is on
+         the course t-table (misc/t_table.html); 2024 used 92%/86%/82% and n = 40.
+    - 17(a): n = 33 -> n = 31 so df = 30 is on the t-table.
+    - 21: the 2024 question said two-tailed but its key used an upper-tailed test;
+         it is now stated as upper-tailed (mean added sugar cannot be below 0).
+  Problems 2-4 come from the earlier 2026 draft of this homework (its normal-
+  distribution problems); 5 uses the Spotify song data from the Week 8 notes;
+  10, 12 and 20 are adapted from OpenStax Introductory Statistics 2e, Chapter 8
+  Homework 99, 100 and 107 and Chapter 9 Homework 74. The 2026 draft's sampling-
+  distribution, discrete and step-density problems were dropped: Homework 2 and
+  Exam 2 covered that material.
+-->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.width=12, fig.height=10, fig.pos = "H")
-#knitr::opts_chunk$set(list(echo = FALSE, eval = FALSE))
 library(kableExtra)
 # emit tables in the native format of whichever output is being rendered
 # (hardcoding 'html' made kable dump raw HTML into the PDF, which LaTeX
@@ -62,316 +81,396 @@ export_tbl <- function(x, file, names = NULL, digits = NULL) {
 }
 library(knitr)
 library(latex2exp)
-library(gridExtra)
+library(ggplot2)
 library(ggpubr)
-library(ggthemes)
-library(plyr)
 mainpath = '../../Data/'
-whiskpath = '../../assets/whiskerMaster.csv'
-
-datapath = '../../Data/'
-#<span style="color: red;"></span>
 ```
 
+Show how you compute each answer: write the formula, put in the numbers, and give the result.
+Use the [Z-table](../../misc/Z_table.html) and [t-table](../../misc/t_table.html) from the course website.
+You can check your answers with the [course calculators](https://stat-tools.jmks-homelab.dev/).
 
-## Definitions
 
-Define the following terms/concepts. (The language of probability - sample space, event,
-random trial, union, intersection, random variable, probability distribution and the Law of
-Large Numbers - was covered on **Homework 2**; review those definitions before starting.)
+# Part I: Definitions
 
-* a.) Population distribution
 
-* b.) Sampling distribution
+$\bf (1)$
+Define the following terms/concepts.
 
-* c.) Probability Mass Function
+(a) Describe the central limit theorem and its significance to the sampling distribution for a sample proportion or mean
 
-* d.) Probability Density Function
+(b) Standard error
 
+(c) Margin of error
 
-## Sampling Distributions, Means, and Variances
+(d) Describe the "basic form" of a confidence interval
 
-$\bf (1)$ A random variable $X$ has the following probability distribution
+(e) Confidence level
 
-```{r, echo=FALSE, warning=F, message=F}
+(f) Critical value
 
-df = cbind.data.frame(X = c(1,2,3,4),
-                      `P(X)` = c(0.25, 0.25, 0.25, 0.25))
+(g) When are the $t$-distribution and the standard normal distribution approximately the same shape?
 
-kable(export_tbl(df, 'hw3_2026_prob_dist_X.csv', digits = 2, names = c('X', 'P(X)')),
-      format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+(h) How are the degrees of freedom of a $t$-distribution related to its shape?
 
-```
+(i) Null and alternative hypotheses
 
-* Derive the sampling distribution for the mean of $n=2$ observations of $X$
+(j) Significance level
 
-<br>
+(k) $p$-value
 
-* Compute the mean $\mu_{\bar{X}}$ and standard deviation $\sigma_{\bar{X}}$ of the sampling distribution of $\bar{X}$
+(l) Rejection region
 
-<br>
 
-$\bf (2)$ A random variable $Y$ has two possible outcomes. The outcome $Y = 1$ occurs with probability $p = 0.23$. Derive the sampling distribution for the proportion of outcomes with $Y = 1$ in a sample of $n = 3$ observations of $Y$.
 
-<br>
+# Part II: Finding Normal Probabilities
 
-$\bf (3)$ Consider a survey of tree volume. Suppose that in the population of trees $10\%$ have a volume of 10 cubic feet, $20\%$ have a volume of 20 cubic feet, $30\%$ have a volume of 30 cubic feet, and $40\%$ have a volume of 40 cubic feet. Let $X$ denote the volume of a randomly selected tree, assuming that every tree has an equal chance of being selected. The probability distribution of $X$ is given in the table below.
 
+$\bf (2)$
+Let $Z$ be a standard normal random variable, $Z \sim N(0, 1)$. For each probability, sketch the curve, shade the area, and use the $Z$-table to find it.
 
-```{r, echo=FALSE, warning=F, message=F}
+(a) $P(Z < 1.47)$
 
-df = cbind.data.frame(X = c(10,20,30,40),
-                      `P(X)` = c(0.1, 0.2, 0.3, 0.4))
+(b) $P(Z > -0.62)$
 
-kable(export_tbl(df, 'hw3_2026_tree_volume_dist.csv', digits = 2,
-                 names = c('Tree Volume (cubic feet)', 'P(X)')),
-      format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+(c) $P(Z > 2.15)$
 
-```
+(d) $P(-1.20 < Z < 0.85)$
 
-* On **Homework 2** you confirmed that $X$ has a mean of $\mu = 30$ cubic feet and a standard
-deviation of $\sigma = 10$ cubic feet. Derive the sampling distribution for the mean tree
-volume in a sample of $n = 2$ trees.
+(e) $P(Z < -1.96 \text{ or } Z > 1.96)$
 
-<br>
 
-## Deriving Probabilities From Discrete Distributions
+$\bf (3)$
+Assume the continuous random variable $X$ follows a normal distribution with mean $\mu = 25$ and variance $\sigma^2 = 16$.
 
-$\bf (4)$ Michael Dickson, who plays for the Seattle Seahawks, is a punter in the NFL. The following sampling distribution gives the mean punting distance (in yards) for a sample of $n=4$ punts. Use this distribution to answer the following questions:
-
-```{r, echo=FALSE, warning=F, message=F}
-
-df = cbind.data.frame(`$\\bar{X} =$ Mean Punt Distance` = c(35.33, 45.67, 55.00, 60.33, 65.67),
-                      `$P(\\bar{X})$` = c(0.4, 0.5, 0.08, 0.01, 0.01))
-kable(export_tbl(df, 'hw3_2026_punt_distance_dist.csv', digits = 2,
-                 names = c('Mean Punt Distance (yards)', 'P(Xbar)')),
-      format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = T)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
-
-```
-
-* What is the probability the mean distance is 55 or more yards?
-
-<br>
-
-* What is the probability the mean distance is at least 35.33 yards?
-
-<br>
-
-* What is the probability the mean distance is between 35.33 and 45.67 yards?
-
-<br>
-
-* What is the probability the mean distance is 35.33 yards or 55 yards?
-
-<br>
-
-$\bf (5)$ A random variable $X$ follows a binomial distribution with probability of success $p = 0.43$ and number of trials $n = 8$. What is the probability of observing fewer than 3 successes, that is what is $P(X < 3)$?
-
-<br>
-
-$\bf (6)$ Tom Brady is a famous quarterback who recently retired from playing in the National Football League. During his career, the probability that Brady would complete a pass in a given play was $64.3\%$.  If a typical NFL team runs about $35$ offensive pass plays, what is the probability that Brady would complete exactly $28$ pass plays in a game?
-
-<br>
-
-$\bf (7)$ A random variable $W$ follows a Poisson distribution with rate parameter $\lambda = 1.8$ events per hour. What is the probability of observing exactly four events in a given hour, that is what is $P(W = 4)$?
-
-<br>
-
-$\bf (8)$ A factory experiences on average 3 equipment malfunctions per day, following a Poisson distribution with a rate parameter of 3. Calculate the probability that on a randomly selected day, the factory will <u>observe 3 or more</u> equipment malfunctions.
-
-<br>
-
-## Deriving Probabilities From Continuous Distributions
-
-${\bf (9)}$ Use the plot below of the probability distribution of a continuous random variable $X$ to answer the following questions
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Step-shaped probability density for X from 0 to 2.1, with x-axis ticks every 0.3 and y-axis (probability density) ticks at 0, 0.167, 0.334, 0.501, 0.668 and 0.835. The density height on each interval is: 0 to 0.3: 0.334; 0.3 to 0.6: 0.668; 0.6 to 0.9: 0.668; 0.9 to 1.2: 0.835; 1.2 to 1.5: 0.167; 1.5 to 1.8: 0.167; 1.8 to 2.1: 0.501; zero outside 0 to 2.1."}
-#C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/PMFplot1.pdf}
-h1 = round(1/6, 3)
-#homework 4 plots
-dist = cbind.data.frame(val = c(0,0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1,2.1), 
-                        dens = c(0,2*h1,4*h1,4*h1,5*h1,1*h1,1*h1,3*h1,1*h1,0))
-#pdf(paste0(savepath, "PMFplot1.pdf"), height = 5, width = 6.5)
-ggplot(data = dist, aes(x = val, y = dens))+geom_step(size = 1)+theme_pander()+
-  scale_x_continuous(limits=c(0, 2.1), breaks = seq(0, 2.1, 0.3))+
-  scale_y_continuous(limits=c(0,5*h1), 
-                     breaks = seq(0, 5*h1, h1))+
-  geom_segment(aes(xend = -1, x = 1, yend = 0, y = 0), size = 1, color = 'black')+
-  theme(panel.grid.minor = element_blank(), axis.text = element_text(size = 12),
-        axis.title = element_text(size = 14))+
-  xlab('X')+
-  ylab("Probability Density")
-#dev.off()
-```
-
-Use the plot to find the following probabilities:
-
-* What is $P(X<0.6)$?
-
-<br>
-
-* What is $P(X>0.3)$?
-
-<br>
-
-* What is $P(1.5<X<1.8)$?
-
-<br>
-
-
-
-
-${\bf (10)}$ Use the plot below of the probability distribution of a continuous random variable $Y$ to answer the following questions
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Step-shaped probability density for Y from -1 to 1, with x-axis ticks every 0.25 and y-axis (probability density) ticks every 0.16 from 0 to 1.12. The density height on each interval is: -1 to -0.75: 0.48; -0.75 to -0.5: 0.32; -0.5 to -0.25: 0.96; -0.25 to 0: 0.80; 0 to 0.25: 0.80; 0.25 to 0.5: 0.32; 0.5 to 0.75: 0.16; 0.75 to 1: 0.16; zero outside -1 to 1."}
-#C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/PMFplot2.pdf
-
-h2 = round(1/(25*0.25), 2)
-dist2 = cbind.data.frame(val = c(-1, -1, -0.75, -0.5, -0.25, 0 , 0.25, 0.5, 0.75, 1, 1), 
-                        dens = c(0,  3*h2,2*h2, 6*h2,  5*h2, 5*h2,2*h2,1*h2,1*h2,0,0))
-#pdf(paste0(savepath, "PMFplot2.pdf"), height = 5, width = 6.5)
-ggplot(data = dist2, aes(x = val, y = dens))+geom_step(size = 1)+theme_bw()+
-  scale_x_continuous(limits=c(-1, 1), breaks = seq(-1, 1, 0.25))+
-  scale_y_continuous(limits=c(0,7*h2), breaks = seq(0, 7*h2, h2))+
-  geom_segment(aes(xend = -1, x = 1, yend = 0, y = 0), size = 1, color = 'black')+
-  theme(panel.grid.minor = element_blank(), axis.text = element_text(size = 12),
-        axis.title = element_text(size = 14))+
-  xlab('Y')+
-  ylab("Probability Density")
-#dev.off()
-```
-
-
-Use the plot to find the following probabilities (recall that the area of a triangle is $\frac{1}{2} \times \text{base} \times \text{height}$)
-
-
-* What is $P(Y>-0.25)$?
-
-<br>
-
-* What is $P(-0.5<Y<0.25)$?
-
-<br>
-
-
-
-
-
-${\bf (11)}$ Use the plot below of the probability distribution of a continuous random variable $Z$ to answer the following questions
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Probability density for Z drawn as straight line segments, with x-axis ticks every 1 from 0 to 6 and y-axis (probability density) ticks every 0.05 from 0 to 0.35. The density rises in a straight line from 0 at Z = 0 to 0.3 at Z = 2, falls to 0.1 at Z = 3, rises to 0.3 at Z = 4, and falls back to 0 at Z = 6."}
-#C:/Users/Bruin/Desktop/GS Academia/TA/Teaching STAT 251/FALL/Week_5/PMF_triangular_plot1.pdf
-dist3 = cbind.data.frame(val = c(0, 2, 3, 4, 6), 
-                         dens = c(0,0.3, 0.1, 0.3, 0))
-#pdf(paste0(savepath, "PMF_triangular_plot1.pdf"), height = 5, width = 6.5)
-ggplot(data = dist3, aes(x = val, y = dens))+geom_line(size = 1)+theme_bw()+
-  scale_x_continuous(limits=c(0, 6), breaks = seq(0, 6, 1))+
-  scale_y_continuous(limits=c(0,0.35), breaks = seq(0, 0.35, 0.05))+
-  geom_segment(aes(xend = 0, x = 6, yend = 0, y = 0), size = 1, color = 'black')+
-  theme(panel.grid.minor = element_blank(), axis.text = element_text(size = 12),
-        axis.title = element_text(size = 14))+
-  xlab('Z')+
-  ylab("Probability Density")
-#dev.off()
-
-```
-
-Use the plot to find the following probabilities (recall that the area of a triangle is $\frac{1}{2} \times \text{base} \times \text{height}$)
-
-
-* What is $P(Z<2)$?
-
-<br>
-
-* What is $P(2<Z<3)$?
-
-<br>
-
-* What is $P(Z>4)$?
-
-<br>
-
-* Give the approximate value of the $25th$ percentile of distribution of $Z$
-
-<br>
-
-
-
-${\bf 12.)}$ Assume the continuous random variable $X$ follows a normal distribution with mean $\mu = 25$ and variance $\sigma^2 = 16$. 
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Normal density curve for X with mean 25 and standard deviation 4, drawn on an x-axis from 0 to 50 with ticks every 10 and a y-axis labeled Density. The curve peaks at X = 25 (density about 0.10) and is close to zero below about 13 and above about 37."}
-ggplot()+xlim(c(-40, 90))+
-  stat_function(fun = dnorm, 
-                args = list(mean = 25, sd = 4),
-                size = 1)+
-  scale_x_continuous(limits = c(0, 50), breaks = seq(0, 50, 10))+
-  theme_classic2()+
-  xlab('X')+
+```{r, echo=F, message=F, warning=FALSE, fig.height=4, fig.width=8, fig.alt = "Normal density curve for X with mean 25 and standard deviation 4, drawn on an x-axis from 0 to 50 with ticks every 10 and a y-axis labeled Density. The curve peaks at X = 25 (density about 0.10) and is close to zero below about 13 and above about 37."}
+ggplot() +
+  stat_function(fun = dnorm, args = list(mean = 25, sd = 4), linewidth = 1) +
+  scale_x_continuous(limits = c(0, 50), breaks = seq(0, 50, 10)) +
+  theme_classic2() +
+  xlab('X') +
   ylab('Density')
+```
 
+Using a $Z$-table, find the following (approximate) probabilities for $X$.
+
+(a) $P(X < 15)$
+
+(b) $P(X > 28)$
+
+(c) $P(12 < X < 20)$
+
+(d) $P(X > 30)$
+
+(e) $P(25 < X < 33)$
+
+(f) What is the value of $X$ that marks the $95th$ percentile of the distribution?
+
+
+$\bf (4)$
+Suppose that a random variable $X$ follows a normal distribution with mean $\mu = -5$ and standard deviation $\sigma = 1.8$. Using the plot of the $Z$-distribution below, shade in the area corresponding to the probability $P(-2 < X < 0.5)$.
+
+```{r, echo=F, message=F, warning=FALSE, fig.height=4, fig.width=8, fig.alt = "Blank standard normal density curve titled Standard Normal (Z) Distribution, subtitle Z ~ N(0, 1), with a Z-axis from -4 to 4 in steps of 0.5 and a y-axis labeled Density(Z). The curve peaks at Z = 0 with density about 0.4. Nothing is shaded."}
+ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), linewidth = 1) +
+  scale_x_continuous(limits = c(-4, 4), breaks = seq(-4, 4, 0.5)) +
+  labs(title = "Standard Normal (Z) Distribution",
+       subtitle = "Z ~ N(0, 1)",
+       x = "Z", y = "Density(Z)") +
+  theme_classic2()
+```
+
+<br>
+
+$\bf (5)$
+In the Week 8 notes we treated 18,860 songs on Spotify as a population. Song length in this population has mean $\mu = 3.71$ minutes and standard deviation $\sigma = 1.51$ minutes, and its distribution is skewed right: most songs are a few minutes long, but a handful of tracks are far longer.
+
+(a) Explain why you **cannot** use the $Z$-table to find the probability that one randomly chosen song is longer than 4 minutes.
+
+(b) A playlist is made of $n = 36$ songs chosen at random. Describe the sampling distribution of the playlist's mean song length $\bar{x}$: give its shape, its mean, and its standard error, and say which result tells you its shape.
+
+(c) Show how to compute the probability that the playlist's mean song length is more than 4 minutes, $P(\bar{x} > 4)$.
+
+(d) Show how to compute $P(\bar{x} < 3.5)$.
+
+
+
+# Part III: Confidence Intervals
+
+
+$\bf (6)$
+Fill in the table below with the corresponding $\alpha$ level and critical value for each confidence interval for a population proportion.
+
+```{r, echo=F, message=F, warning=F}
+alpha = c(0.1, 0.12, 0.03, 0.04, 0.22, 0.01)
+emptyvec = rep('', length(alpha))
+df = cbind.data.frame(`Confidence Level` = paste0('$', 100*(1-alpha), '\\%$'),
+                      `$\\alpha$` = emptyvec,
+                      `critical value: $z_{1-\\alpha/2}$` = emptyvec)
+
+# the alpha and critical-value columns are blank for students to fill in, so
+# export only the confidence levels they are given
+export_tbl(cbind.data.frame(`Confidence Level (%)` = 100*(1-alpha)),
+           'hw3_2026_confidence_levels_proportion.csv',
+           names = 'Confidence Level (%)')
+
+kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
 ```
 
 
-Using a $Z$-table, find the following (approximate) probabilities for $X$. You can also use the app in the course website or [StatDistributions.com](http://www.statdistributions.com/normal/) to check your result
+$\bf (7)$
+The $t$-distribution.
 
-* What is $P(X<15)$?
+(a) Fill in the table below with the corresponding $\alpha$ level and critical value for each confidence interval for a population mean when $\sigma$ is unknown.
 
-<br>
+```{r, echo=F, message=F, warning=F}
+alpha = c(0.10, 0.15, 0.01, 0.001, 0.20, 0.05)
+n = c(5, 8, 11, 14, 41, 13)
+emptyvec = rep('', length(alpha))
+df = cbind.data.frame(`Confidence Level` = paste0('$', 100*(1-alpha), '\\%$'),
+                      `Sample size` = paste0('$n = ', n, '$'),
+                      `$\\alpha$` = emptyvec,
+                      `critical value: $t_{n-1, 1-\\alpha/2}$` = emptyvec)
 
-* What is $P(X>28)$?
+# blank columns are for students to fill in; export the given values only
+export_tbl(cbind.data.frame(`Confidence Level (%)` = 100*(1-alpha),
+                            `Sample Size` = n),
+           'hw3_2026_confidence_levels_mean.csv',
+           names = c('Confidence Level (%)', 'Sample Size'))
 
-<br>
-
-* What is $P(12<X<20)$?
-
-<br>
-
-* What is $P(X>30)$?
-
-<br>
-
-* What is $P(25<X<33)$?
-
-<br>
-
-* What is the value of $X$ that marks the $95th$ percentile of the distribution?
-
-<br>
-
-* What is the value of $X$ that marks the $40th$ percentile of the distribution?
-
-<br>
-
-
-${\bf 13.)}$ Suppose that a random variable $X$ follows a normal distribution with mean $\mu = -5$ and standard deviation $\sigma = 1.8$. Using the plot of the $Z$-distribution below, shade in the area corresponding to the probability $P(-2< X <0.5)$
-
-
-
-```{r, echo=F, message=F, warning=FALSE, fig.height=6, fig.width=10, fig.alt = "Blank standard normal density curve titled Standard Normal (Z) Distribution, subtitle Z ~ N(mu = 0, sigma = 1), with a Z-axis from -4 to 4 in steps of 0.5 and a y-axis labeled Density(Z). The curve peaks at Z = 0 with density about 0.4. Nothing is shaded."}
-
-ggplot(data.frame(x = c(- 4, 4)), aes(x = x))+
-        stat_function(fun = dnorm,
-                      args = list(mean = 0, sd = 1),
-                      size = 1)+
-  scale_x_continuous(limits = c(-4, 4), breaks = seq(-4, 4, 0.5))+
-        labs(title = paste0("Standard Normal (Z) Distribution"),
-             subtitle = TeX(paste0("$Z\\sim N(\\mu = ", 0, ', \\sigma = ',1, ')$')),
-             x = "Z",
-            y = "Density(Z)")+
-        theme_classic2()+
-        theme(legend.position = 'none')
+kable(df, format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
 ```
 
+(b) For each probability, use the $t$-table to give the two upper-tail areas it falls between, then use the course calculator to find its exact value.
 
-<br>
-<br>
-<br>
-<br>
+  * $P(t > 1.97)$ with 5 degrees of freedom
+  * $P(t \leq 2.9)$ with 2 degrees of freedom
+  * $P(t \geq -0.98)$ with 8 degrees of freedom
 
+(c) Look at the $t$-table row for 4 degrees of freedom and the $Z$-score row at the bottom. For a $95\%$ confidence interval, which critical value is larger? Explain why using $s$ in place of $\sigma$ calls for a larger critical value.
+
+
+$\bf (8)$
+A survey conducted by the state of Georgia surveyed college students as part of a larger effort to characterize student behavior [@agresti2007art]. One of the questions in the survey asked students to report their political party affiliation. The table below summarizes the proportion of students who reported being Republican, Democrat, or Independent.
+
+```{r, echo=F, message=F, warning=F}
+df = cbind.data.frame(`Political Party Affiliation` = c('Democrat', 'Republican', 'Independent'),
+                      Count = c(8, 36, 15),
+                      `$\\hat{p}$` = c(8, 36, 15)/sum(c(8,36,15)))
+
+kable(export_tbl(df, 'hw3_2026_political_party.csv', digits = 2,
+                 names = c('Political Party Affiliation', 'Count', 'p-hat')),
+      format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+```
+
+Using the table above, construct a $90\%$ confidence interval for the proportion of Independent college student voters in the state of Georgia.
+
+
+$\bf (9)$
+As part of an effort to improve health services, a health club in the United Kingdom asked club members to complete an online survey [@andriesurvey]. One of the survey questions asked customers to rate their satisfaction level on a Likert scale. The results of this survey question are summarized below.
+
+```{r, echo=F, message=F, warning=F}
+dat = surveydata::membersurvey
+
+df = cbind.data.frame(Response = levels(dat$Q12_1),
+                      Count = summary(dat$Q12_1),
+                      `$\\hat{p}$` = summary(dat$Q12_1)/sum(summary(dat$Q12_1)))
+
+kable(export_tbl(df, 'hw3_2026_membership_satisfaction.csv', digits = 2,
+                 names = c('Response', 'Count', 'p-hat')),
+      format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F,
+      caption = "Customer responses for the survey question \"How satisfied are you with your membership of the organisation overall?\"") %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+```
+
+Using the table above, construct a $95\%$ confidence interval for the proportion of customers that are "very satisfied" or more.
+
+
+$\bf (10)$
+A camp director is interested in the mean number of letters each child sends home during their camp session. The population standard deviation is known to be $\sigma = 2.5$ letters, and the number of letters is approximately normally distributed. A survey of $20$ campers is taken. The mean from the sample is $\bar{x} = 7.9$ letters, with a sample standard deviation of $s = 2.8$ letters [adapted from @illowsky2023introductory, Chapter 8].
+
+(a) Both $\sigma$ and $s$ are given. Which one should you use to build the interval, and should you use a $z$ or a $t$ critical value? Explain your choice.
+
+(b) Construct a $90\%$ confidence interval for the population mean number of letters campers send home.
+
+(c) Interpret the interval from part (b) in a complete sentence.
+
+(d) What would happen to the margin of error if $500$ campers were surveyed instead of $20$? Why?
+
+(e) Which of the following statements describes what "$90\%$ confident" means? Explain what is wrong with each of the other three.
+
+  * If we took repeated samples, approximately $90\%$ of the samples would produce the same confidence interval.
+  * If we took repeated samples, approximately $90\%$ of the confidence intervals calculated from those samples would contain the sample mean.
+  * If we took repeated samples, approximately $90\%$ of the confidence intervals calculated from those samples would contain the true value of the population mean.
+  * If we took repeated samples, the sample mean would equal the population mean in approximately $90\%$ of the samples.
+
+
+$\bf (11)$
+The following table summarizes variables from a random sample of $25$ observations from a dataset concerning housing in California taken from the 1990 census. The full dataset is featured in Aurélien Géron's book 'Hands-On Machine learning with Scikit-Learn and TensorFlow' [@geron2022hands]. Use the table to answer parts (a) and (b).
+
+```{r, echo=F, message=F, warning=F}
+set.seed(555)
+hs = read.csv(file = paste0(mainpath, 'housing.csv'))
+
+hss = hs[sample(1:dim(hs)[1], 25), ]
+
+df = cbind.data.frame(`Variable`= c('Median Age of Houses (per block)', 'Total Rooms (per block)', 'Total Bedrooms (per block)', 'Population of District', 'Number of Households (per block)', 'Median Family Income (in tens of thousands of USD)', 'Median House value (USD)'),
+                      `Sample Mean` = c(mean(hss$housing_median_age), mean(hss$total_rooms),
+                                        mean(hss$total_bedrooms), mean(hss$population),
+                                        mean(hss$households), mean(hss$median_income),
+                                        mean(hss$median_house_value)),
+                      `Sample Standard Deviation` = c(sd(hss$housing_median_age), sd(hss$total_rooms),
+                                        sd(hss$total_bedrooms), sd(hss$population),
+                                        sd(hss$households), sd(hss$median_income),
+                                        sd(hss$median_house_value)))
+
+kable(export_tbl(df, 'hw3_2026_housing_summary.csv', digits = 2,
+                 names = c('Variable', 'Sample Mean', 'Sample Standard Deviation')),
+      format = tbl_fmt, digits = 2, row.names = F, booktabs = T, escape = F,
+      caption = 'Summary statistics for housing data in California from the 1990 census. Estimates are derived from a random sample of 25 observations from Aurélien Géron\'s dataset featured in \'Hands-On Machine learning with Scikit-Learn and TensorFlow\', originally comprising observations from over 20,000 districts in California') %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = 'striped', latex_options = c('striped', 'HOLD_position'))
+```
+
+(a) Construct and interpret a $95\%$ confidence interval for the average median family income for households in California in 1990.
+
+(b) Construct and interpret a $99\%$ confidence interval for the average number of bedrooms per block in California in 1990.
+
+
+$\bf (12)$
+A pharmaceutical company makes tranquilizers. It is assumed that the distribution for the length of time they last is approximately normal. Researchers in a hospital used the drug on a random sample of nine patients. The effective period of the tranquilizer for each patient (in hours) was as follows: 2.7, 2.8, 3.0, 2.3, 2.3, 2.2, 2.8, 2.1, and 2.4 [adapted from @illowsky2023introductory, Chapter 8].
+
+(a) Show how to compute the sample mean $\bar{x}$ and sample standard deviation $s$.
+
+(b) Should you use a $z$ or a $t$ critical value for this interval? Explain your choice, and give the degrees of freedom if you use $t$.
+
+(c) Construct a $95\%$ confidence interval for the population mean length of time the tranquilizer lasts.
+
+(d) What does it mean to be "$95\%$ confident" in this problem?
+
+
+
+# Part IV: Choosing a Minimum Sample Size and Assumptions of Estimators
+
+
+$\bf (13)$
+Choosing a minimum sample size. Remember to always round $n$ **up**.
+
+(a) According to a 2023 study published by the Saudi Heart Association, a survey of college students from Taibah University in Medina, Saudi Arabia, found that $24\%$ of students reported using e-cigarettes [@alzahrani2023prevalence]. Assuming a comparable rate of e-cigarette use in the U.S., what sample size is required to estimate the proportion of college students who use e-cigarettes at the $95\%$ confidence level and within a margin of error of $1.5\%$?
+
+(b) Recent concerns over the rise in global infertility have drawn significant attention to the harmful effects of microplastics, PFAS, and highly processed foods [@zhang2022microplastics; @agarwal2015unique]. A study from 2002 published in <i>Fertility and Sterility</i> found that approximately $15\%$ of couples worldwide experienced infertility [@sharlip2002best]. Assuming a similar rate of infertility in the U.S, compute the sample size needed to estimate infertility of U.S couples at the $99\%$ confidence level and within a margin of error of $4\%$.
+
+(c) A city planner wants to estimate the mean one-way commute time of the city's workers to within $3$ minutes at the $95\%$ confidence level. No earlier study is available, but commute times in the city range from about $5$ to $85$ minutes. Use the range to estimate $\sigma$, then compute the sample size the planner needs.
+
+
+$\bf (14)$
+Assumptions of estimators.
+
+(a) Describe the assumptions associated with estimating $p$ with $\hat{p}$.
+
+(b) Describe the assumptions associated with estimating $\mu$ with $\bar{x}$.
+
+(c) A student wants to estimate the proportion of University of Idaho students who drink coffee every day. She surveys the 40 people standing in line at a campus coffee shop one morning, and 36 of them say they do. Which of the assumptions from part (a) does this study break? Explain.
+
+
+
+# Part V: Significance Tests
+
+
+$\bf (15)$
+State the null and alternative hypotheses for each test.
+
+(a) A pharmaceutical company produces a generic version of the pain reliever ibuprofen, marketing a tablet with a 200 milligram dose. Concerned about the accuracy of the dosing process, the manufacturer suspects that the machine filling the tablets may be malfunctioning leading to a smaller dose in each tablet. The manufacturer wishes to conduct a significance test to determine if the dose is significantly lower than 200 milligrams.
+
+(b) A financial institution invests in a pharmaceutical company, which produces a widely prescribed antidepressant medication with a market value of \$100 per share. Worried about potential discrepancies in the market valuation, the institution suspects that recent market trends may have led to an underestimation of the stock's value. The institution plans to conduct a significance test to determine if the stock's value has significantly increased.
+
+(c) A semiconductor manufacturing company produces microchips with a target defect rate of 0.1% per batch. Concerned about the quality control process, the company suspects that recent changes in manufacturing procedures may have resulted in a change in the defect rate. The company intends to conduct a significance test to determine if the defect rate is significantly different than the target rate of 0.1%.
+
+
+$\bf (16)$
+For each set of hypotheses, significance level, and $p$-value, state whether the test <i>rejects</i> or <i>fails to reject</i> the null hypothesis.
+
+(a) $H_0: \mu = 0$; $H_A: \mu \neq 0$; $\alpha = 0.01$; $p$-value $= 0.0098$
+
+(b) $H_0: p = 0.5$; $H_A: p > 0.5$; $\alpha = 0.05$; $p$-value $= 0.086$
+
+(c) $H_0: \mu = 100$; $H_A: \mu < 100$; $\alpha = 0.001$; $p$-value $= 0.0015$
+
+(d) $H_0: p = 0.9$; $H_A: p \neq 0.9$; $\alpha = 0.1$; $p$-value $= 0.053$
+
+
+$\bf (17)$
+For each set of hypotheses, significance level, sample size, and test statistic, give the critical value and state whether the test <i>rejects</i> or <i>fails to reject</i> the null hypothesis.
+
+(a) $H_0: \mu = 15$; $H_A: \mu > 15$; $n = 31$; $\alpha = 0.05$; $t_{obs} = 2.13$
+
+(b) $H_0: \mu = 0$; $H_A: \mu \neq 0$; $n = 14$; $\alpha = 0.01$; $t_{obs} = -4.1$
+
+(c) $H_0: p = 0.5$; $H_A: p < 0.5$; $n = 120$; $\alpha = 0.1$; $Z_{obs} = -1.5$
+
+(d) $H_0: p = 0.05$; $H_A: p \neq 0.05$; $n = 60$; $\alpha = 0.03$; $Z_{obs} = 1.95$
+
+
+$\bf (18)$
+A toy manufacturer claims that $50\%$ of their toy robots are defect-free. However, a quality control inspector suspects that the actual proportion of defect-free robots is different from what the manufacturer claims. To investigate, the inspector randomly selects $100$ toy robots from a production batch and examines them for defects. After the inspection, the inspector finds that $40$ out of the $100$ toy robots are defect-free. To test their suspicion, they set up a two-tailed hypothesis test with a significance level $\alpha = 0.1$ and hypotheses $H_0: p_0 = 0.5$ (manufacturer's claim) $H_A: p \neq p_0$.
+
+(a) Using the significance level above, is there enough evidence to conclude that the proportion of defect-free toy robots is different from the manufacturer's claim?
+
+
+$\bf (19)$
+A pharmaceutical company has developed a new drug designed to cure a specific bacterial infection. They claim that their drug is effective, with a cure rate of $20\%$. However, a group of independent researchers believes that the cure rate is less than what the pharmaceutical company claims. To investigate, the researchers conduct a clinical trial on $300$ patients suffering from the bacterial infection. After the trial, they find that $70$ out of the $300$ patients were cured using the new drug. To test their suspicion, they set up a hypothesis test with a significance level of $\alpha = 0.05$ with $H_0: p_0 = 0.2$, $H_A: p < p_0$.
+
+(a) Compute the critical value for this test
+
+(b) Compute the test statistic $Z_{obs}$
+
+(c) Compute the $p$-value
+
+(d) Is there enough evidence to conclude that the cure rate of the new drug is less than the rate claimed by the pharmaceutical company?
+
+
+$\bf (20)$
+A particular brand of tires claims that its deluxe tire averages at least $50{,}000$ miles before it needs to be replaced. From past studies of this tire, the standard deviation is known to be $\sigma = 8{,}000$ miles, and tire lifespans are approximately normal. A survey of owners of that tire is conducted. From the $28$ tires surveyed, the mean lifespan is $46{,}500$ miles with a standard deviation of $9{,}800$ miles. The tire company's claim is to be tested at the $\alpha = 0.05$ significance level [adapted from @illowsky2023introductory, Chapter 9].
+
+(a) Both $\sigma$ and $s$ are given. Which one should you use, and is the test statistic a $Z$ or a $t$? Explain your choice.
+
+(b) State the null and alternative hypotheses.
+
+(c) Compute the critical value for this test.
+
+(d) Compute the test statistic.
+
+(e) Compute the $p$-value.
+
+(f) Is there enough evidence to conclude that the deluxe tire averages fewer than $50{,}000$ miles?
+
+
+$\bf (21)$
+A soft drink company claims that their new "Zero Sugar" soda contains zero grams of added sugar per 12-ounce can. To test this claim, a random sample of $25$ cans of this soda is selected. The sample mean is found to be $1.3$ grams of added sugar per can, with a standard deviation of $0.5$ grams. To determine if there is enough evidence to reject the company's claim and conclude that the soda contains added sugar, a group of researchers is interested in testing the following hypotheses: $H_0: \mu_0 = 0$, $H_A: \mu > \mu_0$ at the $\alpha = 0.01$ significance level.
+
+(a) Using the significance level above, is there evidence that the soda produced by the soft drink company contains added sugars?
+
+
+$\bf (22)$
+A group of botanists is studying the growth rate of Venus fly traps in a controlled greenhouse environment. Based on historical data, the typical growth rate of Venus fly traps is believed to be $100$ millimeters per year. The botanists suspect that the current growth rate in their greenhouse is higher than this historical value. To investigate, they take a random sample of $40$ Venus fly traps and measure their growth rates over a year. After the study, they find that the sample mean growth rate for the $40$ Venus fly traps is $105$ millimeters per year with a standard deviation of $12$ mm. To test their suspicion, they set up a hypothesis test with a significance level of $\alpha = 0.05$.
+
+(a) State the null and alternative hypotheses
+
+(b) Compute the critical value for this test
+
+(c) Compute the test statistic $t_{obs}$
+
+(d) Compute the $p$-value
+
+(e) Is there enough evidence to conclude that the current growth rate of Venus fly traps in the greenhouse is higher than the historical value of $100$ millimeters per year?
 
 
 \newpage
-\section{References}
+# References
