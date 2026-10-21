@@ -574,8 +574,14 @@ $(document).ready(function () {
   use the table's area-to-the-left, complement for an upper tail, subtract for an area
   between. Figures are the slide figures (assets/make_lecture19_figures.R).
 
-  Everything from "Confidence levels and critical values" down is still the 2024 Week 9
-  page (2024 Lecture 18), kept for Wed Oct 21 until it is rewritten.
+  All of Lecture 19 was delivered (to its slide 21), but several examples were skipped in
+  class, so every Lecture 19 slide example is worked in full on this page (Oct 20 2026).
+
+  Everything from "Confidence levels and critical values" down is Lecture 20 (Wed Oct 21),
+  lecture_slides/Week 9/2026/Week9_Lecture20_Slides_10_21_2026.pptx, rewritten from the 2024
+  page (2024 Lecture 18) with new data: CYP2C19*2 carriers (1000 Genomes), spotted-seal
+  whiskers (Ginter et al. 2012, Table 2) and watermelon citrulline (Assefa et al. 2020).
+  Numbers and figures come from assets/make_lecture20_figures.R.
 -->
 <div id="finding-normal-probabilities" class="section level1">
 <h1>Finding normal probabilities</h1>
@@ -615,44 +621,79 @@ and whether your answer should be big or small.</p>
 <div id="the-lower-tail" class="section level2">
 <h2>The lower tail</h2>
 <p><img src="assets/l19_lower.png" alt="Two standard normal curves. Left, titled P(Z &lt; 1.25): the area to the left of 1.25 is shaded, most of the curve. Right, titled P(Z &lt; -0.84): the area to the left of -0.84 is shaded, a small part of the left side." width="80%" style="display: block; margin: auto;" /></p>
-<ul>
-<li><span class="math inline">\(P(Z &lt; 1.25)\)</span>: row 1.2, column
-.05 of the table gives <strong>0.8944</strong>.</li>
-<li><span class="math inline">\(P(Z &lt; -0.84)\)</span>: row <span
-class="math inline">\(-0.8\)</span>, column .04 gives
-<strong>0.2005</strong>. A negative <span
-class="math inline">\(z\)</span> is below the mean, so the area to its
-left is less than one half.</li>
-</ul>
+<div id="example-lower-tail" class="section level3">
+<h3>Example: lower tail</h3>
+<ol style="list-style-type: lower-alpha">
+<li><p><span class="math inline">\(P(Z &lt; 1.25)\)</span>. Shade
+everything to the left of 1.25. Since 1.25 is above the mean of 0, the
+shaded area is most of the curve, so expect an answer well over one
+half. This is a lower tail, so the table value is the answer. Split
+<span class="math inline">\(1.25\)</span> into <span
+class="math inline">\(1.2 + 0.05\)</span>: row 1.2, column .05 gives
+<span class="math inline">\(P(Z &lt; 1.25) =\)</span>
+<strong>0.8944</strong>.</p></li>
+<li><p><span class="math inline">\(P(Z &lt; -0.84)\)</span>. Shade
+everything to the left of <span class="math inline">\(-0.84\)</span>.
+That is a small slice of the left side, less than one half, because a
+negative <span class="math inline">\(z\)</span> is below the mean. It is
+again a lower tail: row <span class="math inline">\(-0.8\)</span>,
+column .04 gives <span class="math inline">\(P(Z &lt; -0.84) =\)</span>
+<strong>0.2005</strong>.</p></li>
+</ol>
+</div>
 </div>
 <div id="the-upper-tail" class="section level2">
 <h2>The upper tail</h2>
 <p><img src="assets/l19_upper.png" alt="Two standard normal curves. Left, titled P(Z &gt; 1.80): only the small area to the right of 1.80 is shaded. Right, titled P(Z &gt; -1.30): the area to the right of -1.30 is shaded, most of the curve." width="80%" style="display: block; margin: auto;" /></p>
-<ul>
-<li><span class="math inline">\(P(Z &gt; 1.80) = 1 - P(Z \leq 1.80) = 1
-- 0.9641 = 0.0359\)</span>.</li>
-<li><span class="math inline">\(P(Z &gt; -1.30) = 1 - P(Z \leq -1.30) =
-1 - 0.0968 = 0.9032\)</span>.</li>
-</ul>
+<div id="example-upper-tail" class="section level3">
+<h3>Example: upper tail</h3>
+<ol style="list-style-type: lower-alpha">
+<li><p><span class="math inline">\(P(Z &gt; 1.80)\)</span>. Shade
+everything to the right of 1.80, a thin tail, so expect a small answer.
+The table gives the area to the <strong>left</strong>, so look that up
+first: row 1.8, column .00 gives <span class="math inline">\(P(Z \leq
+1.80) = 0.9641\)</span>. The whole area is 1, so <span
+class="math display">\[P(Z &gt; 1.80) = 1 - P(Z \leq 1.80) = 1 - 0.9641
+= \mathbf{0.0359}\]</span></p></li>
+<li><p><span class="math inline">\(P(Z &gt; -1.30)\)</span>. Shade
+everything to the right of <span class="math inline">\(-1.30\)</span>,
+which is most of the curve. Row <span
+class="math inline">\(-1.3\)</span>, column .00 gives <span
+class="math inline">\(P(Z \leq -1.30) = 0.0968\)</span>, so <span
+class="math display">\[P(Z &gt; -1.30) = 1 - 0.0968 =
+\mathbf{0.9032}\]</span></p></li>
+</ol>
 <p>The normal curve is symmetric, so the area to the right of <span
 class="math inline">\(-1.30\)</span> is the same as the area to the left
 of <span class="math inline">\(+1.30\)</span>: the table gives <span
 class="math inline">\(P(Z \leq 1.30) = 0.9032\)</span>, the same
 answer.</p>
 </div>
+</div>
 <div id="the-area-between" class="section level2">
 <h2>The area between</h2>
 <p><img src="assets/l19_between.png" alt="Two standard normal curves. Left, titled P(-1.30 &lt; Z &lt; 1.80): the area between -1.30 and 1.80 is shaded. Right, titled P(-1.96 &lt; Z &lt; 1.96): the area between -1.96 and 1.96 is shaded, all but the two thin tails." width="80%" style="display: block; margin: auto;" /></p>
-<ul>
-<li><span class="math inline">\(P(-1.30 &lt; Z &lt; 1.80) = 0.9641 -
-0.0968 = 0.8673\)</span>.</li>
-<li><span class="math inline">\(P(-1.96 &lt; Z &lt; 1.96) = 0.9750 -
-0.0250 = 0.9500\)</span>.</li>
-</ul>
+<div id="example-area-between" class="section level3">
+<h3>Example: area between</h3>
+<ol style="list-style-type: lower-alpha">
+<li><p><span class="math inline">\(P(-1.30 &lt; Z &lt; 1.80)\)</span>.
+Shade the area between the two values. Take everything to the left of
+the larger value (row 1.8, column .00: 0.9641), and remove everything to
+the left of the smaller value (row <span
+class="math inline">\(-1.3\)</span>, column .00: 0.0968): <span
+class="math display">\[P(-1.30 &lt; Z &lt; 1.80) = 0.9641 - 0.0968 =
+\mathbf{0.8673}\]</span></p></li>
+<li><p><span class="math inline">\(P(-1.96 &lt; Z &lt; 1.96)\)</span>.
+Row 1.9, column .06 gives 0.9750, and row <span
+class="math inline">\(-1.9\)</span>, column .06 gives 0.0250: <span
+class="math display">\[P(-1.96 &lt; Z &lt; 1.96) = 0.9750 - 0.0250 =
+\mathbf{0.9500}\]</span></p></li>
+</ol>
 <p>Remember that second one. Exactly 95% of a normal distribution lies
 within <strong>1.96</strong> standard deviations of the mean; the
 empirical rule’s “2” is that number rounded. It is where the 2 in a 95%
 confidence interval comes from.</p>
+</div>
 </div>
 <div id="practice" class="section level2">
 <h2>Practice</h2>
@@ -664,21 +705,30 @@ class="math inline">\(P(Z &gt; 0.50)\)</span>   (c) <span
 class="math inline">\(P(-1 &lt; Z &lt; 1)\)</span>   (d) <span
 class="math inline">\(P(-2 &lt; Z &lt; 2)\)</span></li>
 </ol>
-<p>Answers:</p>
+<p>Worked answers:</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
-<li>0.9772</li>
+<li>A <strong>lower tail</strong>, so the table value is the answer: row
+2.0, column .00 gives <span class="math inline">\(P(Z \leq 2.00) =
+0.9772\)</span>.</li>
 </ol></li>
 <li><ol start="2" style="list-style-type: lower-alpha">
-<li><span class="math inline">\(1 - 0.6915 = 0.3085\)</span></li>
+<li>An <strong>upper tail</strong>: row 0.5, column .00 gives <span
+class="math inline">\(P(Z \leq 0.50) = 0.6915\)</span>, so <span
+class="math inline">\(P(Z &gt; 0.50) = 1 - 0.6915 =
+0.3085\)</span>.</li>
 </ol></li>
 <li><ol start="3" style="list-style-type: lower-alpha">
-<li><span class="math inline">\(0.8413 - 0.1587 = 0.6826\)</span>, about
-68%</li>
+<li>An <strong>area between</strong>: row 1.0 gives 0.8413 and row <span
+class="math inline">\(-1.0\)</span> gives 0.1587, so <span
+class="math inline">\(P(-1 &lt; Z &lt; 1) = 0.8413 - 0.1587 =
+0.6826\)</span>, about 68%.</li>
 </ol></li>
 <li><ol start="4" style="list-style-type: lower-alpha">
-<li><span class="math inline">\(0.9772 - 0.0228 = 0.9544\)</span>, about
-95%</li>
+<li>An <strong>area between</strong>: row 2.0 gives 0.9772 and row <span
+class="math inline">\(-2.0\)</span> gives 0.0228, so <span
+class="math inline">\(P(-2 &lt; Z &lt; 2) = 0.9772 - 0.0228 =
+0.9544\)</span>, about 95%.</li>
 </ol></li>
 </ul>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -704,9 +754,9 @@ class="math inline">\(\sigma\)</span>.</p>
 <div id="the-central-limit-theorem-and-an-interval-for-a-mean"
 class="section level1">
 <h1>The central limit theorem and an interval for a mean</h1>
-<p>This section is a summary. The full version, with the simulations,
-pictures and worked examples, is on the <a
-href="lecturemenu8.html#the-central-limit-theorem">Week 8 notes page,
+<p>This section works through every example from the Lecture 19 slides.
+The longer write-up, with the simulations behind the theorem, is on the
+<a href="lecturemenu8.html#the-central-limit-theorem">Week 8 notes page,
 starting at “The central limit theorem”</a>.</p>
 <div id="the-theorem" class="section level2">
 <h2>The theorem</h2>
@@ -745,6 +795,39 @@ class="math inline">\(n(1 - p) &gt; 5\)</span> for <span
 class="math inline">\(\hat{p}\)</span>, so there are enough successes
 <em>and</em> failures.</li>
 </ul>
+<div id="example-the-clt-for-a-proportion" class="section level3">
+<h3>Example: the CLT for a proportion</h3>
+<p>Stephen Curry has made 4,236 of his 4,645 career free throws, so take
+<span class="math inline">\(p = 0.912\)</span>. Let <span
+class="math inline">\(\hat{p}\)</span> be the proportion he makes over a
+stretch of <span class="math inline">\(n\)</span> free throws. Below are
+the exact sampling distributions of <span
+class="math inline">\(\hat{p}\)</span> for <span class="math inline">\(n
+= 10\)</span>, 30 and 100. For which <span
+class="math inline">\(n\)</span> is <span class="math inline">\(n(1 - p)
+&gt; 5\)</span>, and which distributions look like a bell?</p>
+<p><img src="assets/l18_phat_curry.png" alt="Three bar charts of the exact sampling distribution of the proportion of free throws made, with p = 0.912 marked by a red vertical line, each with its own axis scale. For n = 10 the bars are piled against 1 and strongly skewed left. For n = 30 they are still skewed left. For n = 100 they form a nearly symmetric bell centered at 0.912." width="95%" style="display: block; margin: auto;" /></p>
+<p>Curry almost always makes his free throws, so the check that can fail
+is the one for <strong>misses</strong>, <span class="math inline">\(n(1
+- p)\)</span>, with <span class="math inline">\(1 - p =
+0.088\)</span>:</p>
+<ul>
+<li><span class="math inline">\(n = 10\)</span>: <span
+class="math inline">\(10 \times 0.088 = 0.88\)</span>, which fails. The
+distribution is piled up against 1 and strongly skewed.</li>
+<li><span class="math inline">\(n = 30\)</span>: <span
+class="math inline">\(30 \times 0.088 = 2.64\)</span>, which still
+fails. It is still skewed left.</li>
+<li><span class="math inline">\(n = 100\)</span>: <span
+class="math inline">\(100 \times 0.088 = 8.8 &gt; 5\)</span>, which
+passes. This is the only one close to a bell.</li>
+</ul>
+<p>The check and the pictures agree. The CLT needs enough successes
+<em>and</em> enough failures; with too few expected misses, <span
+class="math inline">\(\hat{p}\)</span> cannot spread out to the right of
+<span class="math inline">\(p\)</span> and the distribution stays
+lopsided.</p>
+</div>
 </div>
 <div id="using-it" class="section level2">
 <h2>Using it</h2>
@@ -754,16 +837,74 @@ class="math inline">\(z\)</span>-table, exactly as in the first part of
 these notes. The one change is that we standardize with the
 <strong>standard error</strong>, not <span
 class="math inline">\(\sigma\)</span>: <span class="math display">\[z =
-\frac{\bar{x} - \mu}{\sigma/\sqrt{n}}\]</span> For example, a World
-Cup’s average over <span class="math inline">\(n = 64\)</span> matches
-has <span class="math inline">\(\mu = 2.69\)</span> goals and standard
-error 0.205, so <span class="math inline">\(P(\bar{x} \geq 3) = P(Z \geq
-1.51) = 1 - 0.9345 = 0.0655\)</span>.</p>
+\frac{\bar{x} - \mu}{\sigma/\sqrt{n}}\]</span></p>
 <p>In particular, about 95% of the time a statistic lands within
 <strong>2 standard errors</strong> of its parameter: <span
 class="math display">\[P\left(\mu - 2\frac{\sigma}{\sqrt{n}} \;\leq\;
 \bar{x} \;\leq\; \mu + 2\frac{\sigma}{\sqrt{n}}\right) \approx
 0.95\]</span></p>
+<div id="example-free-throws-again" class="section level3">
+<h3>Example: free throws, again</h3>
+<p>Over a stretch of <span class="math inline">\(n = 100\)</span> free
+throws, let <span class="math inline">\(\hat{p}\)</span> be the
+proportion Curry makes, with <span class="math inline">\(p =
+0.912\)</span>. We just checked that <span class="math inline">\(n(1 -
+p) = 8.8 &gt; 5\)</span> (and <span class="math inline">\(np = 91.2 &gt;
+5\)</span>), so by the CLT <span class="math inline">\(\hat{p}\)</span>
+is approximately normal.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p><em>What are the mean and standard error of <span
+class="math inline">\(\hat{p}\)</span>?</em> The mean of <span
+class="math inline">\(\hat{p}\)</span> is <span
+class="math inline">\(p\)</span> itself, <strong>0.912</strong>. The
+standard error is <span class="math display">\[\sqrt{\frac{p(1 - p)}{n}}
+= \sqrt{\frac{0.912 \times 0.088}{100}} = \sqrt{0.000803} \approx
+\mathbf{0.028}\]</span></p></li>
+<li><p><em>About 95% of the time, <span
+class="math inline">\(\hat{p}\)</span> falls between what two
+values?</em> Within 2 standard errors of its mean: <span
+class="math display">\[0.912 \pm 2(0.028) = 0.912 \pm 0.056, \quad
+\text{from } \mathbf{0.856} \text{ to } \mathbf{0.968}\]</span> So in
+about 95% of stretches of 100 free throws, Curry makes between about 86
+and 97 of them.</p></li>
+</ol>
+</div>
+<div id="example-a-tournaments-average" class="section level3">
+<h3>Example: a tournament’s average</h3>
+<p>The number of goals in a World Cup match is <span
+class="math inline">\(X \sim \text{Poisson}(\lambda = 2.69)\)</span>,
+the 2022 rate. A tournament has 64 matches, so the tournament’s average
+number of goals per match is a sample mean with <span
+class="math inline">\(n = 64\)</span>. For a Poisson variable the mean
+and the variance are both <span class="math inline">\(\lambda\)</span>,
+so <span class="math display">\[\mu = 2.69, \qquad \sigma = \sqrt{2.69}
+\approx 1.64\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p><em>What is the standard error of a tournament’s average?</em>
+<span class="math display">\[\frac{\sigma}{\sqrt{n}} =
+\frac{1.64}{\sqrt{64}} = \frac{1.64}{8} =
+\mathbf{0.205}\]</span></p></li>
+<li><p><em>About 95% of tournaments average between what two
+values?</em> <span class="math inline">\(n = 64 \geq 30\)</span>, so the
+CLT says <span class="math inline">\(\bar{x}\)</span> is approximately
+normal, and about 95% of tournaments land within 2 standard errors of
+<span class="math inline">\(\mu\)</span>: <span
+class="math display">\[2.69 \pm 2(0.205) = 2.69 \pm 0.41, \quad
+\text{from } \mathbf{2.28} \text{ to } \mathbf{3.10} \text{ goals per
+match}\]</span></p></li>
+<li><p><em>How likely is a tournament that averages 3 or more goals per
+match?</em> Sketch the normal curve for <span
+class="math inline">\(\bar{x}\)</span> centered at 2.69 and shade the
+area to the right of 3, a small upper tail. Standardize with the
+standard error: <span class="math display">\[z = \frac{3 - 2.69}{0.205}
+= \frac{0.31}{0.205} \approx 1.51\]</span> Row 1.5, column .01 of the
+table gives <span class="math inline">\(P(Z \leq 1.51) =
+0.9345\)</span>, so <span class="math display">\[P(\bar{x} \geq 3) = P(Z
+\geq 1.51) = 1 - 0.9345 = \mathbf{0.0655}\]</span> About a 7% chance. A
+single match can easily have 0 goals or 6; a tournament’s average is far
+more predictable.</p></li>
+</ol>
+</div>
 </div>
 <div id="a-95-confidence-interval-for-a-mean" class="section level2">
 <h2>A 95% confidence interval for a mean</h2>
@@ -775,20 +916,396 @@ gives the <strong>95% confidence interval</strong> for <span
 class="math inline">\(\mu\)</span>: <span class="math display">\[\bar{x}
 \;\pm\; 2\frac{\sigma}{\sqrt{n}}\]</span> which has the form
 <strong>point estimate <span class="math inline">\(\pm\)</span> margin
-of error</strong>. For example, a sample of <span
-class="math inline">\(n = 20\)</span> songs with <span
-class="math inline">\(\bar{x} = 3.64\)</span> minutes and <span
-class="math inline">\(\sigma = 1.51\)</span> gives <span
-class="math inline">\(3.64 \pm 2(0.34)\)</span>, from <strong>2.96 to
-4.32 minutes</strong>: “We estimate with 95% confidence that the mean
-length of all 18,860 songs is between 2.96 and 4.32 minutes.”</p>
-<p>The 95% describes the <strong>method</strong>, not this one interval.
-About 95% of samples give an interval that captures <span
-class="math inline">\(\mu\)</span>. Once an interval is computed, it
-either contains <span class="math inline">\(\mu\)</span> or it does not.
-It is <strong>not</strong> correct to say there is a 95% probability
-that <span class="math inline">\(\mu\)</span> is between 2.96 and
-4.32.</p>
+of error</strong>.</p>
+<div id="the-data-spotify-songs" class="section level3">
+<h3>The data: Spotify songs</h3>
+<p>These are the same songs as on the <a href="lecturemenu8.html">Week 8
+page</a>. In February 2023, Spotify and YouTube statistics were
+collected for the top 10 Spotify songs of each of 2,079 popular artists
+(the “Spotify and Youtube” dataset on Kaggle). A song credited to
+several artists appears once for each of them, so we count each song
+once, which leaves <strong>18,860 different songs</strong>. One row is
+one song, and our variable is</p>
+<ul>
+<li><span class="math inline">\(X\)</span> = the length of a song, in
+minutes.</li>
+</ul>
+<p>The first five rows:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Song
+</th>
+<th style="text-align:left;">
+Artist
+</th>
+<th style="text-align:left;">
+Minutes
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Feel Good Inc. 
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+3.71
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rhinestone Eyes
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+3.34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New Gold
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+3.59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+On Melancholy Hill
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+3.90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clint Eastwood
+</td>
+<td style="text-align:left;">
+Gorillaz
+</td>
+<td style="text-align:left;">
+5.68
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+</tbody>
+</table>
+<p>Usually we see only a sample, but here we have every song, so we can
+<strong>treat the 18,860 songs as the population</strong> and compute
+its parameters directly: <span class="math display">\[\mu = 3.71 \text{
+minutes}, \qquad \sigma = 1.51 \text{ minutes}.\]</span> Song length is
+skewed right: most songs run 2.5 to 5 minutes, but 41 are longer than 10
+minutes (the Week 8 page has the histogram). Knowing <span
+class="math inline">\(\mu\)</span> lets us check whether an interval
+captured it, which is never possible with real data.</p>
+</div>
+<div id="example-how-often-does-an-interval-capture-mu"
+class="section level3">
+<h3>Example: how often does an interval capture <span
+class="math inline">\(\mu\)</span>?</h3>
+<p>We can check the method here, because we know <span
+class="math inline">\(\mu\)</span>. Below are 25 random samples of <span
+class="math inline">\(n = 20\)</span> songs. For each one the standard
+error is <span class="math inline">\(\sigma/\sqrt{n} = 1.51/\sqrt{20}
+\approx 0.34\)</span> minutes, and each line is <span
+class="math inline">\(\bar{x} \pm 2(0.34)\)</span>, the sample mean plus
+or minus the margin of error.</p>
+<p><img src="assets/l18_ci_cover.png" alt="25 horizontal confidence intervals for mean song length, one per row, each a dot at the sample mean with a line 0.68 minutes either side, plus a vertical line at mu = 3.71 minutes. 24 of the intervals cross the vertical line; one, drawn in red and labeled misses, lies entirely to the right of it." width="85%" style="display: block; margin: auto;" /></p>
+<p><em>How many of the 25 intervals capture <span
+class="math inline">\(\mu = 3.71\)</span>?</em> Count the lines that
+cross the vertical line at 3.71: <strong>24 of the 25</strong> do, and
+one (in red) misses. That is 96%, close to the 95% we expect: about 95%
+of all samples put <span class="math inline">\(\bar{x}\)</span> within 2
+standard errors of <span class="math inline">\(\mu\)</span>, and exactly
+those samples give an interval that reaches <span
+class="math inline">\(\mu\)</span>. Each new set of 25 samples would
+give a slightly different count, but about 95% in the long run.</p>
+</div>
+<div id="example-an-interval-for-mean-song-length"
+class="section level3">
+<h3>Example: an interval for mean song length</h3>
+<p>In practice we see only one sample. Take the bottom interval in the
+plot, which came from these <span class="math inline">\(n = 20\)</span>
+songs, drawn at random from the 18,860:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Song
+</th>
+<th style="text-align:left;">
+Artist
+</th>
+<th style="text-align:left;">
+Minutes
+</th>
+<th style="text-align:left;">
+Song
+</th>
+<th style="text-align:left;">
+Artist
+</th>
+<th style="text-align:left;">
+Minutes
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Wish You Were Here
+</td>
+<td style="text-align:left;">
+Pink Floyd
+</td>
+<td style="text-align:left;">
+5.58
+</td>
+<td style="text-align:left;">
+Tangled up in You
+</td>
+<td style="text-align:left;">
+Staind
+</td>
+<td style="text-align:left;">
+4.60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Told You So
+</td>
+<td style="text-align:left;">
+Mike Perry
+</td>
+<td style="text-align:left;">
+2.44
+</td>
+<td style="text-align:left;">
+Tequila Sunrise
+</td>
+<td style="text-align:left;">
+Cypress Hill
+</td>
+<td style="text-align:left;">
+4.30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Family Tradition
+</td>
+<td style="text-align:left;">
+Hank Williams, Jr. 
+</td>
+<td style="text-align:left;">
+4.05
+</td>
+<td style="text-align:left;">
+Bad Memories
+</td>
+<td style="text-align:left;">
+Elley Duhé
+</td>
+<td style="text-align:left;">
+2.48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BUONANOTTE
+</td>
+<td style="text-align:left;">
+Ernia
+</td>
+<td style="text-align:left;">
+3.67
+</td>
+<td style="text-align:left;">
+Stop! In The Name Of Love
+</td>
+<td style="text-align:left;">
+The Supremes
+</td>
+<td style="text-align:left;">
+2.88
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LIKE ME
+</td>
+<td style="text-align:left;">
+42 Dugg
+</td>
+<td style="text-align:left;">
+2.22
+</td>
+<td style="text-align:left;">
+WITHOUT YOU
+</td>
+<td style="text-align:left;">
+The Kid LAROI
+</td>
+<td style="text-align:left;">
+2.69
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ayer Me Llamó Mi Ex
+</td>
+<td style="text-align:left;">
+KHEA
+</td>
+<td style="text-align:left;">
+3.45
+</td>
+<td style="text-align:left;">
+Paris Ka Trip
+</td>
+<td style="text-align:left;">
+Yo Yo Honey Singh
+</td>
+<td style="text-align:left;">
+3.27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B.I.B.L.E. (Basic Instructions Before Leaving Earth)
+</td>
+<td style="text-align:left;">
+GZA
+</td>
+<td style="text-align:left;">
+4.55
+</td>
+<td style="text-align:left;">
+Perreo en La Luna
+</td>
+<td style="text-align:left;">
+Dalex
+</td>
+<td style="text-align:left;">
+3.64
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Our Last Summer
+</td>
+<td style="text-align:left;">
+Meryl Streep
+</td>
+<td style="text-align:left;">
+2.96
+</td>
+<td style="text-align:left;">
+Ai Preto
+</td>
+<td style="text-align:left;">
+L7NNON
+</td>
+<td style="text-align:left;">
+2.19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Roll Wit Me
+</td>
+<td style="text-align:left;">
+Boyz II Men
+</td>
+<td style="text-align:left;">
+3.53
+</td>
+<td style="text-align:left;">
+Sumérgeme
+</td>
+<td style="text-align:left;">
+Jesús Adrián Romero
+</td>
+<td style="text-align:left;">
+5.46
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+When You Say Nothing At All
+</td>
+<td style="text-align:left;">
+Ronan Keating
+</td>
+<td style="text-align:left;">
+4.28
+</td>
+<td style="text-align:left;">
+You Used to Love Me
+</td>
+<td style="text-align:left;">
+Faith Evans
+</td>
+<td style="text-align:left;">
+4.49
+</td>
+</tr>
+</tbody>
+</table>
+<p>Their mean length is <span class="math display">\[\bar{x} =
+\frac{5.58 + 2.44 + \cdots + 4.49}{20} = \frac{72.73}{20}
+\approx \mathbf{3.64} \text{ minutes},\]</span> and <span
+class="math inline">\(\sigma = 1.51\)</span> minutes is known from the
+population.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p><em>What is the 95% confidence interval for <span
+class="math inline">\(\mu\)</span>?</em> The standard error is <span
+class="math display">\[\frac{\sigma}{\sqrt{n}} = \frac{1.51}{\sqrt{20}}
+= \frac{1.51}{4.47} \approx 0.34 \text{ minutes},\]</span> so the margin
+of error is <span class="math inline">\(2(0.34) = 0.68\)</span> and the
+interval is <span class="math display">\[3.64 \pm 0.68, \quad \text{from
+} \mathbf{2.96} \text{ to } \mathbf{4.32} \text{ minutes}\]</span> “We
+estimate with 95% confidence that the mean length of all 18,860 songs is
+between 2.96 and 4.32 minutes.”</p></li>
+<li><p><em>Does it capture <span class="math inline">\(\mu =
+3.71\)</span>?</em> <strong>Yes</strong>: <span
+class="math inline">\(2.96 \leq 3.71 \leq 4.32\)</span>.</p></li>
+<li><p><em>If we did not know <span class="math inline">\(\mu\)</span>,
+what would “95% confident” mean?</em> The 95% describes the
+<strong>method</strong>, not this one interval. About 95% of samples
+give an interval that captures <span class="math inline">\(\mu\)</span>.
+Once an interval is computed, it either contains <span
+class="math inline">\(\mu\)</span> or it does not. It is
+<strong>not</strong> correct to say there is a 95% probability that
+<span class="math inline">\(\mu\)</span> is between 2.96 and
+4.32.</p></li>
+</ol>
+</div>
 </div>
 </div>
 <div id="a-confidence-interval-for-a-proportion" class="section level1">
@@ -908,447 +1425,562 @@ interval that captures <span class="math inline">\(p\)</span>.</p>
 </div>
 <div id="confidence-levels-and-critical-values" class="section level1">
 <h1>Confidence levels and critical values</h1>
-<p>Above we introduced the <strong>confidence interval</strong> which is
-used to estimate a parameter with an interval of values. We can choose
-how wide to make the confidence interval by selecting the
-<strong>confidence level</strong> - which is the probability that the
-interval will contain the true parameter value
-<strong><u>before</u></strong> the data are gathered. The confidence
-level is controlled via the standard score <span
-class="math inline">\(z\)</span>. The standard score gives the number of
-standard errors to add and subtract from our estimate. Therefore, we
-must look up the appropriate standard score <span
-class="math inline">\(z\)</span> from the standard normal table.</p>
-<p>We saw that for a <span class="math inline">\(95\%\)</span>
-confidence interval, we must add and subtract approximately <span
-class="math inline">\(z=2\)</span> standard errors from our estimate
-<span class="math inline">\(\bar{x}\)</span> or <span
-class="math inline">\(\hat{p}\)</span>. <span
-class="math inline">\(z\)</span> is sometimes referred to as the
-<strong>critical value</strong>. The critical value denotes the upper
-and lower bounds of the confidence interval. In general, if we wish to
-compute the <span class="math inline">\(100(1-\alpha)\%\)</span>
-confidence interval for the statistics <span
-class="math inline">\(\bar{x}\)</span> or <span
-class="math inline">\(\hat{p}\)</span>, then we must add and subtract
-<span class="math inline">\(z_{1-\alpha/2}\)</span> standard errors. The
-quantity <span class="math inline">\(\alpha/2\)</span> denotes the area
-that is divided among the two tails of the standard normal distribution.
-For example, for a <span class="math inline">\(95\%\)</span> confidence
-interval <span class="math inline">\(\alpha = 0.05\)</span> and <span
-class="math inline">\(\alpha/2 = 0.025\)</span>.</p>
-<p>For example, for a <span class="math inline">\(90\%\)</span>
-confidence <span class="math inline">\(\alpha = 0.1\)</span>, and the
-corresponding critical value is <span class="math inline">\(z_{1-0.1/2}
-= z_{0.95}\)</span> which is the 95th percentile from the standard
-normal distribution. The table below gives several confidence levels,
-the corresponding values of <span class="math inline">\(\alpha\)</span>
-and critical values.</p>
+<p>Every interval so far has been <strong>estimate <span
+class="math inline">\(\pm\)</span> 2 standard errors</strong>, which
+captures the parameter about 95% of the time. Suppose a cardiologist
+wants to be 99% sure instead. Should the interval get wider or narrower?
+Wider: to catch the parameter more often, we need a bigger net. The
+thing that changes is the 2, which becomes a larger number.</p>
+<ul>
+<li><strong>Confidence level</strong> <span
+class="math inline">\(C\)</span>. The proportion of all possible samples
+whose interval captures the parameter, such as 90%, 95% or 99%. It
+describes the method <strong>before</strong> the data are gathered.</li>
+<li><span class="math inline">\(\alpha\)</span>. The proportion of
+samples whose interval misses: <span class="math inline">\(\alpha = 1 -
+C\)</span>. It is split evenly between the two tails of the normal
+curve, <span class="math inline">\(\alpha/2\)</span> in each.</li>
+<li><strong>Critical value</strong> <span
+class="math inline">\(z_{1-\alpha/2}\)</span>. The <span
+class="math inline">\(z\)</span> with area <span class="math inline">\(1
+- \alpha/2\)</span> to its left. A <span
+class="math inline">\(100(1-\alpha)\%\)</span> confidence interval is
+<span class="math display">\[\text{estimate} \;\pm\; z_{1-\alpha/2}
+\times SE\]</span> For a mean this is <span
+class="math inline">\(\bar{x} \pm
+z_{1-\alpha/2}\,\sigma/\sqrt{n}\)</span>; for a proportion it is <span
+class="math inline">\(\hat{p} \pm
+z_{1-\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\)</span>.</li>
+</ul>
+<p><img src="assets/l20_crit_values.png" alt="Three standard normal curves side by side for 90%, 95% and 99% confidence. In each the middle area is shaded and the cut-offs are marked: plus and minus 1.645 for 90% with 0.05 in each tail, plus and minus 1.960 for 95% with 0.025 in each tail, and plus and minus 2.576 for 99% with 0.005 in each tail. The higher the confidence, the farther out the cut-offs." width="95%" style="display: block; margin: auto;" /></p>
+<p>Why look up <span class="math inline">\(1 - \alpha/2\)</span>? The
+table gives the area to the <strong>left</strong> of <span
+class="math inline">\(z\)</span>. To the left of the upper cut-off lies
+the middle <span class="math inline">\(C\)</span> plus the lower tail
+<span class="math inline">\(\alpha/2\)</span>, which is <span
+class="math inline">\(1 - \alpha/2\)</span> in all.</p>
+<div id="example-critical-values" class="section level2">
+<h2>Example: critical values</h2>
+<p>Find the critical value for 80%, 90% and 99% confidence. For each
+one, find <span class="math inline">\(\alpha\)</span>, then look for the
+area <span class="math inline">\(1 - \alpha/2\)</span>
+<strong>inside</strong> the <span class="math inline">\(z\)</span>-table
+and read off <span class="math inline">\(z\)</span> from the row and
+column:</p>
+<ul>
+<li><strong>80%.</strong> <span class="math inline">\(\alpha =
+0.20\)</span>, <span class="math inline">\(\alpha/2 = 0.10\)</span>, so
+look for 0.90. The closest table value is 0.8997 in row 1.2, column .08:
+<span class="math inline">\(z_{0.90} = \mathbf{1.28}\)</span>.</li>
+<li><strong>90%.</strong> <span class="math inline">\(\alpha =
+0.10\)</span>, <span class="math inline">\(\alpha/2 = 0.05\)</span>, so
+look for 0.95. It sits exactly halfway between 0.9495 (<span
+class="math inline">\(z = 1.64\)</span>) and 0.9505 (<span
+class="math inline">\(z = 1.65\)</span>), so <span
+class="math inline">\(z_{0.95} = \mathbf{1.645}\)</span>.</li>
+<li><strong>95%.</strong> <span class="math inline">\(\alpha/2 =
+0.025\)</span>, so look for 0.975: row 1.9, column .06 gives <span
+class="math inline">\(z_{0.975} = \mathbf{1.96}\)</span>.</li>
+<li><strong>99%.</strong> <span class="math inline">\(\alpha =
+0.01\)</span>, <span class="math inline">\(\alpha/2 = 0.005\)</span>, so
+look for 0.995. It sits between 0.9949 (<span class="math inline">\(z =
+2.57\)</span>) and 0.9951 (<span class="math inline">\(z =
+2.58\)</span>); the more precise value is <span
+class="math inline">\(z_{0.995} = \mathbf{2.576}\)</span>.</li>
+</ul>
 <table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
-Confidence Level
+Confidence level
 </th>
 <th style="text-align:right;">
 <span class="math inline">\(\alpha\)</span>
 </th>
-<th style="text-align:right;">
-critical value: <span class="math inline">\(z_{1-\alpha/2}\)</span>
+<th style="text-align:left;">
+Area to the left, <span class="math inline">\(1 - \alpha/2\)</span>
+</th>
+<th style="text-align:left;">
+Critical value <span class="math inline">\(z_{1-\alpha/2}\)</span>
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(80\%\)</span>
+80%
 </td>
 <td style="text-align:right;">
 0.20
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
+0.90
+</td>
+<td style="text-align:left;">
 1.28
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(85\%\)</span>
-</td>
-<td style="text-align:right;">
-0.15
-</td>
-<td style="text-align:right;">
-1.44
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(90\%\)</span>
+90%
 </td>
 <td style="text-align:right;">
 0.10
 </td>
-<td style="text-align:right;">
-1.64
+<td style="text-align:left;">
+0.95
+</td>
+<td style="text-align:left;">
+1.645
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(95\%\)</span>
+95%
 </td>
 <td style="text-align:right;">
 0.05
 </td>
-<td style="text-align:right;">
-1.96
+<td style="text-align:left;">
+0.975
+</td>
+<td style="text-align:left;">
+1.960
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(99\%\)</span>
+99%
 </td>
 <td style="text-align:right;">
 0.01
 </td>
-<td style="text-align:right;">
-2.58
+<td style="text-align:left;">
+0.995
+</td>
+<td style="text-align:left;">
+2.576
 </td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>Try it out: give the confidence level and critical value for the
-<span class="math inline">\(100(1-\alpha)\%\)</span> confidence
-intervals with <span class="math inline">\(\alpha = 0.25\)</span>, <span
-class="math inline">\(\alpha = 0.08\)</span>, and <span
-class="math inline">\(\alpha = 0.03\)</span>.</li>
-</ul>
-<div id="an-alternative-confidence-interval-for-a-population-mean."
-class="section level2">
-<h2>An alternative confidence interval for a population mean.</h2>
-<p>Recall the confidence interval that we introduced for estimating the
-population mean:</p>
-<p><span class="math display">\[ \bar{x} \pm z\frac{\sigma}{\sqrt{n}}
-\]</span></p>
-<p>The confidence interval above is based on the assumption that the
-population standard deviation <span
-class="math inline">\(\sigma\)</span> is known. When <span
-class="math inline">\(\sigma\)</span> is known the sampling distribution
-of the <span class="math inline">\(\bar{x}\)</span> is approximately
-<span class="math inline">\(N(\mu, \sigma/\sqrt{n})\)</span>. However,
-we rarely know the value of <span class="math inline">\(\sigma\)</span>
-so we must approximate its value with the sample standard deviation
-<span class="math inline">\(s\)</span> to get</p>
-<p><span class="math display">\[ \bar{x} \pm z\frac{s}{\sqrt{n}}
-\]</span></p>
-<p>Unfortunately, the confidence level of the confidence interval above
-will tend to be less than specified. As a result, more confidence
-intervals will fail to cover the true parameter value than expected.</p>
+<li><p><strong>Try it out.</strong> Give the confidence level and
+critical value for <span class="math inline">\(\alpha = 0.25\)</span>,
+<span class="math inline">\(\alpha = 0.08\)</span> and <span
+class="math inline">\(\alpha = 0.03\)</span>.</p>
 <ul>
-<li>Consider the following example: A social scientist is conducting a
-study to investigate the average time spent daily on social media by
-college students. Each week the scientist surveys five college students
-and asks them to report their time spent on social media. For each
-sample, the scientist computes the <span
-class="math inline">\(95\%\)</span> confidence interval for the mean
-time the students spent on social media. They repeat this process 100
-times. Suppose the population mean time spent on social media is <span
-class="math inline">\(\mu = 120\)</span> minutes with a standard
-deviation of <span class="math inline">\(\sigma = 10\)</span> minutes.
-The plot below shows 100 confidence intervals computed using <span
-class="math inline">\(\bar{x} \pm z\frac{s}{\sqrt{n}}\)</span> where
-each CI is computed from a sample of <span
-class="math inline">\(5\)</span> observations from <span
-class="math inline">\(N(120, 10)\)</span>:</li>
+<li><span class="math inline">\(\alpha = 0.25\)</span>: 75% confidence;
+look up <span class="math inline">\(1 - 0.125 = 0.875\)</span>, which is
+closest to 0.8749 at <span class="math inline">\(z = 1.15\)</span>.</li>
+<li><span class="math inline">\(\alpha = 0.08\)</span>: 92% confidence;
+look up <span class="math inline">\(1 - 0.04 = 0.96\)</span>, which is
+closest to 0.9599 at <span class="math inline">\(z = 1.75\)</span>.</li>
+<li><span class="math inline">\(\alpha = 0.03\)</span>: 97% confidence;
+look up <span class="math inline">\(1 - 0.015 = 0.985\)</span>, which is
+0.9850 at <span class="math inline">\(z = 2.17\)</span>.</li>
+</ul></li>
 </ul>
-<div class="figure">
-<img src="lecturemenu9_files/figure-html/unnamed-chunk-7-1.png" alt="100 confidence intervals, each from a sample of 5 students, drawn as vertical error bars by sample number on the x-axis, with x-bar in minutes on the y-axis and a dashed horizontal line at mu equals 120. A legend marks whether each interval covers the parameter: 12 of the 100 intervals miss the dashed line." width="960" />
-<p class="caption">
-<strong>Figure</strong>: Each point represents the sample mean from a
-hypothetical sample of 5 college students. The whiskers extending from
-each point give the coverage of the confidence interval computed for
-each sample. The black dotted line gives the value of hypothetical
-population mean time spent on social media. The CI’s highlighted in red
-represent those that fail to capture the population mean
-</p>
 </div>
-<p>Based on the plot and example above, the actual proportion of
-confidence intervals that fail to capture the population mean is <span
-class="math inline">\(12\%\)</span>, which is much higher than the
-expected frequency of only <span class="math inline">\(5\%\)</span>.
-This occurs because when we substitute <span
-class="math inline">\(s/\sqrt{n}\)</span> for <span
-class="math inline">\(\sigma/\sqrt{n}\)</span> the standardized
-statistic <span
-class="math inline">\(\frac{\bar{x}-\mu}{s/\sqrt{n}}\)</span> no longer
-follows a standard normal distribution. Instead, it follows a
-distribution called the <strong><span
-class="math inline">\(t\)</span>-distribution</strong>.</p>
-<p>Like the normal distribution, the <span
-class="math inline">\(t\)</span> distribution is a bell curve but it has
-“heavier tails” - that is to say, it has more probability density in the
-tails of the distribution.</p>
-<p><img src="lecturemenu9_files/figure-html/unnamed-chunk-8-1.png" alt="Line plot comparing density curves from x equals -3 to 3: the standard normal curve and t distributions with 1, 2, 5 and 10 degrees of freedom. All are bell-shaped and centered at 0; the t curves have lower peaks and heavier tails, and with more degrees of freedom they move closer to the standard normal." width="960" /></p>
-<p>The amount of probability density in the tails of a <span
-class="math inline">\(t\)</span> distribution is controlled by the
-<strong>degrees of freedom</strong> of the distribution. The confidence
-interval for <span class="math inline">\(\mu\)</span> that uses <span
-class="math inline">\(s/\sqrt{n}\)</span> instead of <span
-class="math inline">\(\sigma/\sqrt{n}\)</span> is given by</p>
-<p><span class="math display">\[ \bar{x} \pm t\frac{s}{\sqrt{n}}
-\]</span></p>
-<p>The quantity <span class="math inline">\(t\)</span> is called the
-<span class="math inline">\(t\)</span>-score and is the <span
-class="math inline">\(1-\alpha/2\)</span> percentile of <span
-class="math inline">\(t\)</span>-distribution with <span
-class="math inline">\(n-1\)</span> degrees of freedom denoted <span
-class="math inline">\(t(n-1)\)</span>. Like the standard score <span
-class="math inline">\(z\)</span>, we must look up the <span
-class="math inline">\(t\)</span>-score corresponding to the desired
-confidence level from a <span
-class="math inline">\(t\)</span>-distribution table:</p>
+<div id="an-interval-for-a-proportion-at-other-confidence-levels"
+class="section level2">
+<h2>An interval for a proportion at other confidence levels</h2>
+<div id="the-data-a-gene-and-a-drug" class="section level3">
+<h3>The data: a gene and a drug</h3>
+<p><strong>Clopidogrel</strong> (brand name Plavix) is a blood thinner
+given to people after a heart attack or when a stent is put in a heart
+artery. It is a <em>prodrug</em>: it does nothing until the liver enzyme
+<strong>CYP2C19</strong> switches it on. The gene for that enzyme comes
+in several versions. People who carry the <strong>CYP2C19*2</strong>
+variant (a single DNA letter change, G to A, at the site rs4244285) make
+a version of the enzyme that does not work, so they switch on less of
+the drug. For heart patients who carry one or two copies, the current
+clinical guideline (CPIC, 2022) recommends a different drug.</p>
+<p>The <strong>1000 Genomes Project</strong> sequenced the genomes of
+2,504 people from 26 populations around the world to catalog human
+genetic variation. We use its 504 East Asian participants (Han Chinese
+in Beijing, Southern Han Chinese, Japanese in Tokyo, Kinh in Ho Chi Minh
+City, and Chinese Dai in Xishuangbanna). The first five:</p>
 <table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
-Upper tail
+Person
 </th>
 <th style="text-align:left;">
-0.25
+Population
 </th>
 <th style="text-align:left;">
-0.2
+Genotype
 </th>
 <th style="text-align:left;">
-0.15
+Copies of *2
 </th>
 <th style="text-align:left;">
-0.125
-</th>
-<th style="text-align:left;">
-0.1
-</th>
-<th style="text-align:left;">
-0.075
-</th>
-<th style="text-align:left;">
-0.05
-</th>
-<th style="text-align:left;">
-0.025
-</th>
-<th style="text-align:left;">
-0.005
-</th>
-<th style="text-align:left;">
-0.0025
-</th>
-<th style="text-align:left;">
-5e-04
+X
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-Two tail
+HG00403
 </td>
 <td style="text-align:left;">
-0.5
+Southern Han Chinese
 </td>
 <td style="text-align:left;">
-0.4
+G/G
 </td>
 <td style="text-align:left;">
-0.3
+0
 </td>
 <td style="text-align:left;">
-0.25
-</td>
-<td style="text-align:left;">
-0.2
-</td>
-<td style="text-align:left;">
-0.15
-</td>
-<td style="text-align:left;">
-0.1
-</td>
-<td style="text-align:left;">
-0.05
-</td>
-<td style="text-align:left;">
-0.01
-</td>
-<td style="text-align:left;">
-0.005
-</td>
-<td style="text-align:left;">
-0.001
+0
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(DF\)</span>
+HG00404
 </td>
 <td style="text-align:left;">
+Southern Han Chinese
 </td>
 <td style="text-align:left;">
+A/A
 </td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-1.376
-</td>
-<td style="text-align:left;">
-1.963
-</td>
-<td style="text-align:left;">
-2.414
-</td>
-<td style="text-align:left;">
-3.078
-</td>
-<td style="text-align:left;">
-4.165
-</td>
-<td style="text-align:left;">
-6.314
-</td>
-<td style="text-align:left;">
-12.706
-</td>
-<td style="text-align:left;">
-63.657
-</td>
-<td style="text-align:left;">
-127.321
-</td>
-<td style="text-align:left;">
-636.619
-</td>
-</tr>
-<tr>
 <td style="text-align:left;">
 2
 </td>
 <td style="text-align:left;">
-0.816
-</td>
-<td style="text-align:left;">
-1.061
-</td>
-<td style="text-align:left;">
-1.386
-</td>
-<td style="text-align:left;">
-1.604
-</td>
-<td style="text-align:left;">
-1.886
-</td>
-<td style="text-align:left;">
-2.282
-</td>
-<td style="text-align:left;">
-2.92
-</td>
-<td style="text-align:left;">
-4.303
-</td>
-<td style="text-align:left;">
-9.925
-</td>
-<td style="text-align:left;">
-14.089
-</td>
-<td style="text-align:left;">
-31.599
+1
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-3
+HG00406
 </td>
 <td style="text-align:left;">
-0.765
+Southern Han Chinese
 </td>
 <td style="text-align:left;">
-0.978
+G/A
 </td>
 <td style="text-align:left;">
-1.25
+1
 </td>
 <td style="text-align:left;">
-1.423
-</td>
-<td style="text-align:left;">
-1.638
-</td>
-<td style="text-align:left;">
-1.924
-</td>
-<td style="text-align:left;">
-2.353
-</td>
-<td style="text-align:left;">
-3.182
-</td>
-<td style="text-align:left;">
-5.841
-</td>
-<td style="text-align:left;">
-7.453
-</td>
-<td style="text-align:left;">
-12.924
+1
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+HG00407
+</td>
+<td style="text-align:left;">
+Southern Han Chinese
+</td>
+<td style="text-align:left;">
+G/G
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HG00409
+</td>
+<td style="text-align:left;">
+Southern Han Chinese
+</td>
+<td style="text-align:left;">
+G/G
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+</tbody>
+</table>
+<p>Each person has two copies of the gene, one from each parent, so the
+genotype is two letters: G/G has no copies of *2, G/A has one and A/A
+has two.</p>
+<ul>
+<li><span class="math inline">\(X\)</span> = 1 if a person carries at
+least one copy of *2, and 0 otherwise.</li>
+</ul>
+</div>
+<div id="example-carriers-of-cyp2c192" class="section level3">
+<h3>Example: carriers of CYP2C19*2</h3>
+<p>Of the <span class="math inline">\(n = 504\)</span> people, 239 carry
+one copy of *2 and 38 carry two, so 277 are carriers. Estimate <span
+class="math inline">\(p\)</span>, the proportion of <strong>all</strong>
+East Asian people who carry the variant, with 90%, 95% and 99%
+confidence.</p>
+<ol style="list-style-type: lower-alpha">
+<li><em>Point estimate, check and standard error.</em></li>
+</ol>
+<ul>
+<li><span class="math inline">\(\hat{p} = 277 / 504 \approx
+0.550\)</span>.</li>
+<li><strong>Check.</strong> There are 277 successes and 227 failures,
+both far more than 5.</li>
+<li><strong>Standard error.</strong> <span
+class="math inline">\(\sqrt{0.550 \times 0.450 / 504} = \sqrt{0.000491}
+\approx 0.022\)</span>.</li>
+</ul>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><em>The three intervals.</em> Only the critical value changes:</li>
+</ol>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Confidence level
+</th>
+<th style="text-align:left;">
+Critical value
+</th>
+<th style="text-align:left;">
+Margin of error
+</th>
+<th style="text-align:left;">
+Interval
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+90%
+</td>
+<td style="text-align:left;">
+1.645
+</td>
+<td style="text-align:left;">
+1.645(0.022) = 0.036
+</td>
+<td style="text-align:left;">
+0.550 ± 0.036: <b>0.514 to 0.586</b>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+95%
+</td>
+<td style="text-align:left;">
+1.960
+</td>
+<td style="text-align:left;">
+1.960(0.022) = 0.043
+</td>
+<td style="text-align:left;">
+0.550 ± 0.043: <b>0.507 to 0.593</b>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+99%
+</td>
+<td style="text-align:left;">
+2.576
+</td>
+<td style="text-align:left;">
+2.576(0.022) = 0.057
+</td>
+<td style="text-align:left;">
+0.550 ± 0.057: <b>0.493 to 0.607</b>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For example, the 90% interval is reported as: <strong>“We estimate
+with 90% confidence that between 51.4% and 58.6% of East Asian people
+carry at least one copy of CYP2C19*2.”</strong></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><em>Can we say that more than half of East Asian people carry
+*2?</em> At 90% and 95% confidence, yes: every value in those intervals
+is above 0.5. At 99% confidence, no: the interval reaches down to 0.493,
+so 0.5 is still a plausible value. Asking for more confidence costs
+precision.</li>
+</ol>
+</div>
+</div>
+<div id="width-confidence-level-and-sample-size" class="section level2">
+<h2>Width, confidence level and sample size</h2>
+<p>The margin of error is <span class="math inline">\(z_{1-\alpha/2}
+\times SE\)</span>, so two things control the width of an interval: the
+confidence level, through <span class="math inline">\(z\)</span>, and
+the sample size, through the standard error. The plot shows the carrier
+interval at four confidence levels (left), and the 95% interval as it
+would be with 4 times fewer or 4 times more people at the same <span
+class="math inline">\(\hat{p}\)</span> (right).</p>
+<p><img src="assets/l20_width.png" alt="Two panels of horizontal intervals around a dashed line at 0.55, the proportion of carriers. Left, confidence level with n = 504: the intervals at 80%, 90%, 95% and 99% get steadily wider from top to bottom, the 99% one running from about 0.49 to 0.61. Right, sample size at 95%: the interval for n = 126 runs from about 0.46 to 0.64, the one for n = 504 is half as wide, and the one for n = 2016 is half as wide again." width="95%" style="display: block; margin: auto;" /></p>
+<ul>
+<li><strong>Higher confidence, wider interval.</strong> A bigger <span
+class="math inline">\(C\)</span> means a bigger critical value.</li>
+<li><strong>Larger sample, narrower interval.</strong> The standard
+error has <span class="math inline">\(\sqrt{n}\)</span> on the bottom,
+so 4 times the sample size gives <strong>half</strong> the width.</li>
+</ul>
+<p>So there is a trade-off: for a fixed <span
+class="math inline">\(n\)</span>, more confidence costs precision. The
+way to get both is more data.</p>
+</div>
+</div>
+<div id="intervals-for-a-mean-when-sigma-is-unknown"
+class="section level1">
+<h1>Intervals for a mean when <span
+class="math inline">\(\sigma\)</span> is unknown</h1>
+<p>Every interval for <span class="math inline">\(\mu\)</span> so far
+used <span class="math inline">\(\sigma\)</span>, the
+<strong>population</strong> standard deviation: <span
+class="math display">\[\bar{x} \pm
+z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}\]</span> But if we do not know
+<span class="math inline">\(\mu\)</span>, we almost never know <span
+class="math inline">\(\sigma\)</span> either. The natural fix is to put
+the sample standard deviation <span class="math inline">\(s\)</span> in
+its place: <span class="math display">\[\bar{x} \pm
+z_{1-\alpha/2}\frac{s}{\sqrt{n}}\]</span> Unfortunately, this interval
+captures <span class="math inline">\(\mu\)</span> <strong>less
+often</strong> than the confidence level promises, especially when <span
+class="math inline">\(n\)</span> is small. The reason is that <span
+class="math inline">\(s\)</span> itself changes from sample to sample.
+When a sample happens to have a small <span
+class="math inline">\(s\)</span>, its interval is too narrow, and those
+narrow intervals miss <span class="math inline">\(\mu\)</span> more
+often.</p>
+<div id="does-s-in-place-of-sigma-work" class="section level2">
+<h2>Does <span class="math inline">\(s\)</span> in place of <span
+class="math inline">\(\sigma\)</span> work?</h2>
+<p>Suppose seal whisker lengths are normal with <span
+class="math inline">\(\mu = 91\)</span> mm and <span
+class="math inline">\(\sigma = 8\)</span> mm (made-up values, close to
+the spotted seals below). We simulate 100 samples of only <span
+class="math inline">\(n = 5\)</span> whiskers each, and from each one
+build the interval <span class="math inline">\(\bar{x} \pm
+1.96\,s/\sqrt{5}\)</span>. A 95% method should miss about 5 times. The
+top panel shows the result; misses are in red.</p>
+<p><img src="assets/l20_t_coverage.png" alt="Two panels of 100 vertical confidence intervals from the same 100 simulated samples of 5 whiskers, with a horizontal line at mu = 91 mm and misses drawn in red. Top panel, x-bar plus or minus 1.96 s over root 5: 12 of 100 intervals miss. Bottom panel, x-bar plus or minus 2.776 s over root 5: the intervals are longer and 5 of 100 miss." width="90%" style="display: block; margin: auto;" /></p>
+<p>With 1.96, <strong>12 of the 100</strong> intervals miss <span
+class="math inline">\(\mu\)</span>, more than twice the 5 we expect. (In
+the long run this method captures <span
+class="math inline">\(\mu\)</span> only about 88% of the time when <span
+class="math inline">\(n = 5\)</span>.) The bottom panel uses the same
+100 samples with a larger multiplier, 2.776, and <strong>5 of the
+100</strong> miss, just as a 95% method should. That larger multiplier
+comes from the <span class="math inline">\(t\)</span> distribution.</p>
+</div>
+<div id="the-t-distribution" class="section level2">
+<h2>The <span class="math inline">\(t\)</span> distribution</h2>
+<p>When we standardize <span class="math inline">\(\bar{x}\)</span> with
+<span class="math inline">\(s\)</span> instead of <span
+class="math inline">\(\sigma\)</span>, the result <span
+class="math display">\[t = \frac{\bar{x} - \mu}{s/\sqrt{n}}\]</span>
+does not follow the standard normal distribution. It follows a
+<strong><span class="math inline">\(t\)</span>
+distribution</strong>.</p>
+<ul>
+<li><strong><span class="math inline">\(t\)</span>
+distribution.</strong> A bell-shaped curve centered at 0, like <span
+class="math inline">\(N(0, 1)\)</span>, but with <strong>heavier
+tails</strong>: more of its area is far from 0. It accounts for the
+extra uncertainty from estimating <span
+class="math inline">\(\sigma\)</span> with <span
+class="math inline">\(s\)</span>.</li>
+<li><strong>Degrees of freedom</strong> (<span
+class="math inline">\(df\)</span>). The <span
+class="math inline">\(t\)</span> distribution is a family of curves, one
+for each value of <span class="math inline">\(df = n - 1\)</span>. The
+more degrees of freedom, the closer <span
+class="math inline">\(t\)</span> is to <span class="math inline">\(N(0,
+1)\)</span>.</li>
+<li><strong><span class="math inline">\(t\)</span> critical
+value</strong> <span
+class="math inline">\(t_{n-1,\,1-\alpha/2}\)</span>. The value with area
+<span class="math inline">\(1 - \alpha/2\)</span> to its left under the
+<span class="math inline">\(t\)</span> distribution with <span
+class="math inline">\(n - 1\)</span> degrees of freedom, read from the
+<span class="math inline">\(t\)</span>-table.</li>
+</ul>
+<p><img src="assets/l20_t_vs_z.png" alt="Density curves on the same axes from -4 to 4: t with 2, 5 and 30 degrees of freedom, and the standard normal N(0, 1). All are bell-shaped and centered at 0. The t curve with 2 degrees of freedom has the lowest peak and the heaviest tails; with 5 degrees of freedom it is closer to the normal; with 30 degrees of freedom it almost lies on top of the standard normal curve." width="80%" style="display: block; margin: auto;" /></p>
+<p>As <span class="math inline">\(n\)</span> grows, <span
+class="math inline">\(s\)</span> becomes a more and more reliable
+estimate of <span class="math inline">\(\sigma\)</span>, and the <span
+class="math inline">\(t\)</span> distribution approaches the standard
+normal. By about <span class="math inline">\(df = 30\)</span> the two
+are nearly indistinguishable, and a <span
+class="math inline">\(t\)</span> distribution with infinitely many
+degrees of freedom <strong>is</strong> the standard normal.</p>
+<p>The interval for <span class="math inline">\(\mu\)</span> when <span
+class="math inline">\(\sigma\)</span> is unknown is <span
+class="math display">\[\bar{x} \;\pm\;
+t_{n-1,\,1-\alpha/2}\,\frac{s}{\sqrt{n}}\]</span> Strictly, it assumes
+the population is normal, but it works well for most populations as long
+as they are not very skewed or full of outliers, and for any population
+once <span class="math inline">\(n \geq 30\)</span>.</p>
+</div>
+<div id="reading-the-t-table" class="section level2">
+<h2>Reading the <span class="math inline">\(t\)</span>-table</h2>
+<p>The <a href="misc/t_table.html">course <span
+class="math inline">\(t\)</span>-table</a> is organized differently from
+the <span class="math inline">\(z\)</span>-table. The
+<strong>rows</strong> are the degrees of freedom, the
+<strong>columns</strong> are confidence levels (with the matching
+upper-tail and two-tail areas in the header), and the values
+<strong>inside</strong> the table are the critical values. Here is part
+of it:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+df
+</th>
+<th style="text-align:left;">
+80%
+</th>
+<th style="text-align:left;">
+90%
+</th>
+<th style="text-align:left;">
+95%
+</th>
+<th style="text-align:left;">
+99%
+</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td style="text-align:left;">
 4
 </td>
 <td style="text-align:left;">
-0.741
-</td>
-<td style="text-align:left;">
-0.941
-</td>
-<td style="text-align:left;">
-1.19
-</td>
-<td style="text-align:left;">
-1.344
-</td>
-<td style="text-align:left;">
 1.533
-</td>
-<td style="text-align:left;">
-1.778
 </td>
 <td style="text-align:left;">
 2.132
@@ -1359,151 +1991,16 @@ Two tail
 <td style="text-align:left;">
 4.604
 </td>
-<td style="text-align:left;">
-5.598
-</td>
-<td style="text-align:left;">
-8.61
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-5
-</td>
-<td style="text-align:left;">
-0.727
-</td>
-<td style="text-align:left;">
-0.92
-</td>
-<td style="text-align:left;">
-1.156
-</td>
-<td style="text-align:left;">
-1.301
-</td>
-<td style="text-align:left;">
-1.476
-</td>
-<td style="text-align:left;">
-1.699
-</td>
-<td style="text-align:left;">
-2.015
-</td>
-<td style="text-align:left;">
-2.571
-</td>
-<td style="text-align:left;">
-4.032
-</td>
-<td style="text-align:left;">
-4.773
-</td>
-<td style="text-align:left;">
-6.869
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-6
-</td>
-<td style="text-align:left;">
-0.718
-</td>
-<td style="text-align:left;">
-0.906
-</td>
-<td style="text-align:left;">
-1.134
-</td>
-<td style="text-align:left;">
-1.273
-</td>
-<td style="text-align:left;">
-1.44
-</td>
-<td style="text-align:left;">
-1.65
-</td>
-<td style="text-align:left;">
-1.943
-</td>
-<td style="text-align:left;">
-2.447
-</td>
-<td style="text-align:left;">
-3.707
-</td>
-<td style="text-align:left;">
-4.317
-</td>
-<td style="text-align:left;">
-5.959
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-7
-</td>
-<td style="text-align:left;">
-0.711
-</td>
-<td style="text-align:left;">
-0.896
-</td>
-<td style="text-align:left;">
-1.119
-</td>
-<td style="text-align:left;">
-1.254
-</td>
-<td style="text-align:left;">
-1.415
-</td>
-<td style="text-align:left;">
-1.617
-</td>
-<td style="text-align:left;">
-1.895
-</td>
-<td style="text-align:left;">
-2.365
-</td>
-<td style="text-align:left;">
-3.499
-</td>
-<td style="text-align:left;">
-4.029
-</td>
-<td style="text-align:left;">
-5.408
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 8
 </td>
 <td style="text-align:left;">
-0.706
-</td>
-<td style="text-align:left;">
-0.889
-</td>
-<td style="text-align:left;">
-1.108
-</td>
-<td style="text-align:left;">
-1.24
-</td>
-<td style="text-align:left;">
 1.397
 </td>
 <td style="text-align:left;">
-1.592
-</td>
-<td style="text-align:left;">
-1.86
+1.860
 </td>
 <td style="text-align:left;">
 2.306
@@ -1511,34 +2008,13 @@ Two tail
 <td style="text-align:left;">
 3.355
 </td>
-<td style="text-align:left;">
-3.833
-</td>
-<td style="text-align:left;">
-5.041
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 9
 </td>
 <td style="text-align:left;">
-0.703
-</td>
-<td style="text-align:left;">
-0.883
-</td>
-<td style="text-align:left;">
-1.1
-</td>
-<td style="text-align:left;">
-1.23
-</td>
-<td style="text-align:left;">
 1.383
-</td>
-<td style="text-align:left;">
-1.574
 </td>
 <td style="text-align:left;">
 1.833
@@ -1547,51 +2023,7 @@ Two tail
 2.262
 </td>
 <td style="text-align:left;">
-3.25
-</td>
-<td style="text-align:left;">
-3.69
-</td>
-<td style="text-align:left;">
-4.781
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-10
-</td>
-<td style="text-align:left;">
-0.7
-</td>
-<td style="text-align:left;">
-0.879
-</td>
-<td style="text-align:left;">
-1.093
-</td>
-<td style="text-align:left;">
-1.221
-</td>
-<td style="text-align:left;">
-1.372
-</td>
-<td style="text-align:left;">
-1.559
-</td>
-<td style="text-align:left;">
-1.812
-</td>
-<td style="text-align:left;">
-2.228
-</td>
-<td style="text-align:left;">
-3.169
-</td>
-<td style="text-align:left;">
-3.581
-</td>
-<td style="text-align:left;">
-4.587
+3.250
 </td>
 </tr>
 <tr>
@@ -1599,22 +2031,7 @@ Two tail
 11
 </td>
 <td style="text-align:left;">
-0.697
-</td>
-<td style="text-align:left;">
-0.876
-</td>
-<td style="text-align:left;">
-1.088
-</td>
-<td style="text-align:left;">
-1.214
-</td>
-<td style="text-align:left;">
 1.363
-</td>
-<td style="text-align:left;">
-1.548
 </td>
 <td style="text-align:left;">
 1.796
@@ -1625,490 +2042,13 @@ Two tail
 <td style="text-align:left;">
 3.106
 </td>
-<td style="text-align:left;">
-3.497
-</td>
-<td style="text-align:left;">
-4.437
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-12
-</td>
-<td style="text-align:left;">
-0.695
-</td>
-<td style="text-align:left;">
-0.873
-</td>
-<td style="text-align:left;">
-1.083
-</td>
-<td style="text-align:left;">
-1.209
-</td>
-<td style="text-align:left;">
-1.356
-</td>
-<td style="text-align:left;">
-1.538
-</td>
-<td style="text-align:left;">
-1.782
-</td>
-<td style="text-align:left;">
-2.179
-</td>
-<td style="text-align:left;">
-3.055
-</td>
-<td style="text-align:left;">
-3.428
-</td>
-<td style="text-align:left;">
-4.318
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-13
-</td>
-<td style="text-align:left;">
-0.694
-</td>
-<td style="text-align:left;">
-0.87
-</td>
-<td style="text-align:left;">
-1.079
-</td>
-<td style="text-align:left;">
-1.204
-</td>
-<td style="text-align:left;">
-1.35
-</td>
-<td style="text-align:left;">
-1.53
-</td>
-<td style="text-align:left;">
-1.771
-</td>
-<td style="text-align:left;">
-2.16
-</td>
-<td style="text-align:left;">
-3.012
-</td>
-<td style="text-align:left;">
-3.372
-</td>
-<td style="text-align:left;">
-4.221
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-14
-</td>
-<td style="text-align:left;">
-0.692
-</td>
-<td style="text-align:left;">
-0.868
-</td>
-<td style="text-align:left;">
-1.076
-</td>
-<td style="text-align:left;">
-1.2
-</td>
-<td style="text-align:left;">
-1.345
-</td>
-<td style="text-align:left;">
-1.523
-</td>
-<td style="text-align:left;">
-1.761
-</td>
-<td style="text-align:left;">
-2.145
-</td>
-<td style="text-align:left;">
-2.977
-</td>
-<td style="text-align:left;">
-3.326
-</td>
-<td style="text-align:left;">
-4.14
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-15
-</td>
-<td style="text-align:left;">
-0.691
-</td>
-<td style="text-align:left;">
-0.866
-</td>
-<td style="text-align:left;">
-1.074
-</td>
-<td style="text-align:left;">
-1.197
-</td>
-<td style="text-align:left;">
-1.341
-</td>
-<td style="text-align:left;">
-1.517
-</td>
-<td style="text-align:left;">
-1.753
-</td>
-<td style="text-align:left;">
-2.131
-</td>
-<td style="text-align:left;">
-2.947
-</td>
-<td style="text-align:left;">
-3.286
-</td>
-<td style="text-align:left;">
-4.073
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-16
-</td>
-<td style="text-align:left;">
-0.69
-</td>
-<td style="text-align:left;">
-0.865
-</td>
-<td style="text-align:left;">
-1.071
-</td>
-<td style="text-align:left;">
-1.194
-</td>
-<td style="text-align:left;">
-1.337
-</td>
-<td style="text-align:left;">
-1.512
-</td>
-<td style="text-align:left;">
-1.746
-</td>
-<td style="text-align:left;">
-2.12
-</td>
-<td style="text-align:left;">
-2.921
-</td>
-<td style="text-align:left;">
-3.252
-</td>
-<td style="text-align:left;">
-4.015
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-17
-</td>
-<td style="text-align:left;">
-0.689
-</td>
-<td style="text-align:left;">
-0.863
-</td>
-<td style="text-align:left;">
-1.069
-</td>
-<td style="text-align:left;">
-1.191
-</td>
-<td style="text-align:left;">
-1.333
-</td>
-<td style="text-align:left;">
-1.508
-</td>
-<td style="text-align:left;">
-1.74
-</td>
-<td style="text-align:left;">
-2.11
-</td>
-<td style="text-align:left;">
-2.898
-</td>
-<td style="text-align:left;">
-3.222
-</td>
-<td style="text-align:left;">
-3.965
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-18
-</td>
-<td style="text-align:left;">
-0.688
-</td>
-<td style="text-align:left;">
-0.862
-</td>
-<td style="text-align:left;">
-1.067
-</td>
-<td style="text-align:left;">
-1.189
-</td>
-<td style="text-align:left;">
-1.33
-</td>
-<td style="text-align:left;">
-1.504
-</td>
-<td style="text-align:left;">
-1.734
-</td>
-<td style="text-align:left;">
-2.101
-</td>
-<td style="text-align:left;">
-2.878
-</td>
-<td style="text-align:left;">
-3.197
-</td>
-<td style="text-align:left;">
-3.922
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-19
-</td>
-<td style="text-align:left;">
-0.688
-</td>
-<td style="text-align:left;">
-0.861
-</td>
-<td style="text-align:left;">
-1.066
-</td>
-<td style="text-align:left;">
-1.187
-</td>
-<td style="text-align:left;">
-1.328
-</td>
-<td style="text-align:left;">
-1.5
-</td>
-<td style="text-align:left;">
-1.729
-</td>
-<td style="text-align:left;">
-2.093
-</td>
-<td style="text-align:left;">
-2.861
-</td>
-<td style="text-align:left;">
-3.174
-</td>
-<td style="text-align:left;">
-3.883
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-20
-</td>
-<td style="text-align:left;">
-0.687
-</td>
-<td style="text-align:left;">
-0.86
-</td>
-<td style="text-align:left;">
-1.064
-</td>
-<td style="text-align:left;">
-1.185
-</td>
-<td style="text-align:left;">
-1.325
-</td>
-<td style="text-align:left;">
-1.497
-</td>
-<td style="text-align:left;">
-1.725
-</td>
-<td style="text-align:left;">
-2.086
-</td>
-<td style="text-align:left;">
-2.845
-</td>
-<td style="text-align:left;">
-3.153
-</td>
-<td style="text-align:left;">
-3.85
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-21
-</td>
-<td style="text-align:left;">
-0.686
-</td>
-<td style="text-align:left;">
-0.859
-</td>
-<td style="text-align:left;">
-1.063
-</td>
-<td style="text-align:left;">
-1.183
-</td>
-<td style="text-align:left;">
-1.323
-</td>
-<td style="text-align:left;">
-1.494
-</td>
-<td style="text-align:left;">
-1.721
-</td>
-<td style="text-align:left;">
-2.08
-</td>
-<td style="text-align:left;">
-2.831
-</td>
-<td style="text-align:left;">
-3.135
-</td>
-<td style="text-align:left;">
-3.819
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-22
-</td>
-<td style="text-align:left;">
-0.686
-</td>
-<td style="text-align:left;">
-0.858
-</td>
-<td style="text-align:left;">
-1.061
-</td>
-<td style="text-align:left;">
-1.182
-</td>
-<td style="text-align:left;">
-1.321
-</td>
-<td style="text-align:left;">
-1.492
-</td>
-<td style="text-align:left;">
-1.717
-</td>
-<td style="text-align:left;">
-2.074
-</td>
-<td style="text-align:left;">
-2.819
-</td>
-<td style="text-align:left;">
-3.119
-</td>
-<td style="text-align:left;">
-3.792
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-23
-</td>
-<td style="text-align:left;">
-0.685
-</td>
-<td style="text-align:left;">
-0.858
-</td>
-<td style="text-align:left;">
-1.06
-</td>
-<td style="text-align:left;">
-1.18
-</td>
-<td style="text-align:left;">
-1.319
-</td>
-<td style="text-align:left;">
-1.489
-</td>
-<td style="text-align:left;">
-1.714
-</td>
-<td style="text-align:left;">
-2.069
-</td>
-<td style="text-align:left;">
-2.807
-</td>
-<td style="text-align:left;">
-3.104
-</td>
-<td style="text-align:left;">
-3.768
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 24
 </td>
 <td style="text-align:left;">
-0.685
-</td>
-<td style="text-align:left;">
-0.857
-</td>
-<td style="text-align:left;">
-1.059
-</td>
-<td style="text-align:left;">
-1.179
-</td>
-<td style="text-align:left;">
 1.318
-</td>
-<td style="text-align:left;">
-1.487
 </td>
 <td style="text-align:left;">
 1.711
@@ -2119,186 +2059,13 @@ Two tail
 <td style="text-align:left;">
 2.797
 </td>
-<td style="text-align:left;">
-3.091
-</td>
-<td style="text-align:left;">
-3.745
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-25
-</td>
-<td style="text-align:left;">
-0.684
-</td>
-<td style="text-align:left;">
-0.856
-</td>
-<td style="text-align:left;">
-1.058
-</td>
-<td style="text-align:left;">
-1.178
-</td>
-<td style="text-align:left;">
-1.316
-</td>
-<td style="text-align:left;">
-1.485
-</td>
-<td style="text-align:left;">
-1.708
-</td>
-<td style="text-align:left;">
-2.06
-</td>
-<td style="text-align:left;">
-2.787
-</td>
-<td style="text-align:left;">
-3.078
-</td>
-<td style="text-align:left;">
-3.725
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-26
-</td>
-<td style="text-align:left;">
-0.684
-</td>
-<td style="text-align:left;">
-0.856
-</td>
-<td style="text-align:left;">
-1.058
-</td>
-<td style="text-align:left;">
-1.177
-</td>
-<td style="text-align:left;">
-1.315
-</td>
-<td style="text-align:left;">
-1.483
-</td>
-<td style="text-align:left;">
-1.706
-</td>
-<td style="text-align:left;">
-2.056
-</td>
-<td style="text-align:left;">
-2.779
-</td>
-<td style="text-align:left;">
-3.067
-</td>
-<td style="text-align:left;">
-3.707
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-27
-</td>
-<td style="text-align:left;">
-0.684
-</td>
-<td style="text-align:left;">
-0.855
-</td>
-<td style="text-align:left;">
-1.057
-</td>
-<td style="text-align:left;">
-1.176
-</td>
-<td style="text-align:left;">
-1.314
-</td>
-<td style="text-align:left;">
-1.482
-</td>
-<td style="text-align:left;">
-1.703
-</td>
-<td style="text-align:left;">
-2.052
-</td>
-<td style="text-align:left;">
-2.771
-</td>
-<td style="text-align:left;">
-3.057
-</td>
-<td style="text-align:left;">
-3.69
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-28
-</td>
-<td style="text-align:left;">
-0.683
-</td>
-<td style="text-align:left;">
-0.855
-</td>
-<td style="text-align:left;">
-1.056
-</td>
-<td style="text-align:left;">
-1.175
-</td>
-<td style="text-align:left;">
-1.313
-</td>
-<td style="text-align:left;">
-1.48
-</td>
-<td style="text-align:left;">
-1.701
-</td>
-<td style="text-align:left;">
-2.048
-</td>
-<td style="text-align:left;">
-2.763
-</td>
-<td style="text-align:left;">
-3.047
-</td>
-<td style="text-align:left;">
-3.674
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 29
 </td>
 <td style="text-align:left;">
-0.683
-</td>
-<td style="text-align:left;">
-0.854
-</td>
-<td style="text-align:left;">
-1.055
-</td>
-<td style="text-align:left;">
-1.174
-</td>
-<td style="text-align:left;">
 1.311
-</td>
-<td style="text-align:left;">
-1.479
 </td>
 <td style="text-align:left;">
 1.699
@@ -2309,151 +2076,16 @@ Two tail
 <td style="text-align:left;">
 2.756
 </td>
-<td style="text-align:left;">
-3.038
-</td>
-<td style="text-align:left;">
-3.659
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-30
-</td>
-<td style="text-align:left;">
-0.683
-</td>
-<td style="text-align:left;">
-0.854
-</td>
-<td style="text-align:left;">
-1.055
-</td>
-<td style="text-align:left;">
-1.173
-</td>
-<td style="text-align:left;">
-1.31
-</td>
-<td style="text-align:left;">
-1.477
-</td>
-<td style="text-align:left;">
-1.697
-</td>
-<td style="text-align:left;">
-2.042
-</td>
-<td style="text-align:left;">
-2.75
-</td>
-<td style="text-align:left;">
-3.03
-</td>
-<td style="text-align:left;">
-3.646
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-40
-</td>
-<td style="text-align:left;">
-0.681
-</td>
-<td style="text-align:left;">
-0.851
-</td>
-<td style="text-align:left;">
-1.05
-</td>
-<td style="text-align:left;">
-1.167
-</td>
-<td style="text-align:left;">
-1.303
-</td>
-<td style="text-align:left;">
-1.468
-</td>
-<td style="text-align:left;">
-1.684
-</td>
-<td style="text-align:left;">
-2.021
-</td>
-<td style="text-align:left;">
-2.704
-</td>
-<td style="text-align:left;">
-2.971
-</td>
-<td style="text-align:left;">
-3.551
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-50
-</td>
-<td style="text-align:left;">
-0.679
-</td>
-<td style="text-align:left;">
-0.849
-</td>
-<td style="text-align:left;">
-1.047
-</td>
-<td style="text-align:left;">
-1.164
-</td>
-<td style="text-align:left;">
-1.299
-</td>
-<td style="text-align:left;">
-1.462
-</td>
-<td style="text-align:left;">
-1.676
-</td>
-<td style="text-align:left;">
-2.009
-</td>
-<td style="text-align:left;">
-2.678
-</td>
-<td style="text-align:left;">
-2.937
-</td>
-<td style="text-align:left;">
-3.496
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 100
 </td>
 <td style="text-align:left;">
-0.677
+1.290
 </td>
 <td style="text-align:left;">
-0.845
-</td>
-<td style="text-align:left;">
-1.042
-</td>
-<td style="text-align:left;">
-1.157
-</td>
-<td style="text-align:left;">
-1.29
-</td>
-<td style="text-align:left;">
-1.451
-</td>
-<td style="text-align:left;">
-1.66
+1.660
 </td>
 <td style="text-align:left;">
 1.984
@@ -2461,207 +2093,749 @@ Two tail
 <td style="text-align:left;">
 2.626
 </td>
-<td style="text-align:left;">
-2.871
-</td>
-<td style="text-align:left;">
-3.39
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Z-score
-</td>
-<td style="text-align:left;">
-0.674
-</td>
-<td style="text-align:left;">
-0.842
-</td>
-<td style="text-align:left;">
-1.036
-</td>
-<td style="text-align:left;">
-1.15
+z
 </td>
 <td style="text-align:left;">
 1.282
 </td>
 <td style="text-align:left;">
-1.44
-</td>
-<td style="text-align:left;">
 1.645
 </td>
 <td style="text-align:left;">
-1.96
+1.960
 </td>
 <td style="text-align:left;">
 2.576
 </td>
-<td style="text-align:left;">
-2.807
-</td>
-<td style="text-align:left;">
-3.291
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Confidence Level:
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(50\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(60\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(70\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(75\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(80\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(85\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(90\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(95\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(99\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(99.5\%\)</span>
-</td>
-<td style="text-align:left;">
-<span class="math inline">\(99.9\%\)</span>
-</td>
 </tr>
 </tbody>
 </table>
-<!-- TODO: the corner header cell is currently labeled "Upper tail" (col.names in the chunk above); since the left-most column actually holds the degrees of freedom, consider relabeling it to "df". Left as-is because "Upper tail" also labels the upper-tail probabilities across the header row. -->
-<p>The table for the <span class="math inline">\(t\)</span> distribution
-is organized a little bit differently than the one we’ve seen previously
-for the standard normal distribution. The left-most column gives the
-degrees of freedom, columns give the different upper tail and two tail
-probabilities, and the values in the middle of the table are the <span
-class="math inline">\(t\)</span> scores that correspond to those
-probabilities.</p>
-<p>Use the table above to verify that the following <span
-class="math inline">\(t\)</span>-scores corresponding to each confidence
-level and sample size are correct.</p>
+<p>The last row is the standard normal: the critical values <span
+class="math inline">\(t\)</span> is closing in on as <span
+class="math inline">\(df\)</span> grows.</p>
+<div id="example-reading-the-t-table" class="section level3">
+<h3>Example: reading the <span
+class="math inline">\(t\)</span>-table</h3>
+<ol style="list-style-type: lower-alpha">
+<li><p><em>95% confidence with <span class="math inline">\(n =
+10\)</span>.</em> <span class="math inline">\(df = 10 - 1 = 9\)</span>;
+row 9, column 95% gives <span class="math inline">\(t =
+\mathbf{2.262}\)</span>.</p></li>
+<li><p><em>90% confidence with <span class="math inline">\(n =
+25\)</span>.</em> <span class="math inline">\(df = 24\)</span>; row 24,
+column 90% gives <span class="math inline">\(t =
+\mathbf{1.711}\)</span>.</p></li>
+<li><p><em>99% confidence with <span class="math inline">\(n =
+10\)</span>.</em> <span class="math inline">\(df = 9\)</span>; row 9,
+column 99% gives <span class="math inline">\(t =
+\mathbf{3.250}\)</span>.</p></li>
+</ol>
+<p>Compare these with <span class="math inline">\(z\)</span> for the
+same confidence levels, 1.960, 1.645 and 2.576: the <span
+class="math inline">\(t\)</span> value is <strong>always
+larger</strong>, so the interval is wider. That extra width is what
+restores the promised confidence level.</p>
+<ul>
+<li><strong>Try it out.</strong> Use the <a
+href="misc/t_table.html">full <span
+class="math inline">\(t\)</span>-table</a> to check these critical
+values.</li>
+</ul>
 <table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
-Confidence Level
+Confidence level
 </th>
 <th style="text-align:left;">
 Sample size
 </th>
 <th style="text-align:right;">
-<span class="math inline">\(\alpha\)</span>
+<span class="math inline">\(df = n - 1\)</span>
 </th>
 <th style="text-align:right;">
-critical value: <span class="math inline">\(t_{1-\alpha/2}\)</span>
+<span class="math inline">\(\alpha\)</span>
+</th>
+<th style="text-align:left;">
+Critical value <span class="math inline">\(t_{n-1,\,1-\alpha/2}\)</span>
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(90\%\)</span>
+90%
 </td>
 <td style="text-align:left;">
 <span class="math inline">\(n = 3\)</span>
 </td>
 <td style="text-align:right;">
-0.10
+2
 </td>
 <td style="text-align:right;">
-2.92
+0.10
+</td>
+<td style="text-align:left;">
+2.920
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(85\%\)</span>
+85%
 </td>
 <td style="text-align:left;">
 <span class="math inline">\(n = 5\)</span>
 </td>
 <td style="text-align:right;">
-0.15
+4
 </td>
 <td style="text-align:right;">
-1.78
+0.15
+</td>
+<td style="text-align:left;">
+1.778
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(95\%\)</span>
+95%
 </td>
 <td style="text-align:left;">
 <span class="math inline">\(n = 10\)</span>
 </td>
 <td style="text-align:right;">
-0.05
+9
 </td>
 <td style="text-align:right;">
-2.26
+0.05
+</td>
+<td style="text-align:left;">
+2.262
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(99\%\)</span>
+99%
 </td>
 <td style="text-align:left;">
 <span class="math inline">\(n = 14\)</span>
 </td>
 <td style="text-align:right;">
-0.01
+13
 </td>
 <td style="text-align:right;">
-3.01
+0.01
+</td>
+<td style="text-align:left;">
+3.012
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-<span class="math inline">\(80\%\)</span>
+80%
 </td>
 <td style="text-align:left;">
 <span class="math inline">\(n = 22\)</span>
 </td>
 <td style="text-align:right;">
-0.20
+21
 </td>
 <td style="text-align:right;">
-1.32
+0.20
+</td>
+<td style="text-align:left;">
+1.323
 </td>
 </tr>
 </tbody>
 </table>
-<p>One nice property of the <span
-class="math inline">\(t\)</span>-distribution is that it converges to
-the standard normal distribution as <span
-class="math inline">\(n\)</span> goes to infinity. Stated another way, a
-<span class="math inline">\(t\)</span>-distribution with <span
-class="math inline">\(\infty\)</span> degrees of freedom is exactly the
-standard normal distribution. This means that with large enough sample
-size, both the confidence interval based on the standard normal
-distribution and the one based on the <span
-class="math inline">\(t\)</span> distribution should yield nearly
-identical results. In fact, for <span class="math inline">\(n \geq
-30\)</span> the difference between the standard normal distribution and
-<span class="math inline">\(t\)</span>-distribution is nearly
-indistinguishable.</p>
 </div>
+</div>
+<div id="which-interval" class="section level2">
+<h2>Which interval?</h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Estimating</th>
+<th>Interval</th>
+<th>When it works</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>a proportion <span class="math inline">\(p\)</span></td>
+<td><span class="math inline">\(\hat{p} \pm
+z_{1-\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\)</span></td>
+<td><span class="math inline">\(n\hat{p} &gt; 5\)</span> and <span
+class="math inline">\(n(1-\hat{p}) &gt; 5\)</span></td>
+</tr>
+<tr class="even">
+<td>a mean <span class="math inline">\(\mu\)</span>, <span
+class="math inline">\(\sigma\)</span> known</td>
+<td><span class="math inline">\(\bar{x} \pm
+z_{1-\alpha/2}\,\sigma/\sqrt{n}\)</span></td>
+<td>the population is normal, or <span class="math inline">\(n \geq
+30\)</span></td>
+</tr>
+<tr class="odd">
+<td>a mean <span class="math inline">\(\mu\)</span>, <span
+class="math inline">\(\sigma\)</span> unknown</td>
+<td><span class="math inline">\(\bar{x} \pm
+t_{n-1,\,1-\alpha/2}\,s/\sqrt{n}\)</span></td>
+<td>the population is roughly normal, or <span class="math inline">\(n
+\geq 30\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The interval for a proportion always uses <span
+class="math inline">\(z\)</span>: there is no separate <span
+class="math inline">\(\sigma\)</span> to estimate, because the standard
+error comes from <span class="math inline">\(\hat{p}\)</span>
+itself.</p>
+</div>
+<div id="example-spotted-seal-whiskers" class="section level2">
+<h2>Example: spotted seal whiskers</h2>
+<div id="the-data-seal-whiskers" class="section level3">
+<h3>The data: seal whiskers</h3>
+<p>Seals and sea lions have the largest whiskers of any mammals, and
+they use them to track the water movements left by swimming fish. Ginter
+and colleagues (2012) measured the longest undamaged whisker of 92 seals
+and sea lions from 11 species, to study how whisker shape evolved. Only
+each species’ sample size, mean and standard deviation were
+published:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Species
+</th>
+<th style="text-align:left;">
+Seals (<span class="math inline">\(n\)</span>)
+</th>
+<th style="text-align:left;">
+Mean length (mm)
+</th>
+<th style="text-align:left;">
+SD (mm)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Harp seal
+</td>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+80.6
+</td>
+<td style="text-align:left;">
+10.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Harbor seal
+</td>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+86.5
+</td>
+<td style="text-align:left;">
+10.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ringed seal
+</td>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+79.6
+</td>
+<td style="text-align:left;">
+10.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Spotted seal
+</td>
+<td style="text-align:left;">
+9
+</td>
+<td style="text-align:left;">
+91.2
+</td>
+<td style="text-align:left;">
+7.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gray seal
+</td>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:left;">
+73.8
+</td>
+<td style="text-align:left;">
+12.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><span class="math inline">\(X\)</span> = the total length of a
+seal’s longest whisker, in mm (one whisker per seal).</li>
+</ul>
+</div>
+<div id="working-the-example" class="section level3">
+<h3>Working the example</h3>
+<p>Estimate <span class="math inline">\(\mu\)</span>, the mean whisker
+length of <strong>all</strong> spotted seals, with 95% confidence, from
+the 9 that were measured: <span class="math inline">\(n = 9\)</span>,
+<span class="math inline">\(\bar{x} = 91.2\)</span> mm, <span
+class="math inline">\(s = 7.9\)</span> mm.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p><em><span class="math inline">\(z\)</span> or <span
+class="math inline">\(t\)</span>? How many degrees of freedom?</em> We
+know only <span class="math inline">\(s\)</span>, not <span
+class="math inline">\(\sigma\)</span>, so use <span
+class="math inline">\(t\)</span>, with <span class="math inline">\(df =
+9 - 1 = 8\)</span>. Row 8, column 95% of the <span
+class="math inline">\(t\)</span>-table gives <span
+class="math inline">\(t = 2.306\)</span>.</p></li>
+<li><p><em>What is the standard error?</em> <span
+class="math display">\[\frac{s}{\sqrt{n}} = \frac{7.9}{\sqrt{9}} =
+\frac{7.9}{3} \approx 2.63 \text{ mm}\]</span></p></li>
+<li><p><em>What is the 95% confidence interval for <span
+class="math inline">\(\mu\)</span>?</em> <span
+class="math display">\[91.2 \pm 2.306(2.63) = 91.2 \pm 6.06, \quad
+\text{from } \mathbf{85.1} \text{ to } \mathbf{97.3} \text{
+mm}\]</span></p></li>
+</ol>
+<p><strong>“We estimate with 95% confidence that the mean length of a
+spotted seal’s longest whisker is between 85.1 and 97.3 mm.”</strong>
+With <span class="math inline">\(z = 1.96\)</span> instead, the margin
+of error would have been only <span class="math inline">\(1.96(2.63) =
+5.15\)</span> mm, too narrow for a sample of 9.</p>
+</div>
+</div>
+<div id="example-watermelon-citrulline" class="section level2">
+<h2>Example: watermelon citrulline</h2>
+<div id="the-data-watermelon-citrulline" class="section level3">
+<h3>The data: watermelon citrulline</h3>
+<p>Korea’s national gene bank stores seed of watermelon varieties
+(<em>Citrullus lanatus</em>) collected from around the world, so that
+plant breeders can use their genes. Assefa and colleagues (2020) grew
+100 of these gene-bank varieties and measured each one’s fruit for
+<strong>citrulline</strong>, an amino acid named after watermelon
+(<em>Citrullus</em>), which was first found in its juice. Citrulline is
+sold as a sports supplement, so breeders are interested in varieties
+that have a lot of it.</p>
+<p>We take a random sample of 12 of the 100 varieties. The first five
+are:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Variety
+</th>
+<th style="text-align:left;">
+Origin
+</th>
+<th style="text-align:left;">
+Citrulline (mg/g)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+IT120008
+</td>
+<td style="text-align:left;">
+Taiwan
+</td>
+<td style="text-align:left;">
+27.16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT199814
+</td>
+<td style="text-align:left;">
+Kazakhstan
+</td>
+<td style="text-align:left;">
+25.83
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT203017
+</td>
+<td style="text-align:left;">
+Russia
+</td>
+<td style="text-align:left;">
+26.38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT203029
+</td>
+<td style="text-align:left;">
+Kazakhstan
+</td>
+<td style="text-align:left;">
+24.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT203627
+</td>
+<td style="text-align:left;">
+unknown
+</td>
+<td style="text-align:left;">
+32.79
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><span class="math inline">\(X\)</span> = the citrulline in a
+variety’s fruit flesh, in mg per gram of dry weight.</li>
+</ul>
+</div>
+<div id="working-the-example-1" class="section level3">
+<h3>Working the example</h3>
+<p>Estimate <span class="math inline">\(\mu\)</span>, the mean
+citrulline content of all 100 gene-bank varieties, with 90% and with 99%
+confidence.</p>
+<p>First, the sample mean and standard deviation of the 12 values. The
+table lists each value <span class="math inline">\(x\)</span>, its
+deviation from the mean <span class="math inline">\(x -
+\bar{x}\)</span>, and the squared deviation:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Variety
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(x\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\(x - \bar{x}\)</span>
+</th>
+<th style="text-align:left;">
+<span class="math inline">\((x - \bar{x})^2\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+IT120008
+</td>
+<td style="text-align:left;">
+27.16
+</td>
+<td style="text-align:left;">
+0.09
+</td>
+<td style="text-align:left;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT199814
+</td>
+<td style="text-align:left;">
+25.83
+</td>
+<td style="text-align:left;">
+-1.24
+</td>
+<td style="text-align:left;">
+1.53
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT203017
+</td>
+<td style="text-align:left;">
+26.38
+</td>
+<td style="text-align:left;">
+-0.69
+</td>
+<td style="text-align:left;">
+0.47
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT203029
+</td>
+<td style="text-align:left;">
+24.01
+</td>
+<td style="text-align:left;">
+-3.06
+</td>
+<td style="text-align:left;">
+9.35
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT203627
+</td>
+<td style="text-align:left;">
+32.79
+</td>
+<td style="text-align:left;">
+5.72
+</td>
+<td style="text-align:left;">
+32.74
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT204167
+</td>
+<td style="text-align:left;">
+25.98
+</td>
+<td style="text-align:left;">
+-1.09
+</td>
+<td style="text-align:left;">
+1.18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT216860
+</td>
+<td style="text-align:left;">
+21.20
+</td>
+<td style="text-align:left;">
+-5.87
+</td>
+<td style="text-align:left;">
+34.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT321075
+</td>
+<td style="text-align:left;">
+24.79
+</td>
+<td style="text-align:left;">
+-2.28
+</td>
+<td style="text-align:left;">
+5.19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+K192386
+</td>
+<td style="text-align:left;">
+38.42
+</td>
+<td style="text-align:left;">
+11.35
+</td>
+<td style="text-align:left;">
+128.86
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+K192397
+</td>
+<td style="text-align:left;">
+33.05
+</td>
+<td style="text-align:left;">
+5.98
+</td>
+<td style="text-align:left;">
+35.78
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+K192432
+</td>
+<td style="text-align:left;">
+19.80
+</td>
+<td style="text-align:left;">
+-7.27
+</td>
+<td style="text-align:left;">
+52.83
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+K192469
+</td>
+<td style="text-align:left;">
+25.41
+</td>
+<td style="text-align:left;">
+-1.66
+</td>
+<td style="text-align:left;">
+2.75
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<b>Sum</b>
+</td>
+<td style="text-align:left;">
+324.82
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+305.14
+</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[\bar{x} = \frac{324.82}{12} \approx
+27.07 \text{ mg/g}, \qquad
+s = \sqrt{\frac{305.14}{12 - 1}} \approx 5.27 \text{ mg/g}\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p><em>Degrees of freedom and standard error.</em> <span
+class="math inline">\(\sigma\)</span> is unknown, so use <span
+class="math inline">\(t\)</span> with <span class="math inline">\(df =
+12 - 1 = 11\)</span>. <span class="math display">\[SE =
+\frac{s}{\sqrt{n}} = \frac{5.27}{\sqrt{12}} = \frac{5.27}{3.46} \approx
+1.52 \text{ mg/g}\]</span></p></li>
+<li><p><em>The 90% and 99% intervals.</em> Row 11 of the <span
+class="math inline">\(t\)</span>-table gives <span
+class="math inline">\(t = 1.796\)</span> for 90% and <span
+class="math inline">\(t = 3.106\)</span> for 99%:</p></li>
+</ol>
+<ul>
+<li><strong>90%:</strong> <span class="math inline">\(27.07 \pm
+1.796(1.52) = 27.07 \pm 2.73\)</span>, from <strong>24.34 to 29.80
+mg/g</strong>.</li>
+<li><strong>99%:</strong> <span class="math inline">\(27.07 \pm
+3.106(1.52) = 27.07 \pm 4.72\)</span>, from <strong>22.35 to 31.79
+mg/g</strong>.</li>
+</ul>
+<p><strong>“We estimate with 90% confidence that the mean citrulline
+content of the gene bank’s 100 watermelon varieties is between 24.34 and
+29.80 mg per gram of dry weight.”</strong></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><em>Which is wider, and why?</em> The 99% interval: more confidence
+needs a larger critical value, so a larger margin of error from the same
+sample.</li>
+</ol>
+<p>Here we can check our work, since all 100 varieties were measured:
+their mean is 27.65 mg/g, which both intervals capture.</p>
+</div>
+</div>
+</div>
+<div id="sources" class="section level1">
+<h1>Sources</h1>
+<ul>
+<li>CYP2C19*2 genotypes: 1000 Genomes Project phase 3, variant
+rs4244285, the 504 East Asian participants, retrieved from the Ensembl
+genome database on October 20, 2026 (<a
+href="https://useast.ensembl.org/Homo_sapiens/Variation/Population?v=rs4244285">Ensembl
+variant page for rs4244285</a>). The 1000 Genomes Project Consortium
+(2015), “A global reference for human genetic variation”,
+<em>Nature</em> 526, 68–74. Data file:
+<code>assets/cyp2c19_rs4244285_eas_1000g.csv</code>.</li>
+<li>Clopidogrel and CYP2C19: Lee, C. R., et al. (2022), “Clinical
+Pharmacogenetics Implementation Consortium Guideline for CYP2C19
+Genotype and Clopidogrel Therapy: 2022 Update”, <em>Clinical
+Pharmacology &amp; Therapeutics</em> 112, 959–967 (<a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9287492/">CPIC
+clopidogrel guideline, full text</a>).</li>
+<li>Seal whiskers: Ginter, C. C., DeWitt, T. J., Fish, F. E., and
+Marshall, C. D. (2012), “Fused traditional and geometric morphometrics
+demonstrate pinniped whisker diversity”, <em>PLoS ONE</em> 7(4), e34481,
+Tables 1 and 2 (<a
+href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0034481">Ginter
+et al. 2012 in PLoS ONE</a>).</li>
+<li>Watermelon citrulline: Assefa, A. D., et al. (2020), “Fruit
+Morphology, Citrulline, and Arginine Levels in Diverse Watermelon
+(<em>Citrullus lanatus</em>) Germplasm Collections”, <em>Plants</em>
+9(9), 1054, Table 3 (<a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7569901/">Assefa et
+al. 2020, full text</a>). Data file:
+<code>assets/watermelon_citrulline_assefa2020.csv</code> (citrulline by
+HPLC, the mean of three measurements).</li>
+<li>Spotify songs: Spotify and YouTube statistics for the top 10 Spotify
+tracks of 2,079 artists, collected February 2023: the “Spotify and
+Youtube” dataset on Kaggle, file <code>Spotify_Youtube.csv</code>.</li>
+</ul>
 </div>
 
 <!--

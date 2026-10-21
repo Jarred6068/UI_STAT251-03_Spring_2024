@@ -171,3 +171,9 @@ Finding normal probabilities (lower tail, upper tail, area between); the central
 
 <a href="./lecture_slides/Week%209/2026/Week9_Lecture19_Slides_10_19_2026.pdf">Slides (PDF)</a> &middot;
 <a href="./lecture_slides/Week%209/2026/Week9_Lecture19_Slides_10_19_2026.pptx">Slides (PowerPoint)</a>
+
+## Lecture 20 &middot; Wednesday, October 21
+Confidence levels other than 95%; the t distribution and intervals for a mean when &sigma; is unknown
+
+<a href="./lecture_slides/Week%209/2026/Week9_Lecture20_Slides_10_21_2026.pdf">Slides (PDF)</a> &middot;
+<a href="./lecture_slides/Week%209/2026/Week9_Lecture20_Slides_10_21_2026.pptx">Slides (PowerPoint)</a>

@@ -40,6 +40,29 @@ stopifnot(zt(1.25) == 0.8944, zt(-0.84) == 0.2005, zt(1.80) == 0.9641, zt(-1.30)
           zt(2) == 0.9772, zt(0.5) == 0.6915, zt(1) == 0.8413, zt(-1) == 0.1587, zt(-2) == 0.0228,
           zt(1.51) == 0.9345, round((3 - 2.69) / (sqrt(2.69) / 8), 2) == 1.51)
 
+# Lecture 19 slide examples, worked in full on this page
+p_ft <- 0.912                                   # Stephen Curry's career free-throw rate
+stopifnot(near(10 * (1 - p_ft), 0.88, 1e-9), near(30 * (1 - p_ft), 2.64, 1e-9),
+          near(100 * (1 - p_ft), 8.8, 1e-9), round(sqrt(p_ft * (1 - p_ft) / 100), 3) == 0.028,
+          near(p_ft - 2 * 0.028, 0.856, 1e-9), near(p_ft + 2 * 0.028, 0.968, 1e-9))
+stopifnot(round(sqrt(2.69), 2) == 1.64, round(1.64 / sqrt(64), 3) == 0.205,   # a World Cup's average
+          near(2.69 - 2 * 0.205, 2.28, 1e-9), near(2.69 + 2 * 0.205, 3.10, 1e-9),
+          round((3 - 2.69) / 0.205, 2) == 1.51, near(1 - zt(1.51), 0.0655, 1e-9))
+stopifnot(round(1.51 / sqrt(20), 2) == 0.34,                                  # song lengths
+          near(3.64 - 2 * 0.34, 2.96, 1e-9), near(3.64 + 2 * 0.34, 4.32, 1e-9))
+
+# Spotify songs, the same population as the Week 8 page: duplicates by Spotify URI are dropped.
+# The 20-song sample is sample 1 of the 25 in assets/l18_ci_cover.png (set.seed(10) in
+# assets/make_lecture18_figures.R), the bottom interval in that plot.
+sg <- read.csv(paste0(path, 'Spotify_Youtube.csv'), stringsAsFactors = FALSE)
+sg <- sg[!duplicated(sg$Uri) & !is.na(sg$Duration_ms), ]
+song_min <- sg$Duration_ms / 60000
+set.seed(10); s1 <- sample(length(song_min), 20, replace = TRUE)
+song_name <- sub(' - .*$', '', sub(' \\(feat\\..*\\)$', '', sg$Track))   # drop "(feat. ...)", " - Single Version"
+stopifnot(length(song_min) == 18860, round(mean(song_min), 2) == 3.71, round(sd(song_min), 2) == 1.51,
+          identical(round(song_min[1:5], 2), c(3.71, 3.34, 3.59, 3.90, 5.68)),
+          round(mean(song_min[s1]), 2) == 3.64, near(sum(round(song_min[s1], 2)), 72.73, 1e-9))
+
 # teens losing focus in class by checking their phones (Pew; the published counts)
 teens <- c(Never = 289, Rarely = 216, Sometimes = 178, Often = 60)
 x_t <- sum(teens[c('Sometimes', 'Often')]); n_t <- sum(teens)
@@ -63,8 +86,14 @@ stopifnot(x_t == 238, n_t == 743, ph_t == 0.320, se_t == 0.017,
   use the table's area-to-the-left, complement for an upper tail, subtract for an area
   between. Figures are the slide figures (assets/make_lecture19_figures.R).
 
-  Everything from "Confidence levels and critical values" down is still the 2024 Week 9
-  page (2024 Lecture 18), kept for Wed Oct 21 until it is rewritten.
+  All of Lecture 19 was delivered (to its slide 21), but several examples were skipped in
+  class, so every Lecture 19 slide example is worked in full on this page (Oct 20 2026).
+
+  Everything from "Confidence levels and critical values" down is Lecture 20 (Wed Oct 21),
+  lecture_slides/Week 9/2026/Week9_Lecture20_Slides_10_21_2026.pptx, rewritten from the 2024
+  page (2024 Lecture 18) with new data: CYP2C19*2 carriers (1000 Genomes), spotted-seal
+  whiskers (Ginter et al. 2012, Table 2) and watermelon citrulline (Assefa et al. 2020).
+  Numbers and figures come from assets/make_lecture20_figures.R.
 -->
 
 # Finding normal probabilities
@@ -100,9 +129,15 @@ should be big or small.
 knitr::include_graphics('assets/l19_lower.png')
 ```
 
-* $P(Z < 1.25)$: row 1.2, column .05 of the table gives **`r fmt(zt(1.25), 4)`**.
-* $P(Z < -0.84)$: row $-0.8$, column .04 gives **`r fmt(zt(-0.84), 4)`**. A negative $z$ is below the
-  mean, so the area to its left is less than one half.
+### Example: lower tail
+
+(a) $P(Z < 1.25)$. Shade everything to the left of 1.25. Since 1.25 is above the mean of 0, the shaded area
+is most of the curve, so expect an answer well over one half. This is a lower tail, so the table value is the
+answer. Split $1.25$ into $1.2 + 0.05$: row 1.2, column .05 gives $P(Z < 1.25) =$ **`r fmt(zt(1.25), 4)`**.
+
+(b) $P(Z < -0.84)$. Shade everything to the left of $-0.84$. That is a small slice of the left side, less
+than one half, because a negative $z$ is below the mean. It is again a lower tail: row $-0.8$, column .04
+gives $P(Z < -0.84) =$ **`r fmt(zt(-0.84), 4)`**.
 
 ## The upper tail
 
@@ -110,8 +145,16 @@ knitr::include_graphics('assets/l19_lower.png')
 knitr::include_graphics('assets/l19_upper.png')
 ```
 
-* $P(Z > 1.80) = 1 - P(Z \leq 1.80) = 1 - `r fmt(zt(1.80), 4)` = `r fmt(1 - zt(1.80), 4)`$.
-* $P(Z > -1.30) = 1 - P(Z \leq -1.30) = 1 - `r fmt(zt(-1.30), 4)` = `r fmt(1 - zt(-1.30), 4)`$.
+### Example: upper tail
+
+(a) $P(Z > 1.80)$. Shade everything to the right of 1.80, a thin tail, so expect a small answer. The table
+gives the area to the **left**, so look that up first: row 1.8, column .00 gives
+$P(Z \leq 1.80) = `r fmt(zt(1.80), 4)`$. The whole area is 1, so
+$$P(Z > 1.80) = 1 - P(Z \leq 1.80) = 1 - `r fmt(zt(1.80), 4)` = \mathbf{`r fmt(1 - zt(1.80), 4)`}$$
+
+(b) $P(Z > -1.30)$. Shade everything to the right of $-1.30$, which is most of the curve. Row $-1.3$,
+column .00 gives $P(Z \leq -1.30) = `r fmt(zt(-1.30), 4)`$, so
+$$P(Z > -1.30) = 1 - `r fmt(zt(-1.30), 4)` = \mathbf{`r fmt(1 - zt(-1.30), 4)`}$$
 
 The normal curve is symmetric, so the area to the right of $-1.30$ is the same as the area to the left
 of $+1.30$: the table gives $P(Z \leq 1.30) = `r fmt(zt(1.30), 4)`$, the same answer.
@@ -122,8 +165,16 @@ of $+1.30$: the table gives $P(Z \leq 1.30) = `r fmt(zt(1.30), 4)`$, the same an
 knitr::include_graphics('assets/l19_between.png')
 ```
 
-* $P(-1.30 < Z < 1.80) = `r fmt(zt(1.80), 4)` - `r fmt(zt(-1.30), 4)` = `r fmt(zt(1.80) - zt(-1.30), 4)`$.
-* $P(-1.96 < Z < 1.96) = `r fmt(zt(1.96), 4)` - `r fmt(zt(-1.96), 4)` = `r fmt(zt(1.96) - zt(-1.96), 4)`$.
+### Example: area between
+
+(a) $P(-1.30 < Z < 1.80)$. Shade the area between the two values. Take everything to the left of the
+larger value (row 1.8, column .00: `r fmt(zt(1.80), 4)`), and remove everything to the left of the smaller
+value (row $-1.3$, column .00: `r fmt(zt(-1.30), 4)`):
+$$P(-1.30 < Z < 1.80) = `r fmt(zt(1.80), 4)` - `r fmt(zt(-1.30), 4)` = \mathbf{`r fmt(zt(1.80) - zt(-1.30), 4)`}$$
+
+(b) $P(-1.96 < Z < 1.96)$. Row 1.9, column .06 gives `r fmt(zt(1.96), 4)`, and row $-1.9$, column .06 gives
+`r fmt(zt(-1.96), 4)`:
+$$P(-1.96 < Z < 1.96) = `r fmt(zt(1.96), 4)` - `r fmt(zt(-1.96), 4)` = \mathbf{`r fmt(zt(1.96) - zt(-1.96), 4)`}$$
 
 Remember that second one. Exactly 95% of a normal distribution lies within **1.96** standard deviations
 of the mean; the empirical rule's "2" is that number rounded. It is where the 2 in a 95% confidence
@@ -135,12 +186,16 @@ For $Z \sim N(0, 1)$, sketch and shade each area, then use the table:
 
 (a) $P(Z \leq 2.00)$ &emsp; (b) $P(Z > 0.50)$ &emsp; (c) $P(-1 < Z < 1)$ &emsp; (d) $P(-2 < Z < 2)$
 
-Answers:
+Worked answers:
 
-* (a) `r fmt(zt(2), 4)`
-* (b) $1 - `r fmt(zt(0.5), 4)` = `r fmt(1 - zt(0.5), 4)`$
-* (c) $`r fmt(zt(1), 4)` - `r fmt(zt(-1), 4)` = `r fmt(zt(1) - zt(-1), 4)`$, about 68%
-* (d) $`r fmt(zt(2), 4)` - `r fmt(zt(-2), 4)` = `r fmt(zt(2) - zt(-2), 4)`$, about 95%
+* (a) A **lower tail**, so the table value is the answer: row 2.0, column .00 gives
+  $P(Z \leq 2.00) = `r fmt(zt(2), 4)`$.
+* (b) An **upper tail**: row 0.5, column .00 gives $P(Z \leq 0.50) = `r fmt(zt(0.5), 4)`$, so
+  $P(Z > 0.50) = 1 - `r fmt(zt(0.5), 4)` = `r fmt(1 - zt(0.5), 4)`$.
+* (c) An **area between**: row 1.0 gives `r fmt(zt(1), 4)` and row $-1.0$ gives `r fmt(zt(-1), 4)`, so
+  $P(-1 < Z < 1) = `r fmt(zt(1), 4)` - `r fmt(zt(-1), 4)` = `r fmt(zt(1) - zt(-1), 4)`$, about 68%.
+* (d) An **area between**: row 2.0 gives `r fmt(zt(2), 4)` and row $-2.0$ gives `r fmt(zt(-2), 4)`, so
+  $P(-2 < Z < 2) = `r fmt(zt(2), 4)` - `r fmt(zt(-2), 4)` = `r fmt(zt(2) - zt(-2), 4)`$, about 95%.
 
 (c) and (d) are the empirical rule from Week 6: about 68% of a normal distribution lies within one
 standard deviation of the mean and about 95% within two.
@@ -154,8 +209,9 @@ next, uses exactly this, with the standard error in place of $\sigma$.
 
 # The central limit theorem and an interval for a mean
 
-This section is a summary. The full version, with the simulations, pictures and worked examples, is on
-the [Week 8 notes page, starting at "The central limit theorem"](lecturemenu8.html#the-central-limit-theorem).
+This section works through every example from the Lecture 19 slides. The longer write-up, with the
+simulations behind the theorem, is on the
+[Week 8 notes page, starting at "The central limit theorem"](lecturemenu8.html#the-central-limit-theorem).
 
 ## The theorem
 
@@ -177,31 +233,148 @@ is, the better the approximation. The textbook's guides for "large enough" are:
   has extreme outliers may need more.
 * $np > 5$ and $n(1 - p) > 5$ for $\hat{p}$, so there are enough successes *and* failures.
 
+### Example: the CLT for a proportion
+
+Stephen Curry has made 4,236 of his 4,645 career free throws, so take $p = 0.912$. Let $\hat{p}$ be the
+proportion he makes over a stretch of $n$ free throws. Below are the exact sampling distributions of
+$\hat{p}$ for $n = 10$, 30 and 100. For which $n$ is $n(1 - p) > 5$, and which distributions look like a bell?
+
+```{r, echo=FALSE, out.width='95%', fig.align='center', fig.alt = "Three bar charts of the exact sampling distribution of the proportion of free throws made, with p = 0.912 marked by a red vertical line, each with its own axis scale. For n = 10 the bars are piled against 1 and strongly skewed left. For n = 30 they are still skewed left. For n = 100 they form a nearly symmetric bell centered at 0.912."}
+knitr::include_graphics('assets/l18_phat_curry.png')
+```
+
+Curry almost always makes his free throws, so the check that can fail is the one for **misses**,
+$n(1 - p)$, with $1 - p = 0.088$:
+
+* $n = 10$: $10 \times 0.088 = 0.88$, which fails. The distribution is piled up against 1 and strongly skewed.
+* $n = 30$: $30 \times 0.088 = 2.64$, which still fails. It is still skewed left.
+* $n = 100$: $100 \times 0.088 = 8.8 > 5$, which passes. This is the only one close to a bell.
+
+The check and the pictures agree. The CLT needs enough successes *and* enough failures; with too few
+expected misses, $\hat{p}$ cannot spread out to the right of $p$ and the distribution stays lopsided.
+
 ## Using it
 
 Because $\bar{x}$ is approximately normal, we can find probabilities about it with the $z$-table,
 exactly as in the first part of these notes. The one change is that we standardize with the
 **standard error**, not $\sigma$:
 $$z = \frac{\bar{x} - \mu}{\sigma/\sqrt{n}}$$
-For example, a World Cup's average over $n = 64$ matches has $\mu = 2.69$ goals and standard error
-0.205, so $P(\bar{x} \geq 3) = P(Z \geq 1.51) = 1 - `r fmt(zt(1.51), 4)` = `r fmt(1 - zt(1.51), 4)`$.
 
 In particular, about 95% of the time a statistic lands within **2 standard errors** of its parameter:
 $$P\left(\mu - 2\frac{\sigma}{\sqrt{n}} \;\leq\; \bar{x} \;\leq\; \mu + 2\frac{\sigma}{\sqrt{n}}\right) \approx 0.95$$
+
+### Example: free throws, again
+
+Over a stretch of $n = 100$ free throws, let $\hat{p}$ be the proportion Curry makes, with $p = 0.912$.
+We just checked that $n(1 - p) = 8.8 > 5$ (and $np = 91.2 > 5$), so by the CLT $\hat{p}$ is approximately
+normal.
+
+(a) *What are the mean and standard error of $\hat{p}$?* The mean of $\hat{p}$ is $p$ itself, **0.912**. The
+standard error is
+$$\sqrt{\frac{p(1 - p)}{n}} = \sqrt{\frac{0.912 \times 0.088}{100}} = \sqrt{0.000803} \approx \mathbf{0.028}$$
+
+(b) *About 95% of the time, $\hat{p}$ falls between what two values?* Within 2 standard errors of its mean:
+$$0.912 \pm 2(0.028) = 0.912 \pm 0.056, \quad \text{from } \mathbf{0.856} \text{ to } \mathbf{0.968}$$
+So in about 95% of stretches of 100 free throws, Curry makes between about 86 and 97 of them.
+
+### Example: a tournament's average
+
+The number of goals in a World Cup match is $X \sim \text{Poisson}(\lambda = 2.69)$, the 2022 rate. A
+tournament has 64 matches, so the tournament's average number of goals per match is a sample mean with
+$n = 64$. For a Poisson variable the mean and the variance are both $\lambda$, so
+$$\mu = 2.69, \qquad \sigma = \sqrt{2.69} \approx 1.64$$
+
+(a) *What is the standard error of a tournament's average?*
+$$\frac{\sigma}{\sqrt{n}} = \frac{1.64}{\sqrt{64}} = \frac{1.64}{8} = \mathbf{0.205}$$
+
+(b) *About 95% of tournaments average between what two values?* $n = 64 \geq 30$, so the CLT says
+$\bar{x}$ is approximately normal, and about 95% of tournaments land within 2 standard errors of $\mu$:
+$$2.69 \pm 2(0.205) = 2.69 \pm 0.41, \quad \text{from } \mathbf{2.28} \text{ to } \mathbf{3.10} \text{ goals per match}$$
+
+(c) *How likely is a tournament that averages 3 or more goals per match?* Sketch the normal curve for
+$\bar{x}$ centered at 2.69 and shade the area to the right of 3, a small upper tail. Standardize with the
+standard error:
+$$z = \frac{3 - 2.69}{0.205} = \frac{0.31}{0.205} \approx 1.51$$
+Row 1.5, column .01 of the table gives $P(Z \leq 1.51) = `r fmt(zt(1.51), 4)`$, so
+$$P(\bar{x} \geq 3) = P(Z \geq 1.51) = 1 - `r fmt(zt(1.51), 4)` = \mathbf{`r fmt(1 - zt(1.51), 4)`}$$
+About a 7% chance. A single match can easily have 0 goals or 6; a tournament's average is far more
+predictable.
 
 ## A 95% confidence interval for a mean
 
 If $\bar{x}$ is within 2 standard errors of $\mu$, then $\mu$ is within 2 standard errors of
 $\bar{x}$. Turning the statement around gives the **95% confidence interval** for $\mu$:
 $$\bar{x} \;\pm\; 2\frac{\sigma}{\sqrt{n}}$$
-which has the form **point estimate $\pm$ margin of error**. For example, a sample of $n = 20$ songs with
-$\bar{x} = 3.64$ minutes and $\sigma = 1.51$ gives $3.64 \pm 2(0.34)$, from **2.96 to 4.32 minutes**:
+which has the form **point estimate $\pm$ margin of error**.
+
+### The data: Spotify songs
+
+These are the same songs as on the [Week 8 page](lecturemenu8.html). In February 2023, Spotify and
+YouTube statistics were collected for the top 10 Spotify songs of each of 2,079 popular artists (the
+"Spotify and Youtube" dataset on Kaggle). A song credited to several artists appears once for each of
+them, so we count each song once, which leaves **18,860 different songs**. One row is one song, and our
+variable is
+
+* $X$ = the length of a song, in minutes.
+
+The first five rows:
+
+```{r, echo=FALSE}
+tab(rbind(data.frame(Song = song_name[1:5], Artist = sg$Artist[1:5], Minutes = fmt(song_min[1:5], 2)),
+          data.frame(Song = '…', Artist = '…', Minutes = '…')))
+```
+
+Usually we see only a sample, but here we have every song, so we can **treat the 18,860 songs as the
+population** and compute its parameters directly:
+$$\mu = `r fmt(mean(song_min), 2)` \text{ minutes}, \qquad \sigma = `r fmt(sd(song_min), 2)` \text{ minutes}.$$
+Song length is skewed right: most songs run 2.5 to 5 minutes, but `r sum(song_min > 10)` are longer than
+10 minutes (the Week 8 page has the histogram). Knowing $\mu$ lets us check whether an interval
+captured it, which is never possible with real data.
+
+### Example: how often does an interval capture $\mu$?
+
+We can check the method here, because we know $\mu$. Below are 25 random samples of $n = 20$ songs. For
+each one the standard error is $\sigma/\sqrt{n} = 1.51/\sqrt{20} \approx 0.34$ minutes, and each line is
+$\bar{x} \pm 2(0.34)$, the sample mean plus or minus the margin of error.
+
+```{r, echo=FALSE, out.width='85%', fig.align='center', fig.alt = "25 horizontal confidence intervals for mean song length, one per row, each a dot at the sample mean with a line 0.68 minutes either side, plus a vertical line at mu = 3.71 minutes. 24 of the intervals cross the vertical line; one, drawn in red and labeled misses, lies entirely to the right of it."}
+knitr::include_graphics('assets/l18_ci_cover.png')
+```
+
+*How many of the 25 intervals capture $\mu = 3.71$?* Count the lines that cross the vertical line at
+3.71: **24 of the 25** do, and one (in red) misses. That is 96%, close to the 95% we expect: about 95% of
+all samples put $\bar{x}$ within 2 standard errors of $\mu$, and exactly those samples give an interval
+that reaches $\mu$. Each new set of 25 samples would give a slightly different count, but about 95% in
+the long run.
+
+### Example: an interval for mean song length
+
+In practice we see only one sample. Take the bottom interval in the plot, which came from these
+$n = 20$ songs, drawn at random from the 18,860:
+
+```{r, echo=FALSE}
+s1_tab <- data.frame(Song = song_name[s1], Artist = sg$Artist[s1], Minutes = fmt(song_min[s1], 2))
+tab(cbind(s1_tab[1:10, ], s1_tab[11:20, ]), col.names = rep(c('Song', 'Artist', 'Minutes'), 2))
+```
+
+Their mean length is
+$$\bar{x} = \frac{5.58 + 2.44 + \cdots + 4.49}{20} = \frac{`r fmt(sum(round(song_min[s1], 2)), 2)`}{20}
+\approx \mathbf{`r fmt(mean(song_min[s1]), 2)`} \text{ minutes},$$
+and $\sigma = 1.51$ minutes is known from the population.
+
+(a) *What is the 95% confidence interval for $\mu$?* The standard error is
+$$\frac{\sigma}{\sqrt{n}} = \frac{1.51}{\sqrt{20}} = \frac{1.51}{4.47} \approx 0.34 \text{ minutes},$$
+so the margin of error is $2(0.34) = 0.68$ and the interval is
+$$3.64 \pm 0.68, \quad \text{from } \mathbf{2.96} \text{ to } \mathbf{4.32} \text{ minutes}$$
 "We estimate with 95% confidence that the mean length of all 18,860 songs is between 2.96 and 4.32
 minutes."
 
-The 95% describes the **method**, not this one interval. About 95% of samples give an interval that
-captures $\mu$. Once an interval is computed, it either contains $\mu$ or it does not. It is **not**
-correct to say there is a 95% probability that $\mu$ is between 2.96 and 4.32.
+(b) *Does it capture $\mu = 3.71$?* **Yes**: $2.96 \leq 3.71 \leq 4.32$.
+
+(c) *If we did not know $\mu$, what would "95% confident" mean?* The 95% describes the **method**, not
+this one interval. About 95% of samples give an interval that captures $\mu$. Once an interval is
+computed, it either contains $\mu$ or it does not. It is **not** correct to say there is a 95%
+probability that $\mu$ is between 2.96 and 4.32.
 
 # A confidence interval for a proportion
 
@@ -248,153 +421,389 @@ the method: about 95% of samples of 743 teens would give an interval that captur
 
 # Confidence levels and critical values
 
-Above we introduced the **confidence interval** which is used to estimate a parameter with an interval of values. We can choose how wide to make the confidence interval by selecting the **confidence level** - which is the probability that the interval will contain the true parameter value **<u>before</u>** the data are gathered. The confidence level is controlled via the standard score $z$. The standard score gives the number of standard errors to add and subtract from our estimate. Therefore, we must look up the appropriate standard score $z$ from the standard normal table.
+```{r lecture20-setup, include=FALSE}
+# every number in the Lecture 20 sections is checked here; the slides' numbers are the same
+# ones asserted in assets/make_lecture20_figures.R
+tt <- function(C, df) round(qt(1 - (1 - C) / 2, df), 3)     # a t-table lookup
+stopifnot(zt(1.64) == 0.9495, zt(1.65) == 0.9505, zt(2.57) == 0.9949, zt(2.58) == 0.9951,
+          zt(1.28) == 0.8997, zt(1.15) == 0.8749, zt(1.75) == 0.9599, zt(2.17) == 0.9850,
+          tt(0.95, 9) == 2.262, tt(0.90, 24) == 1.711, tt(0.99, 9) == 3.250, tt(0.95, 4) == 2.776,
+          tt(0.95, 8) == 2.306, tt(0.90, 11) == 1.796, tt(0.99, 11) == 3.106)
 
-We saw that for a $95\%$ confidence interval, we must add and subtract approximately $z=2$ standard errors from our estimate $\bar{x}$ or $\hat{p}$. $z$ is sometimes referred to as the **critical value**. The critical value denotes the upper and lower bounds of the confidence interval. In general, if we wish to compute the $100(1-\alpha)\%$ confidence interval for the statistics $\bar{x}$ or $\hat{p}$, then we must add and subtract $z_{1-\alpha/2}$ standard errors. The quantity $\alpha/2$ denotes the area that is divided among the two tails of the standard normal distribution. For example, for a $95\%$ confidence interval $\alpha = 0.05$ and $\alpha/2 = 0.025$. 
+# CYP2C19*2 carriers among the 504 East Asian participants of the 1000 Genomes Project
+cyp <- read.csv('assets/cyp2c19_rs4244285_eas_1000g.csv')
+x_c <- sum(cyp$carrier); n_c <- nrow(cyp)
+ph_c <- round(x_c / n_c, 3); se_c <- round(sqrt(ph_c * (1 - ph_c) / n_c), 3)
+zc <- c(1.645, 1.960, 2.576)
+me_c <- round(zc * se_c, 3)
+stopifnot(x_c == 277, n_c == 504, ph_c == 0.550, se_c == 0.022,
+          all(near(me_c, c(0.036, 0.043, 0.057), 1e-9)))
 
-For example, for a $90\%$ confidence $\alpha = 0.1$, and the corresponding critical value is $z_{1-0.1/2} = z_{0.95}$ which is the 95th percentile from the standard normal distribution. The table below gives several confidence levels, the corresponding values of $\alpha$ and critical values. 
+# spotted seal whiskers (Ginter et al. 2012, Table 2): n = 9 seals, one whisker each
+stopifnot(round(7.9 / 3, 2) == 2.63, round(2.306 * 2.63, 2) == 6.06)
 
-```{r, echo=F, message=F, warning=F}
-alpha = c(0.2, 0.15, 0.1, 0.05, 0.01)
-df = cbind.data.frame(`Confidence Level` = paste0('$', 100*(1-alpha), '\\%$'),
-                      `$\\alpha$` = alpha,
-                      `critical value: $z_{1-\\alpha/2}$` = qnorm(1-alpha/2))
-                      
-
-kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
-
+# watermelon citrulline: a random sample of 12 of the 100 gene-bank varieties (Assefa et al. 2020)
+wm <- read.csv('assets/watermelon_citrulline_assefa2020.csv')
+gb <- wm[wm$source == 'gene bank', ]
+set.seed(2026)
+wsamp <- gb[sort(sample(nrow(gb), 12)), ]
+xb_m <- round(mean(wsamp$citrulline), 2); s_m <- round(sd(wsamp$citrulline), 2)
+dev_m <- wsamp$citrulline - mean(wsamp$citrulline)
+stopifnot(nrow(gb) == 100, xb_m == 27.07, s_m == 5.27, round(s_m / sqrt(12), 2) == 1.52,
+          near(sum(wsamp$citrulline), 324.82, 1e-9), round(sum(dev_m^2), 2) == 305.14)
 ```
 
-* Try it out: give the confidence level and critical value for the $100(1-\alpha)\%$ confidence intervals with $\alpha = 0.25$, $\alpha = 0.08$, and $\alpha = 0.03$.
+Every interval so far has been **estimate $\pm$ 2 standard errors**, which captures the parameter about
+95% of the time. Suppose a cardiologist wants to be 99% sure instead. Should the interval get wider or
+narrower? Wider: to catch the parameter more often, we need a bigger net. The thing that changes is the
+2, which becomes a larger number.
 
-## An alternative confidence interval for a population mean.
+* **Confidence level** $C$. The proportion of all possible samples whose interval captures the parameter,
+  such as 90%, 95% or 99%. It describes the method **before** the data are gathered.
+* $\alpha$. The proportion of samples whose interval misses: $\alpha = 1 - C$. It is split evenly between
+  the two tails of the normal curve, $\alpha/2$ in each.
+* **Critical value** $z_{1-\alpha/2}$. The $z$ with area $1 - \alpha/2$ to its left. A
+  $100(1-\alpha)\%$ confidence interval is
+  $$\text{estimate} \;\pm\; z_{1-\alpha/2} \times SE$$
+  For a mean this is $\bar{x} \pm z_{1-\alpha/2}\,\sigma/\sqrt{n}$; for a proportion it is
+  $\hat{p} \pm z_{1-\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}$.
 
-Recall the confidence interval that we introduced for estimating the population mean:
-
-\[ \bar{x} \pm z\frac{\sigma}{\sqrt{n}} \]
-
-The confidence interval above is based on the assumption that the population standard deviation $\sigma$ is known. When $\sigma$ is known the sampling distribution of the $\bar{x}$ is approximately $N(\mu, \sigma/\sqrt{n})$. However, we rarely know the value of $\sigma$ so we must approximate its value with the sample standard deviation $s$ to get 
-
-\[ \bar{x} \pm z\frac{s}{\sqrt{n}} \]
-
-Unfortunately, the confidence level of the confidence interval above will tend to be less than specified. As a result, more confidence intervals will fail to cover the true parameter value than expected. 
-
-* Consider the following example: A social scientist is conducting a study to investigate the average time spent daily on social media by college students. Each week the scientist surveys five college students and asks them to report their time spent on social media. For each sample, the scientist computes the $95\%$ confidence interval for the mean time the students spent on social media. They repeat this process 100 times. Suppose the population mean time spent on social media is $\mu = 120$ minutes with a standard deviation of $\sigma = 10$ minutes. The plot below shows 100 confidence intervals computed using $\bar{x} \pm z\frac{s}{\sqrt{n}}$ where each CI is computed from a sample of $5$ observations from $N(120, 10)$:
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10, fig.cap="**Figure**: Each point represents the sample mean from a hypothetical sample of 5 college students. The whiskers extending from each point give the coverage of the confidence interval computed for each sample. The black dotted line gives the value of hypothetical population mean time spent on social media. The CI's highlighted in red represent those that fail to capture the population mean", fig.alt = "100 confidence intervals, each from a sample of 5 students, drawn as vertical error bars by sample number on the x-axis, with x-bar in minutes on the y-axis and a dashed horizontal line at mu equals 120. A legend marks whether each interval covers the parameter: 12 of the 100 intervals miss the dashed line."}
-
-set.seed(123)
-mu = 120
-sigma = 10
-n = 5
-repeats = 100
-samples = lapply(c(1:repeats), function(x) rnorm(n, mean = mu, sd = sigma))
-
-means.vec = unlist(lapply(samples, function(x) mean(x)))
-se.vec = unlist(lapply(samples, function(x) sd(x)/sqrt(n)))
-
-xpos = 1:100
-ymin = means.vec-2*se.vec
-ymax = means.vec+2*se.vec
-
-ix = which(mu < ymin | mu > ymax)
-
-ind = rep('True', 100)
-ind[ix] = 'False'
-
-df = cbind.data.frame(`$\\bar{x}$` = means.vec,
-                      `$SE$` = se.vec,
-                      xpos = xpos,
-                      `Covers Parameter` = ind)
-
-ggplot(data = df, aes(x = xpos, y = `$\\bar{x}$`, color = `Covers Parameter`))+
-  geom_hline(yintercept = mu, linetype = 'dashed', linewidth = 2, color = 'black')+
-  geom_point(size = 3)+
-  geom_errorbar(aes(ymin = ymin, ymax = ymax), width = 0.01, linewidth = 1)+
-  geom_text(aes(x = -0.1, y = mu+0.1), label = TeX('$\\mu$'), size = 6, color = 'black')+
-  theme_classic2()+
-  scale_x_continuous(breaks = seq(1, 100, 5))+
-  xlab('Sample number')+
-  ylab(TeX('$\\bar{x}$'))+
-  theme(legend.position = 'top',
-        legend.text = element_text(size = 12),
-        axis.title = element_text(size = 16),
-        axis.text = element_text(size = 12))
-
-
+```{r, echo=FALSE, out.width='95%', fig.align='center', fig.alt = "Three standard normal curves side by side for 90%, 95% and 99% confidence. In each the middle area is shaded and the cut-offs are marked: plus and minus 1.645 for 90% with 0.05 in each tail, plus and minus 1.960 for 95% with 0.025 in each tail, and plus and minus 2.576 for 99% with 0.005 in each tail. The higher the confidence, the farther out the cut-offs."}
+knitr::include_graphics('assets/l20_crit_values.png')
 ```
 
-Based on the plot and example above, the actual proportion of confidence intervals that fail to capture the population mean is $12\%$, which is much higher than the expected frequency of only $5\%$. This occurs because when we substitute $s/\sqrt{n}$ for $\sigma/\sqrt{n}$ the standardized statistic $\frac{\bar{x}-\mu}{s/\sqrt{n}}$ no longer follows a standard normal distribution. Instead, it follows a distribution called the **$t$-distribution**.
+Why look up $1 - \alpha/2$? The table gives the area to the **left** of $z$. To the left of the upper
+cut-off lies the middle $C$ plus the lower tail $\alpha/2$, which is $1 - \alpha/2$ in all.
 
-Like the normal distribution, the $t$ distribution is a bell curve but it has "heavier tails" - that is to say, it has more probability density in the tails of the distribution. 
+## Example: critical values
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE, results = 'hide', fig.height=6, fig.width=10, fig.alt = "Line plot comparing density curves from x equals -3 to 3: the standard normal curve and t distributions with 1, 2, 5 and 10 degrees of freedom. All are bell-shaped and centered at 0; the t curves have lower peaks and heavier tails, and with more degrees of freedom they move closer to the standard normal."}
+Find the critical value for 80%, 90% and 99% confidence. For each one, find $\alpha$, then look for the
+area $1 - \alpha/2$ **inside** the $z$-table and read off $z$ from the row and column:
 
-x = seq(-3, 3, length=1000)
-hx = dnorm(x)
+* **80%.** $\alpha = 0.20$, $\alpha/2 = 0.10$, so look for 0.90. The closest table value is
+  `r fmt(zt(1.28), 4)` in row 1.2, column .08: $z_{0.90} = \mathbf{1.28}$.
+* **90%.** $\alpha = 0.10$, $\alpha/2 = 0.05$, so look for 0.95. It sits exactly halfway between
+  `r fmt(zt(1.64), 4)` ($z = 1.64$) and `r fmt(zt(1.65), 4)` ($z = 1.65$), so $z_{0.95} = \mathbf{1.645}$.
+* **95%.** $\alpha/2 = 0.025$, so look for 0.975: row 1.9, column .06 gives $z_{0.975} = \mathbf{1.96}$.
+* **99%.** $\alpha = 0.01$, $\alpha/2 = 0.005$, so look for 0.995. It sits between `r fmt(zt(2.57), 4)`
+  ($z = 2.57$) and `r fmt(zt(2.58), 4)` ($z = 2.58$); the more precise value is $z_{0.995} = \mathbf{2.576}$.
 
-degf = c(1, 2, 5, 10)
-colors = c("red", "blue", "darkgreen", "darkgoldenrod1", "black")
-labels = c("df = 1", "df = 2", "df = 5", "df = 10", "standard normal")
-plot(x, hx, type="l", lty=1, xlab="x value", lwd = 3,
-     ylab="Density", main="Comparison of t Distributions")
-
-#The relevant modification
-mapply(function(DoF, W, C) lines(x, dt(x, DoF), lwd=W, col=C), DoF = degf, W = c(3,3,3,3), C = colors[-5])
-
-legend("topleft", inset=.05, title="t Distributions",
-       labels, lwd=2, lty=c(1, 1, 1, 1, 1), col=colors)
+```{r, echo=FALSE}
+tab(data.frame(`Confidence level` = c('80%', '90%', '95%', '99%'),
+               `$\\alpha$` = c(0.20, 0.10, 0.05, 0.01),
+               `Area to the left, $1 - \\alpha/2$` = c('0.90', '0.95', '0.975', '0.995'),
+               `Critical value $z_{1-\\alpha/2}$` = c('1.28', '1.645', '1.960', '2.576'),
+               check.names = FALSE))
 ```
 
-The amount of probability density in the tails of a $t$ distribution is controlled by the **degrees of freedom** of the distribution. The confidence interval for $\mu$ that uses $s/\sqrt{n}$ instead of $\sigma/\sqrt{n}$ is given by
+* **Try it out.** Give the confidence level and critical value for $\alpha = 0.25$, $\alpha = 0.08$ and
+  $\alpha = 0.03$.
 
-\[ \bar{x} \pm t\frac{s}{\sqrt{n}} \]
+    * $\alpha = 0.25$: 75% confidence; look up $1 - 0.125 = 0.875$, which is closest to
+      `r fmt(zt(1.15), 4)` at $z = 1.15$.
+    * $\alpha = 0.08$: 92% confidence; look up $1 - 0.04 = 0.96$, which is closest to
+      `r fmt(zt(1.75), 4)` at $z = 1.75$.
+    * $\alpha = 0.03$: 97% confidence; look up $1 - 0.015 = 0.985$, which is `r fmt(zt(2.17), 4)` at
+      $z = 2.17$.
 
-The quantity $t$ is called the $t$-score and is the $1-\alpha/2$ percentile of $t$-distribution with $n-1$ degrees of freedom denoted $t(n-1)$. Like the standard score $z$, we must look up the $t$-score corresponding to the desired confidence level from a $t$-distribution table:
+## An interval for a proportion at other confidence levels
 
+### The data: a gene and a drug
 
-```{r, echo=F, message=F, warning=F}
-DF = c(1:30, 40, 50, 100)
-probs = rbind.data.frame(cbind.data.frame(c('$DF$', DF), 
-                         c('',round(qt(1-0.5/2, DF), 3)), c('',round(qt(1-0.4/2, DF),3)),
-                         c('',round(qt(1-0.3/2, DF),3)), c('',round(qt(1-0.25/2, DF),3)), 
-                         c('',round(qt(1-0.2/2, DF), 3)), c('',round(qt(1-0.15/2, DF),3)), 
-                         c('',round(qt(1-0.1/2, DF),3)), c('',round(qt(1-0.05/2, DF),3)),
-                         c('',round(qt(1-0.01/2, DF),3)), c('',round(qt(1 - 0.005/2, DF),3)),
-                         c('',round(qt(1 - 0.001/2, DF),3))),
-                         c('Z-score', round(qnorm(1-c(0.5, 0.4, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05, 0.01, 0.005, 0.001)/2),3)),
-                         c('Confidence Level:', 
-                           paste0('$',100*(1-c(0.5, 0.4, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05, 0.01, 0.005, 0.001)), '\\%$')))
-                        
+**Clopidogrel** (brand name Plavix) is a blood thinner given to people after a heart attack or when a
+stent is put in a heart artery. It is a *prodrug*: it does nothing until the liver enzyme **CYP2C19**
+switches it on. The gene for that enzyme comes in several versions. People who carry the
+**CYP2C19\*2** variant (a single DNA letter change, G to A, at the site rs4244285) make a version of the
+enzyme that does not work, so they switch on less of the drug. For heart patients who carry one or two
+copies, the current clinical guideline (CPIC, 2022) recommends a different drug.
 
-df = rbind.data.frame(c('Two tail', 0.5, 0.4, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05, 0.01, 0.005, 0.001), probs)
+The **1000 Genomes Project** sequenced the genomes of 2,504 people from 26 populations around the world to
+catalog human genetic variation. We use its 504 East Asian participants (Han Chinese in Beijing, Southern
+Han Chinese, Japanese in Tokyo, Kinh in Ho Chi Minh City, and Chinese Dai in Xishuangbanna). The first five:
 
-kable(df, format = 'html', digits = 2, col.names = c('Upper tail', 0.25, 0.2, 0.15, 0.125, 0.1, 0.075, 0.05, 0.025, 0.005, 0.0025, 0.0005),
-      row.names = F, booktabs = F, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
-
+```{r, echo=FALSE}
+pops <- c(CHB = 'Han Chinese, Beijing', CHS = 'Southern Han Chinese', JPT = 'Japanese, Tokyo',
+          KHV = 'Kinh, Ho Chi Minh City', CDX = 'Chinese Dai, Xishuangbanna')
+first5 <- head(cyp, 5)
+tab(rbind(data.frame(Person = first5$sample, Population = pops[first5$pop], Genotype = first5$genotype,
+                     `Copies of *2` = as.character(first5$copies), X = as.character(first5$carrier),
+                     check.names = FALSE),
+          data.frame(Person = '&hellip;', Population = '&hellip;', Genotype = '&hellip;',
+                     `Copies of *2` = '&hellip;', X = '&hellip;', check.names = FALSE)))
 ```
 
-<!-- TODO: the corner header cell is currently labeled "Upper tail" (col.names in the chunk above); since the left-most column actually holds the degrees of freedom, consider relabeling it to "df". Left as-is because "Upper tail" also labels the upper-tail probabilities across the header row. -->
-The table for the $t$ distribution is organized a little bit differently than the one we've seen previously for the standard normal distribution. The left-most column gives the degrees of freedom, columns give the different upper tail and two tail probabilities, and the values in the middle of the table are the $t$ scores that correspond to those probabilities.
+Each person has two copies of the gene, one from each parent, so the genotype is two letters: G/G has no
+copies of \*2, G/A has one and A/A has two.
 
-Use the table above to verify that the following $t$-scores corresponding to each confidence level and sample size are correct.
+* $X$ = 1 if a person carries at least one copy of \*2, and 0 otherwise.
 
-```{r, echo=F, message=F, warning=F}
-alpha = c(0.1, 0.15, 0.05, 0.01, 0.2)
-n = c(3, 5, 10, 14, 22)
-df = cbind.data.frame(`Confidence Level` = paste0('$', 100*(1-alpha), '\\%$'),
-                      `Sample size` = paste0('$n = ', n, '$'),
-                      `$\\alpha$` = alpha,
-                      `critical value: $t_{1-\\alpha/2}$` = round(qt(1-alpha/2, df = n - 1), 3))
-                      
+### Example: carriers of CYP2C19\*2
 
-kable(df, format = 'html', digits = 2, row.names = F, booktabs = T, escape = F)%>%
-  kable_classic(full_width = F, html_font = "Cambria")%>%kable_styling(bootstrap_options = 'striped')
+Of the $n = `r n_c`$ people, `r sum(cyp$copies == 1)` carry one copy of \*2 and `r sum(cyp$copies == 2)`
+carry two, so `r x_c` are carriers. Estimate $p$, the proportion of **all** East Asian people who carry the
+variant, with 90%, 95% and 99% confidence.
 
+(a) *Point estimate, check and standard error.*
+
+* $\hat{p} = `r x_c` / `r n_c` \approx `r fmt(ph_c, 3)`$.
+* **Check.** There are `r x_c` successes and `r n_c - x_c` failures, both far more than 5.
+* **Standard error.** $\sqrt{`r fmt(ph_c, 3)` \times `r fmt(1 - ph_c, 3)` / `r n_c`} = \sqrt{0.000491} \approx `r fmt(se_c, 3)`$.
+
+(b) *The three intervals.* Only the critical value changes:
+
+```{r, echo=FALSE}
+tab(data.frame(`Confidence level` = c('90%', '95%', '99%'),
+               `Critical value` = fmt(zc, 3),
+               `Margin of error` = paste0(fmt(zc, 3), '(', fmt(se_c, 3), ') = ', fmt(me_c, 3)),
+               Interval = paste0(fmt(ph_c, 3), ' &plusmn; ', fmt(me_c, 3), ': <b>', fmt(ph_c - me_c, 3),
+                                 ' to ', fmt(ph_c + me_c, 3), '</b>'),
+               check.names = FALSE))
 ```
 
+For example, the 90% interval is reported as: **"We estimate with 90% confidence that between 51.4% and
+58.6% of East Asian people carry at least one copy of CYP2C19\*2."**
 
-One nice property of the $t$-distribution is that it converges to the standard normal distribution as $n$ goes to infinity. Stated another way, a $t$-distribution with $\infty$ degrees of freedom is exactly the standard normal distribution. This means that with large enough sample size, both the confidence interval based on the standard normal distribution and the one based on the $t$ distribution should yield nearly identical results. In fact, for $n \geq 30$ the difference between the standard normal distribution and $t$-distribution is nearly indistinguishable.
+(c) *Can we say that more than half of East Asian people carry \*2?* At 90% and 95% confidence, yes: every
+value in those intervals is above 0.5. At 99% confidence, no: the interval reaches down to 0.493, so 0.5 is
+still a plausible value. Asking for more confidence costs precision.
 
+## Width, confidence level and sample size
+
+The margin of error is $z_{1-\alpha/2} \times SE$, so two things control the width of an interval: the
+confidence level, through $z$, and the sample size, through the standard error. The plot shows the carrier
+interval at four confidence levels (left), and the 95% interval as it would be with 4 times fewer or 4 times
+more people at the same $\hat{p}$ (right).
+
+```{r, echo=FALSE, out.width='95%', fig.align='center', fig.alt = "Two panels of horizontal intervals around a dashed line at 0.55, the proportion of carriers. Left, confidence level with n = 504: the intervals at 80%, 90%, 95% and 99% get steadily wider from top to bottom, the 99% one running from about 0.49 to 0.61. Right, sample size at 95%: the interval for n = 126 runs from about 0.46 to 0.64, the one for n = 504 is half as wide, and the one for n = 2016 is half as wide again."}
+knitr::include_graphics('assets/l20_width.png')
+```
+
+* **Higher confidence, wider interval.** A bigger $C$ means a bigger critical value.
+* **Larger sample, narrower interval.** The standard error has $\sqrt{n}$ on the bottom, so 4 times the
+  sample size gives **half** the width.
+
+So there is a trade-off: for a fixed $n$, more confidence costs precision. The way to get both is more data.
+
+# Intervals for a mean when $\sigma$ is unknown
+
+Every interval for $\mu$ so far used $\sigma$, the **population** standard deviation:
+$$\bar{x} \pm z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}$$
+But if we do not know $\mu$, we almost never know $\sigma$ either. The natural fix is to put the sample
+standard deviation $s$ in its place:
+$$\bar{x} \pm z_{1-\alpha/2}\frac{s}{\sqrt{n}}$$
+Unfortunately, this interval captures $\mu$ **less often** than the confidence level promises, especially
+when $n$ is small. The reason is that $s$ itself changes from sample to sample. When a sample happens to
+have a small $s$, its interval is too narrow, and those narrow intervals miss $\mu$ more often.
+
+## Does $s$ in place of $\sigma$ work?
+
+Suppose seal whisker lengths are normal with $\mu = 91$ mm and $\sigma = 8$ mm (made-up values, close to the
+spotted seals below). We simulate 100 samples of only $n = 5$ whiskers each, and from each one build the
+interval $\bar{x} \pm 1.96\,s/\sqrt{5}$. A 95% method should miss about 5 times. The top panel shows the
+result; misses are in red.
+
+```{r, echo=FALSE, out.width='90%', fig.align='center', fig.alt = "Two panels of 100 vertical confidence intervals from the same 100 simulated samples of 5 whiskers, with a horizontal line at mu = 91 mm and misses drawn in red. Top panel, x-bar plus or minus 1.96 s over root 5: 12 of 100 intervals miss. Bottom panel, x-bar plus or minus 2.776 s over root 5: the intervals are longer and 5 of 100 miss."}
+knitr::include_graphics('assets/l20_t_coverage.png')
+```
+
+With 1.96, **12 of the 100** intervals miss $\mu$, more than twice the 5 we expect. (In the long run this
+method captures $\mu$ only about 88% of the time when $n = 5$.) The bottom panel uses the same 100 samples
+with a larger multiplier, 2.776, and **5 of the 100** miss, just as a 95% method should. That larger
+multiplier comes from the $t$ distribution.
+
+## The $t$ distribution
+
+When we standardize $\bar{x}$ with $s$ instead of $\sigma$, the result
+$$t = \frac{\bar{x} - \mu}{s/\sqrt{n}}$$
+does not follow the standard normal distribution. It follows a **$t$ distribution**.
+
+* **$t$ distribution.** A bell-shaped curve centered at 0, like $N(0, 1)$, but with **heavier tails**: more
+  of its area is far from 0. It accounts for the extra uncertainty from estimating $\sigma$ with $s$.
+* **Degrees of freedom** ($df$). The $t$ distribution is a family of curves, one for each value of
+  $df = n - 1$. The more degrees of freedom, the closer $t$ is to $N(0, 1)$.
+* **$t$ critical value** $t_{n-1,\,1-\alpha/2}$. The value with area $1 - \alpha/2$ to its left under the
+  $t$ distribution with $n - 1$ degrees of freedom, read from the $t$-table.
+
+```{r, echo=FALSE, out.width='80%', fig.align='center', fig.alt = "Density curves on the same axes from -4 to 4: t with 2, 5 and 30 degrees of freedom, and the standard normal N(0, 1). All are bell-shaped and centered at 0. The t curve with 2 degrees of freedom has the lowest peak and the heaviest tails; with 5 degrees of freedom it is closer to the normal; with 30 degrees of freedom it almost lies on top of the standard normal curve."}
+knitr::include_graphics('assets/l20_t_vs_z.png')
+```
+
+As $n$ grows, $s$ becomes a more and more reliable estimate of $\sigma$, and the $t$ distribution approaches
+the standard normal. By about $df = 30$ the two are nearly indistinguishable, and a $t$ distribution with
+infinitely many degrees of freedom **is** the standard normal.
+
+The interval for $\mu$ when $\sigma$ is unknown is
+$$\bar{x} \;\pm\; t_{n-1,\,1-\alpha/2}\,\frac{s}{\sqrt{n}}$$
+Strictly, it assumes the population is normal, but it works well for most populations as long as they are
+not very skewed or full of outliers, and for any population once $n \geq 30$.
+
+## Reading the $t$-table
+
+The [course $t$-table](misc/t_table.html) is organized differently from the $z$-table. The **rows** are the
+degrees of freedom, the **columns** are confidence levels (with the matching upper-tail and two-tail areas
+in the header), and the values **inside** the table are the critical values. Here is part of it:
+
+```{r, echo=FALSE}
+dfs <- c(4, 8, 9, 11, 24, 29, 100)
+lv <- c(0.80, 0.90, 0.95, 0.99)
+ex <- as.data.frame(sapply(lv, function(C) fmt(tt(C, dfs), 3)))
+names(ex) <- paste0(100 * lv, '%')
+zrow <- setNames(as.data.frame(t(fmt(c(qnorm(0.90), 1.645, 1.960, 2.576), 3))), names(ex))
+tab(rbind(cbind(df = as.character(dfs), ex), cbind(df = 'z', zrow)))
+```
+
+The last row is the standard normal: the critical values $t$ is closing in on as $df$ grows.
+
+### Example: reading the $t$-table
+
+(a) *95% confidence with $n = 10$.* $df = 10 - 1 = 9$; row 9, column 95% gives $t = \mathbf{2.262}$.
+
+(b) *90% confidence with $n = 25$.* $df = 24$; row 24, column 90% gives $t = \mathbf{1.711}$.
+
+(c) *99% confidence with $n = 10$.* $df = 9$; row 9, column 99% gives $t = \mathbf{3.250}$.
+
+Compare these with $z$ for the same confidence levels, 1.960, 1.645 and 2.576: the $t$ value is **always
+larger**, so the interval is wider. That extra width is what restores the promised confidence level.
+
+* **Try it out.** Use the [full $t$-table](misc/t_table.html) to check these critical values.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+alpha <- c(0.1, 0.15, 0.05, 0.01, 0.2)
+n <- c(3, 5, 10, 14, 22)
+tab(data.frame(`Confidence level` = paste0(100 * (1 - alpha), '%'),
+               `Sample size` = paste0('$n = ', n, '$'),
+               `$df = n - 1$` = n - 1,
+               `$\\alpha$` = alpha,
+               `Critical value $t_{n-1,\\,1-\\alpha/2}$` = fmt(qt(1 - alpha / 2, df = n - 1), 3),
+               check.names = FALSE))
+```
+
+## Which interval?
+
+| Estimating | Interval | When it works |
+|---|---|---|
+| a proportion $p$ | $\hat{p} \pm z_{1-\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}$ | $n\hat{p} > 5$ and $n(1-\hat{p}) > 5$ |
+| a mean $\mu$, $\sigma$ known | $\bar{x} \pm z_{1-\alpha/2}\,\sigma/\sqrt{n}$ | the population is normal, or $n \geq 30$ |
+| a mean $\mu$, $\sigma$ unknown | $\bar{x} \pm t_{n-1,\,1-\alpha/2}\,s/\sqrt{n}$ | the population is roughly normal, or $n \geq 30$ |
+
+The interval for a proportion always uses $z$: there is no separate $\sigma$ to estimate, because the
+standard error comes from $\hat{p}$ itself.
+
+## Example: spotted seal whiskers
+
+### The data: seal whiskers
+
+Seals and sea lions have the largest whiskers of any mammals, and they use them to track the water
+movements left by swimming fish. Ginter and colleagues (2012) measured the longest undamaged whisker of
+92 seals and sea lions from 11 species, to study how whisker shape evolved. Only each species' sample
+size, mean and standard deviation were published:
+
+```{r, echo=FALSE}
+tab(data.frame(Species = c('Harp seal', 'Harbor seal', 'Ringed seal', 'Spotted seal', 'Gray seal', '&hellip;'),
+               `Seals ($n$)` = c('16', '15', '16', '9', '8', '&hellip;'),
+               `Mean length (mm)` = c('80.6', '86.5', '79.6', '91.2', '73.8', '&hellip;'),
+               `SD (mm)` = c('10.8', '10.5', '10.9', '7.9', '12.5', '&hellip;'),
+               check.names = FALSE))
+```
+
+* $X$ = the total length of a seal's longest whisker, in mm (one whisker per seal).
+
+### Working the example
+
+Estimate $\mu$, the mean whisker length of **all** spotted seals, with 95% confidence, from the 9 that were
+measured: $n = 9$, $\bar{x} = 91.2$ mm, $s = 7.9$ mm.
+
+(a) *$z$ or $t$? How many degrees of freedom?* We know only $s$, not $\sigma$, so use $t$, with
+$df = 9 - 1 = 8$. Row 8, column 95% of the $t$-table gives $t = 2.306$.
+
+(b) *What is the standard error?*
+$$\frac{s}{\sqrt{n}} = \frac{7.9}{\sqrt{9}} = \frac{7.9}{3} \approx 2.63 \text{ mm}$$
+
+(c) *What is the 95% confidence interval for $\mu$?*
+$$91.2 \pm 2.306(2.63) = 91.2 \pm 6.06, \quad \text{from } \mathbf{85.1} \text{ to } \mathbf{97.3} \text{ mm}$$
+
+**"We estimate with 95% confidence that the mean length of a spotted seal's longest whisker is between
+85.1 and 97.3 mm."** With $z = 1.96$ instead, the margin of error would have been only
+$1.96(2.63) = 5.15$ mm, too narrow for a sample of 9.
+
+## Example: watermelon citrulline
+
+### The data: watermelon citrulline
+
+Korea's national gene bank stores seed of watermelon varieties (*Citrullus lanatus*) collected from around
+the world, so that plant breeders can use their genes. Assefa and colleagues (2020) grew 100 of these
+gene-bank varieties and measured each one's fruit for **citrulline**, an amino acid named after watermelon
+(*Citrullus*), which was first found in its juice. Citrulline is sold as a sports supplement, so breeders
+are interested in varieties that have a lot of it.
+
+We take a random sample of 12 of the 100 varieties. The first five are:
+
+```{r, echo=FALSE}
+cn <- c(TWN = 'Taiwan', KAZ = 'Kazakhstan', RUS = 'Russia', Unknown = 'unknown', MNG = 'Mongolia',
+        UZB = 'Uzbekistan', TUR = 'Turkey')
+first5 <- head(wsamp, 5)
+tab(rbind(data.frame(Variety = first5$accession, Origin = cn[first5$origin],
+                     `Citrulline (mg/g)` = fmt(first5$citrulline, 2), check.names = FALSE),
+          data.frame(Variety = '&hellip;', Origin = '&hellip;', `Citrulline (mg/g)` = '&hellip;',
+                     check.names = FALSE)))
+```
+
+* $X$ = the citrulline in a variety's fruit flesh, in mg per gram of dry weight.
+
+### Working the example
+
+Estimate $\mu$, the mean citrulline content of all 100 gene-bank varieties, with 90% and with 99%
+confidence.
+
+First, the sample mean and standard deviation of the 12 values. The table lists each value $x$, its
+deviation from the mean $x - \bar{x}$, and the squared deviation:
+
+```{r, echo=FALSE}
+tab(rbind(data.frame(Variety = wsamp$accession, `$x$` = fmt(wsamp$citrulline, 2),
+                     `$x - \\bar{x}$` = fmt(dev_m, 2), `$(x - \\bar{x})^2$` = fmt(dev_m^2, 2),
+                     check.names = FALSE),
+          data.frame(Variety = '<b>Sum</b>', `$x$` = fmt(sum(wsamp$citrulline), 2),
+                     `$x - \\bar{x}$` = '0.00', `$(x - \\bar{x})^2$` = fmt(sum(dev_m^2), 2),
+                     check.names = FALSE)))
+```
+
+$$\bar{x} = \frac{`r fmt(sum(wsamp$citrulline), 2)`}{12} \approx `r fmt(xb_m, 2)` \text{ mg/g}, \qquad
+s = \sqrt{\frac{`r fmt(sum(dev_m^2), 2)`}{12 - 1}} \approx `r fmt(s_m, 2)` \text{ mg/g}$$
+
+(a) *Degrees of freedom and standard error.* $\sigma$ is unknown, so use $t$ with $df = 12 - 1 = 11$.
+$$SE = \frac{s}{\sqrt{n}} = \frac{5.27}{\sqrt{12}} = \frac{5.27}{3.46} \approx 1.52 \text{ mg/g}$$
+
+(b) *The 90% and 99% intervals.* Row 11 of the $t$-table gives $t = 1.796$ for 90% and $t = 3.106$ for 99%:
+
+* **90%:** $27.07 \pm 1.796(1.52) = 27.07 \pm 2.73$, from **24.34 to 29.80 mg/g**.
+* **99%:** $27.07 \pm 3.106(1.52) = 27.07 \pm 4.72$, from **22.35 to 31.79 mg/g**.
+
+**"We estimate with 90% confidence that the mean citrulline content of the gene bank's 100 watermelon
+varieties is between 24.34 and 29.80 mg per gram of dry weight."**
+
+(c) *Which is wider, and why?* The 99% interval: more confidence needs a larger critical value, so a larger
+margin of error from the same sample.
+
+Here we can check our work, since all 100 varieties were measured: their mean is
+`r fmt(mean(gb$citrulline), 2)` mg/g, which both intervals capture.
+
+# Sources
+
+* CYP2C19\*2 genotypes: 1000 Genomes Project phase 3, variant rs4244285, the 504 East Asian participants,
+  retrieved from the Ensembl genome database on October 20, 2026
+  ([Ensembl variant page for rs4244285](https://useast.ensembl.org/Homo_sapiens/Variation/Population?v=rs4244285)).
+  The 1000 Genomes Project Consortium (2015), "A global reference for human genetic variation", *Nature*
+  526, 68&ndash;74. Data file: `assets/cyp2c19_rs4244285_eas_1000g.csv`.
+* Clopidogrel and CYP2C19: Lee, C. R., et al. (2022), "Clinical Pharmacogenetics Implementation Consortium
+  Guideline for CYP2C19 Genotype and Clopidogrel Therapy: 2022 Update", *Clinical Pharmacology &
+  Therapeutics* 112, 959&ndash;967
+  ([CPIC clopidogrel guideline, full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC9287492/)).
+* Seal whiskers: Ginter, C. C., DeWitt, T. J., Fish, F. E., and Marshall, C. D. (2012), "Fused traditional
+  and geometric morphometrics demonstrate pinniped whisker diversity", *PLoS ONE* 7(4), e34481, Tables 1
+  and 2 ([Ginter et al. 2012 in PLoS ONE](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0034481)).
+* Watermelon citrulline: Assefa, A. D., et al. (2020), "Fruit Morphology, Citrulline, and Arginine Levels in
+  Diverse Watermelon (*Citrullus lanatus*) Germplasm Collections", *Plants* 9(9), 1054, Table 3
+  ([Assefa et al. 2020, full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC7569901/)). Data file:
+  `assets/watermelon_citrulline_assefa2020.csv` (citrulline by HPLC, the mean of three measurements).
+* Spotify songs: Spotify and YouTube statistics for the top 10 Spotify tracks of 2,079 artists, collected
+  February 2023: the "Spotify and Youtube" dataset on Kaggle, file `Spotify_Youtube.csv`.
