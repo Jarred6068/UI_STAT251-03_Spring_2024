@@ -76,8 +76,9 @@ stopifnot(x_t == 238, n_t == 743, ph_t == 0.320, se_t == 0.017,
     Mon Oct 19   Lecture 19  finding normal probabilities; the central limit theorem;
                              confidence intervals for a mean and a proportion
                              lecture_slides/Week 9/2026/Week9_Lecture19_Slides_10_19_2026.pptx
-    Wed Oct 21   confidence levels other than 95%; the interval for a mean when sigma is unknown
-    Fri Oct 23   choosing a minimum sample size, assumptions of estimators
+    Wed Oct 21   Lecture 20  confidence levels other than 95% (ran short; see below)
+    Fri Oct 23   Lecture 21  the rest of Lecture 20 (width, intervals for a mean when sigma is
+                             unknown); choosing a minimum sample size, assumptions of estimators
   Lecture 18 (Oct 12) stopped before the central limit theorem, so Lecture 19 picks up the
   Week 8 page from "The central limit theorem" on. The full write-up stays on the Week 8
   page; the CLT section here is a condensed summary that links back to it (numbers match
@@ -399,7 +400,7 @@ not know $p$ (that is what we are estimating), so the standard error uses $\hat{
 **When it works.** The interval leans on the CLT, so check that there are enough successes **and**
 failures in the sample: $n\hat{p} > 5$ and $n(1 - \hat{p}) > 5$.
 
-### The data: teens and cell phones
+## The data: teens and cell phones
 
 In Week 1 we met a Pew Research Center survey that asked 743 U.S. teens aged 13 to 17, "Are you losing
 focus in class by checking your cell phone?" The published counts are:
@@ -412,7 +413,7 @@ Call a teen a "success" if they answered "sometimes" or "often":
 
 * $X$ = 1 if a teen loses focus in class sometimes or often, and 0 otherwise.
 
-### Example: losing focus in class
+## Example: losing focus in class
 
 Estimate $p$, the proportion of **all** U.S. teens who lose focus in class sometimes or often.
 
@@ -468,8 +469,9 @@ narrower? Wider: to catch the parameter more often, we need a bigger net. The th
 
 ## In plain words
 
-Think of the parameter ($\mu$ or $p$) as a fish we cannot see, sitting somewhere in a pond. We cannot see
-it, but we can see roughly where the ripples are: that is our estimate, $\bar{x}$ or $\hat{p}$. A confidence
+Think of the parameter ($\mu$ or $p$) as a fish hidden somewhere in a murky pond. We cannot see the fish
+itself, only the ripples it makes, which tell us roughly where it is: that is our estimate, $\bar{x}$ or
+$\hat{p}$. A confidence
 interval is a **net** we throw around the estimate, hoping the fish is inside.
 
 * **Confidence level.** How often our way of throwing the net catches the fish. A 95% confidence level means
@@ -587,8 +589,8 @@ copies of \*2, G/A has one and A/A has two.
 ### Example: carriers of CYP2C19\*2
 
 Of the $n = `r n_c`$ people, `r sum(cyp$copies == 1)` carry one copy of \*2 and `r sum(cyp$copies == 2)`
-carry two, so `r x_c` are carriers. Estimate $p$, the proportion of **all** East Asian people who carry the
-variant, with 90%, 95% and 99% confidence.
+carry two, so `r x_c` are carriers. Estimate $p$, the proportion of **all** individuals of East Asian
+descent who carry the variant, with 90%, 95% and 99% confidence.
 
 (a) *Point estimate, check and standard error.*
 
@@ -608,9 +610,9 @@ tab(data.frame(`Confidence level` = c('90%', '95%', '99%'),
 ```
 
 For example, the 90% interval is reported as: **"We estimate with 90% confidence that between 51.4% and
-58.6% of East Asian people carry at least one copy of CYP2C19\*2."**
+58.6% of individuals of East Asian descent carry at least one copy of CYP2C19\*2."**
 
-(c) *Can we say that more than half of East Asian people carry \*2?* At 90% and 95% confidence, yes: every
+(c) *Can we say that more than half of individuals of East Asian descent carry \*2?* At 90% and 95% confidence, yes: every
 value in those intervals is above 0.5. At 99% confidence, no: the interval reaches down to 0.493, so 0.5 is
 still a plausible value. Asking for more confidence costs precision.
 
@@ -672,8 +674,8 @@ The table uses the CYP2C19 carriers ($\hat{p} = 0.550$, $n = 504$, $SE = 0.022$)
   a factor of $2.576/1.645 \approx 1.6$, from 0.072 to 0.114. The miss rate $\alpha$ drops from 10% to 1%.
   Same data, so no new information: we have traded precision for confidence.
 * **Turning up the sample size** 4 times, from 504 to 2,016 people, cuts the $SE$ in half
-  ($\sqrt{4} = 2$), so the width halves, from 0.086 to 0.044 (0.043 before rounding), while the miss rate stays at 5%. Precision
-  improves at **no** cost in confidence. Because of the square root, though, each halving of the width
+  ($\sqrt{4} = 2$), so the width halves, from 0.086 to 0.044 (0.043 before rounding), while the miss
+  rate stays at 5%. Precision improves at **no** cost in confidence. Because of the square root, though, each halving of the width
   costs 4 times as many observations, so precision gets expensive fast.
 
 **Precision is not accuracy.** Recall the bullseye: the standard error measures precision (how tightly
@@ -681,11 +683,9 @@ estimates cluster), and bias measures accuracy (whether they center on the targe
 on precision and on the random error from sampling. A biased sample, such as a voluntary-response survey,
 gives a narrow interval around the **wrong** value, and no confidence level or sample size fixes that.
 
-So there is a trade-off: for a fixed $n$, more confidence costs precision. The way to get both is more data.
-
 ## Would you board this plane?
 
-Here is why the confidence level matters outside a classroom. An airplane maker has a new passenger jet and is
+Lecture 21 opened with this discussion: here is why the confidence level matters outside a classroom. An airplane maker has a new passenger jet and is
 starting to sell it to airlines. Before it enters wide service, its engineers run a study to estimate the
 probability of a catastrophic failure in flight, and they report that it is **between 0.00012 and 0.0054 per
 flight**. Your flight to the Bahamas turns out to be on one of these planes. (This study is made up; the

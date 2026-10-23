@@ -564,8 +564,9 @@ $(document).ready(function () {
     Mon Oct 19   Lecture 19  finding normal probabilities; the central limit theorem;
                              confidence intervals for a mean and a proportion
                              lecture_slides/Week 9/2026/Week9_Lecture19_Slides_10_19_2026.pptx
-    Wed Oct 21   confidence levels other than 95%; the interval for a mean when sigma is unknown
-    Fri Oct 23   choosing a minimum sample size, assumptions of estimators
+    Wed Oct 21   Lecture 20  confidence levels other than 95% (ran short; see below)
+    Fri Oct 23   Lecture 21  the rest of Lecture 20 (width, intervals for a mean when sigma is
+                             unknown); choosing a minimum sample size, assumptions of estimators
   Lecture 18 (Oct 12) stopped before the central limit theorem, so Lecture 19 picks up the
   Week 8 page from "The central limit theorem" on. The full write-up stays on the Week 8
   page; the CLT section here is a condensed summary that links back to it (numbers match
@@ -1340,8 +1341,8 @@ its place.</p>
 check that there are enough successes <strong>and</strong> failures in
 the sample: <span class="math inline">\(n\hat{p} &gt; 5\)</span> and
 <span class="math inline">\(n(1 - \hat{p}) &gt; 5\)</span>.</p>
-<div id="the-data-teens-and-cell-phones" class="section level3">
-<h3>The data: teens and cell phones</h3>
+<div id="the-data-teens-and-cell-phones" class="section level2">
+<h2>The data: teens and cell phones</h2>
 <p>In Week 1 we met a Pew Research Center survey that asked 743 U.S.
 teens aged 13 to 17, “Are you losing focus in class by checking your
 cell phone?” The published counts are:</p>
@@ -1405,8 +1406,8 @@ Total
 class sometimes or often, and 0 otherwise.</li>
 </ul>
 </div>
-<div id="example-losing-focus-in-class" class="section level3">
-<h3>Example: losing focus in class</h3>
+<div id="example-losing-focus-in-class" class="section level2">
+<h2>Example: losing focus in class</h2>
 <p>Estimate <span class="math inline">\(p\)</span>, the proportion of
 <strong>all</strong> U.S. teens who lose focus in class sometimes or
 often.</p>
@@ -1442,9 +1443,9 @@ thing that changes is the 2, which becomes a larger number.</p>
 <div id="in-plain-words" class="section level2">
 <h2>In plain words</h2>
 <p>Think of the parameter (<span class="math inline">\(\mu\)</span> or
-<span class="math inline">\(p\)</span>) as a fish we cannot see, sitting
-somewhere in a pond. We cannot see it, but we can see roughly where the
-ripples are: that is our estimate, <span
+<span class="math inline">\(p\)</span>) as a fish hidden somewhere in a
+murky pond. We cannot see the fish itself, only the ripples it makes,
+which tell us roughly where it is: that is our estimate, <span
 class="math inline">\(\bar{x}\)</span> or <span
 class="math inline">\(\hat{p}\)</span>. A confidence interval is a
 <strong>net</strong> we throw around the estimate, hoping the fish is
@@ -1823,8 +1824,8 @@ least one copy of *2, and 0 otherwise.</li>
 <p>Of the <span class="math inline">\(n = 504\)</span> people, 239 carry
 one copy of *2 and 38 carry two, so 277 are carriers. Estimate <span
 class="math inline">\(p\)</span>, the proportion of <strong>all</strong>
-East Asian people who carry the variant, with 90%, 95% and 99%
-confidence.</p>
+individuals of East Asian descent who carry the variant, with 90%, 95%
+and 99% confidence.</p>
 <ol style="list-style-type: lower-alpha">
 <li><em>Point estimate, check and standard error.</em></li>
 </ol>
@@ -1903,14 +1904,14 @@ Interval
 </tbody>
 </table>
 <p>For example, the 90% interval is reported as: <strong>“We estimate
-with 90% confidence that between 51.4% and 58.6% of East Asian people
-carry at least one copy of CYP2C19*2.”</strong></p>
+with 90% confidence that between 51.4% and 58.6% of individuals of East
+Asian descent carry at least one copy of CYP2C19*2.”</strong></p>
 <ol start="3" style="list-style-type: lower-alpha">
-<li><em>Can we say that more than half of East Asian people carry
-*2?</em> At 90% and 95% confidence, yes: every value in those intervals
-is above 0.5. At 99% confidence, no: the interval reaches down to 0.493,
-so 0.5 is still a plausible value. Asking for more confidence costs
-precision.</li>
+<li><em>Can we say that more than half of individuals of East Asian
+descent carry *2?</em> At 90% and 95% confidence, yes: every value in
+those intervals is above 0.5. At 99% confidence, no: the interval
+reaches down to 0.493, so 0.5 is still a plausible value. Asking for
+more confidence costs precision.</li>
 </ol>
 </div>
 </div>
@@ -2131,21 +2132,18 @@ work only on precision and on the random error from sampling. A biased
 sample, such as a voluntary-response survey, gives a narrow interval
 around the <strong>wrong</strong> value, and no confidence level or
 sample size fixes that.</p>
-<p>So there is a trade-off: for a fixed <span
-class="math inline">\(n\)</span>, more confidence costs precision. The
-way to get both is more data.</p>
 </div>
 </div>
 <div id="would-you-board-this-plane" class="section level2">
 <h2>Would you board this plane?</h2>
-<p>Here is why the confidence level matters outside a classroom. An
-airplane maker has a new passenger jet and is starting to sell it to
-airlines. Before it enters wide service, its engineers run a study to
-estimate the probability of a catastrophic failure in flight, and they
-report that it is <strong>between 0.00012 and 0.0054 per
-flight</strong>. Your flight to the Bahamas turns out to be on one of
-these planes. (This study is made up; the airline numbers below are
-real.)</p>
+<p>Lecture 21 opened with this discussion: here is why the confidence
+level matters outside a classroom. An airplane maker has a new passenger
+jet and is starting to sell it to airlines. Before it enters wide
+service, its engineers run a study to estimate the probability of a
+catastrophic failure in flight, and they report that it is
+<strong>between 0.00012 and 0.0054 per flight</strong>. Your flight to
+the Bahamas turns out to be on one of these planes. (This study is made
+up; the airline numbers below are real.)</p>
 <ol style="list-style-type: decimal">
 <li><p><em>Would you feel comfortable flying on this plane?</em> Turn
 the interval into flights: <span class="math inline">\(1/0.00012 \approx
