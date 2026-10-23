@@ -94,6 +94,14 @@ stopifnot(x_t == 238, n_t == 743, ph_t == 0.320, se_t == 0.017,
   page (2024 Lecture 18) with new data: CYP2C19*2 carriers (1000 Genomes), spotted-seal
   whiskers (Ginter et al. 2012, Table 2) and watermelon citrulline (Assefa et al. 2020).
   Numbers and figures come from assets/make_lecture20_figures.R.
+
+  Lecture 20 ran short (Oct 21 2026): it stopped partway through the CYP2C19 example (slide 8), so
+  its deck is trimmed to slides 1-8 and everything from that example on is Lecture 21 (Fri Oct 23),
+  Week9_Lecture21_Slides_10_23_2026.pptx. Lecture 21 opens with the "Would you board this plane?"
+  discussion (a made-up study; the IATA comparison is real) and a review of C, alpha and the critical
+  value, finishes the Lecture 20 material, and squeezes in "Choosing a minimum sample size" (one
+  definition slide and one example). "Assumptions behind these intervals" is notes reading only.
+  No schedule shift: Friday's planned topics are still covered.
 -->
 
 # Finding normal probabilities
@@ -458,15 +466,54 @@ Every interval so far has been **estimate $\pm$ 2 standard errors**, which captu
 narrower? Wider: to catch the parameter more often, we need a bigger net. The thing that changes is the
 2, which becomes a larger number.
 
+## In plain words
+
+Think of the parameter ($\mu$ or $p$) as a fish we cannot see, sitting somewhere in a pond. We cannot see
+it, but we can see roughly where the ripples are: that is our estimate, $\bar{x}$ or $\hat{p}$. A confidence
+interval is a **net** we throw around the estimate, hoping the fish is inside.
+
+* **Confidence level.** How often our way of throwing the net catches the fish. A 95% confidence level means
+  that if we threw the net this way 100 times, from 100 different samples, about 95 throws would catch it.
+* **$\alpha$ (the error rate).** How often the net misses: the risk of being wrong that we agree to live
+  with. At 95% confidence, $\alpha = 5\%$, so about 5 throws in 100 come up empty. Confidence level and
+  $\alpha$ always add up to 100%.
+* **Critical value.** **How big the net is**, measured in standard errors. To miss less often we need a
+  bigger net: about 1.645 standard errors either side for 90%, 1.96 for 95% and 2.576 for 99%.
+* **Precision.** How narrow the net is. A narrow interval tells us a lot about where the fish is; a very
+  wide one is almost certain to catch it but tells us little. A forecast that says "tomorrow's high will be
+  between $-50$ and $150$ degrees" is never wrong and never useful. A forecast of "between 71 and 72 degrees"
+  is useful, but it will often be wrong.
+
+That is the whole tension in this section: **being sure** (a high confidence level) and **being precise**
+(a narrow interval) pull against each other, and the sample size is what lets us have more of both.
+
+## In detail
+
 * **Confidence level** $C$. The proportion of all possible samples whose interval captures the parameter,
-  such as 90%, 95% or 99%. It describes the method **before** the data are gathered.
-* $\alpha$. The proportion of samples whose interval misses: $\alpha = 1 - C$. It is split evenly between
-  the two tails of the normal curve, $\alpha/2$ in each.
-* **Critical value** $z_{1-\alpha/2}$. The $z$ with area $1 - \alpha/2$ to its left. A
-  $100(1-\alpha)\%$ confidence interval is
+  such as 90%, 95% or 99%. It is a property of the **method**, fixed before the data are gathered. Once one
+  interval is computed, it either contains the parameter or it does not; the $C$ tells us how often the
+  method works in the long run.
+* $\alpha$. The proportion of samples whose interval misses: $\alpha = 1 - C$. A miss can happen on either
+  side (the estimate lands too far above the parameter, or too far below), so $\alpha$ is split evenly
+  between the two tails of the normal curve, $\alpha/2$ in each.
+* **Critical value** $z_{1-\alpha/2}$. The $z$ with area $1 - \alpha/2$ to its left, so that the middle
+  area between $-z_{1-\alpha/2}$ and $z_{1-\alpha/2}$ is exactly $C$. A $100(1-\alpha)\%$ confidence
+  interval is
   $$\text{estimate} \;\pm\; z_{1-\alpha/2} \times SE$$
   For a mean this is $\bar{x} \pm z_{1-\alpha/2}\,\sigma/\sqrt{n}$; for a proportion it is
   $\hat{p} \pm z_{1-\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}$.
+* **Margin of error** $m = z_{1-\alpha/2} \times SE$, the $\pm$ part. The interval's **width** is $2m$, and
+  a smaller width means a more **precise** estimate.
+
+Where does the formula come from? By the central limit theorem, the estimate is approximately normal,
+centered at the parameter, with standard deviation $SE$. So a proportion $C$ of all samples give an
+estimate within $z_{1-\alpha/2}$ standard errors of the parameter. For a mean,
+$$P\left(-z_{1-\alpha/2} \leq \frac{\bar{x} - \mu}{SE} \leq z_{1-\alpha/2}\right) = C.$$
+"$\bar{x}$ is within $z_{1-\alpha/2} \times SE$ of $\mu$" is the same statement as "$\mu$ is within
+$z_{1-\alpha/2} \times SE$ of $\bar{x}$", so rearranging gives
+$$P\left(\bar{x} - z_{1-\alpha/2}\,SE \;\leq\; \mu \;\leq\; \bar{x} + z_{1-\alpha/2}\,SE\right) = C.$$
+The probability is about the random $\bar{x}$, that is, about the method, before a sample is drawn. The
+"2" we used before is just $z_{0.975} = 1.96$, rounded.
 
 ```{r, echo=FALSE, out.width='95%', fig.align='center', fig.alt = "Three standard normal curves side by side for 90%, 95% and 99% confidence. In each the middle area is shaded and the cut-offs are marked: plus and minus 1.645 for 90% with 0.05 in each tail, plus and minus 1.960 for 95% with 0.025 in each tail, and plus and minus 2.576 for 99% with 0.005 in each tail. The higher the confidence, the farther out the cut-offs."}
 knitr::include_graphics('assets/l20_crit_values.png')
@@ -582,7 +629,86 @@ knitr::include_graphics('assets/l20_width.png')
 * **Larger sample, narrower interval.** The standard error has $\sqrt{n}$ on the bottom, so 4 times the
   sample size gives **half** the width.
 
+### Two dials: in plain words
+
+Picture the interval's width controlled by **two dials**.
+
+* **The confidence dial.** Turn it up and the net gets bigger, so it misses less often, but the interval
+  gets wider and says less about where the parameter is. Turn it down and the interval gets narrower, but it
+  misses more often. This dial only trades one thing for another: **sureness for precision**. It never gives
+  you more of both.
+* **The sample size dial.** Turn it up (collect more data) and the estimate itself gets steadier, so the
+  same size of net, in standard errors, covers less ground. The interval gets narrower **without** losing any
+  confidence. This is the only dial that buys precision for free. Well, not quite free: more data costs
+  time and money.
+
+A third thing, the spread of the population ($\sigma$), also affects the width, but it is not a dial: it
+is a fact about the population that we cannot change.
+
+### Two dials: in detail
+
+The width of an interval is
+$$\text{width} = 2m = 2 \times z_{1-\alpha/2} \times SE, \qquad SE = \frac{\sigma}{\sqrt{n}} \text{ or } \sqrt{\frac{p(1-p)}{n}}.$$
+The confidence level enters only through $z_{1-\alpha/2}$, and the sample size only through $SE$:
+
+```{r, echo=FALSE}
+se_n <- function(n) round(sqrt(ph_c * (1 - ph_c) / n), 3)    # rounded, as computed by hand
+wid <- c(2 * me_c, 2 * round(1.96 * c(se_n(126), se_c, se_n(2016)), 3))
+stopifnot(se_n(126) == 0.044, se_n(2016) == 0.011,
+          all(near(wid, c(0.072, 0.086, 0.114, 0.172, 0.086, 0.044), 1e-9)))
+tab(data.frame(
+  Dial = c('Confidence level', '', '', 'Sample size (at 95%)', '', ''),
+  Setting = c('90%', '95%', '99%', 'n = 126', 'n = 504', 'n = 2,016'),
+  `Critical value` = c('1.645', '1.960', '2.576', '1.960', '1.960', '1.960'),
+  SE = fmt(c(rep(se_c, 3), se_n(126), se_c, se_n(2016)), 3),
+  `Width, 2 &times; z &times; SE` = fmt(wid, 3),
+  `Intervals that miss` = c('10%', '5%', '1%', '5%', '5%', '5%'),
+  check.names = FALSE))
+```
+
+The table uses the CYP2C19 carriers ($\hat{p} = 0.550$, $n = 504$, $SE = 0.022$).
+
+* **Turning up the confidence level** from 90% to 99% raises $z$ from 1.645 to 2.576, so the width grows by
+  a factor of $2.576/1.645 \approx 1.6$, from 0.072 to 0.114. The miss rate $\alpha$ drops from 10% to 1%.
+  Same data, so no new information: we have traded precision for confidence.
+* **Turning up the sample size** 4 times, from 504 to 2,016 people, cuts the $SE$ in half
+  ($\sqrt{4} = 2$), so the width halves, from 0.086 to 0.044 (0.043 before rounding), while the miss rate stays at 5%. Precision
+  improves at **no** cost in confidence. Because of the square root, though, each halving of the width
+  costs 4 times as many observations, so precision gets expensive fast.
+
+**Precision is not accuracy.** Recall the bullseye: the standard error measures precision (how tightly
+estimates cluster), and bias measures accuracy (whether they center on the target). Both dials work only
+on precision and on the random error from sampling. A biased sample, such as a voluntary-response survey,
+gives a narrow interval around the **wrong** value, and no confidence level or sample size fixes that.
+
 So there is a trade-off: for a fixed $n$, more confidence costs precision. The way to get both is more data.
+
+## Would you board this plane?
+
+Here is why the confidence level matters outside a classroom. An airplane maker has a new passenger jet and is
+starting to sell it to airlines. Before it enters wide service, its engineers run a study to estimate the
+probability of a catastrophic failure in flight, and they report that it is **between 0.00012 and 0.0054 per
+flight**. Your flight to the Bahamas turns out to be on one of these planes. (This study is made up; the
+airline numbers below are real.)
+
+(1) *Would you feel comfortable flying on this plane?* Turn the interval into flights:
+$1/0.00012 \approx `r format(round(1 / 0.00012), big.mark = ',')`$ and $1/0.0054 \approx `r round(1 / 0.0054)`$,
+so the study says somewhere between **1 failure in 8,300 flights and 1 in 185 flights**. For comparison, the
+world's airlines had **1 fatal accident per 5.6 million flights** on average over 2021&ndash;2025 (IATA). Even
+the best case in this interval is about $0.00012 \times 5{,}600{,}000 \approx `r round(0.00012 * 5.6e6)`$ times
+riskier than a typical flight. Most of us would stay home.
+
+(2) *If the maker could report this interval at 90%, 95% or 99% confidence, which would you want?* For a
+safety decision the number that matters is the **upper end**, the worst case that the data still allow. A
+90% interval is the narrowest, but $\alpha = 0.10$: 1 in 10 intervals built this way misses, and when it
+misses, the true risk could be above its upper end. A 99% interval is wider, so its upper end is higher and
+more cautious, but only 1 in 100 such intervals misses. When being wrong is costly, we want **high
+confidence**, and we accept a wider interval to get it.
+
+(3) *Would you feel differently if the interval were narrower but had a lower confidence level?* It should
+not reassure you. From the same data, a narrower interval only comes from a smaller critical value, which
+means a lower confidence level: it looks more precise but is more likely to be wrong. The only way to make
+the interval narrower **and** keep the confidence is to collect more data, a larger $n$.
 
 # Intervals for a mean when $\sigma$ is unknown
 
@@ -787,6 +913,83 @@ margin of error from the same sample.
 Here we can check our work, since all 100 varieties were measured: their mean is
 `r fmt(mean(gb$citrulline), 2)` mg/g, which both intervals capture.
 
+# Choosing a minimum sample size
+
+```{r lecture21-setup, include=FALSE}
+# sample sizes on the Lecture 21 slides and the try-it-outs; always round up
+nsz_p <- function(z, p, m) ceiling(round(z^2 * p * (1 - p) / m^2, 6))
+nsz_m <- function(z, sig, m) ceiling(round((z * sig / m)^2, 6))
+stopifnot(round(1.96^2 * 0.25 / 0.03^2, 1) == 1067.1, nsz_p(1.96, 0.5, 0.03) == 1068,
+          round((1.96 * 7.9 / 2)^2, 1) == 59.9, nsz_m(1.96, 7.9, 2) == 60,
+          nsz_p(1.96, 0.5, 0.015) == 4269, round(1.96^2 * 0.55 * 0.45 / 0.03^2, 1) == 1056.4,
+          nsz_p(1.96, 0.95, 0.02) == 457, nsz_m(1.96, 2.5, 0.5) == 97, nsz_m(1.645, 400, 120) == 31,
+          round(1 / 0.00012) == 8333, round(1 / 0.0054) == 185, round(0.00012 * 5.6e6) == 672)
+```
+
+The margin of error $m$ is the $\pm$ part of an interval. It shrinks when the confidence level goes down or
+when $n$ goes up. We rarely want to give up confidence, and we cannot change how spread out the population
+is, but **before** a study we can choose $n$. Real studies cost time and money, so the question is: what is
+the **smallest** $n$ that gives the margin of error we need?
+
+Solve the margin-of-error formula for $n$:
+
+* **For a proportion:** $m = z\sqrt{\dfrac{p(1-p)}{n}}$, so
+  $$n = \frac{z^2\, p^*(1-p^*)}{m^2}$$
+  where $p^*$ is a guess at $p$ from an earlier study. With no earlier study, use $p^* = 0.5$: the product
+  $p(1-p)$ is largest at $p = 0.5$, so this gives a sample big enough whatever $p$ turns out to be.
+* **For a mean:** $m = z\dfrac{\sigma}{\sqrt{n}}$, so
+  $$n = \left(\frac{z\,\sigma}{m}\right)^2$$
+  where $\sigma$ comes from an earlier study. With nothing to go on, a rough guess is
+  $\sigma \approx \text{range}/4$, because most of a roughly normal population lies within 2 standard
+  deviations of the mean.
+* **Always round up.** A sample of 59 would give a margin of error slightly larger than the target; 60 does
+  not.
+
+We use $z$ in both formulas, even for a mean: the $t$ critical value depends on $n$, which is what we are
+trying to find.
+
+## Example: planning the next study
+
+(a) *How many people would a new study need to estimate the proportion of CYP2C19\*2 carriers within
+$\pm 0.03$ with 95% confidence, if we had no earlier guess?* Use $p^* = 0.5$ and $z = 1.96$:
+$$n = \frac{1.96^2(0.5)(0.5)}{0.03^2} = \frac{3.8416 \times 0.25}{0.0009} = 1067.1 \quad\to\quad \mathbf{1{,}068} \text{ people}$$
+With the earlier estimate $p^* = 0.55$ instead, $n = 1.96^2(0.55)(0.45)/0.03^2 = 1056.4$, so 1,057 people:
+a little smaller, because 0.55 is not 0.5.
+
+(b) *How many spotted seals would we need to estimate the mean whisker length within $\pm 2$ mm with 95%
+confidence?* Use $\sigma \approx 7.9$ mm from Ginter et al.:
+$$n = \left(\frac{1.96 \times 7.9}{2}\right)^2 = (7.742)^2 = 59.9 \quad\to\quad \mathbf{60} \text{ seals}$$
+
+(c) *What happens to $n$ if we want half the margin of error?* $m$ is squared on the bottom, so halving $m$
+makes $n$ **4 times** as large. For the carriers, $\pm 0.015$ needs `r format(nsz_p(1.96, 0.5, 0.015), big.mark = ',')`
+people instead of 1,068.
+
+* **Try it out.**
+
+    * The sensitivity of a medical test is the probability that it comes back positive when the person has
+      the disease. Rapid strep tests have a sensitivity of about 0.95. How many tests of a new rapid strep
+      test would be needed to estimate its sensitivity within $\pm 0.02$ with 95% confidence?
+      *Answer:* $n = 1.96^2(0.95)(0.05)/0.02^2 = 456.2$, so **457** tests.
+    * A researcher wants to estimate the mean number of hours college students spend on TikTok each week,
+      within $\pm 0.5$ hours with 95% confidence. Earlier studies suggest $\sigma \approx 2.5$ hours.
+      *Answer:* $n = (1.96 \times 2.5/0.5)^2 = 96.04$, so **97** students.
+    * A marketing firm wants to estimate what students spend over spring break, within $\pm\$120$ with 90%
+      confidence. Spending ranges from about \$100 to \$1,700. *Answer:* $\sigma \approx 1600/4 = 400$, so
+      $n = (1.645 \times 400/120)^2 = 30.1$, and **31** students.
+
+## Assumptions behind these intervals
+
+Every interval in these notes rests on a few assumptions:
+
+* The data are a **random sample** from the population (an unbiased sampling design; see Weeks 4 and 5).
+* The **population is much larger than the sample**. For a small, finite population the formulas change.
+* The **sampling distribution is roughly normal**, which needs one of:
+    * for $\hat{p}$: at least 5 successes and 5 failures, $n\hat{p} > 5$ and $n(1-\hat{p}) > 5$;
+    * for $\bar{x}$: a roughly normal population, or a large sample, $n \geq 30$ (the central limit theorem).
+      Plot the data to check for strong skew or outliers.
+
+No formula fixes a biased sample: a margin of error measures only the **random** error from sampling.
+
 # Sources
 
 * CYP2C19\*2 genotypes: 1000 Genomes Project phase 3, variant rs4244285, the 504 East Asian participants,
@@ -805,5 +1008,8 @@ Here we can check our work, since all 100 varieties were measured: their mean is
   Diverse Watermelon (*Citrullus lanatus*) Germplasm Collections", *Plants* 9(9), 1054, Table 3
   ([Assefa et al. 2020, full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC7569901/)). Data file:
   `assets/watermelon_citrulline_assefa2020.csv` (citrulline by HPLC, the mean of three measurements).
+* Airline safety: IATA (2026), "2025 Annual Safety Report" press release, March 9, 2026: 1 fatal accident per
+  5.6 million flights on average over 2021&ndash;2025
+  ([IATA 2025 safety report release](https://www.iata.org/en/pressroom/2026-releases/2026-03-09-01/)).
 * Spotify songs: Spotify and YouTube statistics for the top 10 Spotify tracks of 2,079 artists, collected
   February 2023: the "Spotify and Youtube" dataset on Kaggle, file `Spotify_Youtube.csv`.

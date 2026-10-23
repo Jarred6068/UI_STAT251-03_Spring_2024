@@ -582,6 +582,14 @@ $(document).ready(function () {
   page (2024 Lecture 18) with new data: CYP2C19*2 carriers (1000 Genomes), spotted-seal
   whiskers (Ginter et al. 2012, Table 2) and watermelon citrulline (Assefa et al. 2020).
   Numbers and figures come from assets/make_lecture20_figures.R.
+
+  Lecture 20 ran short (Oct 21 2026): it stopped partway through the CYP2C19 example (slide 8), so
+  its deck is trimmed to slides 1-8 and everything from that example on is Lecture 21 (Fri Oct 23),
+  Week9_Lecture21_Slides_10_23_2026.pptx. Lecture 21 opens with the "Would you board this plane?"
+  discussion (a made-up study; the IATA comparison is real) and a review of C, alpha and the critical
+  value, finishes the Lecture 20 material, and squeezes in "Choosing a minimum sample size" (one
+  definition slide and one example). "Assumptions behind these intervals" is notes reading only.
+  No schedule shift: Friday's planned topics are still covered.
 -->
 <div id="finding-normal-probabilities" class="section level1">
 <h1>Finding normal probabilities</h1>
@@ -1431,19 +1439,69 @@ captures the parameter about 95% of the time. Suppose a cardiologist
 wants to be 99% sure instead. Should the interval get wider or narrower?
 Wider: to catch the parameter more often, we need a bigger net. The
 thing that changes is the 2, which becomes a larger number.</p>
+<div id="in-plain-words" class="section level2">
+<h2>In plain words</h2>
+<p>Think of the parameter (<span class="math inline">\(\mu\)</span> or
+<span class="math inline">\(p\)</span>) as a fish we cannot see, sitting
+somewhere in a pond. We cannot see it, but we can see roughly where the
+ripples are: that is our estimate, <span
+class="math inline">\(\bar{x}\)</span> or <span
+class="math inline">\(\hat{p}\)</span>. A confidence interval is a
+<strong>net</strong> we throw around the estimate, hoping the fish is
+inside.</p>
+<ul>
+<li><strong>Confidence level.</strong> How often our way of throwing the
+net catches the fish. A 95% confidence level means that if we threw the
+net this way 100 times, from 100 different samples, about 95 throws
+would catch it.</li>
+<li><strong><span class="math inline">\(\alpha\)</span> (the error
+rate).</strong> How often the net misses: the risk of being wrong that
+we agree to live with. At 95% confidence, <span
+class="math inline">\(\alpha = 5\%\)</span>, so about 5 throws in 100
+come up empty. Confidence level and <span
+class="math inline">\(\alpha\)</span> always add up to 100%.</li>
+<li><strong>Critical value.</strong> <strong>How big the net
+is</strong>, measured in standard errors. To miss less often we need a
+bigger net: about 1.645 standard errors either side for 90%, 1.96 for
+95% and 2.576 for 99%.</li>
+<li><strong>Precision.</strong> How narrow the net is. A narrow interval
+tells us a lot about where the fish is; a very wide one is almost
+certain to catch it but tells us little. A forecast that says
+“tomorrow’s high will be between <span
+class="math inline">\(-50\)</span> and <span
+class="math inline">\(150\)</span> degrees” is never wrong and never
+useful. A forecast of “between 71 and 72 degrees” is useful, but it will
+often be wrong.</li>
+</ul>
+<p>That is the whole tension in this section: <strong>being
+sure</strong> (a high confidence level) and <strong>being
+precise</strong> (a narrow interval) pull against each other, and the
+sample size is what lets us have more of both.</p>
+</div>
+<div id="in-detail" class="section level2">
+<h2>In detail</h2>
 <ul>
 <li><strong>Confidence level</strong> <span
 class="math inline">\(C\)</span>. The proportion of all possible samples
-whose interval captures the parameter, such as 90%, 95% or 99%. It
-describes the method <strong>before</strong> the data are gathered.</li>
+whose interval captures the parameter, such as 90%, 95% or 99%. It is a
+property of the <strong>method</strong>, fixed before the data are
+gathered. Once one interval is computed, it either contains the
+parameter or it does not; the <span class="math inline">\(C\)</span>
+tells us how often the method works in the long run.</li>
 <li><span class="math inline">\(\alpha\)</span>. The proportion of
 samples whose interval misses: <span class="math inline">\(\alpha = 1 -
-C\)</span>. It is split evenly between the two tails of the normal
-curve, <span class="math inline">\(\alpha/2\)</span> in each.</li>
+C\)</span>. A miss can happen on either side (the estimate lands too far
+above the parameter, or too far below), so <span
+class="math inline">\(\alpha\)</span> is split evenly between the two
+tails of the normal curve, <span class="math inline">\(\alpha/2\)</span>
+in each.</li>
 <li><strong>Critical value</strong> <span
 class="math inline">\(z_{1-\alpha/2}\)</span>. The <span
 class="math inline">\(z\)</span> with area <span class="math inline">\(1
-- \alpha/2\)</span> to its left. A <span
+- \alpha/2\)</span> to its left, so that the middle area between <span
+class="math inline">\(-z_{1-\alpha/2}\)</span> and <span
+class="math inline">\(z_{1-\alpha/2}\)</span> is exactly <span
+class="math inline">\(C\)</span>. A <span
 class="math inline">\(100(1-\alpha)\%\)</span> confidence interval is
 <span class="math display">\[\text{estimate} \;\pm\; z_{1-\alpha/2}
 \times SE\]</span> For a mean this is <span
@@ -1451,7 +1509,32 @@ class="math inline">\(\bar{x} \pm
 z_{1-\alpha/2}\,\sigma/\sqrt{n}\)</span>; for a proportion it is <span
 class="math inline">\(\hat{p} \pm
 z_{1-\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\)</span>.</li>
+<li><strong>Margin of error</strong> <span class="math inline">\(m =
+z_{1-\alpha/2} \times SE\)</span>, the <span
+class="math inline">\(\pm\)</span> part. The interval’s
+<strong>width</strong> is <span class="math inline">\(2m\)</span>, and a
+smaller width means a more <strong>precise</strong> estimate.</li>
 </ul>
+<p>Where does the formula come from? By the central limit theorem, the
+estimate is approximately normal, centered at the parameter, with
+standard deviation <span class="math inline">\(SE\)</span>. So a
+proportion <span class="math inline">\(C\)</span> of all samples give an
+estimate within <span class="math inline">\(z_{1-\alpha/2}\)</span>
+standard errors of the parameter. For a mean, <span
+class="math display">\[P\left(-z_{1-\alpha/2} \leq \frac{\bar{x} -
+\mu}{SE} \leq z_{1-\alpha/2}\right) = C.\]</span> “<span
+class="math inline">\(\bar{x}\)</span> is within <span
+class="math inline">\(z_{1-\alpha/2} \times SE\)</span> of <span
+class="math inline">\(\mu\)</span>” is the same statement as “<span
+class="math inline">\(\mu\)</span> is within <span
+class="math inline">\(z_{1-\alpha/2} \times SE\)</span> of <span
+class="math inline">\(\bar{x}\)</span>”, so rearranging gives <span
+class="math display">\[P\left(\bar{x} - z_{1-\alpha/2}\,SE \;\leq\; \mu
+\;\leq\; \bar{x} + z_{1-\alpha/2}\,SE\right) = C.\]</span> The
+probability is about the random <span
+class="math inline">\(\bar{x}\)</span>, that is, about the method,
+before a sample is drawn. The “2” we used before is just <span
+class="math inline">\(z_{0.975} = 1.96\)</span>, rounded.</p>
 <p><img src="assets/l20_crit_values.png" alt="Three standard normal curves side by side for 90%, 95% and 99% confidence. In each the middle area is shaded and the cut-offs are marked: plus and minus 1.645 for 90% with 0.05 in each tail, plus and minus 1.960 for 95% with 0.025 in each tail, and plus and minus 2.576 for 99% with 0.005 in each tail. The higher the confidence, the farther out the cut-offs." width="95%" style="display: block; margin: auto;" /></p>
 <p>Why look up <span class="math inline">\(1 - \alpha/2\)</span>? The
 table gives the area to the <strong>left</strong> of <span
@@ -1459,6 +1542,7 @@ class="math inline">\(z\)</span>. To the left of the upper cut-off lies
 the middle <span class="math inline">\(C\)</span> plus the lower tail
 <span class="math inline">\(\alpha/2\)</span>, which is <span
 class="math inline">\(1 - \alpha/2\)</span> in all.</p>
+</div>
 <div id="example-critical-values" class="section level2">
 <h2>Example: critical values</h2>
 <p>Find the critical value for 80%, 90% and 99% confidence. For each
@@ -1847,9 +1931,250 @@ class="math inline">\(C\)</span> means a bigger critical value.</li>
 error has <span class="math inline">\(\sqrt{n}\)</span> on the bottom,
 so 4 times the sample size gives <strong>half</strong> the width.</li>
 </ul>
+<div id="two-dials-in-plain-words" class="section level3">
+<h3>Two dials: in plain words</h3>
+<p>Picture the interval’s width controlled by <strong>two
+dials</strong>.</p>
+<ul>
+<li><strong>The confidence dial.</strong> Turn it up and the net gets
+bigger, so it misses less often, but the interval gets wider and says
+less about where the parameter is. Turn it down and the interval gets
+narrower, but it misses more often. This dial only trades one thing for
+another: <strong>sureness for precision</strong>. It never gives you
+more of both.</li>
+<li><strong>The sample size dial.</strong> Turn it up (collect more
+data) and the estimate itself gets steadier, so the same size of net, in
+standard errors, covers less ground. The interval gets narrower
+<strong>without</strong> losing any confidence. This is the only dial
+that buys precision for free. Well, not quite free: more data costs time
+and money.</li>
+</ul>
+<p>A third thing, the spread of the population (<span
+class="math inline">\(\sigma\)</span>), also affects the width, but it
+is not a dial: it is a fact about the population that we cannot
+change.</p>
+</div>
+<div id="two-dials-in-detail" class="section level3">
+<h3>Two dials: in detail</h3>
+<p>The width of an interval is <span class="math display">\[\text{width}
+= 2m = 2 \times z_{1-\alpha/2} \times SE, \qquad SE =
+\frac{\sigma}{\sqrt{n}} \text{ or } \sqrt{\frac{p(1-p)}{n}}.\]</span>
+The confidence level enters only through <span
+class="math inline">\(z_{1-\alpha/2}\)</span>, and the sample size only
+through <span class="math inline">\(SE\)</span>:</p>
+<table class=" lightable-classic table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Dial
+</th>
+<th style="text-align:left;">
+Setting
+</th>
+<th style="text-align:left;">
+Critical value
+</th>
+<th style="text-align:left;">
+SE
+</th>
+<th style="text-align:left;">
+Width, 2 × z × SE
+</th>
+<th style="text-align:left;">
+Intervals that miss
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Confidence level
+</td>
+<td style="text-align:left;">
+90%
+</td>
+<td style="text-align:left;">
+1.645
+</td>
+<td style="text-align:left;">
+0.022
+</td>
+<td style="text-align:left;">
+0.072
+</td>
+<td style="text-align:left;">
+10%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+95%
+</td>
+<td style="text-align:left;">
+1.960
+</td>
+<td style="text-align:left;">
+0.022
+</td>
+<td style="text-align:left;">
+0.086
+</td>
+<td style="text-align:left;">
+5%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+99%
+</td>
+<td style="text-align:left;">
+2.576
+</td>
+<td style="text-align:left;">
+0.022
+</td>
+<td style="text-align:left;">
+0.114
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sample size (at 95%)
+</td>
+<td style="text-align:left;">
+n = 126
+</td>
+<td style="text-align:left;">
+1.960
+</td>
+<td style="text-align:left;">
+0.044
+</td>
+<td style="text-align:left;">
+0.172
+</td>
+<td style="text-align:left;">
+5%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+n = 504
+</td>
+<td style="text-align:left;">
+1.960
+</td>
+<td style="text-align:left;">
+0.022
+</td>
+<td style="text-align:left;">
+0.086
+</td>
+<td style="text-align:left;">
+5%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+n = 2,016
+</td>
+<td style="text-align:left;">
+1.960
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+0.044
+</td>
+<td style="text-align:left;">
+5%
+</td>
+</tr>
+</tbody>
+</table>
+<p>The table uses the CYP2C19 carriers (<span
+class="math inline">\(\hat{p} = 0.550\)</span>, <span
+class="math inline">\(n = 504\)</span>, <span class="math inline">\(SE =
+0.022\)</span>).</p>
+<ul>
+<li><strong>Turning up the confidence level</strong> from 90% to 99%
+raises <span class="math inline">\(z\)</span> from 1.645 to 2.576, so
+the width grows by a factor of <span class="math inline">\(2.576/1.645
+\approx 1.6\)</span>, from 0.072 to 0.114. The miss rate <span
+class="math inline">\(\alpha\)</span> drops from 10% to 1%. Same data,
+so no new information: we have traded precision for confidence.</li>
+<li><strong>Turning up the sample size</strong> 4 times, from 504 to
+2,016 people, cuts the <span class="math inline">\(SE\)</span> in half
+(<span class="math inline">\(\sqrt{4} = 2\)</span>), so the width
+halves, from 0.086 to 0.044 (0.043 before rounding), while the miss rate
+stays at 5%. Precision improves at <strong>no</strong> cost in
+confidence. Because of the square root, though, each halving of the
+width costs 4 times as many observations, so precision gets expensive
+fast.</li>
+</ul>
+<p><strong>Precision is not accuracy.</strong> Recall the bullseye: the
+standard error measures precision (how tightly estimates cluster), and
+bias measures accuracy (whether they center on the target). Both dials
+work only on precision and on the random error from sampling. A biased
+sample, such as a voluntary-response survey, gives a narrow interval
+around the <strong>wrong</strong> value, and no confidence level or
+sample size fixes that.</p>
 <p>So there is a trade-off: for a fixed <span
 class="math inline">\(n\)</span>, more confidence costs precision. The
 way to get both is more data.</p>
+</div>
+</div>
+<div id="would-you-board-this-plane" class="section level2">
+<h2>Would you board this plane?</h2>
+<p>Here is why the confidence level matters outside a classroom. An
+airplane maker has a new passenger jet and is starting to sell it to
+airlines. Before it enters wide service, its engineers run a study to
+estimate the probability of a catastrophic failure in flight, and they
+report that it is <strong>between 0.00012 and 0.0054 per
+flight</strong>. Your flight to the Bahamas turns out to be on one of
+these planes. (This study is made up; the airline numbers below are
+real.)</p>
+<ol style="list-style-type: decimal">
+<li><p><em>Would you feel comfortable flying on this plane?</em> Turn
+the interval into flights: <span class="math inline">\(1/0.00012 \approx
+8,333\)</span> and <span class="math inline">\(1/0.0054 \approx
+185\)</span>, so the study says somewhere between <strong>1 failure in
+8,300 flights and 1 in 185 flights</strong>. For comparison, the world’s
+airlines had <strong>1 fatal accident per 5.6 million flights</strong>
+on average over 2021–2025 (IATA). Even the best case in this interval is
+about <span class="math inline">\(0.00012 \times 5{,}600{,}000 \approx
+672\)</span> times riskier than a typical flight. Most of us would stay
+home.</p></li>
+<li><p><em>If the maker could report this interval at 90%, 95% or 99%
+confidence, which would you want?</em> For a safety decision the number
+that matters is the <strong>upper end</strong>, the worst case that the
+data still allow. A 90% interval is the narrowest, but <span
+class="math inline">\(\alpha = 0.10\)</span>: 1 in 10 intervals built
+this way misses, and when it misses, the true risk could be above its
+upper end. A 99% interval is wider, so its upper end is higher and more
+cautious, but only 1 in 100 such intervals misses. When being wrong is
+costly, we want <strong>high confidence</strong>, and we accept a wider
+interval to get it.</p></li>
+<li><p><em>Would you feel differently if the interval were narrower but
+had a lower confidence level?</em> It should not reassure you. From the
+same data, a narrower interval only comes from a smaller critical value,
+which means a lower confidence level: it looks more precise but is more
+likely to be wrong. The only way to make the interval narrower
+<strong>and</strong> keep the confidence is to collect more data, a
+larger <span class="math inline">\(n\)</span>.</p></li>
+</ol>
 </div>
 </div>
 <div id="intervals-for-a-mean-when-sigma-is-unknown"
@@ -2801,6 +3126,125 @@ their mean is 27.65 mg/g, which both intervals capture.</p>
 </div>
 </div>
 </div>
+<div id="choosing-a-minimum-sample-size" class="section level1">
+<h1>Choosing a minimum sample size</h1>
+<p>The margin of error <span class="math inline">\(m\)</span> is the
+<span class="math inline">\(\pm\)</span> part of an interval. It shrinks
+when the confidence level goes down or when <span
+class="math inline">\(n\)</span> goes up. We rarely want to give up
+confidence, and we cannot change how spread out the population is, but
+<strong>before</strong> a study we can choose <span
+class="math inline">\(n\)</span>. Real studies cost time and money, so
+the question is: what is the <strong>smallest</strong> <span
+class="math inline">\(n\)</span> that gives the margin of error we
+need?</p>
+<p>Solve the margin-of-error formula for <span
+class="math inline">\(n\)</span>:</p>
+<ul>
+<li><strong>For a proportion:</strong> <span class="math inline">\(m =
+z\sqrt{\dfrac{p(1-p)}{n}}\)</span>, so <span class="math display">\[n =
+\frac{z^2\, p^*(1-p^*)}{m^2}\]</span> where <span
+class="math inline">\(p^*\)</span> is a guess at <span
+class="math inline">\(p\)</span> from an earlier study. With no earlier
+study, use <span class="math inline">\(p^* = 0.5\)</span>: the product
+<span class="math inline">\(p(1-p)\)</span> is largest at <span
+class="math inline">\(p = 0.5\)</span>, so this gives a sample big
+enough whatever <span class="math inline">\(p\)</span> turns out to
+be.</li>
+<li><strong>For a mean:</strong> <span class="math inline">\(m =
+z\dfrac{\sigma}{\sqrt{n}}\)</span>, so <span class="math display">\[n =
+\left(\frac{z\,\sigma}{m}\right)^2\]</span> where <span
+class="math inline">\(\sigma\)</span> comes from an earlier study. With
+nothing to go on, a rough guess is <span class="math inline">\(\sigma
+\approx \text{range}/4\)</span>, because most of a roughly normal
+population lies within 2 standard deviations of the mean.</li>
+<li><strong>Always round up.</strong> A sample of 59 would give a margin
+of error slightly larger than the target; 60 does not.</li>
+</ul>
+<p>We use <span class="math inline">\(z\)</span> in both formulas, even
+for a mean: the <span class="math inline">\(t\)</span> critical value
+depends on <span class="math inline">\(n\)</span>, which is what we are
+trying to find.</p>
+<div id="example-planning-the-next-study" class="section level2">
+<h2>Example: planning the next study</h2>
+<ol style="list-style-type: lower-alpha">
+<li><p><em>How many people would a new study need to estimate the
+proportion of CYP2C19*2 carriers within <span class="math inline">\(\pm
+0.03\)</span> with 95% confidence, if we had no earlier guess?</em> Use
+<span class="math inline">\(p^* = 0.5\)</span> and <span
+class="math inline">\(z = 1.96\)</span>: <span class="math display">\[n
+= \frac{1.96^2(0.5)(0.5)}{0.03^2} = \frac{3.8416 \times 0.25}{0.0009} =
+1067.1 \quad\to\quad \mathbf{1{,}068} \text{ people}\]</span> With the
+earlier estimate <span class="math inline">\(p^* = 0.55\)</span>
+instead, <span class="math inline">\(n = 1.96^2(0.55)(0.45)/0.03^2 =
+1056.4\)</span>, so 1,057 people: a little smaller, because 0.55 is not
+0.5.</p></li>
+<li><p><em>How many spotted seals would we need to estimate the mean
+whisker length within <span class="math inline">\(\pm 2\)</span> mm with
+95% confidence?</em> Use <span class="math inline">\(\sigma \approx
+7.9\)</span> mm from Ginter et al.: <span class="math display">\[n =
+\left(\frac{1.96 \times 7.9}{2}\right)^2 = (7.742)^2 = 59.9
+\quad\to\quad \mathbf{60} \text{ seals}\]</span></p></li>
+<li><p><em>What happens to <span class="math inline">\(n\)</span> if we
+want half the margin of error?</em> <span
+class="math inline">\(m\)</span> is squared on the bottom, so halving
+<span class="math inline">\(m\)</span> makes <span
+class="math inline">\(n\)</span> <strong>4 times</strong> as large. For
+the carriers, <span class="math inline">\(\pm 0.015\)</span> needs 4,269
+people instead of 1,068.</p></li>
+</ol>
+<ul>
+<li><p><strong>Try it out.</strong></p>
+<ul>
+<li>The sensitivity of a medical test is the probability that it comes
+back positive when the person has the disease. Rapid strep tests have a
+sensitivity of about 0.95. How many tests of a new rapid strep test
+would be needed to estimate its sensitivity within <span
+class="math inline">\(\pm 0.02\)</span> with 95% confidence?
+<em>Answer:</em> <span class="math inline">\(n =
+1.96^2(0.95)(0.05)/0.02^2 = 456.2\)</span>, so <strong>457</strong>
+tests.</li>
+<li>A researcher wants to estimate the mean number of hours college
+students spend on TikTok each week, within <span
+class="math inline">\(\pm 0.5\)</span> hours with 95% confidence.
+Earlier studies suggest <span class="math inline">\(\sigma \approx
+2.5\)</span> hours. <em>Answer:</em> <span class="math inline">\(n =
+(1.96 \times 2.5/0.5)^2 = 96.04\)</span>, so <strong>97</strong>
+students.</li>
+<li>A marketing firm wants to estimate what students spend over spring
+break, within <span class="math inline">\(\pm\$120\)</span> with 90%
+confidence. Spending ranges from about $100 to $1,700. <em>Answer:</em>
+<span class="math inline">\(\sigma \approx 1600/4 = 400\)</span>, so
+<span class="math inline">\(n = (1.645 \times 400/120)^2 =
+30.1\)</span>, and <strong>31</strong> students.</li>
+</ul></li>
+</ul>
+</div>
+<div id="assumptions-behind-these-intervals" class="section level2">
+<h2>Assumptions behind these intervals</h2>
+<p>Every interval in these notes rests on a few assumptions:</p>
+<ul>
+<li>The data are a <strong>random sample</strong> from the population
+(an unbiased sampling design; see Weeks 4 and 5).</li>
+<li>The <strong>population is much larger than the sample</strong>. For
+a small, finite population the formulas change.</li>
+<li>The <strong>sampling distribution is roughly normal</strong>, which
+needs one of:
+<ul>
+<li>for <span class="math inline">\(\hat{p}\)</span>: at least 5
+successes and 5 failures, <span class="math inline">\(n\hat{p} &gt;
+5\)</span> and <span class="math inline">\(n(1-\hat{p}) &gt;
+5\)</span>;</li>
+<li>for <span class="math inline">\(\bar{x}\)</span>: a roughly normal
+population, or a large sample, <span class="math inline">\(n \geq
+30\)</span> (the central limit theorem). Plot the data to check for
+strong skew or outliers.</li>
+</ul></li>
+</ul>
+<p>No formula fixes a biased sample: a margin of error measures only the
+<strong>random</strong> error from sampling.</p>
+</div>
+</div>
 <div id="sources" class="section level1">
 <h1>Sources</h1>
 <ul>
@@ -2832,6 +3276,11 @@ href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7569901/">Assefa et
 al. 2020, full text</a>). Data file:
 <code>assets/watermelon_citrulline_assefa2020.csv</code> (citrulline by
 HPLC, the mean of three measurements).</li>
+<li>Airline safety: IATA (2026), “2025 Annual Safety Report” press
+release, March 9, 2026: 1 fatal accident per 5.6 million flights on
+average over 2021–2025 (<a
+href="https://www.iata.org/en/pressroom/2026-releases/2026-03-09-01/">IATA
+2025 safety report release</a>).</li>
 <li>Spotify songs: Spotify and YouTube statistics for the top 10 Spotify
 tracks of 2,079 artists, collected February 2023: the “Spotify and
 Youtube” dataset on Kaggle, file <code>Spotify_Youtube.csv</code>.</li>

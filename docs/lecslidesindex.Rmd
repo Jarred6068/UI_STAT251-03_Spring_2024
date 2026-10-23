@@ -173,7 +173,13 @@ Finding normal probabilities (lower tail, upper tail, area between); the central
 <a href="./lecture_slides/Week%209/2026/Week9_Lecture19_Slides_10_19_2026.pptx">Slides (PowerPoint)</a>
 
 ## Lecture 20 &middot; Wednesday, October 21
-Confidence levels other than 95%; the t distribution and intervals for a mean when &sigma; is unknown
+Confidence levels other than 95%: the confidence level, &alpha; and critical values (the t distribution moved to Lecture 21)
 
 <a href="./lecture_slides/Week%209/2026/Week9_Lecture20_Slides_10_21_2026.pdf">Slides (PDF)</a> &middot;
 <a href="./lecture_slides/Week%209/2026/Week9_Lecture20_Slides_10_21_2026.pptx">Slides (PowerPoint)</a>
+
+## Lecture 21 &middot; Friday, October 23
+Confidence intervals concluded: interval width, the t distribution and intervals for a mean when &sigma; is unknown; choosing a minimum sample size
+
+<a href="./lecture_slides/Week%209/2026/Week9_Lecture21_Slides_10_23_2026.pdf">Slides (PDF)</a> &middot;
+<a href="./lecture_slides/Week%209/2026/Week9_Lecture21_Slides_10_23_2026.pptx">Slides (PowerPoint)</a>

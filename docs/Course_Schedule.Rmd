@@ -206,6 +206,11 @@ outlined below. Any changes will be announced in class and posted here.**
   levels other than 95% and the interval for a mean when sigma is unknown. If Lecture
   19 runs short, the teen cell-phone proportion example moves to the front of Oct 21.
   Exam 2 was already given, so no study guide changes scope.
+
+  CARRY-OVER, Oct 21 2026. No dates changed. Lecture 20 (Wed Oct 21) stopped partway
+  through the CYP2C19 carrier example (its slide 8). Lecture 21 (Fri Oct 23) finishes it and
+  carries the t distribution / sigma-unknown intervals, then squeezes in choosing a minimum
+  sample size (Jarred's choice: no shift). The Oct 21 and Oct 23 rows say so.
 -->
 
 
@@ -391,12 +396,12 @@ outlined below. Any changes will be announced in class and posted here.**
 <tr>
   <th scope="row">Wednesday</th>
   <td>October 21, 2026</td>
-  <td>Confidence intervals continued: confidence levels other than 95%, intervals for a mean when &sigma; is unknown</td>
+  <td>Confidence intervals continued: confidence levels other than 95%</td>
 </tr>
 <tr>
   <th scope="row">Friday</th>
   <td>October 23, 2026</td>
-  <td>Choosing a minimum sample size, assumptions of estimators -- **[Course project check](project_check.html) due Sunday, October 25 at 11:59PM**</td>
+  <td>Intervals for a mean when &sigma; is unknown (the t distribution); choosing a minimum sample size, assumptions of estimators -- **[Course project check](project_check.html) due Sunday, October 25 at 11:59PM**</td>
 </tr>
 </tbody>
 <tbody>
